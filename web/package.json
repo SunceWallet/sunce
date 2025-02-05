@@ -9,7 +9,9 @@
   },
   "scripts": {
     "prebuild": "rm -rf dist/",
-    "build": "NODE_ENV=production ../node_modules/.bin/parcel build ../src/index.prod.njk --public-url=./ --detailed-report --no-source-maps",
+    "build:parcel": "NODE_ENV=production ../node_modules/.bin/parcel build ../src/index.prod.njk --public-url=./ --no-source-maps",
+    "build:add-manifest": "cp ../src/manifest.json dist/ && cp -r ../src/favicons dist/ && sed -i '' 's|</head>|<link rel=\"manifest\" href=\"manifest.json\"></head>|' dist/index.prod.html",
+    "build": "npm run build:parcel && npm run build:add-manifest",
     "dev": "NODE_ENV=development ../node_modules/.bin/parcel serve ../src/index.dev.njk -p 3000"
   },
   "browser": {
