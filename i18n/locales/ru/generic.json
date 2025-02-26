@@ -41,6 +41,7 @@
     "stellar-address-not-found-error": "Адрес Stellar не найден: {{address}}",
     "stellar-address-request-failed-error": "Не удалось найти адрес Stellar {{address}}.",
     "stellar-uri-verification-error": "Не удалось верифицировать Stellar URI.",
+    "stellar-uri-callback-format-error": "Проблема с параметром callback: {{reason}}",
     "submission-failed-error": "Не удалось отправить транзакцию на {{endpoint}} с ошибкой статуса {{status}}: {{message}}",
     "testnet-endpoint-not-available-error": "{{service}} не предоставляет конечную точку тестовой сети.",
     "timeout-error": "Время запроса истекло",

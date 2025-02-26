@@ -15,6 +15,7 @@ import { getAssetsFromBalances } from "~Generic/lib/stellar"
 import { PaymentParams } from "~Payment/components/PaymentForm"
 import PaymentForm from "~Payment/components/PaymentForm"
 import { SendTransaction } from "../../Transaction/components/TransactionSender"
+import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
 
 interface ConnectedPaymentFormProps {
   accountData: AccountData
@@ -37,12 +38,17 @@ function ConnectedPaymentForm(props: ConnectedPaymentFormProps) {
   ])
 
   const handleSubmit = React.useCallback(
-    async (createTx: (horizon: Server, account: Account) => Promise<Transaction>) => {
+    async (
+      createTx: (
+        horizon: Server,
+        account: Account
+      ) => Promise<{ tx: Transaction; signatureRequest?: MultisigTransactionResponse }>
+    ) => {
       try {
         setTxCreationPending(true)
-        const tx = await createTx(props.horizon, props.selectedAccount)
+        const { tx, signatureRequest } = await createTx(props.horizon, props.selectedAccount)
         setTxCreationPending(false)
-        await sendTransaction(tx)
+        await sendTransaction(tx, signatureRequest)
       } catch (error) {
         trackError(error)
       } finally {
@@ -107,9 +113,10 @@ function PaymentRequestContent(props: PaymentRequestContentProps) {
       asset,
       destination,
       memo,
-      memoType
+      memoType,
+      payStellarUri: props.payStellarUri
     }
-  }, [amount, asset, destination, memo, memoType])
+  }, [amount, asset, destination, memo, memoType, props.payStellarUri])
 
   return (
     <Box>

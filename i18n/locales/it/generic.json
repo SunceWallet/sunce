@@ -32,6 +32,7 @@
     "stellar-address-not-found-error": "Indirizzo stellare non trovato: {{address}}",
     "stellar-address-request-failed-error": "Risoluzione stellare dell'indirizzo di {{address}} non riuscita.",
     "stellar-uri-verification-error": "Non è stato possibile verificare la firma di Stellar URI.",
+    "stellar-uri-callback-format-error": "Stellar URI's callback is not valid: {{reason}}",
     "submission-failed-error": "Invio della transazione a {{endpoint}} fallita {{status}}: {{message}}",
     "testnet-endpoint-not-available-error": "{{service}} non fornisce un endpoint testnet.",
     "timeout-error": "Richiesta scaduta",

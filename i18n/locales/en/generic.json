@@ -41,6 +41,7 @@
     "stellar-address-not-found-error": "Stellar address not found: {{address}}",
     "stellar-address-request-failed-error": "Stellar address resolution of {{address}} failed.",
     "stellar-uri-verification-error": "Stellar URI's signature could not be verified.",
+    "stellar-uri-callback-format-error": "Stellar URI's callback is not valid: {{reason}}",
     "submission-failed-error": "Submitting transaction to {{endpoint}} failed with status {{status}}: {{message}}",
     "testnet-endpoint-not-available-error": "{{service}} does not provide a testnet endpoint.",
     "timeout-error": "Request timed out",

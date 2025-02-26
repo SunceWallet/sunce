@@ -18,5 +18,19 @@ export async function verifyTransactionRequest(request: string, options: Verific
     }
   }
 
+  if (parsedURI.callback) {
+    try {
+      const callbackURI = new URL(parsedURI.callback)
+      if (!["http:", "https:"].includes(callbackURI.protocol)) {
+        throw new Error("Unsupported schema")
+      }
+    } catch (e) {
+      throw CustomError(
+        "StellarUriVerificationError",
+        i18next.t("stellar-uri-callback-format-error", { reason: e.message || "" })
+      )
+    }
+  }
+
   return parsedURI
 }

@@ -225,7 +225,8 @@ class TransactionSender extends React.Component<Props, State> {
         await this.submitTransactionToThirdPartyService(signedTx, thirdPartySecurityService)
       } else if (
         this.state.signatureRequest &&
-        (this.state.signatureRequest.status === "ready" || this.state.signatureRequest.status === "failed")
+        (this.state.signatureRequest.status === "ready" || this.state.signatureRequest.status === "failed") &&
+        !this.state.signatureRequest.external // do not submit SEP-07 signed txs via backend
       ) {
         await this.submitMultisigTransactionToStellarNetwork(this.state.signatureRequest)
       } else if (
@@ -236,7 +237,8 @@ class TransactionSender extends React.Component<Props, State> {
         (await requiresRemoteSignatures(horizon, signedTx, account.publicKey))
       ) {
         await this.submitTransactionToMultisigService(signedTx, unsignedTx)
-      } else {
+      } else if (!this.state.signatureRequest || !this.state.signatureRequest.external) {
+        // skip submission for SEP-07 links with callback
         await this.submitTransactionToHorizon(signedTx)
       }
       setTimeout(() => {

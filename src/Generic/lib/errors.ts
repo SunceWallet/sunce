@@ -101,8 +101,12 @@ export function getErrorTranslation(error: Error, t: TFunction): string {
     prefix += ": "
   }
 
-  const fallback = error.message
-  return prefix + t([key, fallback], params)
+  const fallback = (error.message as any)?.message || error.message
+  try {
+    return prefix + t([key, fallback], params)
+  } catch (e) {
+    return prefix + fallback
+  }
 }
 
 export function renderFormFieldError(error: any, t: TFunction) {

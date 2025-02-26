@@ -17,6 +17,7 @@ import { RefStateObject } from "~Generic/hooks/userinterface"
 import { useTransactionTitle } from "~TransactionReview/components/TransactionReviewDialog"
 import TransactionSummary from "~TransactionReview/components/TransactionSummary"
 import { SendTransaction } from "../../Transaction/components/TransactionSender"
+import { MultisigTransactionStatus } from "~Generic/lib/multisig-service"
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -106,7 +107,26 @@ function TransactionRequestContent(props: TransactionRequestContentProps) {
         Object.keys(filledReplacements).length > 0
           ? props.txStellarUri.replace(filledReplacements).getTransaction()
           : props.txStellarUri.getTransaction()
-      sendTransaction(newTx)
+
+      // if the link has callback, create a signatureRequest so that it goes via multisig flow
+      // multisig flow skips submission to the network now and that's what we want for SEP07 links with callbacks
+      if (props.txStellarUri.callback) {
+        const signatureRequest = {
+          created_at: Date.now().toString(),
+          cursor: "",
+          hash: props.txStellarUri.getTransaction().toXDR(),
+          req: props.txStellarUri.toString(),
+          status: MultisigTransactionStatus.pending,
+          signed_by: [],
+          signers: [],
+          updated_at: Date.now().toString(),
+          external: true
+        }
+
+        sendTransaction(newTx, signatureRequest)
+      } else {
+        sendTransaction(newTx)
+      }
     } catch (error) {
       trackError(error)
     } finally {
@@ -146,7 +166,7 @@ function TransactionRequestContent(props: TransactionRequestContentProps) {
     <Box>
       {msg && (
         <Typography>
-          <b>{t("transaciton-request.transaction.uri-content.message")}:</b>
+          <b>{t("transaction-request.transaction.uri-content.message")}:</b>
           {msg}
         </Typography>
       )}

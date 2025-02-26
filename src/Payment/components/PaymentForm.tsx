@@ -1,3 +1,4 @@
+import { Typography } from "@material-ui/core"
 import ButtonBase from "@material-ui/core/ButtonBase"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import TextField from "@material-ui/core/TextField"
@@ -24,6 +25,7 @@ import { AccountData } from "~Generic/lib/account"
 import { formatBalance } from "~Generic/lib/balances"
 import { CustomError } from "~Generic/lib/errors"
 import { FormBigNumber, isValidAmount, replaceCommaWithDot } from "~Generic/lib/form"
+import { MultisigTransactionResponse, MultisigTransactionStatus } from "~Generic/lib/multisig-service"
 import { findMatchingBalanceLine, getAccountMinimumBalance, getSpendableBalance } from "~Generic/lib/stellar"
 import { isMuxedAddress, isPublicKey, isStellarAddress } from "~Generic/lib/stellar-address"
 import { createPaymentOperation, createTransaction, multisigMinimumFee } from "~Generic/lib/transaction"
@@ -35,6 +37,7 @@ export interface PaymentParams {
   destination?: string
   memo?: string
   memoType?: MemoType
+  payStellarUri?: PayStellarUri
 }
 
 export interface PaymentFormValues {
@@ -92,6 +95,8 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     placeholder: t("payment.memo-metadata.placeholder.optional"),
     requiredType: undefined
   })
+  const [callback, setCallback] = React.useState<string>("")
+  const [payStellarUri, setPayStellarUri] = React.useState<PayStellarUri>()
   const form = useForm<PaymentFormValues>({
     defaultValues: {
       amount: "",
@@ -174,6 +179,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
 
   const handlePaymentLink = React.useCallback((uri: PayStellarUri) => {
     setValue("destination", uri.destination)
+    setPayStellarUri(uri)
 
     if (uri.amount) {
       setValue("amount", uri.amount)
@@ -186,6 +192,10 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     if (uri.memo) {
       setMemoType(uri.memoType || "text")
       setValue("memoValue", uri.memo)
+    }
+
+    if (uri.callback) {
+      setCallback(uri.callback)
     }
   }, [])
 
@@ -443,6 +453,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
           {priceInput}
           {memoInput}
         </HorizontalLayout>
+        {callback && <Typography>callback: {callback}</Typography>}
         <Portal target={props.actionsRef.element}>{dialogActions}</Portal>
       </form>
     </>
@@ -458,7 +469,15 @@ interface Props {
   trustedAssets: Asset[]
   txCreationPending?: boolean
   onCancel?: () => void
-  onSubmit: (createTx: (horizon: Server, account: Account) => Promise<Transaction>) => any
+  onSubmit: (
+    createTx: (
+      horizon: Server,
+      account: Account
+    ) => Promise<{
+      tx: Transaction
+      signatureRequest?: MultisigTransactionResponse
+    }>
+  ) => any
 }
 
 function PaymentFormContainer(props: Props) {
@@ -503,7 +522,28 @@ function PaymentFormContainer(props: Props) {
   }
 
   const submitForm = (formValues: ExtendedPaymentFormValues) => {
-    props.onSubmit((horizon, account) => createPaymentTx(horizon, account, formValues))
+    props.onSubmit(async (horizon, account) => {
+      const tx = await createPaymentTx(horizon, account, formValues)
+      if (props.preselectedParams?.payStellarUri) {
+        const signatureRequest: MultisigTransactionResponse = {
+          created_at: Date.now().toString(),
+          cursor: "",
+          hash: tx.toXDR(),
+          req: props.preselectedParams?.payStellarUri.toString(),
+          status: MultisigTransactionStatus.pending,
+          signed_by: [],
+          signers: [],
+          updated_at: Date.now().toString(),
+          external: true
+        }
+        return {
+          tx,
+          signatureRequest
+        }
+      } else {
+        return { tx }
+      }
+    })
   }
 
   return <PaymentForm {...props} onSubmit={submitForm} />

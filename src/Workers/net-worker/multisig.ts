@@ -235,7 +235,8 @@ export async function submitSignature(multisigTx: MultisigTransactionResponse, s
     await handleServerError(response, responseData)
   }
 
-  if (responseData.status === "ready") {
+  if (responseData.status === "ready" && !multisigTx.external) {
+    // skip submission for SEP-07 txs
     // Transaction is now sufficiently signed to be submitted to the Stellar network
     const txSubmissionResponse = await submitMultisigTransactionToStellarNetwork(multisigTx)
 
@@ -309,10 +310,10 @@ async function handleServerError(response: Response, responseBodyObject: any) {
   } else {
     throw CustomError(
       "SubmissionFailedError",
-      `Submitting transaction to multi-signature service failed  ${response.status}: ${message}`,
+      `Submitting transaction to multi-signature service failed  ${response.status}: ${message.message || message}`,
       {
         endpoint: "multi-signature service",
-        message,
+        message: message.message || message,
         status: String(response.status)
       }
     )

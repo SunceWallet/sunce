@@ -14,6 +14,7 @@ import ScrollableBalances from "~Generic/components/ScrollableBalances"
 import MainTitle from "~Generic/components/MainTitle"
 import TransactionSender from "~Transaction/components/TransactionSender"
 import PaymentForm from "./PaymentForm"
+import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
 
 interface Props {
   account: Account
@@ -21,7 +22,7 @@ interface Props {
   horizon: Server
   onClose: () => void
   openOrdersCount: number
-  sendTransaction: (transaction: Transaction) => Promise<any>
+  sendTransaction: (transaction: Transaction, signatureRequest?: MultisigTransactionResponse) => Promise<any>
 }
 
 function PaymentDialog(props: Props) {
@@ -31,12 +32,17 @@ function PaymentDialog(props: Props) {
   const [txCreationPending, setTxCreationPending] = React.useState(false)
 
   const handleSubmit = React.useCallback(
-    async (createTx: (horizon: Server, account: Account) => Promise<Transaction>) => {
+    async (
+      createTx: (
+        horizon: Server,
+        account: Account
+      ) => Promise<{ tx: Transaction; signatureRequest?: MultisigTransactionResponse }>
+    ) => {
       try {
         setTxCreationPending(true)
-        const tx = await createTx(props.horizon, props.account)
+        const { tx, signatureRequest } = await createTx(props.horizon, props.account)
         setTxCreationPending(false)
-        await sendTransaction(tx)
+        await sendTransaction(tx, signatureRequest)
       } catch (error) {
         trackError(error)
       } finally {

@@ -26,6 +26,7 @@ export interface MultisigTransactionResponse {
   signed_by: string[]
   signers: string[]
   updated_at: string
+  external?: boolean
 }
 
 export interface SignatureRequestSigner {
