@@ -51,7 +51,6 @@ function StellarRequestReviewDialog(props: StellarRequestReviewDialogProps) {
 
   return (
     <DialogBody
-      preventNotchSpacing
       top={<MainTitle hideBackButton onBack={onClose} title={t("transaction-request.stellar-uri.title")} />}
       actions={props.actionsRef}
     >

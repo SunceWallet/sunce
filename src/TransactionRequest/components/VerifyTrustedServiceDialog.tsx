@@ -23,7 +23,6 @@ function VerifyTrustedServiceDialog(props: VerifyTrustedServiceDialogProps) {
   return (
     <DialogBody
       background={<WarnIcon style={{ fontSize: 220 }} />}
-      preventNotchSpacing
       top={<MainTitle hideBackButton onBack={onCancel} title={t("transaction-request.verify-trusted-service.title")} />}
       actions={
         <DialogActionsBox desktopStyle={{ marginTop: 32 }} smallDialog>
