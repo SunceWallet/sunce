@@ -166,8 +166,7 @@ function TransactionRequestContent(props: TransactionRequestContentProps) {
     <Box>
       {msg && (
         <Typography>
-          <b>{t("transaction-request.transaction.uri-content.message")}:</b>
-          {msg}
+          <b>{t("transaction-request.transaction.uri-content.message")}:</b> {msg}
         </Typography>
       )}
       <Typography className={classes.uriContainer} variant="h6">
