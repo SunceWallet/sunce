@@ -66,9 +66,6 @@
     "stellar-sdk": "^9.0.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.23.6",
-    "@babel/preset-react": "^7.23.3",
-    "@babel/preset-typescript": "^7.23.3",
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
     "@satoshipay/stellar-sep-10": "^0.3.0",
@@ -106,8 +103,6 @@
     "@types/zen-observable": "^0.8.0",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.6",
     "big.js": "^5.2.2",
     "core-js": "^2.6.9",
     "cross-env": "^7.0.3",
