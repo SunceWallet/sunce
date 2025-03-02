@@ -2,10 +2,10 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { makeStyles } from "@material-ui/core/styles"
 import SendIcon from "@material-ui/icons/Send"
-import { Account } from "~App/contexts/accounts"
-import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import QRCodeIcon from "~Icons/components/QRCode"
+import { Account } from "~/src/App/contexts/accounts"
+import { useLiveAccountData } from "~/src/Generic/hooks/stellar-subscriptions"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import QRCodeIcon from "~/src/Icons/components/QRCode"
 
 export const useButtonStyles = makeStyles(theme => ({
   desktop: {

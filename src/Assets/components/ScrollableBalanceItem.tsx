@@ -1,9 +1,9 @@
 import React from "react"
 import makeStyles from "@material-ui/core/styles/makeStyles"
-import { balancelineToAsset } from "~Generic/lib/stellar"
-import { breakpoints } from "~App/theme"
-import { SingleBalance } from "~Account/components/AccountBalances"
-import { BalanceLine } from "~Generic/lib/account"
+import { balancelineToAsset } from "~/src/Generic/lib/stellar"
+import { breakpoints } from "~/src/App/theme"
+import { SingleBalance } from "~/src/Account/components/AccountBalances"
+import { BalanceLine } from "~/src/Generic/lib/account"
 import AssetLogo from "./AssetLogo"
 
 export function getBalanceItemMinMaxWidth() {

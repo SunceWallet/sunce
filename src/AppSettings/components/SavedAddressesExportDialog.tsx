@@ -3,11 +3,11 @@ import DialogContent from "@material-ui/core/DialogContent"
 import DialogContentText from "@material-ui/core/DialogContentText"
 import ErrorIcon from "@material-ui/icons/Error"
 import { fade, useTheme } from "@material-ui/core/styles"
-import DialogBody from "~Layout/components/DialogBody"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import { HorizontalLayout } from "~Layout/components/Box"
+import DialogBody from "~/src/Layout/components/DialogBody"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import { HorizontalLayout } from "~/src/Layout/components/Box"
 import { TextField } from "@material-ui/core"
-import { SavedAddressesContext } from "~App/contexts/savedAddresses"
+import { SavedAddressesContext } from "~/src/App/contexts/savedAddresses"
 
 function SavedAddressesExportDialog() {
   const theme = useTheme()

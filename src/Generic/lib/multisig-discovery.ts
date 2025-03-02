@@ -1,6 +1,6 @@
 import { CustomError } from "./errors"
 import { workers } from "../../Workers/worker-controller"
-import { StellarToml } from "~shared/types/stellar-toml"
+import { StellarToml } from "~/src/shared/types/stellar-toml"
 
 const multisigCoordinatorResolutionCache = new Map<string, string>()
 const multisigCoordinatorResolutionPending = new Map<string, Promise<string>>()

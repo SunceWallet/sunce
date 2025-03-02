@@ -1,4 +1,4 @@
-import { workers } from "~Workers/worker-controller"
+import { workers } from "~/src/Workers/worker-controller"
 import { createPersistentCache } from "./persistent-cache"
 
 export interface AssetRecord {

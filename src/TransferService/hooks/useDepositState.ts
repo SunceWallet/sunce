@@ -10,9 +10,9 @@ import {
   TransferResultType,
   TransferStatus
 } from "@satoshipay/stellar-transfer"
-import { Account } from "~App/contexts/accounts"
-import { CustomError } from "~Generic/lib/errors"
-import { useWebAuth } from "~Generic/hooks/stellar"
+import { Account } from "~/src/App/contexts/accounts"
+import { CustomError } from "~/src/Generic/lib/errors"
+import { useWebAuth } from "~/src/Generic/hooks/stellar"
 import { Action, TransferStates } from "../util/statemachine"
 import { useTransferState } from "./useTransferState"
 import { parseAmount } from "../util/util"

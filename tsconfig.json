@@ -6,10 +6,6 @@
     "strict": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "paths": {
-      "~*": ["./src/*"],
-      "*": ["shared/types/*"]
-    },
     "esModuleInterop": true,
     "target": "es2017",
     "lib": ["es6", "dom"],

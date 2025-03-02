@@ -17,7 +17,7 @@ import { TransferState } from "../util/statemachine"
 import { useWithdrawalState } from "../hooks/useWithdrawalState"
 import { TransferContent, TransferSidebar } from "../components/TransferContent"
 import WithdrawalProvider from "../components/WithdrawalProvider"
-import { Account } from "~App/contexts/accounts"
+import { Account } from "~/src/App/contexts/accounts"
 
 const eurt = new Asset("EURT", "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S")
 const demoAssets = [eurt]

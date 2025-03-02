@@ -5,12 +5,12 @@ import CloseIcon from "@material-ui/icons/Close"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogContentText from "@material-ui/core/DialogContentText"
 import DialogTitle from "@material-ui/core/DialogTitle"
-import { Account } from "~App/contexts/accounts"
-import { trackError } from "~App/contexts/notifications"
-import { AccountData } from "~Generic/lib/account"
-import { createTransaction } from "~Generic/lib/transaction"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import TransactionSender, { SendTransaction } from "~Transaction/components/TransactionSender"
+import { Account } from "~/src/App/contexts/accounts"
+import { trackError } from "~/src/App/contexts/notifications"
+import { AccountData } from "~/src/Generic/lib/account"
+import { createTransaction } from "~/src/Generic/lib/transaction"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import TransactionSender, { SendTransaction } from "~/src/Transaction/components/TransactionSender"
 
 interface Props {
   account: Account

@@ -6,8 +6,8 @@ import { SettingsProvider } from "../contexts/settings"
 import { SignatureDelegationProvider } from "../contexts/signatureDelegation"
 import { StellarProvider } from "../contexts/stellar"
 import { TransactionRequestProvider } from "../contexts/transactionRequest"
-import { DialogsProvider } from "~App/contexts/dialogs"
-import { SavedAddressesProvider } from "~App/contexts/savedAddresses"
+import { DialogsProvider } from "~/src/App/contexts/dialogs"
+import { SavedAddressesProvider } from "~/src/App/contexts/savedAddresses"
 
 export function ContextProviders(props: { children: React.ReactNode }) {
   return (

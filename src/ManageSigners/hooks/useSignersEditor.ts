@@ -1,11 +1,11 @@
 import React from "react"
 import { Horizon, Operation, Server, Transaction, xdr } from "stellar-sdk"
-import { trackError } from "~App/contexts/notifications"
-import { Account } from "~App/contexts/accounts"
-import { SettingsContext, SettingsContextType } from "~App/contexts/settings"
-import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { AccountData } from "~Generic/lib/account"
-import { createTransaction } from "~Generic/lib/transaction"
+import { trackError } from "~/src/App/contexts/notifications"
+import { Account } from "~/src/App/contexts/accounts"
+import { SettingsContext, SettingsContextType } from "~/src/App/contexts/settings"
+import { useLiveAccountData } from "~/src/Generic/hooks/stellar-subscriptions"
+import { AccountData } from "~/src/Generic/lib/account"
+import { createTransaction } from "~/src/Generic/lib/transaction"
 import { initializeEditorState, SignersEditorState } from "../lib/editor"
 
 export interface SignersEditorOptions {

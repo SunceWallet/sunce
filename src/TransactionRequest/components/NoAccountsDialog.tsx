@@ -3,10 +3,10 @@ import Typography from "@material-ui/core/Typography"
 import CancelIcon from "@material-ui/icons/Close"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import MainTitle from "~Generic/components/MainTitle"
-import TestnetBadge from "~Generic/components/TestnetBadge"
-import DialogBody from "~Layout/components/DialogBody"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import MainTitle from "~/src/Generic/components/MainTitle"
+import TestnetBadge from "~/src/Generic/components/TestnetBadge"
+import DialogBody from "~/src/Layout/components/DialogBody"
 
 interface Props {
   onClose: () => void

@@ -2,8 +2,8 @@ import React from "react"
 import Async from "react-promise"
 import { xdr, AccountResponse, Asset, Memo, Networks, Operation, Server, TransactionBuilder } from "stellar-sdk"
 import { TransactionReviewDialogBody } from "../components/TransactionReviewDialog"
-import { Account } from "~App/contexts/accounts"
-import { useWebAuth } from "~Generic/hooks/stellar"
+import { Account } from "~/src/App/contexts/accounts"
+import { useWebAuth } from "~/src/Generic/hooks/stellar"
 
 const eurt = new Asset("EURT", "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S")
 const testnetHorizon = new Server("https://horizon-testnet.stellar.org")

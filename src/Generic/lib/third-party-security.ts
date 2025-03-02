@@ -1,8 +1,8 @@
 import { Server, Transaction, Horizon } from "stellar-sdk"
 import { CustomError } from "./errors"
-import StellarGuardIcon from "~Icons/components/StellarGuard"
-import LobstrVaultIcon from "~Icons/components/LobstrVault"
-import { workers } from "~Workers/worker-controller"
+import StellarGuardIcon from "~/src/Icons/components/StellarGuard"
+import LobstrVaultIcon from "~/src/Icons/components/LobstrVault"
+import { workers } from "~/src/Workers/worker-controller"
 
 export interface ThirdPartySecurityService {
   endpoints: {

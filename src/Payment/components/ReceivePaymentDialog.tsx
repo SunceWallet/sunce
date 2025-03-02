@@ -1,12 +1,12 @@
 import Typography from "@material-ui/core/Typography"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Account } from "~App/contexts/accounts"
-import { useIsMobile } from "~Generic/hooks/userinterface"
-import { Box } from "~Layout/components/Box"
-import DialogBody from "~Layout/components/DialogBody"
-import KeyExportBox from "~Account/components/KeyExportBox"
-import MainTitle from "~Generic/components/MainTitle"
+import { Account } from "~/src/App/contexts/accounts"
+import { useIsMobile } from "~/src/Generic/hooks/userinterface"
+import { Box } from "~/src/Layout/components/Box"
+import DialogBody from "~/src/Layout/components/DialogBody"
+import KeyExportBox from "~/src/Account/components/KeyExportBox"
+import MainTitle from "~/src/Generic/components/MainTitle"
 
 interface Props {
   account: Account

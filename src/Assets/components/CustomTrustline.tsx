@@ -4,11 +4,11 @@ import { Asset, Server, Transaction } from "stellar-sdk"
 import useMediaQuery from "@material-ui/core/useMediaQuery"
 import TextField from "@material-ui/core/TextField"
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser"
-import { Account } from "~App/contexts/accounts"
-import { AccountData } from "~Generic/lib/account"
-import DialogBody from "~Layout/components/DialogBody"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import MainTitle from "~Generic/components/MainTitle"
+import { Account } from "~/src/App/contexts/accounts"
+import { AccountData } from "~/src/Generic/lib/account"
+import DialogBody from "~/src/Layout/components/DialogBody"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import MainTitle from "~/src/Generic/components/MainTitle"
 
 interface Props {
   account: Account

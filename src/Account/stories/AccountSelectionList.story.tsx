@@ -1,6 +1,6 @@
 import React from "react"
 import AccountSelectionList from "../components/AccountSelectionList"
-import { Account } from "~App/contexts/accounts"
+import { Account } from "~/src/App/contexts/accounts"
 
 const accounts: Account[] = [
   {

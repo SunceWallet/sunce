@@ -4,7 +4,7 @@ import { fade, useTheme } from "@material-ui/core/styles"
 import ErrorIcon from "@material-ui/icons/Error"
 import React from "react"
 import { Translation, useTranslation } from "react-i18next"
-import { Box, HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
+import { Box, HorizontalLayout, VerticalLayout } from "~/src/Layout/components/Box"
 import { getErrorTranslation } from "../lib/errors"
 
 // tslint:disable-next-line

@@ -4,11 +4,11 @@ import Dialog from "@material-ui/core/Dialog"
 import Fade from "@material-ui/core/Fade"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
-import { useDialogActions, useIsMobile } from "~Generic/hooks/userinterface"
-import { breakpoints, CompactDialogTransition } from "~App/theme"
-import DialogBody from "~Layout/components/DialogBody"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import Portal from "~Generic/components/Portal"
+import { useDialogActions, useIsMobile } from "~/src/Generic/hooks/userinterface"
+import { breakpoints, CompactDialogTransition } from "~/src/App/theme"
+import DialogBody from "~/src/Layout/components/DialogBody"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import Portal from "~/src/Generic/components/Portal"
 
 const useLegalConfirmationStyles = makeStyles({
   root: {

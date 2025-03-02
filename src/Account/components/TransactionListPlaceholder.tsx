@@ -1,7 +1,7 @@
 import CircularProgress from "@material-ui/core/CircularProgress"
 import React from "react"
 import ContentLoader from "react-content-loader"
-import { VerticalLayout } from "~Layout/components/Box"
+import { VerticalLayout } from "~/src/Layout/components/Box"
 
 function SubtitlePlaceholder() {
   const width = window.innerWidth - 48

@@ -2,7 +2,7 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import Dialog from "@material-ui/core/Dialog"
 import DialogContent from "@material-ui/core/DialogContent"
-import { QRReader, isFullscreenQRPreview } from "~Platform/components"
+import { QRReader, isFullscreenQRPreview } from "~/src/Platform/components"
 import { ActionButton, DialogActionsBox } from "./DialogActions"
 
 interface Props {
