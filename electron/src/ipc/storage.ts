@@ -1,7 +1,7 @@
 import { app } from "electron"
 import isDev from "electron-is-dev"
 import Store from "electron-store"
-import { createStore } from "key-store"
+import { createStore, KeysData } from "key-store"
 import { customAlphabet } from "nanoid"
 import * as path from "path"
 import { Keypair, Networks, Transaction } from "stellar-sdk"
@@ -12,7 +12,12 @@ import { Messages } from "../shared/ipc"
 const storeDirectoryPath = path.join(app.getPath("appData"), "sunce-wallet")
 
 // Use different key stores for development and production
-const mainStore = new Store({
+const mainStore = new Store<{
+  "installation-id": string
+  settings: object
+  keys: KeysData<PublicKeyData>
+  ignoredSignatureRequests: string[]
+}>({
   cwd: storeDirectoryPath,
   name: isDev ? "development" : "config"
 })
