@@ -1,12 +1,12 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import Typography from "@material-ui/core/Typography"
-import { Account } from "~App/contexts/accounts"
-import * as routes from "~App/routes"
-import { useRouter, RefStateObject } from "~Generic/hooks/userinterface"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import { Box } from "~Layout/components/Box"
-import Portal from "~Generic/components/Portal"
+import { Account } from "~/src/App/contexts/accounts"
+import * as routes from "~/src/App/routes"
+import { useRouter, RefStateObject } from "~/src/Generic/hooks/userinterface"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import { Box } from "~/src/Layout/components/Box"
+import Portal from "~/src/Generic/components/Portal"
 
 interface Props {
   account: Account

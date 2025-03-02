@@ -1,7 +1,7 @@
 import { TransferServerInfo } from "@suncewallet/stellar-transfer"
 import { multicast, Observable, ObservableLike } from "observable-fns"
 import { Asset, Horizon, ServerApi, Transaction } from "stellar-sdk"
-import { trackError } from "~App/contexts/notifications"
+import { trackError } from "~/src/App/contexts/notifications"
 import { AccountData } from "../lib/account"
 import { FixedOrderbookRecord } from "../lib/orderbook"
 import { stringifyAsset } from "../lib/stellar"

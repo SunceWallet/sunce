@@ -1,14 +1,14 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { useForceRerender } from "~Generic/hooks/util"
-import { testBiometricAuth, isBiometricAuthAvailable } from "~Platform/bio-auth"
+import { useForceRerender } from "~/src/Generic/hooks/util"
+import { testBiometricAuth, isBiometricAuthAvailable } from "~/src/Platform/bio-auth"
 import {
   loadIgnoredSignatureRequestHashes,
   loadSettings,
   saveIgnoredSignatureRequestHashes,
   saveSettings
-} from "~Platform/settings"
-import getUpdater from "~Platform/updater"
+} from "~/src/Platform/settings"
+import getUpdater from "~/src/Platform/updater"
 import { trackError } from "./notifications"
 
 interface Props {

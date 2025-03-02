@@ -1,7 +1,7 @@
 import React from "react"
 import { Memo } from "stellar-sdk"
 import { WithdrawalSuccessResponse } from "@suncewallet/stellar-transfer"
-import { trackError } from "~App/contexts/notifications"
+import { trackError } from "~/src/App/contexts/notifications"
 
 export function usePolling(pollIntervalMs: number) {
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null)

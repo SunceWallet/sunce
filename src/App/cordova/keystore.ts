@@ -1,7 +1,7 @@
 import { KeyStore } from "key-store"
 import { Transaction, Keypair, Networks } from "stellar-sdk"
-import { Messages } from "~shared/ipc"
-import { WrongPasswordError } from "~Generic/lib/errors"
+import { Messages } from "~/src/shared/ipc"
+import { WrongPasswordError } from "~/src/Generic/lib/errors"
 import { CommandHandlers, expose } from "./ipc"
 
 export const commandHandlers: CommandHandlers = {

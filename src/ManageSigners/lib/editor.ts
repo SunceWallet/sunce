@@ -1,5 +1,5 @@
 import { Horizon } from "stellar-sdk"
-import { AccountData } from "~Generic/lib/account"
+import { AccountData } from "~/src/Generic/lib/account"
 
 export namespace MultisigPresets {
   export enum Type {

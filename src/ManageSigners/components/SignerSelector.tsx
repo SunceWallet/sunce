@@ -7,8 +7,8 @@ import RadioGroup from "@material-ui/core/RadioGroup"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Horizon } from "stellar-sdk"
-import { Account } from "~App/contexts/accounts"
-import { Address } from "~Generic/components/PublicKey"
+import { Account } from "~/src/App/contexts/accounts"
+import { Address } from "~/src/Generic/components/PublicKey"
 
 interface SignerSelectorProps {
   accounts: Account[]

@@ -5,10 +5,10 @@ import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import { makeStyles } from "@material-ui/core/styles"
-import { Account } from "~App/contexts/accounts"
-import { AccountData } from "~Generic/lib/account"
-import { breakpoints } from "~App/theme"
-import { SingleBalance } from "~Account/components/AccountBalances"
+import { Account } from "~/src/App/contexts/accounts"
+import { AccountData } from "~/src/Generic/lib/account"
+import { breakpoints } from "~/src/App/theme"
+import { SingleBalance } from "~/src/Account/components/AccountBalances"
 
 const useBreakdownItemStyles = makeStyles({
   root: {

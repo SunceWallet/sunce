@@ -1,4 +1,4 @@
-import { CustomError } from "~Generic/lib/errors"
+import { CustomError } from "~/src/Generic/lib/errors"
 import { Messages } from "../shared/ipc"
 import { call } from "./ipc"
 

@@ -1,7 +1,7 @@
 import { trackError } from "./error"
 import { expose } from "./ipc"
 import { refreshLastNativeInteractionTime } from "./app.cordova"
-import { Messages } from "~shared/ipc"
+import { Messages } from "~/src/shared/ipc"
 
 function startQRReader() {
   return new Promise<string>((resolve, reject) => {

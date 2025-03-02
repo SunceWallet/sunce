@@ -1,0 +1,11 @@
+Error: Cannot read properties of undefined (reading 'replace')
+  TypeError: Cannot read properties of undefined (reading 'replace')
+      at escapeMarkdown (/Users/troggy/projects/montelibero/SunceWallet/mtl_sunce/node_modules/@parcel/diagnostic/lib/diagnostic.js:238:21)
+      at errorToDiagnostic (/Users/troggy/projects/montelibero/SunceWallet/mtl_sunce/node_modules/@parcel/diagnostic/lib/diagnostic.js:109:14)
+      at PackagerRunner.optimize (/Users/troggy/projects/montelibero/SunceWallet/mtl_sunce/node_modules/@parcel/core/lib/PackagerRunner.js:363:59)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async PackagerRunner.getBundleResult (/Users/troggy
+projects/montelibero/SunceWallet/mtl_sunce/node_modules/@parcel/core/lib/PackagerRunner.js:229:15)
+      at async PackagerRunner.getBundleInfo (/Users/troggy/projects/montelibero/SunceWallet/mtl_sunce/node_modules/@parcel/core/lib/PackagerRunner.js:215:9)
+      at async PackagerRunner.run (/Users/troggy/projects/montelibero/SunceWallet/mtl_sunce/node_modules/@parcel/core/lib/PackagerRunner.js:126:107)
+      at async Child.handleRequest (/Users/troggy/projects/montelibero/SunceWallet/mtl_sunce/node_modules/@parcel/core/node_modules/@parcel/workers/lib/child.js:203:9)

@@ -13,8 +13,8 @@ import {
   MuxedAccount
 } from "stellar-sdk"
 import BigNumber from "big.js"
-import { Account } from "~App/contexts/accounts"
-import { workers } from "~Workers/worker-controller"
+import { Account } from "~/src/App/contexts/accounts"
+import { workers } from "~/src/Workers/worker-controller"
 import { WrongPasswordError, CustomError } from "./errors"
 import { applyTimeout } from "./promise"
 import { getAllSources, isNotFoundError } from "./stellar"

@@ -1,13 +1,13 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Account } from "~App/contexts/accounts"
-import { useIsMobile, RefStateObject } from "~Generic/hooks/userinterface"
-import ScrollableBalances from "~Assets/components/ScrollableBalances"
-import DialogBody from "~Layout/components/DialogBody"
-import TestnetBadge from "~Generic/components/TestnetBadge"
-import InlineLoader from "~Generic/components/InlineLoader"
-import { VerticalLayout } from "~Layout/components/Box"
-import MainTitle from "~Generic/components/MainTitle"
+import { Account } from "~/src/App/contexts/accounts"
+import { useIsMobile, RefStateObject } from "~/src/Generic/hooks/userinterface"
+import ScrollableBalances from "~/src/Assets/components/ScrollableBalances"
+import DialogBody from "~/src/Layout/components/DialogBody"
+import TestnetBadge from "~/src/Generic/components/TestnetBadge"
+import InlineLoader from "~/src/Generic/components/InlineLoader"
+import { VerticalLayout } from "~/src/Layout/components/Box"
+import MainTitle from "~/src/Generic/components/MainTitle"
 
 interface TitleProps {
   account: Account

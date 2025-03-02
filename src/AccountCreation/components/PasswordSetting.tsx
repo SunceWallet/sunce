@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next"
 import Collapse from "@material-ui/core/Collapse"
 import ListItemText from "@material-ui/core/ListItemText"
 import Switch from "@material-ui/core/Switch"
-import AccountSettingsItem from "~AccountSettings/components/AccountSettingsItem"
-import PasswordField from "~Generic/components/PasswordField"
+import AccountSettingsItem from "~/src/AccountSettings/components/AccountSettingsItem"
+import PasswordField from "~/src/Generic/components/PasswordField"
 
 interface PasswordSettingProps {
   error?: string

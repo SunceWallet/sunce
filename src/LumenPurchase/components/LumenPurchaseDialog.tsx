@@ -1,8 +1,8 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Account } from "~App/contexts/accounts"
-import MainTitle from "~Generic/components/MainTitle"
-import DialogBody from "~Layout/components/DialogBody"
+import { Account } from "~/src/App/contexts/accounts"
+import MainTitle from "~/src/Generic/components/MainTitle"
+import DialogBody from "~/src/Layout/components/DialogBody"
 import LumenPurchaseOptions from "./LumenPurchaseOptions"
 
 interface Props {

@@ -8,9 +8,9 @@ import TextField from "@material-ui/core/TextField"
 import Typography from "@material-ui/core/Typography"
 import GroupIcon from "@material-ui/icons/Group"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
-import AccountSettingsItem from "~AccountSettings/components/AccountSettingsItem"
-import { QRReader } from "~Generic/components/FormFields"
-import { useIsMobile } from "~Generic/hooks/userinterface"
+import AccountSettingsItem from "~/src/AccountSettings/components/AccountSettingsItem"
+import { QRReader } from "~/src/Generic/components/FormFields"
+import { useIsMobile } from "~/src/Generic/hooks/userinterface"
 
 const FundingNote = React.memo(function FundingNote() {
   const isSmallScreen = useIsMobile()

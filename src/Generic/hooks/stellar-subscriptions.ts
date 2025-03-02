@@ -3,12 +3,12 @@
 import { ObservableLike } from "observable-fns"
 import React from "react"
 import { Asset, FeeBumpTransaction, Horizon, Networks, ServerApi, TransactionBuilder } from "stellar-sdk"
-import { Account } from "~App/contexts/accounts"
+import { Account } from "~/src/App/contexts/accounts"
 import { createEmptyAccountData, AccountData, BalanceLine } from "../lib/account"
 import { FixedOrderbookRecord } from "../lib/orderbook"
 import { stringifyAsset } from "../lib/stellar"
 import { mapSuspendables } from "../lib/suspense"
-import { CollectionPage } from "~Workers/net-worker/stellar-network"
+import { CollectionPage } from "~/src/Workers/net-worker/stellar-network"
 import {
   accountDataCache,
   accountOpenOrdersCache,

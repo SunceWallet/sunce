@@ -7,10 +7,10 @@ import {
   StellarAddressCacheContext,
   StellarAddressReverseCacheContext,
   WebAuthTokenCacheContext
-} from "~App/contexts/caches"
-import { StellarContext } from "~App/contexts/stellar"
-import { workers } from "~Workers/worker-controller"
-import { StellarToml, StellarTomlCurrency } from "~shared/types/stellar-toml"
+} from "~/src/App/contexts/caches"
+import { StellarContext } from "~/src/App/contexts/stellar"
+import { workers } from "~/src/Workers/worker-controller"
+import { StellarToml, StellarTomlCurrency } from "~/src/shared/types/stellar-toml"
 import { createEmptyAccountData, AccountData, BalanceLine } from "../lib/account"
 import { createPersistentCache } from "../lib/persistent-cache"
 import * as StellarAddresses from "../lib/stellar-address"

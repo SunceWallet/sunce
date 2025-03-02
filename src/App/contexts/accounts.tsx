@@ -1,7 +1,7 @@
 import React from "react"
 import { Keypair, Transaction } from "stellar-sdk"
-import { CustomError, WrongPasswordError } from "~Generic/lib/errors"
-import getKeyStore, { KeyStoreAPI } from "~Platform/key-store"
+import { CustomError, WrongPasswordError } from "~/src/Generic/lib/errors"
+import getKeyStore, { KeyStoreAPI } from "~/src/Platform/key-store"
 import { trackError } from "./notifications"
 
 export interface Account {

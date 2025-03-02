@@ -3,19 +3,23 @@ import { TFunction } from "i18next"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Asset, Operation, Transaction, Networks } from "stellar-sdk"
-import { SingleBalance } from "~Account/components/AccountBalances"
-import { useLiveAccountOffers } from "~Generic/hooks/stellar-subscriptions"
-import { useAccountHomeDomainSafe } from "~Generic/hooks/stellar"
-import { useIsSmallMobile } from "~Generic/hooks/userinterface"
-import { AccountData } from "~Generic/lib/account"
-import { formatBalance } from "~Generic/lib/balances"
-import { offerAssetToAsset, stringifyAssetToReadableString, trustlineLimitEqualsUnlimited } from "~Generic/lib/stellar"
-import { CopyableAddress } from "~Generic/components/PublicKey"
+import { SingleBalance } from "~/src/Account/components/AccountBalances"
+import { useLiveAccountOffers } from "~/src/Generic/hooks/stellar-subscriptions"
+import { useAccountHomeDomainSafe } from "~/src/Generic/hooks/stellar"
+import { useIsSmallMobile } from "~/src/Generic/hooks/userinterface"
+import { AccountData } from "~/src/Generic/lib/account"
+import { formatBalance } from "~/src/Generic/lib/balances"
+import {
+  offerAssetToAsset,
+  stringifyAssetToReadableString,
+  trustlineLimitEqualsUnlimited
+} from "~/src/Generic/lib/stellar"
+import { CopyableAddress } from "~/src/Generic/components/PublicKey"
 import { SummaryItem, SummaryDetailsField } from "./SummaryItem"
-import { Account, AccountsContext } from "~App/contexts/accounts"
+import { Account, AccountsContext } from "~/src/App/contexts/accounts"
 import PersonAdd from "@material-ui/icons/PersonAdd"
-import { DialogsContext } from "~App/contexts/dialogs"
-import { SavedAddressesContext } from "~App/contexts/savedAddresses"
+import { DialogsContext } from "~/src/App/contexts/dialogs"
+import { SavedAddressesContext } from "~/src/App/contexts/savedAddresses"
 
 const isUTF8 = (buffer: Buffer) => !buffer.toString("utf8").match(/[\x00-\x1F]/)
 

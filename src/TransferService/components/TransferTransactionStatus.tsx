@@ -2,7 +2,7 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import Typography from "@material-ui/core/Typography"
 import { DepositTransaction, TransferStatus, WithdrawalTransaction } from "@suncewallet/stellar-transfer"
-import { VerticalLayout } from "~Layout/components/Box"
+import { VerticalLayout } from "~/src/Layout/components/Box"
 import { formatDuration } from "../util/formatters"
 
 function Paragraph(props: { children: React.ReactNode }) {

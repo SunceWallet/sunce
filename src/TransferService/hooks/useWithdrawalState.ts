@@ -10,11 +10,11 @@ import {
   WithdrawalInstructionsSuccess,
   WithdrawalTransaction
 } from "@suncewallet/stellar-transfer"
-import { Account } from "~App/contexts/accounts"
-import { useHorizonURLs, useWebAuth } from "~Generic/hooks/stellar"
-import { CustomError } from "~Generic/lib/errors"
-import { useNetWorker } from "~Generic/hooks/workers"
-import { createTransaction } from "~Generic/lib/transaction"
+import { Account } from "~/src/App/contexts/accounts"
+import { useHorizonURLs, useWebAuth } from "~/src/Generic/hooks/stellar"
+import { CustomError } from "~/src/Generic/lib/errors"
+import { useNetWorker } from "~/src/Generic/hooks/workers"
+import { createTransaction } from "~/src/Generic/lib/transaction"
 import { Action, TransferStates } from "../util/statemachine"
 import { useTransferState } from "./useTransferState"
 import { createMemo, parseAmount } from "../util/util"

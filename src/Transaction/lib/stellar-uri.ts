@@ -1,6 +1,6 @@
 import i18next from "../../App/i18n"
 import { parseStellarUri } from "@stellarguard/stellar-uri"
-import { CustomError } from "~Generic/lib/errors"
+import { CustomError } from "~/src/Generic/lib/errors"
 
 export interface VerificationOptions {
   allowUnsafeTestnetURIs?: boolean
