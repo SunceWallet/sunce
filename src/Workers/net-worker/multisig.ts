@@ -1,14 +1,14 @@
 import { Observable, Subject } from "observable-fns"
 import qs from "qs"
 import { Networks, Transaction } from "stellar-sdk"
-import { CustomError } from "~Generic/lib/errors"
+import { CustomError } from "~/src/Generic/lib/errors"
 import {
   createSignatureRequestURI,
   MultisigServerInfo,
   MultisigTransactionResponse
-} from "~Generic/lib/multisig-service"
-import { manageStreamConnection, whenBackOnline } from "~Generic/lib/stream"
-import { joinURL } from "~Generic/lib/url"
+} from "~/src/Generic/lib/multisig-service"
+import { manageStreamConnection, whenBackOnline } from "~/src/Generic/lib/stream"
+import { joinURL } from "~/src/Generic/lib/url"
 import { raiseConnectionError, ServiceID } from "./errors"
 
 interface ServerSentEvent {

@@ -2,9 +2,9 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import ThumbUpIcon from "@material-ui/icons/ThumbUp"
-import { trackError } from "~App/contexts/notifications"
-import { friendbotTopup } from "~Generic/lib/stellar"
-import MainSelectionButton from "~Generic/components/MainSelectionButton"
+import { trackError } from "~/src/App/contexts/notifications"
+import { friendbotTopup } from "~/src/Generic/lib/stellar"
+import MainSelectionButton from "~/src/Generic/components/MainSelectionButton"
 
 interface Props {
   className?: string

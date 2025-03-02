@@ -2,8 +2,8 @@ import React from "react"
 import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { Keypair } from "stellar-sdk"
-import { Account, AccountsContext } from "~App/contexts/accounts"
-import { CustomError } from "~Generic/lib/errors"
+import { Account, AccountsContext } from "~/src/App/contexts/accounts"
+import { CustomError } from "~/src/Generic/lib/errors"
 import { AccountCreation, AccountCreationErrors } from "../types/types"
 
 function isAccountAlreadyImported(creatingAccount: AccountCreation, accounts: Account[], testnet: boolean) {

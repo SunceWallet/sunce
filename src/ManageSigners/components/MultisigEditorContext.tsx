@@ -1,6 +1,6 @@
 import React from "react"
 import { Server, Transaction } from "stellar-sdk"
-import { Account } from "~App/contexts/accounts"
+import { Account } from "~/src/App/contexts/accounts"
 import { useSignersEditor, SignersUpdate } from "../hooks/useSignersEditor"
 import { MultisigPresets, SignersEditorState } from "../lib/editor"
 

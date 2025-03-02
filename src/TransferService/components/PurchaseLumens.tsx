@@ -1,7 +1,7 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import LumenDepositOptions from "~LumenPurchase/components/LumenPurchaseOptions"
-import { VerticalLayout } from "~Layout/components/Box"
+import LumenDepositOptions from "~/src/LumenPurchase/components/LumenPurchaseOptions"
+import { VerticalLayout } from "~/src/Layout/components/Box"
 import { DepositContext } from "./DepositProvider"
 import { Paragraph, Summary } from "./Sidebar"
 

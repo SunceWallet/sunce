@@ -1,7 +1,7 @@
 import React from "react"
-import { NotificationsContext } from "~App/contexts/notifications"
-import { useNetWorker } from "~Generic/hooks/workers"
-import { ConnectionErrorEvent, Service } from "~Workers/net-worker"
+import { NotificationsContext } from "~/src/App/contexts/notifications"
+import { useNetWorker } from "~/src/Generic/hooks/workers"
+import { ConnectionErrorEvent, Service } from "~/src/Workers/net-worker"
 import { autoHideDuration } from "./NotificationContainer"
 
 type Setter<T> = (prev: T) => T

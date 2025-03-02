@@ -15,7 +15,7 @@ import {
 } from "@satoshipay/stellar-transfer"
 import BigNumber from "big.js"
 import { Asset, Transaction } from "stellar-sdk"
-import { CustomError } from "~Generic/lib/errors"
+import { CustomError } from "~/src/Generic/lib/errors"
 
 export namespace TransferStates {
   export interface SelectType {

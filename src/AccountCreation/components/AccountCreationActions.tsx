@@ -7,11 +7,11 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { makeStyles } from "@material-ui/core/styles"
 import CheckIcon from "@material-ui/icons/Check"
-import { useRouter } from "~Generic/hooks/userinterface"
-import { matchesRoute } from "~Generic/lib/routes"
-import * as routes from "~App/routes"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import { useButtonStyles } from "~Account/components/AccountActions"
+import { useRouter } from "~/src/Generic/hooks/userinterface"
+import { matchesRoute } from "~/src/Generic/lib/routes"
+import * as routes from "~/src/App/routes"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import { useButtonStyles } from "~/src/Account/components/AccountActions"
 
 const useAccountCreationStyles = makeStyles({
   desktopBox: {

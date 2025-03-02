@@ -1,9 +1,9 @@
 import BigNumber from "big.js"
 import React from "react"
-import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { BalanceLine } from "~Generic/lib/account"
-import { formatBalance, sortBalances, BalanceFormattingOptions } from "~Generic/lib/balances"
-import { balancelineToAsset, stringifyAsset } from "~Generic/lib/stellar"
+import { useLiveAccountData } from "~/src/Generic/hooks/stellar-subscriptions"
+import { BalanceLine } from "~/src/Generic/lib/account"
+import { formatBalance, sortBalances, BalanceFormattingOptions } from "~/src/Generic/lib/balances"
+import { balancelineToAsset, stringifyAsset } from "~/src/Generic/lib/stellar"
 
 interface SingleBalanceProps {
   assetCode: string

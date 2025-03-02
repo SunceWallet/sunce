@@ -5,9 +5,9 @@ import Typography from "@material-ui/core/Typography"
 import TrustIcon from "@material-ui/icons/Check"
 import DenyIcon from "@material-ui/icons/Cancel"
 import WarnIcon from "@material-ui/icons/Warning"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
-import MainTitle from "~Generic/components/MainTitle"
-import DialogBody from "~Layout/components/DialogBody"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
+import MainTitle from "~/src/Generic/components/MainTitle"
+import DialogBody from "~/src/Layout/components/DialogBody"
 
 interface VerifyTrustedServiceDialogProps {
   onTrust: () => void

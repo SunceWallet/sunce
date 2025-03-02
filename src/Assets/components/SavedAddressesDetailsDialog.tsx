@@ -1,13 +1,13 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import MainTitle from "~Generic/components/MainTitle"
-import DialogBody from "~Layout/components/DialogBody"
+import MainTitle from "~/src/Generic/components/MainTitle"
+import DialogBody from "~/src/Layout/components/DialogBody"
 import { TextField } from "@material-ui/core"
 import CloseIcon from "@material-ui/icons/Close"
 import { useForm } from "react-hook-form"
 import { nanoid } from "nanoid"
-import { isMuxedAddress, isPublicKey, isStellarAddress } from "~Generic/lib/stellar-address"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
+import { isMuxedAddress, isPublicKey, isStellarAddress } from "~/src/Generic/lib/stellar-address"
+import { ActionButton, DialogActionsBox } from "~/src/Generic/components/DialogActions"
 
 export interface SavedAddressDetailsDialogProps {
   address?: string

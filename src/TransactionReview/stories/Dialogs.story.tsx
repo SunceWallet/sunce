@@ -2,9 +2,9 @@ import React from "react"
 import Button from "@material-ui/core/Button"
 import { Asset, Server, Transaction } from "stellar-sdk"
 import TransactionReviewDialog from "../components/TransactionReviewDialog"
-import { Account, AccountsContext, AccountsProvider } from "~App/contexts/accounts"
-import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { createPaymentOperation, createTransaction } from "~Generic/lib/transaction"
+import { Account, AccountsContext, AccountsProvider } from "~/src/App/contexts/accounts"
+import { useLiveAccountData } from "~/src/Generic/hooks/stellar-subscriptions"
+import { createPaymentOperation, createTransaction } from "~/src/Generic/lib/transaction"
 
 interface DialogContainerProps {
   account: Account

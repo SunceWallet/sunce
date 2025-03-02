@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { CustomError } from "~Generic/lib/errors"
+import { CustomError } from "~/src/Generic/lib/errors"
 import { TransferStates } from "../util/statemachine"
 import { Paragraph, Summary } from "./Sidebar"
 

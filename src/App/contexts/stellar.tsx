@@ -1,6 +1,6 @@
 import React from "react"
-import { useNetworkCacheReset } from "~Generic/hooks/stellar-subscriptions"
-import { workers } from "~Workers/worker-controller"
+import { useNetworkCacheReset } from "~/src/Generic/hooks/stellar-subscriptions"
+import { workers } from "~/src/Workers/worker-controller"
 import { trackError } from "./notifications"
 
 interface Props {

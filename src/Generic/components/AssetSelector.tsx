@@ -5,8 +5,8 @@ import ListItemText from "@material-ui/core/ListItemText"
 import MenuItem from "@material-ui/core/MenuItem"
 import TextField, { TextFieldProps } from "@material-ui/core/TextField"
 import { makeStyles } from "@material-ui/core/styles"
-import AssetLogo from "~Assets/components/AssetLogo"
-import { BalanceLine } from "~Generic/lib/account"
+import AssetLogo from "~/src/Assets/components/AssetLogo"
+import { BalanceLine } from "~/src/Generic/lib/account"
 import { balancelineToAsset, stringifyAsset } from "../lib/stellar"
 
 const useAssetItemStyles = makeStyles(theme => ({

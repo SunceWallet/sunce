@@ -1,4 +1,4 @@
-import { Messages } from "~shared/ipc"
+import { Messages } from "~/src/shared/ipc"
 import { expose } from "./ipc"
 
 export function registerURLHandler(contentWindow: Window, iframeReady: Promise<void>) {

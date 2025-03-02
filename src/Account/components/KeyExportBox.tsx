@@ -2,8 +2,8 @@ import QRCode from "qrcode.react"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import Typography from "@material-ui/core/Typography"
-import { useClipboard } from "~Generic/hooks/userinterface"
-import { Box, VerticalLayout } from "~Layout/components/Box"
+import { useClipboard } from "~/src/Generic/hooks/userinterface"
+import { Box, VerticalLayout } from "~/src/Layout/components/Box"
 
 interface Props {
   export: string

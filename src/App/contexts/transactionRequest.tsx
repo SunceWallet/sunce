@@ -1,8 +1,8 @@
 import React from "react"
 import { StellarUri, StellarUriType, TransactionStellarUri } from "@stellarguard/stellar-uri"
-import { CustomError } from "~Generic/lib/errors"
-import { subscribeToDeepLinkURLs } from "~Platform/protocol-handler"
-import { verifyTransactionRequest } from "~Transaction/lib/stellar-uri"
+import { CustomError } from "~/src/Generic/lib/errors"
+import { subscribeToDeepLinkURLs } from "~/src/Platform/protocol-handler"
+import { verifyTransactionRequest } from "~/src/Transaction/lib/stellar-uri"
 import { trackError } from "./notifications"
 import { useTranslation } from "react-i18next"
 

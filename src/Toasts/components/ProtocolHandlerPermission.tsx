@@ -7,13 +7,13 @@ import Tooltip from "@material-ui/core/Tooltip"
 import { useTheme } from "@material-ui/core/styles"
 import CloseIcon from "@material-ui/icons/Close"
 import CheckIcon from "@material-ui/icons/Check"
-import { NotificationsContext } from "~App/contexts/notifications"
-import { HorizontalLayout } from "~Layout/components/Box"
+import { NotificationsContext } from "~/src/App/contexts/notifications"
+import { HorizontalLayout } from "~/src/Layout/components/Box"
 import {
   isDefaultProtocolClient,
   isDifferentHandlerInstalled,
   setAsDefaultProtocolClient
-} from "~Platform/protocol-handler"
+} from "~/src/Platform/protocol-handler"
 
 function isNotificationDismissed() {
   return localStorage.getItem("protocol-handler-notification-dismissed") !== null

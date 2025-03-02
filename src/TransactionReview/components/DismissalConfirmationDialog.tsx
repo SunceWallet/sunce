@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { ActionButton, ConfirmDialog } from "~Generic/components/DialogActions"
+import { ActionButton, ConfirmDialog } from "~/src/Generic/components/DialogActions"
 
 interface Props {
   onCancel: () => void

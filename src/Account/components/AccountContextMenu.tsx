@@ -13,11 +13,11 @@ import MoneyIcon from "@material-ui/icons/AttachMoney"
 import ContactsIcon from "@material-ui/icons/Contacts"
 import SettingsIcon from "@material-ui/icons/Settings"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
-import { Account } from "~App/contexts/accounts"
-import { SettingsContextType } from "~App/contexts/settings"
-import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { useIsMobile } from "~Generic/hooks/userinterface"
-import ContextMenu, { AnchorRenderProps } from "~Generic/components/ContextMenu"
+import { Account } from "~/src/App/contexts/accounts"
+import { SettingsContextType } from "~/src/App/contexts/settings"
+import { useLiveAccountData } from "~/src/Generic/hooks/stellar-subscriptions"
+import { useIsMobile } from "~/src/Generic/hooks/userinterface"
+import ContextMenu, { AnchorRenderProps } from "~/src/Generic/components/ContextMenu"
 
 const useContextMenuItemStyles = makeStyles({
   disabled: {

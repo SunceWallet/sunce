@@ -1,15 +1,15 @@
 import BigNumber from "big.js"
 import { Asset, Horizon } from "stellar-sdk"
-import { AccountData, BalanceLine } from "~Generic/lib/account"
-import { formatBalance, BalanceFormattingOptions } from "~Generic/lib/balances"
-import { FormBigNumber, isValidAmount } from "~Generic/lib/form"
-import { calculateSpread, FixedOrderbookRecord } from "~Generic/lib/orderbook"
+import { AccountData, BalanceLine } from "~/src/Generic/lib/account"
+import { formatBalance, BalanceFormattingOptions } from "~/src/Generic/lib/balances"
+import { FormBigNumber, isValidAmount } from "~/src/Generic/lib/form"
+import { calculateSpread, FixedOrderbookRecord } from "~/src/Generic/lib/orderbook"
 import {
   BASE_RESERVE,
   findMatchingBalanceLine,
   getAccountMinimumBalance,
   getSpendableBalance
-} from "~Generic/lib/stellar"
+} from "~/src/Generic/lib/stellar"
 import { useConversionOffers } from "./conversion"
 
 export const bigNumberToInputValue = (bignum: BigNumber, overrides?: BalanceFormattingOptions) =>

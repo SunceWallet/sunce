@@ -4,7 +4,7 @@ import ListItemText from "@material-ui/core/ListItemText"
 import WarningIcon from "@material-ui/icons/Warning"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { warningColor } from "~App/theme"
+import { warningColor } from "~/src/App/theme"
 
 interface WarningProps {
   primary: React.ReactNode

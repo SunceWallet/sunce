@@ -1,7 +1,7 @@
 import { Dialog } from "@material-ui/core"
 import React from "react"
-import { FullscreenDialogTransition } from "~App/theme"
-import ViewLoading from "~Generic/components/ViewLoading"
+import { FullscreenDialogTransition } from "~/src/App/theme"
+import ViewLoading from "~/src/Generic/components/ViewLoading"
 import SavedAddressesDialog, { SavedAddressesDialogProps } from "../../Assets/components/SavedAddressesDialog"
 
 interface Props {
