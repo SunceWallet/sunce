@@ -48,8 +48,8 @@
       "text": {
         "primary": "Handle Stellar protocol requests",
         "secondary": {
-          "default": "Solar is handling all Stellar links",
-          "non-default": "Make Solar handle all Stellar URIs"
+          "default": "Sunce is handling all Stellar links",
+          "non-default": "Make Sunce handle all Stellar URIs"
         }
       }
     },

@@ -58,9 +58,9 @@
         "message": "Enable app notifications"
       },
       "protocol-handler": {
-        "error": "Could not register Solar as default handler.",
-        "message": "Do you want Solar to handle interactive Stellar links on this computer (recommended)?",
-        "success": "Successfully registered Solar as default handler.",
+        "error": "Could not register Sunce as default handler.",
+        "message": "Do you want Sunce to handle interactive Stellar links on this computer (recommended)?",
+        "success": "Successfully registered Sunce as default handler.",
         "tooltip": {
           "dismiss": "Dismiss",
           "install": "Install"

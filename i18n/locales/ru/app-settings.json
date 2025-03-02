@@ -44,6 +44,15 @@
         }
       }
     },
+    "protocol-handler": {
+      "text": {
+        "primary": "Обрабатывать запросы протокола Stellar",
+        "secondary": {
+          "default": "Sunce автоматически открывает ссылки Stellar",
+          "non-default": "Использовать Sunce для открытия всех ссылок Stellar"
+        }
+      }
+    },
     "testnet": {
       "text": {
         "primary": "Отображать аккаунты Testnet",
