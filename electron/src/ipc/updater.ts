@@ -1,6 +1,5 @@
 import { app, autoUpdater, dialog, Notification } from "electron"
 import isDev from "electron-is-dev"
-import fetch from "isomorphic-fetch"
 import os from "os"
 import { URL } from "url"
 import { expose } from "./_ipc"
