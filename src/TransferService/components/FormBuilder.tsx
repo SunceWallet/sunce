@@ -2,7 +2,7 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import MenuItem from "@material-ui/core/MenuItem"
 import TextField from "@material-ui/core/TextField"
-import { TransferInfoFields } from "@satoshipay/stellar-transfer"
+import { TransferInfoFields } from "@suncewallet/stellar-transfer"
 import { formatDescriptionText, formatIdentifier } from "../util/formatters"
 import FormLayout from "./FormLayout"
 

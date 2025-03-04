@@ -9,7 +9,7 @@ import {
   KYCResponseType,
   TransferResultType,
   TransferStatus
-} from "@satoshipay/stellar-transfer"
+} from "@suncewallet/stellar-transfer"
 import { Account } from "~App/contexts/accounts"
 import { CustomError } from "~Generic/lib/errors"
 import { useWebAuth } from "~Generic/hooks/stellar"

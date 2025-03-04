@@ -1,6 +1,6 @@
 import React from "react"
 import { Memo } from "stellar-sdk"
-import { WithdrawalSuccessResponse } from "@satoshipay/stellar-transfer"
+import { WithdrawalSuccessResponse } from "@suncewallet/stellar-transfer"
 import { trackError } from "~App/contexts/notifications"
 
 export function usePolling(pollIntervalMs: number) {

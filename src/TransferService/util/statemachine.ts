@@ -12,7 +12,7 @@ import {
   Withdrawal,
   WithdrawalInstructionsSuccess,
   WithdrawalTransaction
-} from "@satoshipay/stellar-transfer"
+} from "@suncewallet/stellar-transfer"
 import BigNumber from "big.js"
 import { Asset, Transaction } from "stellar-sdk"
 import { CustomError } from "~Generic/lib/errors"

@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@stellarguard/stellar-uri": "^2.0.0",
+    "@suncewallet/stellar-transfer": "^1.0.0",
     "electron-context-menu": "^3.6.1",
     "electron-debug": "^3.2.0",
     "electron-is-dev": "^2.0.0",
@@ -68,7 +69,6 @@
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
     "@satoshipay/stellar-sep-10": "^0.3.0",
-    "@satoshipay/stellar-transfer": "^0.2.2",
     "@stellarguard/stellar-uri": "^2.0.0",
     "@storybook/addon-actions": "^7.6.8",
     "@storybook/addons": "^7.6.8",

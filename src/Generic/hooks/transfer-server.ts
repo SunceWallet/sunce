@@ -3,7 +3,7 @@ import {
   openTransferServer,
   TransferServer,
   TransferServerInfo
-} from "@satoshipay/stellar-transfer"
+} from "@suncewallet/stellar-transfer"
 import { Asset, Networks } from "stellar-sdk"
 import { mapSuspendables } from "../lib/suspense"
 import { transferInfosCache } from "./_caches"

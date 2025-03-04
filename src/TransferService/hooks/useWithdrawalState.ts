@@ -9,7 +9,7 @@ import {
   Withdrawal,
   WithdrawalInstructionsSuccess,
   WithdrawalTransaction
-} from "@satoshipay/stellar-transfer"
+} from "@suncewallet/stellar-transfer"
 import { Account } from "~App/contexts/accounts"
 import { useHorizonURLs, useWebAuth } from "~Generic/hooks/stellar"
 import { CustomError } from "~Generic/lib/errors"

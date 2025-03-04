@@ -1,7 +1,7 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Transaction } from "stellar-sdk"
-import { AssetTransferInfo } from "@satoshipay/stellar-transfer"
+import { AssetTransferInfo } from "@suncewallet/stellar-transfer"
 import { Account } from "~App/contexts/accounts"
 import { RefStateObject } from "~Generic/hooks/userinterface"
 import { useLoadingState } from "~Generic/hooks/util"

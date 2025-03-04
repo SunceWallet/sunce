@@ -1,4 +1,4 @@
-import { AssetTransferInfo } from "@satoshipay/stellar-transfer"
+import { AssetTransferInfo } from "@suncewallet/stellar-transfer"
 import React from "react"
 import { Asset, Transaction } from "stellar-sdk"
 import { Account } from "~App/contexts/accounts"

@@ -9,7 +9,7 @@ import {
   Withdrawal,
   WithdrawalInstructionsSuccess,
   DepositInstructionsSuccess
-} from "@satoshipay/stellar-transfer"
+} from "@suncewallet/stellar-transfer"
 import { trackError } from "~App/contexts/notifications"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { RefStateObject } from "~Generic/hooks/userinterface"
