@@ -524,7 +524,7 @@ function PaymentFormContainer(props: Props) {
   const submitForm = (formValues: ExtendedPaymentFormValues) => {
     props.onSubmit(async (horizon, account) => {
       const tx = await createPaymentTx(horizon, account, formValues)
-      if (props.preselectedParams?.payStellarUri) {
+      if (props.preselectedParams?.payStellarUri?.callback) {
         const signatureRequest: MultisigTransactionResponse = {
           created_at: Date.now().toString(),
           cursor: "",
