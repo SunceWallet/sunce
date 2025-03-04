@@ -10,7 +10,7 @@ import {
   Withdrawal,
   WithdrawalSuccessResponse,
   TransferTransaction
-} from "@satoshipay/stellar-transfer"
+} from "@suncewallet/stellar-transfer"
 import { action } from "@storybook/addon-actions"
 import { DesktopTwoColumns } from "../components/Sidebar"
 import { TransferState } from "../util/statemachine"

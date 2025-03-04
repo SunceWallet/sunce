@@ -1,5 +1,4 @@
 import BigNumber from "big.js"
-import fetch from "isomorphic-fetch"
 import {
   xdr,
   Asset,

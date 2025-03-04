@@ -1,7 +1,7 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import Typography from "@material-ui/core/Typography"
-import { Deposit } from "@satoshipay/stellar-transfer"
+import { Deposit } from "@suncewallet/stellar-transfer"
 import { RefStateObject } from "~Generic/hooks/userinterface"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
 import { VerticalLayout } from "~Layout/components/Box"
