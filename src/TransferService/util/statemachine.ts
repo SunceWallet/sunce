@@ -1,5 +1,5 @@
 // tslint:disable no-object-literal-type-assertion
-import { WebauthData } from "@satoshipay/stellar-sep-10"
+import { WebauthData } from "@suncewallet/stellar-sep-10"
 import {
   Deposit,
   DepositInstructionsSuccess,

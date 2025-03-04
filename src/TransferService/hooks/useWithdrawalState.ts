@@ -1,6 +1,6 @@
 import BigNumber from "big.js"
 import { Horizon, Networks, Operation, Server, Transaction, xdr } from "stellar-sdk"
-import { WebauthData } from "@satoshipay/stellar-sep-10"
+import { WebauthData } from "@suncewallet/stellar-sep-10"
 import {
   fetchTransferInfos,
   KYCResponseType,

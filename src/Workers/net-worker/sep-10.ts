@@ -1,6 +1,6 @@
 import JWT from "jsonwebtoken"
 import { Networks, Server, Transaction } from "stellar-sdk"
-import * as WebAuth from "@satoshipay/stellar-sep-10"
+import * as WebAuth from "@suncewallet/stellar-sep-10"
 
 export async function fetchWebAuthChallenge(
   endpointURL: string,

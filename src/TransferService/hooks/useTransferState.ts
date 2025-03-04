@@ -1,7 +1,7 @@
 import BigNumber from "big.js"
 import React from "react"
 import { Asset, Transaction } from "stellar-sdk"
-import { getServiceSigningKey, getWebAuthEndpointURL, WebauthData } from "@satoshipay/stellar-sep-10"
+import { getServiceSigningKey, getWebAuthEndpointURL, WebauthData } from "@suncewallet/stellar-sep-10"
 import { fetchTransaction, fetchTransferInfos, TransferServer } from "@suncewallet/stellar-transfer"
 import { Account } from "~App/contexts/accounts"
 import { SigningKeyCacheContext } from "~App/contexts/caches"
