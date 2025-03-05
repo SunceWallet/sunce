@@ -1,6 +1,6 @@
 import BigNumber from "big.js"
 import { Networks, Transaction } from "stellar-sdk"
-import { WebauthData } from "@satoshipay/stellar-sep-10"
+import { WebauthData } from "@suncewallet/stellar-sep-10"
 import {
   fetchTransferInfos,
   Deposit,
@@ -9,7 +9,7 @@ import {
   KYCResponseType,
   TransferResultType,
   TransferStatus
-} from "@satoshipay/stellar-transfer"
+} from "@suncewallet/stellar-transfer"
 import { Account } from "~App/contexts/accounts"
 import { CustomError } from "~Generic/lib/errors"
 import { useWebAuth } from "~Generic/hooks/stellar"

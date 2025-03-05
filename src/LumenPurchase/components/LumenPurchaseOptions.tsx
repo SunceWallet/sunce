@@ -1,4 +1,3 @@
-import fetch from "isomorphic-fetch"
 import React from "react"
 import { Trans, useTranslation } from "react-i18next"
 import List from "@material-ui/core/List"
