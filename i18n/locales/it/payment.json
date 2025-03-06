@@ -24,6 +24,10 @@
       "placeholder": "Max. {{amount}}"
     }
   },
+  "note": {
+    "multisig-pubkey": "Indirizzo dell'account multi-firma, non della chiave di co-firma locale.",
+    "issuance": "Risorsa selezionato viene emesso dal vostro conto. I nuovi risorsa saranno coniati al momento della spesa"
+  },
   "title": {
     "send": "Invia fondi",
     "receive": "Ricevi fondi"

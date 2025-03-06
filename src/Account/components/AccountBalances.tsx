@@ -13,6 +13,12 @@ interface SingleBalanceProps {
   style?: React.CSSProperties
 }
 
+export const InfiniteBalance = React.memo(() => (
+  <span>
+    <span style={{ display: "inline-block", fontWeight: 300, fontSize: "24px" }}>∞</span>
+  </span>
+))
+
 export const SingleBalance = React.memo(function SingleBalance(props: SingleBalanceProps) {
   const balance = BigNumber(props.balance).abs()
 

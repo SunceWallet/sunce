@@ -25,7 +25,8 @@
     }
   },
   "note": {
-    "multisig-pubkey": "Address of the multi-signature account, not your local co-signature key."
+    "multisig-pubkey": "Address of the multi-signature account, not your local co-signature key.",
+    "issuance": "Selected asset is issued by your account. New tokens will be minted upon sending"
   },
   "title": {
     "send": "Send funds",

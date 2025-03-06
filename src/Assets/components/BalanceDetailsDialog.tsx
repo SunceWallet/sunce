@@ -63,6 +63,7 @@ const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProp
               marginRight: props.hmargin
             }}
             testnet={props.account.testnet}
+            isOwnAsset={props.account.accountID === asset.getIssuer()}
           />
         )
       })}
