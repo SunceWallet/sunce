@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import { useAssetMetadata } from "~Generic/hooks/stellar"
 import { balancelineToAsset } from "~Generic/lib/stellar"
 import { breakpoints } from "~App/theme"
-import { SingleBalance } from "~Account/components/AccountBalances"
+import { InfiniteBalance, SingleBalance } from "~Account/components/AccountBalances"
 import { BalanceLine } from "~Generic/lib/account"
 import { AccountName } from "~Generic/components/Fetchers"
 import AssetLogo from "./AssetLogo"
@@ -92,6 +92,7 @@ interface BalanceListItemProps {
   spendableBalance?: boolean
   style?: React.CSSProperties
   testnet: boolean
+  isOwnAsset?: boolean
 }
 
 function BalanceListItem(props: BalanceListItemProps) {
@@ -102,10 +103,11 @@ function BalanceListItem(props: BalanceListItemProps) {
   const assetMetadata = useAssetMetadata(asset, props.testnet)
   const { t } = useTranslation()
 
-  const balance = React.useMemo(
-    () => (props.hideBalance ? null : <SingleBalance assetCode={""} balance={props.balance.balance} />),
-    [props.balance.balance, props.hideBalance]
-  )
+  const balance = React.useMemo(() => {
+    if (props.hideBalance) return null
+    if (props.isOwnAsset) return <InfiniteBalance />
+    return <SingleBalance assetCode={""} balance={props.balance.balance} />
+  }, [props.balance.balance, props.hideBalance])
 
   if (props.balance.asset_type === "native") {
     return (
