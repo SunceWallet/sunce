@@ -47,6 +47,7 @@
     }
   },
   "no-assets-info": "This account does not use any assets other than Stellar Lumens yet.",
+  "issuance": "Asset {{ asset }} is issued by your account. New tokens will be minted upon trade",
   "title": "Trade",
   "trading-price": {
     "default-label": "Price (limit)",

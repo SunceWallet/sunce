@@ -218,6 +218,7 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
           compact={props.compact}
           onClick={props.onClick && isAccountActivated ? handleClick : undefined}
           testnet={props.account.testnet}
+          ownAsset={accountData.account_id === asset.getIssuer()}
         />
       )),
       <ScrollableBalanceItem

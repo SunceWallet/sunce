@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core"
+import { Box, Typography } from "@material-ui/core"
 import ButtonBase from "@material-ui/core/ButtonBase"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import TextField from "@material-ui/core/TextField"
@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next"
 import { Asset, Memo, MemoType, Server, Transaction } from "stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { DialogsContext } from "~App/contexts/dialogs"
+import { warningColor } from "~App/theme"
 import AssetSelector from "~Generic/components/AssetSelector"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
 import { PriceInput, QRReader } from "~Generic/components/FormFields"
@@ -327,6 +328,16 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     [form, spendableBalance, t]
   )
 
+  const isOwnAsset = React.useMemo(() => form.getValues()["asset"]?.getIssuer() === props.accountData.account_id, [
+    form,
+    props.accountData
+  ])
+
+  const priceInputHelperText = React.useMemo(() => {
+    if (!form.getValues()["asset"] || isOwnAsset) return <span></span>
+    return maxSendButton
+  }, [form, isOwnAsset])
+
   const priceInput = React.useMemo(
     () => (
       <PriceInput
@@ -341,7 +352,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
             }
             if (!isValidAmount(value) || FormBigNumber(value).eq(0)) {
               return t<string>("payment.validation.invalid-price")
-            } else if (FormBigNumber(value).gt(spendableBalance)) {
+            } else if (!isOwnAsset && FormBigNumber(value).gt(spendableBalance)) {
               return t<string>("payment.validation.not-enough-funds")
             } else {
               return undefined
@@ -352,7 +363,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         margin="normal"
         name="amount"
         placeholder={t("payment.inputs.price.label")}
-        helperText={form.getValues()["asset"] ? maxSendButton : null}
+        helperText={priceInputHelperText}
         style={{
           flexGrow: isSmallScreen ? 1 : undefined,
           marginLeft: 24,
@@ -442,7 +453,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         </ActionButton>
       </DialogActionsBox>
     ),
-    [formID, props.onCancel, props.txCreationPending, t]
+    [formID, isOwnAsset, props.onCancel, props.txCreationPending, t]
   )
 
   return (
@@ -453,7 +464,11 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
           {priceInput}
           {memoInput}
         </HorizontalLayout>
-        {callback && <Typography>callback: {callback}</Typography>}
+        {isOwnAsset && (
+          <Box margin="32px 0 0" padding="8px 12px" style={{ background: warningColor }}>
+            {t("payment.note.issuance")}
+          </Box>
+        )}
         <Portal target={props.actionsRef.element}>{dialogActions}</Portal>
       </form>
     </>

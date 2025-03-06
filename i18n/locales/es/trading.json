@@ -47,6 +47,7 @@
     }
   },
   "no-assets-info": "Esta cuenta aún no usa activos diferentes a Lumens Stellar.",
+  "issuance": "Activo {{ asset }} es emitido por su cuenta. Se acuñarán nuevos tokens al comerciar",
   "title": "Negociar",
   "trading-price": {
     "default-label": "Precio (límite)",

@@ -24,6 +24,10 @@
       "placeholder": "Max. {{amount}}"
     }
   },
+  "note": {
+    "multisig-pubkey": "Dirección de la cuenta multifirma, no su clave de cofirma local.",
+    "issuance": "El activo seleccionado es emitido por su cuenta. Se acuñarán nuevos tokens al gastar"
+  },
   "title": {
     "send": "Envía fondos",
     "receive": "Recibe fondos"
