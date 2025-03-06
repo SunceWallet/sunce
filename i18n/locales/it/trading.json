@@ -47,6 +47,7 @@
     }
   },
   "no-assets-info": "Questo account non utilizza ancora risorse diverse da Stellar Lumens.",
+  "issuance": "Risorsa {{ asset }} è emesso dal vostro conto. Nuovi risorse saranno coniati al momento dello scambio.",
   "title": "Negozia",
   "trading-price": {
     "default-label": "Prezzo (limite)",

@@ -24,6 +24,7 @@ import {
   OptimisticAccountUpdate,
   OptimisticOfferUpdate
 } from "./optimistic-updates/index"
+import { AssetRecord } from "stellar-sdk/lib/types/assets"
 
 export interface CollectionPage<T> {
   _embedded: {
@@ -716,10 +717,52 @@ export async function fetchAccountData(
   }
 
   const accountData = await parseJSONResponse<Horizon.AccountResponse & { home_domain: string | undefined }>(response)
+
+  const issuedAssets = (await fetchIssuedAssetsData(horizonURL, accountID))._embedded.records.map((a: AssetRecord) => ({
+    balance: "0",
+    limit: "0",
+    asset_type: a.asset_type as any, // TODO: possible to resolve?
+    asset_code: a.asset_code,
+    asset_issuer: a.asset_issuer,
+    buying_liabilities: "0",
+    selling_liabilities: "0",
+    last_modified_ledger: "",
+    is_authorized: true,
+    is_authorized_to_maintain_liabilities: true,
+    is_clawback_enabled: a.flags.auth_clawback_enabled
+  }))
   // FIXME: Add support for liquidity pools
   // Remove liquidity pools from account data
-  accountData.balances = accountData.balances.filter(b => b.asset_type !== "liquidity_pool_shares")
+  // Add self-issued assets
+  accountData.balances = [
+    ...accountData.balances.filter(b => b.asset_type !== "liquidity_pool_shares"),
+    ...issuedAssets
+  ]
   return optimisticallyUpdateAccountData(horizonURL, accountData)
+}
+
+export async function fetchIssuedAssetsData(
+  horizonURL: string,
+  accountID: string
+): Promise<CollectionPage<AssetRecord>> {
+  const fetchQueue = getFetchQueue(horizonURL)
+  const url = new URL(`/assets?${qs.stringify({ asset_issuer: accountID })}`, horizonURL)
+  const response = await fetchQueue.add(() => fetch(String(url)), { priority: 2 })
+
+  if (response.status === 404) {
+    return {
+      _links: {
+        next: { href: String(url) },
+        prev: { href: String(url) },
+        self: { href: String(url) }
+      },
+      _embedded: {
+        records: []
+      }
+    }
+  }
+
+  return parseJSONResponse<CollectionPage<AssetRecord>>(response)
 }
 
 export async function fetchLatestAccountEffect(horizonURL: string, accountID: string) {

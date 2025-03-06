@@ -99,6 +99,11 @@ function TradingForm(props: Props) {
   const sendTransaction = props.sendTransaction
   const { primaryAsset, secondaryAsset, manualPrice } = form.watch()
 
+  const isSellingOwnAsset = React.useMemo(() => primaryAsset?.getIssuer() === props.accountData.account_id, [
+    props.accountData,
+    primaryAsset
+  ])
+
   React.useEffect(() => {
     if (!primaryAsset && props.initialPrimaryAsset) {
       form.setValue("primaryAsset", props.initialPrimaryAsset)
@@ -275,6 +280,7 @@ function TradingForm(props: Props) {
               required: t<string>("trading.validation.primary-amount-missing"),
               validate: value => {
                 const amountInvalid = primaryAmount.lt(0) || (value.length > 0 && primaryAmount.eq(0))
+                if (isSellingOwnAsset) return true
                 const exceedsBalance =
                   (props.primaryAction === "sell" && primaryBalance && primaryAmount.gt(spendablePrimaryBalance)) ||
                   (props.primaryAction === "buy" && secondaryBalance && secondaryAmount.gt(spendableSecondaryBalance))
@@ -298,7 +304,7 @@ function TradingForm(props: Props) {
             }}
             InputProps={{
               endAdornment:
-                props.primaryAction === "buy" ? (
+                props.primaryAction === "buy" || isSellingOwnAsset ? (
                   undefined
                 ) : (
                   <InputAdornment position="end">
@@ -319,13 +325,13 @@ function TradingForm(props: Props) {
                 ? t("trading.inputs.primary-amount.label.buy")
                 : t("trading.inputs.primary-amount.label.sell")
             }
-            placeholder={t(
-              "trading.inputs.primary-amount.placeholder",
-              `Max. ${bigNumberToInputValue(maxPrimaryAmount)}`,
-              {
-                amount: bigNumberToInputValue(maxPrimaryAmount)
-              }
-            )}
+            placeholder={
+              isSellingOwnAsset
+                ? ""
+                : t("trading.inputs.primary-amount.placeholder", `Max. ${bigNumberToInputValue(maxPrimaryAmount)}`, {
+                    amount: bigNumberToInputValue(maxPrimaryAmount)
+                  })
+            }
             required
             style={{ flexGrow: 1, flexShrink: 1, width: "55%" }}
           />
@@ -420,6 +426,11 @@ function TradingForm(props: Props) {
               `The spread between buying and selling price is about ${(relativeSpread * 100).toFixed(1)}%.`,
               { spread: (relativeSpread * 100).toFixed(1) }
             )}
+          </Box>
+        ) : null}
+        {isSellingOwnAsset ? (
+          <Box margin="32px 0 0" padding="8px 12px" style={{ background: warningColor }}>
+            {t("trading.issuance", { asset: primaryAsset?.getCode() })}
           </Box>
         ) : null}
         <Portal target={props.dialogActionsRef?.element}>
