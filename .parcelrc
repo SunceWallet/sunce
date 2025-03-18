@@ -2,5 +2,13 @@
   "extends": "@parcel/config-default",
   "transformers": {
     "*.njk": ["parcel-transformer-nunjucks"]
-  }
+  },
+  "optimizers": {
+    "data-url:*": ["...", "@parcel/optimizer-data-url"],
+    "*.css": ["@parcel/optimizer-css"],
+    "*.{html,xhtml}": ["@parcel/optimizer-htmlnano"],
+    "*.{js,mjs,cjs}": ["@parcel/optimizer-swc"],
+    "*.svg": [],
+    "*.{jpg,jpeg,png}": ["@parcel/optimizer-image"]
+  },
 }

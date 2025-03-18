@@ -1,7 +1,7 @@
 import DebugLogger from "debug"
 import { expose, registerSerializer } from "threads"
 import { CustomErrorSerializer } from "../Generic/lib/errors"
-import { ConnectionErrorDescription, ConnectionErrorEvent, Exposed as Errors, ServiceID } from "./net-worker/errors"
+import { type ConnectionErrorDescription, type ConnectionErrorEvent, Exposed as Errors, ServiceID } from "./net-worker/errors"
 import * as Multisig from "./net-worker/multisig"
 import * as SEP10 from "./net-worker/sep-10"
 import * as Ecosystem from "./net-worker/stellar-ecosystem"

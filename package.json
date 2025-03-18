@@ -32,7 +32,7 @@
     "dev": "run-p prebuild:electron:ts:watch dev:bundle dev:app:delayed",
     "dev:app": "cross-env NODE_ENV=development NODE_OPTIONS=\"--import tsx\" TS_NODE_PROJECT=./electron/tsconfig.json run-electron ./electron/src/index.dev",
     "dev:app:delayed": "wait-on -t 2000 && run-s dev:app",
-    "dev:bundle": "cross-env NODE_ENV=development parcel watch ./src/index.dev.njk --public-url=./"
+    "dev:bundle": "cross-env NODE_ENV=development parcel serve ./src/index.dev.njk"
   },
   "lint-staged": {
     "ignore": [
@@ -136,7 +136,7 @@
     "observable-fns": "^0.5.0",
     "os-browserify": "^0.3.0",
     "p-queue": "^6.2.0",
-    "parcel": "^2.13.3",
+    "parcel": "^2.14.0",
     "parcel-transformer-nunjucks": "^1.0.1",
     "prettier": "^1.19.1",
     "punycode": "^2.3.1",
