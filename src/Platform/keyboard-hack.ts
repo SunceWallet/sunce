@@ -3,7 +3,7 @@
 const styleHack = "display: 'run-in'; "
 
 export function setupRerenderListener(elements: NodeListOf<Element>) {
-  if (process.env.PLATFORM !== "ios") return
+  if (import.meta.env.VITE_PLATFORM !== "ios") return
 
   const listener = () => {
     elements.forEach(element => {

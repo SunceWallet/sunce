@@ -1,5 +1,3 @@
-/// <reference types="parcel-env" />
-
 import React from "react"
 import ReactDOM from "react-dom"
 import { HashRouter as Router } from "react-router-dom"
@@ -27,8 +25,3 @@ const App = () => (
 )
 
 ReactDOM.render(<App />, document.getElementById("app"))
-
-// Hot Module Replacement
-if (module.hot) {
-  module.hot.accept()
-}

@@ -333,6 +333,6 @@ const initialScreenHeight = window.screen.height
 
 // CSS media query selector to detect an open keyboard on iOS + Android
 export const MobileKeyboardOpenedSelector =
-  process.env.PLATFORM === "ios" || process.env.PLATFORM === "android"
+  import.meta.env.VITE_PLATFORM === "ios" || import.meta.env.VITE_PLATFORM === "android"
     ? () => `@media (max-height: ${initialScreenHeight - 100}px)`
     : () => `:not(*)`

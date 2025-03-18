@@ -74,7 +74,7 @@ export const BiometricLockSetting = React.memo(function BiometricLockSetting(pro
       icon={<FingerprintIcon className={classes.icon} />}
       onClick={props.enrolled ? props.onToggle : undefined}
       primaryText={
-        process.env.PLATFORM === "ios"
+        import.meta.env.VITE_PLATFORM === "ios"
           ? t("app-settings.settings.biometric-lock.text.primary.ios")
           : t("app-settings.settings.biometric-lock.text.primary.default")
       }

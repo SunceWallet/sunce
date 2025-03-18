@@ -3,7 +3,7 @@ import { Messages } from "../shared/ipc"
 const hideSplashScreenDelay = 500
 
 function handleSplashScreen() {
-  if (process.env.PLATFORM === "android" || process.env.PLATFORM === "ios") {
+  if (import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios") {
     const listener = (event: Event) => {
       if (event instanceof MessageEvent && event.source === window.parent) {
         if (event.data === Messages.HideSplashScreen) {
@@ -42,7 +42,7 @@ function showSplashScreen() {
 export default handleSplashScreen
 
 export function appIsLoaded() {
-  if ((process.env.PLATFORM === "android" || process.env.PLATFORM === "ios") && window.parent) {
+  if ((import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios") && window.parent) {
     window.parent.postMessage("app:ready", "*")
 
     // Make sure that we definitely hide the splash screen and re-send app:ready in case there is

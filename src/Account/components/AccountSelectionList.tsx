@@ -10,7 +10,7 @@ import { Account } from "~App/contexts/accounts"
 import InlineLoader from "~Generic/components/InlineLoader"
 import AccountBalances from "./AccountBalances"
 
-const isMobileDevice = process.env.PLATFORM === "android" || process.env.PLATFORM === "ios"
+const isMobileDevice = import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios"
 
 interface AccountSelectionListProps {
   accounts: Account[]

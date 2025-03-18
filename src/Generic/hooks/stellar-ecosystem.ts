@@ -1,7 +1,7 @@
 import React from "react"
 import { trackError } from "~App/contexts/notifications"
-import { AccountRecord, fetchWellknownAccounts } from "../lib/stellar-expert"
-import { AssetRecord, fetchAllAssets } from "../lib/stellar-ticker"
+import { type AccountRecord, fetchWellknownAccounts } from "~/Generic/lib/stellar-expert"
+import { type AssetRecord, fetchAllAssets } from "~/Generic/lib/stellar-ticker"
 import { tickerAssetsCache, wellKnownAccountsCache } from "./_caches"
 import { useForceRerender } from "./util"
 

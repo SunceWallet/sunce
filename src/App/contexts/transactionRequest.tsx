@@ -6,7 +6,7 @@ import { verifyTransactionRequest } from "~Transaction/lib/stellar-uri"
 import { trackError } from "./notifications"
 import { useTranslation } from "react-i18next"
 
-const allowUnsafeTestnetURIs = Boolean(process.env.ALLOW_UNSAFE_TESTNET_URIS)
+const allowUnsafeTestnetURIs = Boolean(import.meta.env.VITE_ALLOW_UNSAFE_TESTNET_URIS)
 
 interface Props {
   children: React.ReactNode

@@ -6,22 +6,22 @@ interface QRReaderProps {
   style?: any // ignored
 }
 
-function getImplementation() {
+async function getImplementation() {
   if (window.electron) {
-    const implementation = require("./components/electron")
+    const implementation = await import("./components/electron")
     return implementation
-  } else if (process.env.PLATFORM === "android" || process.env.PLATFORM === "ios") {
-    const implementation = require("./components/cordova")
+  } else if (import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios") {
+    const implementation = await import("./components/cordova")
     return implementation
-  } else if (process.browser) {
-    const implementation = require("./components/web")
+  } else if (typeof window !== 'undefined') {
+    const implementation = await import("./components/web")
     return implementation
   } else {
     throw new Error("There are no platform components for your platform.")
   }
 }
 
-const components: any = getImplementation()
+const components: any = await getImplementation()
 
 export const isFullscreenQRPreview: boolean = components.isFullscreenQRPreview
 

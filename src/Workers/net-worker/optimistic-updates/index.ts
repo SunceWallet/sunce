@@ -2,8 +2,8 @@ import { Horizon, Operation, ServerApi, Transaction } from "stellar-sdk"
 import {
   accountDataUpdates,
   offerUpdates,
-  OptimisticAccountUpdate,
-  OptimisticOfferUpdate
+  type OptimisticAccountUpdate,
+  type OptimisticOfferUpdate
 } from "../../lib/optimistic-updates"
 import handleChangeTrust from "./change-trust"
 import handleManageOffer from "./manage-offer"

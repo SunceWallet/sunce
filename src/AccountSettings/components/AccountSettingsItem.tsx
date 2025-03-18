@@ -5,7 +5,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles"
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import { breakpoints } from "~App/theme"
 
-const isMobileDevice = process.env.PLATFORM === "android" || process.env.PLATFORM === "ios"
+const isMobileDevice = import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios"
 
 const useAccountSettingsItemStyles = makeStyles({
   caret: {

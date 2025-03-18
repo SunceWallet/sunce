@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: get version
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
@@ -45,7 +45,7 @@ jobs:
         - name: setup node
           uses: actions/setup-node@v4
           with:
-            node-version: 20
+            node-version: 22
 
         - name: Setup
           run: npm ci

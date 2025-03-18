@@ -39,7 +39,7 @@ function CustomTrustlineDialog(props: Props) {
         <TextField
           label={t("account-settings.custom-trustline.textfield.code.label")}
           placeholder="EURT, USDT, BTC, ..."
-          autoFocus={process.env.PLATFORM !== "ios"}
+          autoFocus={import.meta.env.VITE_PLATFORM !== "ios"}
           margin="dense"
           name="asset-code"
           value={code}

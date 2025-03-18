@@ -17,7 +17,7 @@ import { SearchField } from "~Generic/components/FormFields"
 import MainTitle from "~Generic/components/MainTitle"
 import ViewLoading from "~Generic/components/ViewLoading"
 import { FixedSizeList } from "~Generic/components/VirtualList"
-import { AssetRecord, useTickerAssets, useWellKnownAccounts } from "~Generic/hooks/stellar-ecosystem"
+import { useTickerAssets, useWellKnownAccounts } from "~Generic/hooks/stellar-ecosystem"
 import { useRouter } from "~Generic/hooks/userinterface"
 import { AccountData } from "~Generic/lib/account"
 import * as popularAssets from "~Generic/lib/popularAssets"
@@ -28,6 +28,7 @@ import DialogBody from "~Layout/components/DialogBody"
 import TransactionSender from "~Transaction/components/TransactionSender"
 import BalanceDetailsListItem from "./BalanceDetailsListItem"
 import CustomTrustlineDialog from "./CustomTrustline"
+import { AssetRecord } from "~Generic/lib/stellar-ticker"
 
 function assetRecordMatches(assetRecord: AssetRecord, search: string) {
   search = search.toLowerCase()

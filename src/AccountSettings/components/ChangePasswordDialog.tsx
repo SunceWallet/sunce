@@ -214,7 +214,7 @@ function ChangePasswordDialog(props: Props) {
       >
         <Box basis="400px" grow={0} hidden={!props.account.requiresPassword} margin="0 16px" shrink>
           <PasswordField
-            autoFocus={props.account.requiresPassword && process.env.PLATFORM !== "ios"}
+            autoFocus={props.account.requiresPassword && import.meta.env.VITE_PLATFORM !== "ios"}
             error={Boolean(errors.prevPassword)}
             label={
               errors.prevPassword
@@ -230,7 +230,7 @@ function ChangePasswordDialog(props: Props) {
         </Box>
         <Box basis="400px" grow={0} hidden={removingPassword} margin="0 16px" shrink>
           <PasswordField
-            autoFocus={!props.account.requiresPassword && process.env.PLATFORM !== "ios"}
+            autoFocus={!props.account.requiresPassword && import.meta.env.VITE_PLATFORM !== "ios"}
             error={Boolean(errors.nextPassword)}
             label={
               errors.nextPassword

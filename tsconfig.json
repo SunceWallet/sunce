@@ -4,7 +4,7 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "strict": true,
-    "module": "esnext",
+    "module": "es2022",
     "moduleResolution": "node",
     "paths": {
       "~*": ["./src/*"],
@@ -17,5 +17,8 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "./dist"]
+
 }

@@ -1,7 +1,7 @@
 import BigNumber from "big.js"
 import { Asset, Horizon, LiquidityPoolAsset, Operation, Transaction } from "stellar-sdk"
 import { balancelineToAsset, getLiquidityPoolIdFromAsset, stringifyAssetToReadableString } from "~Generic/lib/stellar"
-import { OptimisticAccountUpdate } from "../../lib/optimistic-updates"
+import { type OptimisticAccountUpdate } from "../../lib/optimistic-updates"
 
 function addTrustline(
   horizonURL: string,

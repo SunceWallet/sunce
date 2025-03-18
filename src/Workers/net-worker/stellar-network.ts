@@ -21,8 +21,8 @@ import {
   optimisticallyUpdateAccountData,
   optimisticallyUpdateOffers,
   removeStaleOptimisticUpdates,
-  OptimisticAccountUpdate,
-  OptimisticOfferUpdate
+  type OptimisticAccountUpdate,
+  type OptimisticOfferUpdate
 } from "./optimistic-updates/index"
 
 export interface CollectionPage<T> {

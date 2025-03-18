@@ -144,7 +144,7 @@ function TxConfirmationForm(props: Props) {
         />
         {props.account.requiresPassword && !props.disabled ? (
           <PasswordField
-            autoFocus={process.env.PLATFORM !== "ios"}
+            autoFocus={import.meta.env.VITE_PLATFORM !== "ios"}
             error={Boolean(passwordError)}
             label={
               passwordError

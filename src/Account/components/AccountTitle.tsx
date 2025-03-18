@@ -258,7 +258,7 @@ function AccountTitle(props: AccountTitleProps) {
 
   const focusInput = React.useCallback(() => {
     // Doesn't work on iOS, even leads to weird broken behavior
-    if (inputRef.current && process.env.PLATFORM !== "ios") {
+    if (inputRef.current && import.meta.env.VITE_PLATFORM !== "ios") {
       inputRef.current.select()
       inputRef.current.focus()
     }

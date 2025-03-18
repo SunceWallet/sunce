@@ -44,7 +44,7 @@ function NewSignerForm(props: Props) {
       <ListItemText>
         <HorizontalLayout>
           <TextField
-            autoFocus={process.env.PLATFORM !== "ios"}
+            autoFocus={import.meta.env.VITE_PLATFORM !== "ios"}
             error={!!props.errors.publicKey}
             label={
               props.errors.publicKey

@@ -85,8 +85,8 @@ function Stage2() {
         <DesktopNotifications />
         <StellarUriHandler />
       </React.Suspense>
-      {process.env.PLATFORM === "android" ? <AndroidBackButton /> : null}
-      {process.env.PLATFORM === "android" || process.env.PLATFORM === "ios" ? <LinkHandler /> : null}
+      {import.meta.env.VITE_PLATFORM === "android" ? <AndroidBackButton /> : null}
+      {import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios" ? <LinkHandler /> : null}
     </>
   )
 }

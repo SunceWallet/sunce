@@ -263,7 +263,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
   const destinationInput = React.useMemo(
     () => (
       <TextField
-        autoFocus={process.env.PLATFORM !== "ios"}
+        autoFocus={import.meta.env.VITE_PLATFORM !== "ios"}
         disabled={Boolean(preselectedParams?.destination)}
         error={Boolean(form.errors.destination)}
         fullWidth

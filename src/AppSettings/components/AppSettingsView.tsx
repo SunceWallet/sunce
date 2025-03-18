@@ -10,9 +10,8 @@ import MainTitle from "~Generic/components/MainTitle"
 import { useIsMobile, useRouter } from "~Generic/hooks/userinterface"
 import { matchesRoute } from "~Generic/lib/routes"
 import { Section } from "~Layout/components/Page"
+import pkg from "../../../package.json"
 
-// tslint:disable-next-line
-const pkg = require("../../../package.json")
 
 function SettingsPage() {
   const isSmallScreen = useIsMobile()

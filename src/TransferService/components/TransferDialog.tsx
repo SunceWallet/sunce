@@ -63,8 +63,8 @@ function TransferDialog(props: TransferDialogProps) {
   ])
 
   // Allow overriding the transfer server domain by asset using an env var (for testing purposes)
-  const assetTransferDomainOverrides = process.env.TRANSFER_DOMAIN_OVERRIDE
-    ? parseOverrides(process.env.TRANSFER_DOMAIN_OVERRIDE)
+  const assetTransferDomainOverrides = import.meta.env.VITE_TRANSFER_DOMAIN_OVERRIDE
+    ? parseOverrides(import.meta.env.VITE_TRANSFER_DOMAIN_OVERRIDE)
     : {}
   const transferInfos = useTransferInfos(trustedAssets, props.account.testnet, assetTransferDomainOverrides)
 
