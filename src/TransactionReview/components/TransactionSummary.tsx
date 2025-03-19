@@ -1,7 +1,7 @@
 import BigNumber from "big.js"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Operation, Transaction } from "stellar-sdk"
+import { Operation, Transaction } from "@stellar/stellar-sdk"
 import Collapse from "@material-ui/core/Collapse"
 import Divider from "@material-ui/core/Divider"
 import useMediaQuery from "@material-ui/core/useMediaQuery"

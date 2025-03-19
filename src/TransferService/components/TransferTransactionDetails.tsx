@@ -2,7 +2,7 @@ import BigNumber from "big.js"
 import { nanoid } from "nanoid"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Transaction } from "stellar-sdk"
+import { Transaction } from "@stellar/stellar-sdk"
 import SendIcon from "@material-ui/icons/Send"
 import {
   Deposit,

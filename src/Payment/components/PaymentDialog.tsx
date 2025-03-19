@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset, Server, Transaction } from "stellar-sdk"
+import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { trackError } from "~App/contexts/notifications"
 import { useLiveAccountData, useLiveAccountOffers } from "~Generic/hooks/stellar-subscriptions"
@@ -19,7 +19,7 @@ import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
 interface Props {
   account: Account
   accountData: AccountData
-  horizon: Server
+  horizon: Horizon.Server
   onClose: () => void
   openOrdersCount: number
   sendTransaction: (transaction: Transaction, signatureRequest?: MultisigTransactionResponse) => Promise<any>
@@ -34,7 +34,7 @@ function PaymentDialog(props: Props) {
   const handleSubmit = React.useCallback(
     async (
       createTx: (
-        horizon: Server,
+        horizon: Horizon.Server,
         account: Account
       ) => Promise<{ tx: Transaction; signatureRequest?: MultisigTransactionResponse }>
     ) => {

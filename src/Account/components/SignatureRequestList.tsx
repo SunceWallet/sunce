@@ -1,7 +1,7 @@
 import ListSubheader from "@material-ui/core/ListSubheader"
 import { TransactionStellarUri } from "@stellarguard/stellar-uri"
 import React from "react"
-import { Transaction } from "stellar-sdk"
+import { Transaction } from "@stellar/stellar-sdk"
 import { useRouter } from "~Generic/hooks/userinterface"
 import { matchesRoute } from "~Generic/lib/routes"
 import * as routes from "~App/routes"

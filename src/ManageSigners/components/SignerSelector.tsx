@@ -6,7 +6,7 @@ import Radio from "@material-ui/core/Radio"
 import RadioGroup from "@material-ui/core/RadioGroup"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Horizon } from "stellar-sdk"
+import { Horizon } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { Address } from "~Generic/components/PublicKey"
 

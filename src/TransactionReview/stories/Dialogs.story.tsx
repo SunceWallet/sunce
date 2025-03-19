@@ -1,6 +1,6 @@
 import React from "react"
 import Button from "@material-ui/core/Button"
-import { Asset, Server, Transaction } from "stellar-sdk"
+import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
 import TransactionReviewDialog from "../components/TransactionReviewDialog"
 import { Account, AccountsContext, AccountsProvider } from "~App/contexts/accounts"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
@@ -24,12 +24,12 @@ function DialogContainer(props: DialogContainerProps) {
             amount: "1",
             asset: Asset.native(),
             destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT",
-            horizon: new Server("https://horizon-testnet.stellar.org")
+            horizon: new Horizon.Server("https://horizon-testnet.stellar.org")
           })
         ],
         {
           accountData,
-          horizon: new Server("https://horizon-testnet.stellar.org"),
+          horizon: new Horizon.Server("https://horizon-testnet.stellar.org"),
           walletAccount: props.account
         }
       )

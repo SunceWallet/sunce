@@ -51,8 +51,10 @@
     }
   },
   "dependencies": {
-    "@stellarguard/stellar-uri": "^2.0.0",
+    "@stellar/stellar-sdk": "^13.1.0",
+    "@stellarguard/stellar-uri": "^3.0.1",
     "@suncewallet/stellar-transfer": "^1.0.0",
+    "@suncewallet/stellar-sep-10": "^1.0.0",
     "electron-context-menu": "^3.6.1",
     "electron-debug": "^3.2.0",
     "electron-is-dev": "^2.0.0",
@@ -62,14 +64,11 @@
     "key-store": "^1.1.0",
     "lodash.pick": "^4.4.0",
     "nanoid": "^3.1.31",
-    "react-hook-form": "^5.0.3",
-    "stellar-sdk": "^9.0.1"
+    "react-hook-form": "^5.0.3"
   },
   "devDependencies": {
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
-    "@suncewallet/stellar-sep-10": "^1.0.0",
-    "@stellarguard/stellar-uri": "^2.0.0",
     "@storybook/addon-actions": "^7.6.8",
     "@storybook/addons": "^7.6.8",
     "@storybook/cli": "^7.6.8",

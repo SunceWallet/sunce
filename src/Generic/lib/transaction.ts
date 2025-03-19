@@ -11,7 +11,7 @@ import {
   xdr,
   Networks,
   MuxedAccount
-} from "stellar-sdk"
+} from "@stellar/stellar-sdk"
 import BigNumber from "big.js"
 import { Account } from "~App/contexts/accounts"
 import { workers } from "~Workers/worker-controller"

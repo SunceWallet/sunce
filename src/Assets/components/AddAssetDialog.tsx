@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset, AssetType, Horizon, Operation, Server, Transaction } from "stellar-sdk"
+import { Asset, AssetType, Horizon, Operation, Transaction } from "@stellar/stellar-sdk"
 import Dialog from "@material-ui/core/Dialog"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
@@ -229,7 +229,7 @@ const useAddAssetStyles = makeStyles({
 interface AddAssetDialogProps {
   account: Account
   accountData: AccountData
-  horizon: Server
+  horizon: Horizon.Server
   hpadding: number
   itemHPadding: number
   onClose: () => void

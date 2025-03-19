@@ -7,7 +7,7 @@ import { TransactionStellarUri } from "@stellarguard/stellar-uri"
 import BigNumber from "big.js"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Server } from "stellar-sdk"
+import { Horizon } from "@stellar/stellar-sdk"
 import AccountSelectionList from "~Account/components/AccountSelectionList"
 import { Account } from "~App/contexts/accounts"
 import { trackError } from "~App/contexts/notifications"
@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
 interface TransactionRequestContentProps {
   accounts: Account[]
   actionsRef: RefStateObject
-  horizon: Server
+  horizon: Horizon.Server
   onClose: () => void
   onAccountChange: (account: Account) => void
   selectedAccount: Account | null

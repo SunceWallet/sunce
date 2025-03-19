@@ -1,4 +1,4 @@
-import { FederationServer, StellarTomlResolver } from "stellar-sdk"
+import { Federation, StellarToml } from "@stellar/stellar-sdk"
 import { AccountRecord } from "~Generic/lib/stellar-expert"
 import { AssetRecord } from "~Generic/lib/stellar-ticker"
 import { CustomError } from "~Generic/lib/errors"
@@ -61,10 +61,10 @@ export async function fetchAllAssets(tickerURL: string): Promise<AssetRecord[]> 
 
 export async function fetchStellarToml(
   domain: string,
-  options: StellarTomlResolver.StellarTomlResolveOptions = {}
+  options: StellarToml.Api.StellarTomlResolveOptions = {}
 ): Promise<any> {
   try {
-    return await StellarTomlResolver.resolve(domain, options)
+    return await StellarToml.Resolver.resolve(domain, options)
   } catch (error) {
     // tslint:disable-next-line no-console
     console.warn(`Could not resolve stellar.toml data for domain ${domain}:`, error)
@@ -72,6 +72,6 @@ export async function fetchStellarToml(
   }
 }
 
-export function resolveStellarAddress(address: string, options?: FederationServer.Options) {
-  return FederationServer.resolve(address, options)
+export function resolveStellarAddress(address: string, options?: Federation.Api.Options) {
+  return Federation.Server.resolve(address, options)
 }

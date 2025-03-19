@@ -1,5 +1,5 @@
 import BigNumber from "big.js"
-import { Asset, Horizon } from "stellar-sdk"
+import { Asset, Horizon } from "@stellar/stellar-sdk"
 import { AccountData, BalanceLine } from "~Generic/lib/account"
 import { formatBalance, BalanceFormattingOptions } from "~Generic/lib/balances"
 import { FormBigNumber, isValidAmount } from "~Generic/lib/form"

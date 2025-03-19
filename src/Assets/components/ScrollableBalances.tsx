@@ -1,7 +1,7 @@
 import React from "react"
 import { animated, useSpring } from "react-spring"
 import { useDrag } from "react-use-gesture"
-import { Asset, Horizon } from "stellar-sdk"
+import { Asset, Horizon } from "@stellar/stellar-sdk"
 import IconButton from "@material-ui/core/IconButton"
 import makeStyles from "@material-ui/core/styles/makeStyles"
 import LeftIcon from "@material-ui/icons/ArrowLeft"

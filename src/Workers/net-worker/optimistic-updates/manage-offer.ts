@@ -1,11 +1,11 @@
 import BigNumber from "big.js"
-import { Operation, ServerApi, Transaction } from "stellar-sdk"
+import { Operation, Horizon, Transaction } from "@stellar/stellar-sdk"
 import { OptimisticOfferUpdate } from "../../lib/optimistic-updates"
 
 function createOffer(
   operation: Operation.ManageBuyOffer | Operation.ManageSellOffer,
   tx: Transaction
-): ServerApi.OfferRecord & { _optimistic: true } {
+): Horizon.ServerApi.OfferRecord & { _optimistic: true } {
   return {
     _optimistic: true,
     _links: {
@@ -54,7 +54,7 @@ function handleManageOffer(
 
     return [
       {
-        apply(offers: ServerApi.OfferRecord[]): ServerApi.OfferRecord[] {
+        apply(offers: Horizon.ServerApi.OfferRecord[]): Horizon.ServerApi.OfferRecord[] {
           return [...offers, createOffer(operation, transaction)]
         },
         effectsAccountID: operation.source || transaction.source,
@@ -69,7 +69,7 @@ function handleManageOffer(
 
     return [
       {
-        apply(offers: ServerApi.OfferRecord[]): ServerApi.OfferRecord[] {
+        apply(offers: Horizon.ServerApi.OfferRecord[]): Horizon.ServerApi.OfferRecord[] {
           return offers.filter(offer => String(offer.id) !== String(operation.offerId))
         },
         effectsAccountID: operation.source || transaction.source,
@@ -84,7 +84,7 @@ function handleManageOffer(
 
     return [
       {
-        apply(offers: ServerApi.OfferRecord[]): ServerApi.OfferRecord[] {
+        apply(offers: Horizon.ServerApi.OfferRecord[]): Horizon.ServerApi.OfferRecord[] {
           return offers.map(offer => {
             return String(offer.id) === String(operation.offerId) ? createOffer(operation, transaction) : offer
           })

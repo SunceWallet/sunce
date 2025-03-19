@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Horizon } from "stellar-sdk"
+import { Horizon } from "@stellar/stellar-sdk"
 import IconButton from "@material-ui/core/IconButton"
 import Divider from "@material-ui/core/Divider"
 import List from "@material-ui/core/List"

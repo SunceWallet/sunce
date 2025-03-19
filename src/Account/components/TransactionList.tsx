@@ -1,7 +1,7 @@
 import BigNumber from "big.js"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset, Networks, Operation, Transaction } from "stellar-sdk"
+import { Asset, Networks, Operation, Transaction } from "@stellar/stellar-sdk"
 import HumanTime from "react-human-time"
 import Collapse from "@material-ui/core/Collapse"
 import List from "@material-ui/core/List"

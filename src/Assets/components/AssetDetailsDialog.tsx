@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset } from "stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 import Avatar from "@material-ui/core/Avatar"
 import Card from "@material-ui/core/Card"
 import CardContent from "@material-ui/core/CardContent"

@@ -1,4 +1,4 @@
-import { Horizon, Operation, ServerApi, Transaction } from "stellar-sdk"
+import { Horizon, Operation, Transaction } from "@stellar/stellar-sdk"
 import {
   accountDataUpdates,
   offerUpdates,
@@ -38,8 +38,8 @@ export function optimisticallyUpdateAccountData(
 export function optimisticallyUpdateOffers(
   horizonURL: string,
   accountID: string,
-  openOffers: ServerApi.OfferRecord[]
-): ServerApi.OfferRecord[] {
+  openOffers: Horizon.ServerApi.OfferRecord[]
+): Horizon.ServerApi.OfferRecord[] {
   const optimisticUpdates = offerUpdates.getUpdates(horizonURL, accountID)
   const updated = optimisticUpdates.reduce((updatedOffers, update) => update.apply(updatedOffers), openOffers)
   return updated

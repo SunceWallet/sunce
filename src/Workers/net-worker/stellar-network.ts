@@ -4,7 +4,7 @@ import throttle from "lodash.throttle"
 import { filter, flatMap, map, merge, multicast, Observable } from "observable-fns"
 import PromiseQueue from "p-queue"
 import qs from "qs"
-import { Asset, Horizon, Networks, Server, ServerApi, Transaction } from "stellar-sdk"
+import { Asset, Horizon, Networks, Transaction } from "@stellar/stellar-sdk"
 import pkg from "../../../package.json"
 import { Cancellation, CustomError } from "~Generic/lib/errors"
 import { observableFromAsyncFactory } from "~Generic/lib/observables"
@@ -69,10 +69,10 @@ interface FeeStats {
 }
 
 const accountSubscriptionCache = new Map<string, Observable<Horizon.AccountResponse>>()
-const effectsSubscriptionCache = new Map<string, Observable<ServerApi.EffectRecord>>()
-const orderbookSubscriptionCache = new Map<string, Observable<ServerApi.OrderbookRecord>>()
-const ordersSubscriptionCache = new Map<string, Observable<ServerApi.OfferRecord[]>>()
-const transactionsSubscriptionCache = new Map<string, Observable<Horizon.TransactionResponse>>()
+const effectsSubscriptionCache = new Map<string, Observable<Horizon.ServerApi.EffectRecord>>()
+const orderbookSubscriptionCache = new Map<string, Observable<Horizon.ServerApi.OrderbookRecord>>()
+const ordersSubscriptionCache = new Map<string, Observable<Horizon.ServerApi.OfferRecord[]>>()
+const transactionsSubscriptionCache = new Map<string, Observable<Horizon.HorizonApi.TransactionResponse>>()
 
 const accountDataCache = new Map<string, Horizon.AccountResponse | null>()
 const accountDataWaitingCache = new Map<string, ReturnType<typeof waitForAccountDataUncached>>()
@@ -275,7 +275,7 @@ function subscribeToAccountEffectsUncached(horizonURLs: string[], accountID: str
   let latestCursor: string | undefined
   let latestEffectCreatedAt: string | undefined
 
-  return subscribeToUpdatesAndPoll<ServerApi.EffectRecord>(
+  return subscribeToUpdatesAndPoll<Horizon.ServerApi.EffectRecord>(
     {
       async applyUpdate(update) {
         debug(`Received new effect:`, update)
@@ -321,13 +321,13 @@ function subscribeToAccountEffectsUncached(horizonURLs: string[], accountID: str
         }
 
         return multicast(
-          observableFromAsyncFactory<ServerApi.EffectRecord>(async observer => {
+          observableFromAsyncFactory<Horizon.ServerApi.EffectRecord>(async observer => {
             return fetchQueue.add(() =>
               createReconnectingSSE(
                 createURL,
                 {
                   onMessage(message) {
-                    const effect: ServerApi.EffectRecord = JSON.parse(message.data)
+                    const effect: Horizon.ServerApi.EffectRecord = JSON.parse(message.data)
 
                     // Don't update latestCursor cursor here – if we do it too early it might cause
                     // shouldApplyUpdate() to return false, since it compares the new effect with itself
@@ -519,7 +519,7 @@ function subscribeToOpenOrdersUncached(horizonURLs: string[], accountID: string)
   const serviceID = getServiceID(horizonURL)
 
   let latestCursor: string | undefined
-  let latestSet: ServerApi.OfferRecord[] = []
+  let latestSet: Horizon.ServerApi.OfferRecord[] = []
 
   const fetchUpdate = async () => {
     debug(`Fetching account's open orders…`)
@@ -530,7 +530,7 @@ function subscribeToOpenOrdersUncached(horizonURLs: string[], accountID: string)
     return page._embedded.records
   }
 
-  return subscribeToUpdatesAndPoll<ServerApi.OfferRecord[]>(
+  return subscribeToUpdatesAndPoll<Horizon.ServerApi.OfferRecord[]>(
     {
       async applyUpdate(update) {
         debug(`Received updated open orders:`, update)
@@ -611,7 +611,7 @@ function createOrderbookQuery(selling: Asset, buying: Asset) {
   return query
 }
 
-function createEmptyOrderbookRecord(base: Asset, counter: Asset): ServerApi.OrderbookRecord {
+function createEmptyOrderbookRecord(base: Asset, counter: Asset): Horizon.ServerApi.OrderbookRecord {
   return {
     _links: {
       self: {
@@ -633,7 +633,7 @@ function subscribeToOrderbookUncached(horizonURLs: string[], sellingAsset: strin
   const query = createOrderbookQuery(selling, buying)
 
   if (selling.equals(buying)) {
-    return Observable.from<ServerApi.OrderbookRecord>([createEmptyOrderbookRecord(buying, buying)])
+    return Observable.from<Horizon.ServerApi.OrderbookRecord>([createEmptyOrderbookRecord(buying, buying)])
   }
 
   const horizonURL = getRandomURL(horizonURLs)
@@ -665,13 +665,13 @@ function subscribeToOrderbookUncached(horizonURLs: string[], sellingAsset: strin
         return snapshot !== latestKnownSnapshot
       },
       subscribeToUpdates() {
-        return observableFromAsyncFactory<ServerApi.OrderbookRecord>(observer => {
+        return observableFromAsyncFactory<Horizon.ServerApi.OrderbookRecord>(observer => {
           return fetchQueue.add(() =>
             createReconnectingSSE(
               createURL,
               {
                 onMessage(message) {
-                  const record: ServerApi.OrderbookRecord = JSON.parse(message.data)
+                  const record: Horizon.ServerApi.OrderbookRecord = JSON.parse(message.data)
                   observer.next(record)
                 },
                 onUnexpectedError(error) {
@@ -739,7 +739,7 @@ export async function fetchLatestAccountEffect(horizonURL: string, accountID: st
     return null
   }
 
-  return parseJSONResponse<ServerApi.EffectRecord>(response)
+  return parseJSONResponse<Horizon.ServerApi.EffectRecord>(response)
 }
 
 export interface FetchTransactionsOptions extends PaginationOptions {
@@ -751,7 +751,7 @@ export async function fetchAccountTransactions(
   horizonURLs: string[],
   accountID: string,
   options: FetchTransactionsOptions = {}
-): Promise<CollectionPage<Horizon.TransactionResponse>> {
+): Promise<CollectionPage<Horizon.HorizonApi.TransactionResponse>> {
   const horizonURL = getRandomURL(horizonURLs)
   const fetchQueue = getFetchQueue(horizonURL)
   const pagination = {
@@ -778,7 +778,7 @@ export async function fetchAccountTransactions(
     }
   }
 
-  const collection = await parseJSONResponse<CollectionPage<Horizon.TransactionResponse>>(response)
+  const collection = await parseJSONResponse<CollectionPage<Horizon.HorizonApi.TransactionResponse>>(response)
 
   removeStaleOptimisticUpdates(
     horizonURL,
@@ -798,7 +798,7 @@ export async function fetchAccountOpenOrders(
 
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
 
-  return parseJSONResponse<CollectionPage<ServerApi.OfferRecord>>(response)
+  return parseJSONResponse<CollectionPage<Horizon.ServerApi.OfferRecord>>(response)
 }
 
 export async function fetchFeeStats(horizonURL: string): Promise<FeeStats> {
@@ -828,12 +828,12 @@ export async function fetchOrderbookRecord(horizonURLs: string[], sellingAsset: 
   const url = new URL(`/order_book?${qs.stringify({ ...identification, ...query })}`, horizonURL)
 
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
-  return parseJSONResponse<ServerApi.OrderbookRecord>(response)
+  return parseJSONResponse<Horizon.ServerApi.OrderbookRecord>(response)
 }
 
 export async function fetchTimebounds(horizonURL: string, timeout: number) {
   const fetchQueue = getFetchQueue(horizonURL)
-  const horizon = new Server(horizonURL)
+  const horizon = new Horizon.Server(horizonURL)
 
   return fetchQueue.add(() => horizon.fetchTimebounds(timeout), {
     priority: 10

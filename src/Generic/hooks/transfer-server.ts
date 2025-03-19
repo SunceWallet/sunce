@@ -4,7 +4,7 @@ import {
   TransferServer,
   TransferServerInfo
 } from "@suncewallet/stellar-transfer"
-import { Asset, Networks } from "stellar-sdk"
+import { Asset, Networks } from "@stellar/stellar-sdk"
 import { mapSuspendables } from "../lib/suspense"
 import { transferInfosCache } from "./_caches"
 import { useAccountHomeDomains } from "./stellar"

@@ -1,6 +1,6 @@
 import BigNumber from "big.js"
 import React from "react"
-import { Asset } from "stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 import {
   AssetTransferInfo,
   KYCResponseType,

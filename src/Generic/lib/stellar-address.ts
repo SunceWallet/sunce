@@ -1,5 +1,5 @@
 import LRUCache from "lru-cache"
-import { FederationServer } from "stellar-sdk"
+import { Federation } from "@stellar/stellar-sdk"
 import { workers } from "~Workers/worker-controller"
 import { CustomError } from "./errors"
 import { isNotFoundError } from "./stellar"
@@ -11,7 +11,7 @@ export const isStellarAddress = (str: string) =>
 
 export async function lookupFederationRecord(
   stellarAddress: string,
-  lookupCache: LRUCache<string, FederationServer.Record>,
+  lookupCache: LRUCache<string, Federation.Api.Record>,
   reverseLookupCache: LRUCache<string, string>
 ) {
   const { netWorker } = await workers
@@ -21,7 +21,7 @@ export async function lookupFederationRecord(
     return cached
   }
 
-  let resolved: FederationServer.Record
+  let resolved: Federation.Api.Record
   try {
     resolved = await netWorker.resolveStellarAddress(stellarAddress)
   } catch (error) {
