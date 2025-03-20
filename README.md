@@ -84,7 +84,7 @@ To run the app in development mode:
 npm run dev
 
 # On Mac OS:
-PLATFORM=darwin npm run dev
+VITE_PLATFORM=darwin npm run dev
 ```
 
 To run the tests:
@@ -111,6 +111,12 @@ npm run dev
 See [Cordova build readme](./cordova/README.md).
 
 ### Production build
+
+#### Web
+
+```
+npm run build:web
+```
 
 #### Desktop
 
