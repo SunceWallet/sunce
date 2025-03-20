@@ -12,6 +12,7 @@
   },
   "homepage": "https://sunce.montelibero.org/",
   "repository": "github:montelibero/mtl_sunce",
+  "main": "./electron/lib/index.js",
   "scripts": {
     "precommit": "lint-staged",
     "lint:fix": "eslint --fix '{src,stories}/**/*.{ts,tsx}'",
@@ -133,7 +134,7 @@
     "crypto-browserify": "^3.12.0",
     "debug": "^4.1.1",
     "electron": "^34.3.0",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^24.13.3",
     "electron-builder-squirrel-windows": "^25.1.8",
     "electron-notarize": "^0.2.0",
     "electron-reload": "^1.5.0",
