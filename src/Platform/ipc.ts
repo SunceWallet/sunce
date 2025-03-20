@@ -1,6 +1,6 @@
 // Global IPC.* types are defined in types/ipc.d.ts
 
-async function getImplementation() {
+function getImplementation() {
   if (window.electron) {
     const impl = import("./ipc/electron")
     return impl
@@ -15,13 +15,13 @@ async function getImplementation() {
   }
 }
 
-const implementation: any = await getImplementation()
+const implementation: Promise<any> = getImplementation()
 
 export function call<Message extends keyof IPC.MessageType>(
   messageType: Message,
   ...args: IPC.MessageArgs<Message>
 ): Promise<IPC.MessageReturnType<Message>> {
-  return implementation.call(messageType, ...args)
+  return implementation.then(i => i.call(messageType, ...args))
 }
 
 type UnsubscribeFn = () => void
@@ -30,5 +30,5 @@ export function subscribeToMessages<Message extends keyof IPC.MessageType>(
   messageType: Message,
   callback: (message: any) => void
 ): UnsubscribeFn {
-  return implementation.subscribeToMessages(messageType, callback)
+  return implementation.then(i => i.subscribeToMessages(messageType, callback))
 }

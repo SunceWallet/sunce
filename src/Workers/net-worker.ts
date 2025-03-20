@@ -1,5 +1,6 @@
 import DebugLogger from "debug"
-import { expose, registerSerializer } from "threads"
+import { registerSerializer } from "threads"
+import { expose } from "threads/worker"
 import { CustomErrorSerializer } from "~/Generic/lib/errors"
 import { type ConnectionErrorDescription, type ConnectionErrorEvent, Exposed as Errors, ServiceID } from "~/Workers/net-worker/errors"
 import * as Multisig from "~/Workers/net-worker/multisig"

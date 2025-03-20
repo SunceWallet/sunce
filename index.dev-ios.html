@@ -28,7 +28,6 @@
     <iframe id="walletframe"></iframe>
 
     <script src="../cordova/platforms/ios/platform_www/cordova.js"></script>
-    <script nomodule src="polyfills.ts"></script>
     <script>
       function onDeviceReady() {
         const walletframe = document.getElementById("walletframe")
@@ -42,6 +41,6 @@
 
       document.addEventListener("deviceready", onDeviceReady, false);
     </script>
-    <script src="./App/bootstrap.cordova.ts"></script>
+    <script src="/src/App/bootstrap.cordova.ts"></script>
   </body>
 </html>
