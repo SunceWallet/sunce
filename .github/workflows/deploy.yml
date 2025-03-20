@@ -23,14 +23,10 @@ jobs:
         
       - name: Build website
         run: |
-          cd web
-          npm run build
+          npm run build:web
           
-      - name: Rename index file
-        run: mv web/dist/index.prod.html web/dist/index.html
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./web/dist 
+          publish_dir: ./dist 

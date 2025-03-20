@@ -10,7 +10,7 @@ const platform = process.env.VITE_PLATFORM
 
 const getBundleName = (isProd) => {
   if (platform === 'android' || platform === 'ios') {
-    return isProd ? `index.prod-${platform}.html` : `index.dev-${platform}.html`
+    return isProd ? `entries/prod/${platform}/index.html` : `entries/dev/${platform}/index.html`
   }
 
   return 'index.html'
@@ -18,6 +18,7 @@ const getBundleName = (isProd) => {
 
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
+  const env = isProd ? 'prod' : 'dev';
   const bundleName = getBundleName(isProd)
   const inputFile = resolve(__dirname, bundleName);
 
@@ -31,7 +32,9 @@ export default defineConfig(({ mode }) => {
         name: 'rename',
         enforce: 'post',
         generateBundle(options, bundle) {
-          bundle[bundleName].fileName = bundle[bundleName].fileName.replace(bundleName, 'index.html');
+          if (bundleName !== '/index.html') {
+            bundle[bundleName].fileName = bundle[bundleName].fileName.replace(bundleName, `index.${env}-${platform}.html`);
+          }
         }
       }
     ],
@@ -48,6 +51,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           app: inputFile,
+          web: "/index.html"
         },
       },
     },

@@ -75,11 +75,9 @@ Follow the setup of the development builds but instead of `npm run dev:android/i
 
 ```
 # Android
-npm run prebuild:android
 npm run build:android
 
 # iOS
-npm run prebuild:ios
 npm run build:ios
 ```
 

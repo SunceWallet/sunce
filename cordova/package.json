@@ -64,8 +64,8 @@
     "install:ios": "rm -rf ./plugins && ./scripts/create-config-from-template.sh prod ios && cordova platform add ios && node ./hooks/after_platform_add/set_ios_deployment_target.js",
     "remove:android": "cordova platform rm android",
     "remove:ios": "cordova platform rm ios",
-    "prebuild:android": "rm -rf ../dist/ && NODE_ENV=production VITE_PLATFORM=android ../node_modules/.bin/vite build -c ../vite.config.ts -m production && ./scripts/create-config-from-template.sh prod android",
-    "prebuild:ios": "rm -rf ../dist/ && NODE_ENV=production VITE_PLATFORM=ios ../node_modules/.bin/vite build -c ../vite.config.ts -m production && ./scripts/create-config-from-template.sh prod ios",
+    "prebuild:android": "./scripts/create-config-from-template.sh prod android",
+    "prebuild:ios": "./scripts/create-config-from-template.sh prod ios",
     "build:android": "dotenv -- cordova build android",
     "build:android:signed:manual": "source ./scripts/signing-env-android.sh && dotenv -- cordova build android --release -- --keystore=$KEYSTORE_LOCATION --storePassword=$KEYSTORE_PASSWORD --alias=$SIGNINGKEY_ALIAS --password=$SIGNINGKEY_PASSWORD --packageType=$PACKAGE_TYPE",
     "build:android:signed:auto": "cordova build android --release -- --keystore=$KEYSTORE_LOCATION --storePassword=$KEYSTORE_PASSWORD --alias=$SIGNINGKEY_ALIAS --password=$SIGNINGKEY_PASSWORD --packageType=$PACKAGE_TYPE",
@@ -74,7 +74,7 @@
     "dev:ios": "run-p dev:bundle:ios dev:cordova:ios",
     "dev:bundle:android": "VITE_PLATFORM=android NODE_ENV=development ../node_modules/.bin/vite -c ../vite.config.ts -m development",
     "dev:bundle:ios": "VITE_PLATFORM=ios NODE_ENV=development ../node_modules/.bin/vite -c ../vite.config.ts -m development",
-    "dev:cordova:android": "../node_modules/.bin/vite build -c ../vite.config.ts -m development && ./scripts/create-config-from-template.sh dev android && dotenv -- cordova build android",
-    "dev:cordova:ios": "../node_modules/.bin/vite build -c ../vite.config.ts -m development && ./scripts/create-config-from-template.sh dev ios && cordova build ios --buildConfig=build.ios.json"
+    "dev:cordova:android": "./scripts/create-config-from-template.sh dev android && dotenv -- cordova build android",
+    "dev:cordova:ios": "./scripts/create-config-from-template.sh dev ios && cordova build ios --buildConfig=build.ios.json"
   }
 }

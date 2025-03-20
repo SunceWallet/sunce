@@ -40,7 +40,9 @@ jobs:
             cd cordova
             npm install
             npm run install:android
-            npm run prebuild:android
+
+        - name: Prebuild project (Android)
+          run: npm run prebuild:android
 
         - name: Build artifacts
           env:
