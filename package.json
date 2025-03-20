@@ -12,7 +12,7 @@
   },
   "homepage": "https://sunce.montelibero.org/",
   "repository": "github:montelibero/mtl_sunce",
-  "main": "./electron/lib/index.js",
+  "main": "./electron/lib/index.prod.js",
   "scripts": {
     "precommit": "lint-staged",
     "lint:fix": "eslint --fix '{src,stories}/**/*.{ts,tsx}'",
@@ -58,6 +58,7 @@
     "@suncewallet/stellar-sep-10": "^1.0.0",
     "@suncewallet/stellar-transfer": "^1.0.0",
     "big.js": "^5.2.2",
+    "core-js": "^3.41.0",
     "electron-context-menu": "^3.6.1",
     "electron-debug": "^3.2.0",
     "electron-is-dev": "^2.0.0",
@@ -94,8 +95,7 @@
     "react-window": "^1.8.5",
     "smoothscroll-polyfill": "^0.4.4",
     "stellar-sdk": "^9.0.1",
-    "threads": "^1.7.0",
-    "core-js": "^3.41.0"
+    "threads": "^1.7.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.0",
@@ -138,6 +138,7 @@
     "electron-builder-squirrel-windows": "^25.1.8",
     "electron-notarize": "^0.2.0",
     "electron-reload": "^1.5.0",
+    "electron-vite": "^3.0.0",
     "eslint": "^8.56.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.0.2",

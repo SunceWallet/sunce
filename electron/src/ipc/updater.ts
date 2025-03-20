@@ -1,4 +1,3 @@
-/// <reference types="vite/client" />
 import { app, autoUpdater, dialog, Notification } from "electron"
 import isDev from "electron-is-dev"
 import os from "os"
@@ -14,7 +13,7 @@ interface UpdateInfo {
   url: string
 }
 
-const updateEndpoint = !isDev ? "https://update.sunce.monteliber.org/" : import.meta.env.VITE_UPDATE_ENDPOINT
+const updateEndpoint = !isDev ? "https://update.sunce.monteliber.org/" : process.env.VITE_UPDATE_ENDPOINT
 
 // tslint:disable-next-line: no-console
 checkForUpdates().catch(console.error)
