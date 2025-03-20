@@ -8,8 +8,10 @@ const __dirname = join(dirname(fileURLToPath(import.meta.url)), "")
 
 const platform = process.env.VITE_PLATFORM
 
+const isCordova = platform === 'android' || platform === 'ios'
+
 const getBundleName = (isProd) => {
-  if (platform === 'android' || platform === 'ios') {
+  if (isCordova) {
     return isProd ? `entries/prod/${platform}/index.html` : `entries/dev/${platform}/index.html`
   }
 
@@ -32,7 +34,7 @@ export default defineConfig(({ mode }) => {
         name: 'rename',
         enforce: 'post',
         generateBundle(options, bundle) {
-          if (bundleName !== '/index.html') {
+          if (bundleName !== '/index.html' && isCordova) {
             bundle[bundleName].fileName = bundle[bundleName].fileName.replace(bundleName, `index.${env}-${platform}.html`);
           }
         }
