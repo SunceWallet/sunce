@@ -1,5 +1,5 @@
 // tslint:disable-next-line: no-var-requires
-import { contextBridge, ipcRenderer } from "electron"
+const { contextBridge, ipcRenderer } = require("electron")
 const electronProcess = process
 
 function sendMessage<Message extends keyof IPC.MessageType>(

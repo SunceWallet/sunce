@@ -41,8 +41,6 @@ export function createMainWindow() {
 
   const pathname = path.join(__dirname, "../../dist/index.html")
 
-  console.log(pathname)
-
   const webappURL = URL.format({
     pathname,
     protocol: "file:",

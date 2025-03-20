@@ -5,17 +5,16 @@ import { createAppMenu } from "./menu"
 import { createMainWindow, getOpenWindows, trackWindow } from "./window"
 import "./ipc/index"
 import "./ipc/updater"
-import electronDebug from "electron-debug"
 
 // returns true if installation-related stuff is happening (win only)
 // tslint:disable-next-line: no-var-requires
-// if (squirrel) {
-//   app.quit()
-// }
+if (require("electron-squirrel-startup")) {
+  app.quit()
+}
 
 // Enable opening dev tools in production using keyboard shortcut
 // tslint:disable-next-line: no-var-requires
-electronDebug({
+require("electron-debug")({
   isEnabled: true,
   showDevTools: false
 })
