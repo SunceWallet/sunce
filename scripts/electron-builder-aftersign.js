@@ -1,11 +1,11 @@
 // See: https://medium.com/@TwitterArchiveEraser/notarize-electron-apps-7a5f988406db
 
-import fs from "fs"
-import yaml from "js-yaml"
-import path from "path"
-import notarize from "electron-notarize"
+const fs = require("fs")
+const yaml = require("js-yaml")
+const path = require("path")
+const notarize = require("electron-notarize")
 
-export default async function(params) {
+module.exports = async function(params) {
   // Only notarize the app on Mac OS only.
   if (process.platform !== "darwin") {
     return

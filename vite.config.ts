@@ -1,8 +1,10 @@
+import os from "os"
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { nodePolyfills } from '@troggy/vite-plugin-node-polyfills'
+
 
 const __dirname = join(dirname(fileURLToPath(import.meta.url)), "")
 
@@ -10,21 +12,37 @@ const platform = process.env.VITE_PLATFORM
 
 const isCordova = platform === 'android' || platform === 'ios'
 
-const getBundleName = (isProd) => {
+const getBundleName = (isProd: boolean) => {
   if (isCordova) {
-    return isProd ? `entries/prod/${platform}/index.html` : `entries/dev/${platform}/index.html`
+    return isProd ? `index.prod-${platform}.html` : `index.dev-${platform}.html`
   }
 
   return 'index.html'
 }
+
+const getLocalIP = () => {
+  const interfaces = os.networkInterfaces();
+  for (const interfaceName in interfaces) {
+    for (const net of interfaces[interfaceName]) {
+      if (net.family === 'IPv4' && !net.internal) {
+        return net.address;
+      }
+    }
+  }
+  return '127.0.0.1'; // Default fallback
+}
+
+const localIp = getLocalIP()
+process.env.VITE_LOCAL_IP = localIp
 
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
   const env = isProd ? 'prod' : 'dev';
   const bundleName = getBundleName(isProd)
   const inputFile = resolve(__dirname, bundleName);
+  const distDir = resolve(__dirname, "dist");
 
-  return { 
+  return {
     plugins: [
       nodePolyfills(),
       react({
@@ -48,7 +66,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       assetsDir: '',
-      minify: false,
+      minify: true,
       sourcemap: true,
       rollupOptions: {
         input: {

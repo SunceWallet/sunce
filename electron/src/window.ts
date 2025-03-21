@@ -6,8 +6,8 @@ import URL from "url"
 let openWindows: BrowserWindow[] = []
 
 // start protocol handler
-import * as protocolHandler from "./protocol-handler"
-import { Messages } from "./shared/ipc"
+import * as protocolHandler from "./protocol-handler.js"
+import { Messages } from "./shared/ipc.js"
 
 export function createMainWindow() {
   if (process.platform !== "darwin") {
@@ -40,14 +40,14 @@ export function createMainWindow() {
   window.removeMenu()
 
   const pathname = path.join(__dirname, "../../dist/index.html")
-
+  
   const webappURL = URL.format({
     pathname,
     protocol: "file:",
     slashes: true
   })
 
-  window.loadURL(webappURL)
+  window.loadURL(isDev ? "http://localhost:3000/" : webappURL)
 
   window.webContents.session.setPermissionRequestHandler((webContents, permission, callback) => {
     if (!webContents.getURL().startsWith("file://") && (permission === "media" || permission === "openExternal")) {

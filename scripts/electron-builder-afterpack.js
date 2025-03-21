@@ -1,6 +1,6 @@
-import { exec } from "child_process"
+const { exec } = require("child_process")
 
-export default async ({ electronPlatformName, appOutDir, packager }) => {
+module.exports = async ({ electronPlatformName, appOutDir, packager }) => {
   // only macos
   if (electronPlatformName !== `darwin`) return
   const appName = packager.appInfo.productFilename

@@ -1,37 +1,22 @@
+
 {
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/",
+    "sourceMap": true,
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "paths": {
       "~*": ["./src/*"],
       "*": ["shared/types/*"]
     },
-    "target": "esnext",
-    "lib": ["esnext", "dom"],
-    "noUnusedLocals": true,
-    
-    "allowJs": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "isolatedModules": false,
-    "noEmit": true,
-    "jsx": "react",
-    "declaration": true,
-    "removeComments": true,
-    "noLib": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "esModuleInterop": true,
-    "sourceMap": true,
-    "strict": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "target": "es2017",
+    "lib": ["es6", "dom"],
+    "jsx": "react",
+    "noUnusedLocals": true,
     "resolveJsonModule": true,
-    "noImplicitThis": false,
-    "downlevelIteration": true,
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "./dist"]
-
+    "skipLibCheck": true
+  }
 }
