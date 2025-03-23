@@ -1,4 +1,4 @@
-import { Asset } from "stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 
 /*
  * Quick orderbook cheat sheet:

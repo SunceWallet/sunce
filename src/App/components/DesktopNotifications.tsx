@@ -2,7 +2,7 @@ import BigNumber from "big.js"
 import { TFunction } from "i18next"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset, ServerApi } from "stellar-sdk"
+import { Asset, Horizon } from "@stellar/stellar-sdk"
 import { Trade } from "stellar-sdk/lib/types/trade"
 import { useHorizonURLs } from "~Generic/hooks/stellar"
 import { useLiveAccountEffects } from "~Generic/hooks/stellar-subscriptions"
@@ -20,8 +20,8 @@ import { SignatureDelegationContext } from "../contexts/signatureDelegation"
 import * as routes from "../routes"
 import { AccountCredited } from "stellar-sdk/lib/types/effects"
 
-const isTradeEffect = (effect: ServerApi.EffectRecord): effect is Trade => effect.type === "trade"
-const isPaymentEffect = (effect: ServerApi.EffectRecord) =>
+const isTradeEffect = (effect: Horizon.ServerApi.EffectRecord): effect is Trade => effect.type === "trade"
+const isPaymentEffect = (effect: Horizon.ServerApi.EffectRecord) =>
   effect.type === "account_credited" || effect.type === "account_debited"
 
 function createEffectHandlers(
@@ -68,7 +68,7 @@ function createEffectHandlers(
 
       showNotification({ title, text: notificationBody }, () => router.history.push(routes.account(account.id)))
     },
-    async handlePaymentEffect(account: Account, effect: ServerApi.EffectRecord) {
+    async handlePaymentEffect(account: Account, effect: Horizon.ServerApi.EffectRecord) {
       if (effect.type === "account_credited" && effect.account === account.accountID) {
         const paymentEffect = effect as AccountCredited
         const title = t("app.notification.desktop.received-payment.title", `Received payment | ${account.name}`, {
@@ -133,7 +133,7 @@ function DesktopNotifications() {
     return unsubscribeFromNewSignatureRequests
   }, [handleNewSignatureRequest, subscribeToNewSignatureRequests])
 
-  useLiveAccountEffects(accounts, (account: Account, effect: ServerApi.EffectRecord) => {
+  useLiveAccountEffects(accounts, (account: Account, effect: Horizon.ServerApi.EffectRecord) => {
     if (isTradeEffect(effect)) {
       effectHandlers.handleTradeEffect(account, effect).catch(trackError)
     } else if (isPaymentEffect(effect)) {

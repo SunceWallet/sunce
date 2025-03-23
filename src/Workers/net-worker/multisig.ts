@@ -1,6 +1,6 @@
 import { Observable, Subject } from "observable-fns"
 import qs from "qs"
-import { Networks, Transaction } from "stellar-sdk"
+import { Networks, Transaction } from "@stellar/stellar-sdk"
 import { CustomError } from "~Generic/lib/errors"
 import {
   createSignatureRequestURI,

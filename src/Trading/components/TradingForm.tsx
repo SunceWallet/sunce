@@ -1,7 +1,7 @@
 import React from "react"
 import { Controller, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Asset, Horizon, Operation, Transaction } from "stellar-sdk"
+import { Asset, Horizon, Operation, Transaction } from "@stellar/stellar-sdk"
 import Button from "@material-ui/core/Button"
 import ExpansionPanel from "@material-ui/core/ExpansionPanel"
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"

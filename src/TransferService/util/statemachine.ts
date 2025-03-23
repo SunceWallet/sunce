@@ -14,7 +14,7 @@ import {
   WithdrawalTransaction
 } from "@suncewallet/stellar-transfer"
 import BigNumber from "big.js"
-import { Asset, Transaction } from "stellar-sdk"
+import { Asset, Transaction } from "@stellar/stellar-sdk"
 import { CustomError } from "~Generic/lib/errors"
 
 export namespace TransferStates {

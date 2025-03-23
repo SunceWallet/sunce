@@ -2,7 +2,7 @@
 
 import { ObservableLike } from "observable-fns"
 import React from "react"
-import { Asset, FeeBumpTransaction, Horizon, Networks, ServerApi, TransactionBuilder } from "stellar-sdk"
+import { Asset, FeeBumpTransaction, Horizon, Networks, TransactionBuilder } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { createEmptyAccountData, AccountData, BalanceLine } from "../lib/account"
 import { FixedOrderbookRecord } from "../lib/orderbook"
@@ -23,7 +23,7 @@ import { useHorizonURLs } from "./stellar"
 import { useDebouncedState, useForceRerender } from "./util"
 import { useNetWorker } from "./workers"
 
-function withDecodedTx(tx: Horizon.TransactionResponse, network: Networks): DecodedTransactionResponse {
+function withDecodedTx(tx: Horizon.HorizonApi.TransactionResponse, network: Networks): DecodedTransactionResponse {
   const decoded = TransactionBuilder.fromXDR(tx.envelope_xdr, network)
 
   return {
@@ -130,7 +130,7 @@ export function useLiveAccountData(accountID: string, testnet: boolean): Account
   return useLiveAccountDataSet([accountID], testnet)[0]
 }
 
-function applyAccountOffersUpdate(prev: OfferHistory, next: ServerApi.OfferRecord[]): OfferHistory {
+function applyAccountOffersUpdate(prev: OfferHistory, next: Horizon.ServerApi.OfferRecord[]): OfferHistory {
   // We ignore `prev` here
   return { olderOffersAvailable: prev.olderOffersAvailable, offers: next }
 }
@@ -177,7 +177,7 @@ export function useOlderOffers(accountID: string, testnet: boolean) {
 
   const fetchMoreOffers = React.useCallback(
     async function fetchMoreOffers() {
-      let fetched: CollectionPage<ServerApi.OfferRecord>
+      let fetched: CollectionPage<Horizon.ServerApi.OfferRecord>
 
       const selector = [horizonURLs, accountID] as const
       const history = accountOpenOrdersCache.get(selector)
@@ -196,7 +196,7 @@ export function useOlderOffers(accountID: string, testnet: boolean) {
             order: "desc"
           }))
 
-      const fetchedOffers: ServerApi.OfferRecord[] = fetched._embedded.records
+      const fetchedOffers: Horizon.ServerApi.OfferRecord[] = fetched._embedded.records
 
       accountOpenOrdersCache.set(
         selector,
@@ -217,7 +217,7 @@ export function useOlderOffers(accountID: string, testnet: boolean) {
   return fetchMoreOffers
 }
 
-type EffectHandler = (account: Account, effect: ServerApi.EffectRecord) => void
+type EffectHandler = (account: Account, effect: Horizon.ServerApi.EffectRecord) => void
 
 export function useLiveAccountEffects(accounts: Account[], handler: EffectHandler) {
   const netWorker = useNetWorker()

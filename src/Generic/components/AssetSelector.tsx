@@ -1,5 +1,5 @@
 import React from "react"
-import { Asset } from "stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import MenuItem from "@material-ui/core/MenuItem"

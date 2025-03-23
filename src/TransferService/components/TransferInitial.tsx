@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset } from "stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 import Collapse from "@material-ui/core/Collapse"
 import MenuItem from "@material-ui/core/MenuItem"
 import TextField from "@material-ui/core/TextField"

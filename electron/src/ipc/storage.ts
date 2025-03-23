@@ -4,7 +4,7 @@ import Store from "electron-store"
 import { createStore, KeysData } from "key-store"
 import { customAlphabet } from "nanoid"
 import * as path from "path"
-import { Keypair, Networks, Transaction } from "stellar-sdk"
+import { Keypair, Networks, Transaction } from "@stellar/stellar-sdk"
 import { expose } from "./_ipc"
 import { Messages } from "../shared/ipc"
 

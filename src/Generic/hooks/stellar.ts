@@ -1,7 +1,7 @@
 /* tslint:disable:no-string-literal */
 
 import React from "react"
-import { Asset, Networks, Server, Transaction, Horizon } from "stellar-sdk"
+import { Asset, Networks, Transaction, Horizon } from "@stellar/stellar-sdk"
 import {
   SigningKeyCacheContext,
   StellarAddressCacheContext,
@@ -23,7 +23,7 @@ export function useHorizon(testnet: boolean = false) {
   const horizonURLs = useHorizonURLs(testnet)
   const horizonURL = horizonURLs[0]
 
-  return testnet ? new Server(horizonURL) : new Server(horizonURL)
+  return testnet ? new Horizon.Server(horizonURL) : new Horizon.Server(horizonURL)
 }
 
 export function useHorizonURLs(testnet: boolean = false) {

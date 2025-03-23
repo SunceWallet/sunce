@@ -1,4 +1,4 @@
-import { Server, Transaction, Horizon } from "stellar-sdk"
+import { Transaction, Horizon } from "@stellar/stellar-sdk"
 import { CustomError } from "./errors"
 import StellarGuardIcon from "~Icons/components/StellarGuard"
 import LobstrVaultIcon from "~Icons/components/LobstrVault"
@@ -34,7 +34,7 @@ const services: ThirdPartySecurityService[] = [
   }
 ]
 
-export async function isThirdPartyProtected(horizon: Server, accountPubKey: string) {
+export async function isThirdPartyProtected(horizon: Horizon.Server, accountPubKey: string) {
   const { netWorker } = await workers
   const horizonURL = horizon.serverURL.toString()
 
@@ -45,7 +45,7 @@ export async function isThirdPartyProtected(horizon: Server, accountPubKey: stri
   return enabledService
 }
 
-export function containsThirdPartySigner(signers: Horizon.AccountSigner[]) {
+export function containsThirdPartySigner(signers: Horizon.HorizonApi.AccountSigner[]) {
   const signerKeys = signers.map(signer => signer.key)
 
   const enabledService = services.find(service => signerKeys.includes(service.publicKey))

@@ -1,4 +1,4 @@
-import { Horizon, Operation, Signer, Transaction } from "stellar-sdk"
+import { Horizon, Operation, Signer, Transaction } from "@stellar/stellar-sdk"
 import { type OptimisticUpdate } from "../../lib/optimistic-updates"
 
 function addSigner(

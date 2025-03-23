@@ -1,6 +1,6 @@
 import BigNumber from "big.js"
 import React from "react"
-import { Asset, Transaction } from "stellar-sdk"
+import { Asset, Transaction } from "@stellar/stellar-sdk"
 import { getServiceSigningKey, getWebAuthEndpointURL, WebauthData } from "@suncewallet/stellar-sep-10"
 import { fetchTransaction, fetchTransferInfos, TransferServer } from "@suncewallet/stellar-transfer"
 import { Account } from "~App/contexts/accounts"

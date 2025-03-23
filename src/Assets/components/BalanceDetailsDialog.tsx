@@ -1,7 +1,7 @@
 import BigNumber from "big.js"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset, Horizon, ServerApi } from "stellar-sdk"
+import { Asset, Horizon, Horizon } from "@stellar/stellar-sdk"
 import Dialog from "@material-ui/core/Dialog"
 import Divider from "@material-ui/core/Divider"
 import List from "@material-ui/core/List"
@@ -35,7 +35,7 @@ interface TrustedAssetsProps {
   hmargin: string | number
   hpadding: string | number
   onOpenAssetDetails: (asset: Asset) => void
-  openOffers: ServerApi.OfferRecord[]
+  openOffers: Horizon.ServerApi.OfferRecord[]
   olderOffersAvailable?: boolean
 }
 

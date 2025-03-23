@@ -1,5 +1,5 @@
 import React from "react"
-import { Asset } from "stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 import Avatar from "@material-ui/core/Avatar"
 import makeStyles from "@material-ui/core/styles/makeStyles"
 import { useAssetMetadata } from "~Generic/hooks/stellar"

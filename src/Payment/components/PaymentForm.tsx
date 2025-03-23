@@ -11,7 +11,7 @@ import { nanoid } from "nanoid"
 import React from "react"
 import { Controller, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Asset, Memo, MemoType, Server, Transaction } from "stellar-sdk"
+import { Asset, Memo, MemoType, Horizon, Transaction } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { DialogsContext } from "~App/contexts/dialogs"
 import AssetSelector from "~Generic/components/AssetSelector"
@@ -471,7 +471,7 @@ interface Props {
   onCancel?: () => void
   onSubmit: (
     createTx: (
-      horizon: Server,
+      horizon: Horizon.Server,
       account: Account
     ) => Promise<{
       tx: Transaction
@@ -483,7 +483,7 @@ interface Props {
 function PaymentFormContainer(props: Props) {
   const { lookupFederationRecord } = useFederationLookup()
 
-  const createPaymentTx = async (horizon: Server, account: Account, formValues: ExtendedPaymentFormValues) => {
+  const createPaymentTx = async (horizon: Horizon.Server, account: Account, formValues: ExtendedPaymentFormValues) => {
     const asset = props.trustedAssets.find(trustedAsset => trustedAsset.equals(formValues.asset))
     const federationRecord =
       formValues.destination.indexOf("*") > -1 ? await lookupFederationRecord(formValues.destination) : null

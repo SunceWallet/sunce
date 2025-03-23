@@ -1,5 +1,5 @@
 import { createStore, KeysData } from "key-store"
-import { Networks, Keypair, Transaction } from "stellar-sdk"
+import { Networks, Keypair, Transaction } from "@stellar/stellar-sdk"
 import { Messages } from "../../shared/ipc"
 import { WrongPasswordError } from "../../Generic/lib/errors"
 
@@ -119,6 +119,17 @@ const defaultTestingKeys: KeysData<PublicKeyData> = {
   }
 }
 
+const defaultSettings: Platform.SettingsData = {
+  agreedToTermsAt: "2019-01-17T07:34:05.688Z",
+  biometricLock: false,
+  multisignature: true,
+  testnet: true,
+  trustedServices: [],
+  hideMemos: false,
+  showDust: false,
+  showClaimableBalanceTxs: false
+}
+
 initKeyStore()
 initSettings()
 
@@ -160,17 +171,6 @@ function initKeyStore() {
   }
 
   callHandlers[Messages.SignTransaction] = signTransaction
-}
-
-const defaultSettings: Platform.SettingsData = {
-  agreedToTermsAt: "2019-01-17T07:34:05.688Z",
-  biometricLock: false,
-  multisignature: true,
-  testnet: true,
-  trustedServices: [],
-  hideMemos: false,
-  showDust: false,
-  showClaimableBalanceTxs: false
 }
 
 function initSettings() {

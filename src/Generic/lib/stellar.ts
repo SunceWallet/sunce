@@ -9,7 +9,7 @@ import {
   Transaction,
   LiquidityPoolAsset,
   getLiquidityPoolId
-} from "stellar-sdk"
+} from "@stellar/stellar-sdk"
 import { OfferAsset } from "stellar-sdk/lib/types/offer"
 import { AssetRecord } from "../hooks/stellar-ecosystem"
 import { AccountData, BalanceLine } from "./account"

@@ -1,5 +1,5 @@
 import React from "react"
-import { Memo } from "stellar-sdk"
+import { Memo } from "@stellar/stellar-sdk"
 
 interface Props {
   memo: Memo

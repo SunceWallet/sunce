@@ -1,4 +1,4 @@
-import { Asset } from "stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 
 export const mainnet = [
   new Asset("EURMTL", "GACKTN5DAZGWXRWB2WLM6OPBDHAMT6SJNGLJZPQMEZBUR4JUGBX2UK7V"),

@@ -1,5 +1,5 @@
 import JWT from "jsonwebtoken"
-import { Networks, Server, Transaction } from "stellar-sdk"
+import { Networks, Horizon, Transaction } from "@stellar/stellar-sdk"
 import * as WebAuth from "@suncewallet/stellar-sep-10"
 
 export async function fetchWebAuthChallenge(
@@ -16,7 +16,7 @@ export async function fetchWebAuthChallenge(
 }
 
 export async function fetchWebAuthData(horizonURL: string, issuerAccountID: string) {
-  const horizon = new Server(horizonURL)
+  const horizon = new Horizon.Server(horizonURL)
   return WebAuth.fetchWebAuthData(horizon, issuerAccountID)
 }
 
