@@ -1,5 +1,5 @@
 import i18next from "../../App/i18n"
-import { parseStellarUri } from "@stellarguard/stellar-uri"
+import { parseStellarUri } from "@suncewallet/stellar-uri"
 import { CustomError } from "~Generic/lib/errors"
 
 export interface VerificationOptions {

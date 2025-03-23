@@ -1,5 +1,5 @@
 import React from "react"
-import { StellarUri, StellarUriType, TransactionStellarUri } from "@stellarguard/stellar-uri"
+import { StellarUri, StellarUriType, TransactionStellarUri } from "@suncewallet/stellar-uri"
 import { CustomError } from "~Generic/lib/errors"
 import { subscribeToDeepLinkURLs } from "~Platform/protocol-handler"
 import { verifyTransactionRequest } from "~Transaction/lib/stellar-uri"

@@ -1,6 +1,6 @@
 import Box from "@material-ui/core/Box"
 import Typography from "@material-ui/core/Typography"
-import { PayStellarUri } from "@stellarguard/stellar-uri"
+import { PayStellarUri } from "@suncewallet/stellar-uri"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"

@@ -1,7 +1,7 @@
 import { Dialog } from "@material-ui/core"
 import Fade from "@material-ui/core/Fade"
 import { TransitionProps } from "@material-ui/core/transitions/transition"
-import { StellarUri } from "@stellarguard/stellar-uri"
+import { StellarUri } from "@suncewallet/stellar-uri"
 import React from "react"
 import { SettingsContext } from "~App/contexts/settings"
 import { TransactionRequestContext } from "~App/contexts/transactionRequest"

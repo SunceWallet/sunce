@@ -1,10 +1,10 @@
 import React from "react"
-import { createRoot } from "react-dom/client"
 import { HashRouter as Router } from "react-router-dom"
 import { MuiThemeProvider } from "@material-ui/core/styles"
 import ViewLoading from "~Generic/components/ViewLoading"
 import { ContextProviders } from "./context"
 import theme from "../theme"
+import ReactDOM from "react-dom"
 
  const Stage2 = React.lazy(() => import("./app-stage2"))
 
@@ -24,4 +24,4 @@ const App = () => (
   </Providers>
 )
 
-createRoot(document.getElementById("app")).render(React.createElement(App))
+ReactDOM.render(<App />, document.getElementById("app"))
