@@ -70,21 +70,19 @@ The encryption key is derived from the password using `PBKDF2` with `SHA256`. Th
 
 ## Development
 
-### Desktop
-
 Install the dependencies first:
 
 ```
 npm install
 ```
 
+### Desktop
+
+
 To run the app in development mode:
 
 ```
 npm run dev
-
-# On Mac OS:
-VITE_PLATFORM=darwin npm run dev
 ```
 
 To run the tests:
@@ -102,13 +100,40 @@ npm run storybook
 ### Run dev server without electron
 
 ```
-cd web/
-npm run dev
+npm run dev:web
 ```
 
 ### Android/iOS
 
-See [Cordova build readme](./cordova/README.md).
+#### Android
+
+Initial setup:
+```
+cd cordova
+npm install
+npm run install:android
+```
+
+Build APK with the app updating on code changes:
+```
+cd ..
+npm run dev:android
+```
+
+#### iOS
+Initial setup:
+```
+cd cordova
+npm install
+npm run install:ios
+```
+
+Build APK with the app updating on code changes:
+```
+cd ..
+npm run dev:ios
+```
+
 
 ### Production build
 

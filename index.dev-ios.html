@@ -27,11 +27,11 @@
   <body>
     <iframe id="walletframe"></iframe>
 
-    <script src="/cordova/platforms/ios/platform_www/cordova.js"></script>
+    <script src="cordova.js"></script>
     <script>
       function onDeviceReady() {
         const walletframe = document.getElementById("walletframe")
-        walletframe.setAttribute("src", "http://localhost:3000/entries/dev/ios/");
+        walletframe.setAttribute("src", "http://%VITE_LOCAL_IP%:3000/index.html");
 
         setTimeout(function() {
           // iPhone X iframe height fix
@@ -41,6 +41,6 @@
 
       document.addEventListener("deviceready", onDeviceReady, false);
     </script>
-    <script src="/src/App/bootstrap.cordova.ts"></script>
+    <script type="module" src="/src/App/bootstrap.cordova.ts"></script>
   </body>
 </html>

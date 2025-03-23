@@ -31,6 +31,8 @@ npm run install:android
 Create the development build:
 
 ```
+# Note the script should be executed from roo package, not cordova
+cd ..
 npm run dev:android
 ```
 
@@ -50,6 +52,7 @@ npm run install:ios
 Create the development build:
 
 ```
+cd ..
 npm run dev:ios
 ```
 
@@ -75,9 +78,11 @@ Follow the setup of the development builds but instead of `npm run dev:android/i
 
 ```
 # Android
+cd ..
 npm run build:android
 
 # iOS
+cd ..
 npm run build:ios
 ```
 
@@ -97,7 +102,9 @@ SIGNINGKEY_ALIAS=AliasOfMyKey
 Specify PACKAGE_TYPE (apk, bundle) and run the following npm script to start the build process of the signed apk.
 
 ```
+cd ..
 npm run prebuild:android
+cd cordova
 PACKAGE_TYPE=apk npm run build:android:signed:manual
 ```
 
