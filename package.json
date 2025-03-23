@@ -27,7 +27,7 @@
     "build:linux": "VITE_PLATFORM=linux npm run prebuild:electron && electron-builder -p always --linux --x64 --config ./electron-build.yml",
     "build:mac": "VITE_PLATFORM=darwin npm run prebuild:electron && electron-builder -p always --mac --x64 --arm64 --config ./electron-build.yml",
     "build:mac:signed": "source ./scripts/signing-env.sh mac && NOTARIZE=true npm run build:mac -- -c.forceCodeSigning=true",
-    "build:win": "export arch=x64|| set arch=x64 && npm run prebuild:electron && electron-builder -p always --win --x64 --config ./electron-build.yml",
+    "build:win": "export arch=x64|| set arch=x64 && VITE_PLATFORM=windows npm run prebuild:electron && electron-builder -p always --win --x64 --config ./electron-build.yml",
     "build:win:signed": "source ./scripts/signing-env.sh win && npm run build:win -- -c.forceCodeSigning=true",
     "build:web": "cross-env NODE_ENV=production vite build -m production",
     "prebuild:android": "rm -rf ./dist/ && cross-env NODE_ENV=production VITE_PLATFORM=android vite build -m production && cd cordova && npm run prebuild:android",

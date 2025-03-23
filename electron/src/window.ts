@@ -6,8 +6,8 @@ import URL from "url"
 let openWindows: BrowserWindow[] = []
 
 // start protocol handler
-import * as protocolHandler from "./protocol-handler.js"
-import { Messages } from "./shared/ipc.js"
+import * as protocolHandler from "./protocol-handler"
+import { Messages } from "./shared/ipc"
 
 export function createMainWindow() {
   if (process.platform !== "darwin") {

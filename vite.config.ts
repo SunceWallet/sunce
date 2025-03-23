@@ -11,6 +11,7 @@ const __dirname = join(dirname(fileURLToPath(import.meta.url)), "")
 const platform = process.env.VITE_PLATFORM
 
 const isCordova = platform === 'android' || platform === 'ios'
+const isDesktop = ['darwin', 'linux', 'windows'].indexOf(platform || '') >= 0
 
 const getBundleName = (isProd: boolean) => {
   if (isCordova) {
@@ -35,6 +36,7 @@ const getLocalIP = () => {
 const localIp = getLocalIP()
 process.env.VITE_LOCAL_IP = localIp
 
+
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
   const env = isProd ? 'prod' : 'dev';
@@ -43,6 +45,7 @@ export default defineConfig(({ mode }) => {
   const distDir = resolve(__dirname, "dist");
 
   return {
+    base: "./",
     plugins: [
       nodePolyfills(),
       react({
