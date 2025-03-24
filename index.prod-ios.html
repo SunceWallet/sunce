@@ -9,7 +9,6 @@
     <link href="/src/App/css/fonts.css" rel="stylesheet">
     <link href="/src/App/css/base-styles.css" rel="stylesheet">
     <link href="/src/SplashScreen/splash.css" rel="stylesheet">
-    <link class="sandbox-script" href="/index.html" rel="preload" as="script">
 
     <style type="text/css">
       body {
@@ -34,17 +33,11 @@
     </iframe>
 
     <script>
-      const preloadLink = document.querySelector("head > link.sandbox-script");
-
-      if (!preloadLink) {
-        throw new Error("Link to app script not found.");
-      }
-
       function onDeviceReady() {
         const walletframe = document.getElementById("walletframe")
 
         // Need to delay iframe initialization, so we have time to set up our event listeners first
-        walletframe.setAttribute("src", preloadLink.getAttribute("href"));
+        walletframe.setAttribute("src", "/index.html");
 
         setTimeout(function() {
           // iPhone X iframe height fix
@@ -55,7 +48,7 @@
       document.addEventListener("deviceready", onDeviceReady, false);
     </script>
 
-    <script src="../cordova/platforms/ios/platform_www/cordova.js"></script>
-    <script src="/src/App/bootstrap.cordova.ts"></script>
+    <script src="cordova.js"></script>
+    <script type="module" src="/src/App/bootstrap.cordova.ts"></script>
   </body>
 </html>
