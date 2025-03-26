@@ -1,20 +1,20 @@
-import { AccountResponse, Horizon } from "@stellar/stellar-sdk"
+import { Horizon } from "@stellar/stellar-sdk"
 
 // Horizon.BalanceLine without Horizon.BalanceLineLiquidityPool
-export type BalanceLine = Horizon.BalanceLineAsset | Horizon.BalanceLineNative
+export type BalanceLine = Horizon.HorizonApi.BalanceLineAsset | Horizon.HorizonApi.BalanceLineNative
 
 export interface AccountData {
-  account_id: AccountResponse["account_id"]
+  account_id: Horizon.HorizonApi.AccountResponse["account_id"]
   balances: BalanceLine[]
-  data_attr: AccountResponse["data_attr"]
-  flags: AccountResponse["flags"]
+  data_attr: Horizon.HorizonApi.AccountResponse["data_attr"]
+  flags: Horizon.HorizonApi.AccountResponse["flags"]
   home_domain?: string
   id: string
   inflation_destination?: string
-  paging_token: AccountResponse["paging_token"]
-  signers: Horizon.AccountSigner[]
+  paging_token: Horizon.HorizonApi.AccountResponse["paging_token"]
+  signers: Horizon.HorizonApi.AccountSigner[]
   subentry_count: number
-  thresholds: Horizon.AccountThresholds
+  thresholds: Horizon.HorizonApi.AccountThresholds
 }
 
 export const createEmptyAccountData = (accountID: string): AccountData => ({

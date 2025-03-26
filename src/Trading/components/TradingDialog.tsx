@@ -22,6 +22,7 @@ import DialogBody from "~Layout/components/DialogBody"
 import TransactionSender from "~Transaction/components/TransactionSender"
 import MainActionSelection from "./MainActionSelection"
 import TradingForm from "./TradingForm"
+import OfferList from "~Account/components/OfferList"
 
 interface TradingDialogProps {
   account: Account
@@ -54,7 +55,7 @@ function TradingDialog(props: TradingDialogProps) {
 
   const trustlines = React.useMemo(
     () =>
-      accountData.balances.filter((balance): balance is Horizon.BalanceLineAsset => balance.asset_type !== "native"),
+      accountData.balances.filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native"),
     [accountData.balances]
   )
 
@@ -85,10 +86,13 @@ function TradingDialog(props: TradingDialogProps) {
   const MainContent = React.useMemo(
     () => (
       <Carousel current={primaryAction ? 1 : 0}>
-        <MainActionSelection
-          onSelectBuy={() => selectPrimaryAction("buy")}
-          onSelectSell={() => selectPrimaryAction("sell")}
-        />
+        <div>
+          <MainActionSelection
+            onSelectBuy={() => selectPrimaryAction("buy")}
+            onSelectSell={() => selectPrimaryAction("sell")}
+            account={props.account}
+          />
+        </div>
         <React.Suspense fallback={<ViewLoading />}>
           <TradingForm
             account={props.account}
