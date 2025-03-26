@@ -154,7 +154,7 @@ function TradingDialog(props: TradingDialogProps) {
           <ScrollableBalances account={props.account} compact />
         </>
       }
-      actions={dialogActionsRef}
+      actions={primaryAction ? dialogActionsRef : null}
     >
       <InlineErrorBoundary>{trustlines.length > 0 ? MainContent : LinkToManageAssets}</InlineErrorBoundary>
     </DialogBody>
