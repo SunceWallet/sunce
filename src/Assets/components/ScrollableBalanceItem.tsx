@@ -2,7 +2,7 @@ import React from "react"
 import makeStyles from "@material-ui/core/styles/makeStyles"
 import { balancelineToAsset } from "~Generic/lib/stellar"
 import { breakpoints } from "~App/theme"
-import { InfiniteBalance, SingleBalance } from "~Account/components/AccountBalances"
+import { SingleBalance } from "~Account/components/AccountBalances"
 import { BalanceLine } from "~Generic/lib/account"
 import AssetLogo from "./AssetLogo"
 
@@ -129,8 +129,7 @@ function BalanceItem(props: BalanceItemProps, ref: React.Ref<any>) {
         <span className={classes.assetCode}>
           {props.balance.asset_type === "native" ? "XLM" : props.balance.asset_code}
         </span>
-        {props.ownAsset && <InfiniteBalance />}
-        {!props.ownAsset && <SingleBalance assetCode="" balance={props.balance.balance} inline />}
+        <SingleBalance assetCode="" balance={props.balance.balance} showInfinity={props.ownAsset} inline />
       </div>
     </div>
   )

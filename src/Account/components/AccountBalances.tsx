@@ -1,3 +1,4 @@
+import { Horizon } from "@stellar/stellar-sdk"
 import BigNumber from "big.js"
 import React from "react"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
@@ -11,13 +12,8 @@ interface SingleBalanceProps {
   inline?: boolean
   untrimmed?: boolean
   style?: React.CSSProperties
+  showInfinity?: boolean
 }
-
-export const InfiniteBalance = React.memo(() => (
-  <span>
-    <span style={{ display: "inline-block", fontWeight: 300, fontSize: "24px" }}>∞</span>
-  </span>
-))
 
 export const SingleBalance = React.memo(function SingleBalance(props: SingleBalanceProps) {
   const balance = BigNumber(props.balance).abs()
@@ -38,10 +34,11 @@ export const SingleBalance = React.memo(function SingleBalance(props: SingleBala
     <span style={{ whiteSpace: "nowrap", ...props.style }}>
       <span style={{ display: "inline-block" }}>
         {balance.gte(0) ? null : <span>-&nbsp;</span>}
-        <span style={{ fontWeight: 300 }}>
+        {!props.showInfinity && <span style={{ fontWeight: 300 }}>
           {integerPart}
           <span style={{ opacity: 0.8 }}>{decimalPart ? "." + decimalPart : ""}</span>
-        </span>
+        </span>}
+        {props.showInfinity &&<span style={{ display: "inline-block", fontWeight: 300 }}>∞</span>}
       </span>
       {props.assetCode ? (
         <>
@@ -63,9 +60,15 @@ export const SingleBalance = React.memo(function SingleBalance(props: SingleBala
 
 interface MultipleBalancesProps {
   balances: BalanceLine[]
+  accountId: string
   component?: React.ComponentType<SingleBalanceProps>
   inline?: boolean
   onClick?: () => void
+}
+
+const isOwnAsset = (accountId: string, balance: BalanceLine) => {
+  if (balance.asset_type === "native") return false
+  return accountId === (balance as Horizon.HorizonApi.BalanceLineAsset).asset_issuer
 }
 
 // tslint:disable-next-line no-shadowed-variable
@@ -86,6 +89,7 @@ export const MultipleBalances = React.memo(function MultipleBalances(props: Mult
             balance={balance.balance}
             inline={props.inline}
             style={{ marginRight: index < balances.length - 1 ? "1.2em" : undefined }}
+            showInfinity={isOwnAsset(props.accountId, balance)}
           />{" "}
         </React.Fragment>
       ))}
@@ -107,9 +111,9 @@ function AccountBalances(props: {
   const accountData = useLiveAccountData(props.publicKey, props.testnet)
 
   return accountData.balances.length > 0 ? (
-    <MultipleBalances balances={accountData.balances} component={props.component} onClick={props.onClick} />
+    <MultipleBalances balances={accountData.balances} accountId={accountData.account_id} component={props.component} onClick={props.onClick} />
   ) : (
-    <MultipleBalances balances={[zeroXLMBalance] as any} component={props.component} onClick={props.onClick} />
+    <MultipleBalances balances={[zeroXLMBalance] as any} accountId={accountData.account_id} component={props.component} onClick={props.onClick} />
   )
 }
 
