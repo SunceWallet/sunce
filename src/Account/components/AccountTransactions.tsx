@@ -20,6 +20,7 @@ import OfferList from "./OfferList"
 import { InteractiveSignatureRequestList } from "./SignatureRequestList"
 import TransactionList from "./TransactionList"
 import { isDustTransaction } from "~Generic/lib/transaction"
+import OfferOverview from "./OfferOverview"
 
 const excludeClaimableFilter = (account: Account, tx: DecodedTransactionResponse) =>
   !tx.decodedTx.operations.every(
@@ -116,7 +117,7 @@ function AccountTransactions(props: { account: Account }) {
       {accountData.balances.length > 0 ? (
         <>
           {settings.multiSignature ? <PendingMultisigTransactions account={account} /> : null}
-          <OfferList account={account} title={t("account.transactions.offer-list.title")} />
+          <OfferOverview account={account} />
           <TransactionList
             account={account}
             background="transparent"
