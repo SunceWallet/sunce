@@ -8,15 +8,35 @@ import { useLiveAccountOffers } from "~Generic/hooks/stellar-subscriptions"
 import { useRouter } from "~Generic/hooks/userinterface"
 import * as routes from "~App/routes"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
-import { List } from "@material-ui/core"
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import { List, ListSubheader, makeStyles } from "@material-ui/core"
+import { breakpoints } from "~App/theme"
 
 
+const useOfferOverviewStyles = makeStyles({
+  list: {
+    paddingBottom: 0,
+  },
+  header: {
+    padding: "8px 24px 0px 24px",
+    lineHeight: 1,
+    alignItems: "center",
+    display: "flex",
+    cursor: "pointer",
+
+    [breakpoints.down(600)]: {
+      paddingLeft: 24,
+      paddingRight: 24
+    }
+  }
+})
 
 interface Props {
   account: Account
 }
 
 function OfferOverview(props: Props) {
+  const classes = useOfferOverviewStyles()
   const router = useRouter()
   const offerHistory = useLiveAccountOffers(props.account.accountID, props.account.testnet)
   const { t } = useTranslation()
@@ -31,13 +51,10 @@ function OfferOverview(props: Props) {
   }
 
   return (
-    <List>
-      <ListItem
-        button={true}
-        onClick={openTrading}
-      >
-        <ListItemText primary={t("account.transactions.offer-list.title")} />
-      </ListItem>
+    <List className={classes.list}>
+      <ListSubheader className={classes.header} disableSticky onClick={openTrading}>
+        {t("account.transactions.offer-list.title")} ({offerHistory.offers.length}{offerHistory.olderOffersAvailable ? '+' : ''}) <KeyboardArrowRightIcon />
+      </ListSubheader>
     </List>
   )
 }
