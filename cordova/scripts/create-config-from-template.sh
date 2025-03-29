@@ -9,7 +9,8 @@ cd "$(dirname $0)"
 if [ -f "../config/$TEMPLATE_FILE" ]; then
   echo "Creating config file from $TEMPLATE_FILE ..."
 
-  export HTML_ENTRYPOINT="http://localhost/index.$ENVIRONMENT-$PLATFORM.html"
+  export HTML_ENTRYPOINT="index.$ENVIRONMENT-$PLATFORM.html"
+  
   export PACKAGE_VERSION="$(cat ../../package.json | ../node_modules/.bin/json version)"
   aligned_build_version=$(($(TZ=UTC date +%s)-1708020000))
   export ANDROID_VERSIONCODE="$aligned_build_version"
