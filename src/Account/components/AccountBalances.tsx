@@ -38,7 +38,7 @@ export const SingleBalance = React.memo(function SingleBalance(props: SingleBala
           {integerPart}
           <span style={{ opacity: 0.8 }}>{decimalPart ? "." + decimalPart : ""}</span>
         </span>}
-        {props.showInfinity &&<span style={{ display: "inline-block", fontWeight: 300 }}>∞</span>}
+        {props.showInfinity &&<span style={{ display: "inline-block", fontWeight: 300, transform: "scale(1.5)" }}>∞</span>}
       </span>
       {props.assetCode ? (
         <>

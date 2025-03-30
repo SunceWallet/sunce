@@ -36,7 +36,8 @@ export const SummaryDetailsField = React.memo(function SummaryDetailsField(props
       }}
       InputLabelProps={{
         style: {
-          whiteSpace: "nowrap"
+          whiteSpace: "nowrap",
+          textTransform: "none",
         }
       }}
     />
