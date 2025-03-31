@@ -5,7 +5,12 @@ import { Asset, Horizon } from "@stellar/stellar-sdk"
 import Dialog from "@material-ui/core/Dialog"
 import Divider from "@material-ui/core/Divider"
 import List from "@material-ui/core/List"
+import IconButton from "@material-ui/core/IconButton"
 import AddIcon from "@material-ui/icons/Add"
+import EditIcon from "@material-ui/icons/Edit"
+import StarIcon from "@material-ui/icons/Star"
+import StarBorderIcon from "@material-ui/icons/StarBorder"
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff"
 import { Account } from "~App/contexts/accounts"
 import * as routes from "~App/routes"
 import { FullscreenDialogTransition } from "~App/theme"
@@ -21,6 +26,7 @@ import { getAccountMinimumBalance, getSpendableBalance, stringifyAsset } from "~
 import DialogBody from "~Layout/components/DialogBody"
 import AddAssetDialog from "./AddAssetDialog"
 import BalanceDetailsListItem from "./BalanceDetailsListItem"
+import { useAssetVisibility } from "~Generic/hooks/useAssetVisibility"
 
 function isAssetMatchingBalance(asset: Asset, balance: BalanceLine): boolean {
   return balance.asset_type === "native"
@@ -37,6 +43,9 @@ interface TrustedAssetsProps {
   onOpenAssetDetails: (asset: Asset) => void
   openOffers: Horizon.ServerApi.OfferRecord[]
   olderOffersAvailable?: boolean
+  isEditMode: boolean
+  assetVisibilityModes: Record<string, "default" | "favorite" | "hidden">
+  onToggleAssetVisibility: (asset: Asset) => void
 }
 
 const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProps) {
@@ -50,6 +59,8 @@ const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProp
             (offer.selling.asset_code === asset.code && offer.selling.asset_issuer === asset.issuer)
         )
         const badgeCount = props.olderOffersAvailable && openOffers.length >= 10 ? "10+" : openOffers.length
+        const visibilityMode = props.assetVisibilityModes[stringifyAsset(asset)] || "default"
+        
         return (
           <BalanceDetailsListItem
             key={stringifyAsset(asset)}
@@ -64,6 +75,9 @@ const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProp
             }}
             testnet={props.account.testnet}
             isOwnAsset={props.account.accountID === asset.getIssuer()}
+            isEditMode={props.isEditMode}
+            visibilityMode={visibilityMode}
+            onToggleVisibility={() => props.onToggleAssetVisibility(asset)}
           />
         )
       })}
@@ -133,6 +147,8 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const isSmallScreen = useIsMobile()
   const router = useRouter()
   const { t } = useTranslation()
+  const [isEditMode, setIsEditMode] = React.useState(false)
+  const { visibilityModes, toggleVisibilityMode } = useAssetVisibility(props.account.accountID)
 
   const openAddAssetDialog = React.useCallback(
     () => router.history.push(routes.manageAccountAssets(props.account.id)),
@@ -151,6 +167,8 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const openAssetDetails = (asset: Asset) =>
     router.history.push(routes.assetDetails(props.account.id, stringifyAsset(asset)))
 
+  const toggleEditMode = () => setIsEditMode(!isEditMode)
+
   const trustedAssets = sortBalances(accountData.balances)
     .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
     .map(balance => new Asset(balance.asset_code, balance.asset_issuer))
@@ -164,7 +182,20 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const itemHMargin = 0
 
   return (
-    <DialogBody excessWidth={12} top={<MainTitle onBack={props.onClose} title={props.account.name} />}>
+    <DialogBody 
+      excessWidth={12} 
+      top={
+        <MainTitle 
+          onBack={props.onClose} 
+          title={props.account.name}
+          actions={
+            <IconButton onClick={toggleEditMode} color={isEditMode ? "primary" : "default"}>
+              <EditIcon />
+            </IconButton>
+          }
+        />
+      }
+    >
       <List style={{ paddingLeft: hpadding, paddingRight: hpadding, margin: "0 -8px" }}>
         <ButtonListItem
           gutterBottom
@@ -187,6 +218,9 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
           onOpenAssetDetails={openAssetDetails}
           openOffers={openOrders}
           olderOffersAvailable={olderOffersAvailable}
+          isEditMode={isEditMode}
+          assetVisibilityModes={visibilityModes}
+          onToggleAssetVisibility={toggleVisibilityMode}
         />
       </List>
       <Divider style={{ margin: "16px 0" }} />
