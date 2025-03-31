@@ -150,6 +150,24 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const [isEditMode, setIsEditMode] = React.useState(false)
   const { visibilityModes, toggleVisibilityMode } = useAssetVisibility(props.account.accountID)
 
+  // Sort assets by visibility mode and balance
+  const sortAssetsByVisibility = React.useCallback((assets: Asset[]) => {
+    // Filter assets by visibility mode
+    const favoriteAssets = assets.filter(asset => visibilityModes[stringifyAsset(asset)] === "favorite")
+    const defaultAssets = assets.filter(asset => visibilityModes[stringifyAsset(asset)] === "default" || visibilityModes[stringifyAsset(asset)] === undefined)
+    const hiddenAssets = assets.filter(asset => visibilityModes[stringifyAsset(asset)] === "hidden")
+
+    return [...favoriteAssets, ...defaultAssets, ...hiddenAssets]
+  }, [visibilityModes])
+
+  // Get sorted assets
+  const trustedAssets = React.useMemo(() => {
+    const assets = sortBalances(accountData.balances)
+      .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
+      .map(balance => new Asset(balance.asset_code, balance.asset_issuer))
+    return sortAssetsByVisibility(assets)
+  }, [accountData.balances, sortAssetsByVisibility])
+
   const openAddAssetDialog = React.useCallback(
     () => router.history.push(routes.manageAccountAssets(props.account.id)),
     [props.account.id, router.history]
@@ -167,11 +185,9 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const openAssetDetails = (asset: Asset) =>
     router.history.push(routes.assetDetails(props.account.id, stringifyAsset(asset)))
 
-  const toggleEditMode = () => setIsEditMode(!isEditMode)
-
-  const trustedAssets = sortBalances(accountData.balances)
-    .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
-    .map(balance => new Asset(balance.asset_code, balance.asset_issuer))
+  const toggleEditMode = () => {
+    setIsEditMode(!isEditMode)
+  }
 
   const nativeBalance = accountData.balances.find(
     (balance): balance is Horizon.HorizonApi.BalanceLineNative => balance.asset_type === "native"
