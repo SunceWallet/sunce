@@ -149,24 +149,23 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const { t } = useTranslation()
   const [isEditMode, setIsEditMode] = React.useState(false)
   const { visibilityModes, toggleVisibilityMode } = useAssetVisibility(props.account.accountID)
+  const [trustedAssets, setTrustedAssets] = React.useState<Asset[]>([])
 
-  // Sort assets by visibility mode and balance
   const sortAssetsByVisibility = React.useCallback((assets: Asset[]) => {
-    // Filter assets by visibility mode
     const favoriteAssets = assets.filter(asset => visibilityModes[stringifyAsset(asset)] === "favorite")
-    const defaultAssets = assets.filter(asset => visibilityModes[stringifyAsset(asset)] === "default" || visibilityModes[stringifyAsset(asset)] === undefined)
+    const defaultAssets = assets.filter(asset => [undefined, "default"].indexOf(visibilityModes[stringifyAsset(asset)]) >= 0)
     const hiddenAssets = assets.filter(asset => visibilityModes[stringifyAsset(asset)] === "hidden")
-
     return [...favoriteAssets, ...defaultAssets, ...hiddenAssets]
   }, [visibilityModes])
 
-  // Get sorted assets
-  const trustedAssets = React.useMemo(() => {
+  // Sort assets on initial render and when edit mode changes
+  React.useEffect(() => {
+    if (isEditMode) return
     const assets = sortBalances(accountData.balances)
       .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
       .map(balance => new Asset(balance.asset_code, balance.asset_issuer))
-    return sortAssetsByVisibility(assets)
-  }, [accountData.balances, sortAssetsByVisibility])
+    setTrustedAssets(sortAssetsByVisibility(assets))
+  }, [accountData.balances, sortAssetsByVisibility, isEditMode])
 
   const openAddAssetDialog = React.useCallback(
     () => router.history.push(routes.manageAccountAssets(props.account.id)),
