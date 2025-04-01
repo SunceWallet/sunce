@@ -127,7 +127,8 @@ const defaultSettings: Platform.SettingsData = {
   trustedServices: [],
   hideMemos: false,
   showDust: false,
-  showClaimableBalanceTxs: false
+  showClaimableBalanceTxs: false,
+  accountAssetVisibilityModes: {}
 }
 
 initKeyStore()
@@ -201,7 +202,6 @@ function initSettings() {
     )
   }
 }
-
 function subscribeToDeepLinkURLs(callback: (url: string) => void) {
   // check if a stellar uri has been passed already
   const uri = new URLSearchParams(window.location.search).get("uri")
@@ -212,3 +212,4 @@ function subscribeToDeepLinkURLs(callback: (url: string) => void) {
   // no way to unsubscribe
   return () => undefined
 }
+

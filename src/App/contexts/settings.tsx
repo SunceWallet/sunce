@@ -40,6 +40,8 @@ interface ContextType {
   toggleShowClaimableBalanceTxs: () => void
   trustedServices: TrustedService[]
   updateAvailable: boolean
+  accountAssetVisibilityModes: Platform.AccountAssetVisibilityModes
+  setAssetVisibilityMode: (accountId: string, assetKey: string, mode: Platform.VisibilityMode) => void
 }
 
 interface SettingsState extends Platform.SettingsData {
@@ -55,7 +57,8 @@ const initialSettings: SettingsState = {
   testnet: false,
   showDust: false,
   showClaimableBalanceTxs: false,
-  trustedServices: []
+  trustedServices: [],
+  accountAssetVisibilityModes: {}
 }
 
 const initialIgnoredSignatureRequests: string[] = []
@@ -86,7 +89,9 @@ const SettingsContext = React.createContext<ContextType>({
   toggleShowDust: () => undefined,
   toggleShowClaimableBalanceTxs: () => undefined,
   trustedServices: initialSettings.trustedServices,
-  updateAvailable: false
+  updateAvailable: false,
+  accountAssetVisibilityModes: initialSettings.accountAssetVisibilityModes,
+  setAssetVisibilityMode: () => undefined
 })
 
 export function SettingsProvider(props: Props) {
@@ -172,6 +177,17 @@ export function SettingsProvider(props: Props) {
       .catch(trackError)
   }
 
+  const setAssetVisibilityMode = (accountId: string, assetKey: string, mode: Platform.VisibilityMode) => {
+    const updatedModes = {
+      ...settings.accountAssetVisibilityModes,
+      [accountId]: {
+        ...(settings.accountAssetVisibilityModes[accountId] || {}),
+        [assetKey]: mode
+      }
+    }
+    updateSettings({ accountAssetVisibilityModes: updatedModes })
+  }
+
   const contextValue: ContextType = {
     agreedToTermsAt: settings.agreedToTermsAt,
     biometricLock: settings.biometricLock,
@@ -196,7 +212,9 @@ export function SettingsProvider(props: Props) {
     toggleShowDust,
     toggleShowClaimableBalanceTxs,
     trustedServices: settings.trustedServices,
-    updateAvailable
+    updateAvailable,
+    accountAssetVisibilityModes: settings.accountAssetVisibilityModes,
+    setAssetVisibilityMode
   }
 
   return <SettingsContext.Provider value={contextValue}>{props.children}</SettingsContext.Provider>
