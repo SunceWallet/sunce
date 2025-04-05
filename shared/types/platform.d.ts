@@ -4,9 +4,13 @@ interface TrustedService {
 }
 
 declare namespace Platform {
-  export type VisibilityMode = "default" | "favorite" | "hidden"
-  export type AssetVisibilityModes = Record<string, VisibilityMode>
-  export type AccountAssetVisibilityModes = Record<string, AssetVisibilityModes>
+  export type VisibilityMode = undefined | "favorite" | "hidden"
+  export interface AssetSettings {
+    visibility: VisibilityMode
+    order: number
+  }
+  export type AssetSettingsMap = Record<string, AssetSettings>
+  export type AccountAssetSettingsMap = Record<string, AssetSettingsMap>
   export interface SettingsData {
     agreedToTermsAt?: string
     biometricLock: boolean
@@ -16,7 +20,7 @@ declare namespace Platform {
     trustedServices: TrustedService[]
     showDust: boolean
     showClaimableBalanceTxs: boolean
-    accountAssetVisibilityModes: AccountAssetVisibilityModes
+    accountAssetSettings: AccountAssetSettingsMap
   }
 }
 

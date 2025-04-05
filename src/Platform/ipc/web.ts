@@ -128,7 +128,7 @@ const defaultSettings: Platform.SettingsData = {
   hideMemos: false,
   showDust: false,
   showClaimableBalanceTxs: false,
-  accountAssetVisibilityModes: {}
+  accountAssetSettings: {}
 }
 
 initKeyStore()

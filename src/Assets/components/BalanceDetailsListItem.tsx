@@ -112,7 +112,7 @@ interface BalanceListItemProps {
   testnet: boolean
   isOwnAsset?: boolean
   isEditMode?: boolean
-  visibilityMode?: "default" | "favorite" | "hidden"
+  visibilityMode?: Platform.VisibilityMode
   onToggleVisibility?: () => void
 }
 

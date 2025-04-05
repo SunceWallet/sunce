@@ -40,8 +40,8 @@ interface ContextType {
   toggleShowClaimableBalanceTxs: () => void
   trustedServices: TrustedService[]
   updateAvailable: boolean
-  accountAssetVisibilityModes: Platform.AccountAssetVisibilityModes
-  setAssetVisibilityMode: (accountId: string, assetKey: string, mode: Platform.VisibilityMode) => void
+  accountAssetSettings: Platform.AccountAssetSettingsMap
+  setAssetSettings: (accountId: string, assetKey: string, mode: Platform.AssetSettings) => void
 }
 
 interface SettingsState extends Platform.SettingsData {
@@ -58,7 +58,7 @@ const initialSettings: SettingsState = {
   showDust: false,
   showClaimableBalanceTxs: false,
   trustedServices: [],
-  accountAssetVisibilityModes: {}
+  accountAssetSettings: {}
 }
 
 const initialIgnoredSignatureRequests: string[] = []
@@ -90,8 +90,8 @@ const SettingsContext = React.createContext<ContextType>({
   toggleShowClaimableBalanceTxs: () => undefined,
   trustedServices: initialSettings.trustedServices,
   updateAvailable: false,
-  accountAssetVisibilityModes: initialSettings.accountAssetVisibilityModes,
-  setAssetVisibilityMode: () => undefined
+  accountAssetSettings: initialSettings.accountAssetSettings,
+  setAssetSettings: () => undefined
 })
 
 export function SettingsProvider(props: Props) {
@@ -177,15 +177,15 @@ export function SettingsProvider(props: Props) {
       .catch(trackError)
   }
 
-  const setAssetVisibilityMode = (accountId: string, assetKey: string, mode: Platform.VisibilityMode) => {
-    const updatedModes = {
-      ...settings.accountAssetVisibilityModes,
+  const setAssetSettings = (accountId: string, assetKey: string, assetSettings: Platform.AssetSettings) => {
+    const updateAssetSettings = {
+      ...settings.accountAssetSettings,
       [accountId]: {
-        ...(settings.accountAssetVisibilityModes[accountId] || {}),
-        [assetKey]: mode
+        ...(settings.accountAssetSettings[accountId] || {}),
+        [assetKey]: assetSettings
       }
     }
-    updateSettings({ accountAssetVisibilityModes: updatedModes })
+    updateSettings({ accountAssetSettings: updateAssetSettings })
   }
 
   const contextValue: ContextType = {
@@ -213,8 +213,8 @@ export function SettingsProvider(props: Props) {
     toggleShowClaimableBalanceTxs,
     trustedServices: settings.trustedServices,
     updateAvailable,
-    accountAssetVisibilityModes: settings.accountAssetVisibilityModes,
-    setAssetVisibilityMode
+    accountAssetSettings: settings.accountAssetSettings,
+    setAssetSettings,
   }
 
   return <SettingsContext.Provider value={contextValue}>{props.children}</SettingsContext.Provider>
