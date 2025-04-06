@@ -101,12 +101,9 @@ function AssetSelector(props: AssetSelectorProps) {
   const { assetSettings } = useAssetSettings(props.accountId)
 
   const assets = React.useMemo(
-    () => [
-      Asset.native(),
-      ...sortBalances(props.assets, assetSettings).map(asset =>
+    () => sortBalances(props.assets, assetSettings).map(asset =>
         "code" in asset && "issuer" in asset ? (asset as Asset) : balancelineToAsset(asset)
-      )
-    ],
+      ),
     [props.assets]
   )
 
@@ -193,15 +190,6 @@ function AssetSelector(props: AssetSelectorProps) {
           {t("generic.assets.select-an-asset")}
         </MenuItem>
       )}
-      {props.showXLM ? (
-        <AssetItem
-          asset={Asset.native()}
-          disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.isNative())}
-          key={stringifyAsset(Asset.native())}
-          testnet={props.testnet}
-          value={Asset.native().getCode()}
-        />
-      ) : null}
       {visibleAssets
         .filter(asset => !asset.isNative())
         .map(asset => (
@@ -213,6 +201,15 @@ function AssetSelector(props: AssetSelectorProps) {
             value={asset.getCode()}
           />
       ))}
+      {props.showXLM ? (
+        <AssetItem
+          asset={Asset.native()}
+          disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.isNative())}
+          key={stringifyAsset(Asset.native())}
+          testnet={props.testnet}
+          value={Asset.native().getCode()}
+        />
+      ) : null}
       {hiddenAssets && !showHidden && (
         <MenuItem value="showHidden">{t("generic.assets.show-hidden")}</MenuItem>
       )}
