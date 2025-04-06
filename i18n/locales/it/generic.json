@@ -91,5 +91,11 @@
   },
   "user-interface": {
     "copied-to-clipboard": "Copiato negli appunti."
+  },
+  "assets": {
+    "show-hidden": "Mostra nascosti...",
+    "hidden-assets": "Attività nascoste",
+    "select-an-asset": "Seleziona un'risorsa",
+    "select-an-asset-short": "Risorsa"
   }
 }

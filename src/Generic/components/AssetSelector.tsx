@@ -10,6 +10,8 @@ import { BalanceLine } from "~Generic/lib/account"
 import { balancelineToAsset, stringifyAsset } from "../lib/stellar"
 import { sortBalances } from "~Generic/lib/balances"
 import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
+import { ListSubheader } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
 
 const useAssetItemStyles = makeStyles(theme => ({
   icon: {
@@ -35,6 +37,7 @@ interface AssetItemProps {
   // key + value props are expected here from React/Material-ui validation mechanisms
   key: string
   value: string
+  style?: React.CSSProperties
 }
 
 const AssetItem = React.memo(
@@ -107,8 +110,29 @@ function AssetSelector(props: AssetSelectorProps) {
     [props.assets]
   )
 
+  const { t } = useTranslation()
+
+  const [showHidden, setShowHidden] = React.useState(false)
+
+  const visibleAssets = React.useMemo(() => {
+    return assets.filter(asset => assetSettings[stringifyAsset(asset)]?.visibility !== "hidden")
+  }, [props.assets, assetSettings])
+
+  const hiddenAssets = React.useMemo(() => {
+    return assets.filter(asset => assetSettings[stringifyAsset(asset)]?.visibility === "hidden")
+  }, [props.assets, assetSettings])
+
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = React.useCallback(() => setOpen(true), [])
+  const handleClose = React.useCallback(() => setOpen(false), [])
+
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<{ name?: any; value: any }>, child: React.ComponentElement<AssetItemProps, any>) => {
+      if (child.props.value === "showHidden") {
+        setShowHidden(true)
+        setOpen(true)
+        return
+      }
       const matchingAsset = assets.find(asset => asset.equals(child.props.asset))
 
       if (matchingAsset) {
@@ -156,14 +180,17 @@ function AssetSelector(props: AssetSelectorProps) {
           root: props.value ? undefined : classes.unselected,
           select: classes.select
         },
+        open,
+        onOpen: handleOpen,
+        onClose: handleClose,
         displayEmpty: !props.value,
         disableUnderline: props.disableUnderline,
-        renderValue: () => (props.value ? props.value.getCode() : "Select")
+        renderValue: () => (props.value ? props.value.getCode() : t("generic.assets.select-an-asset-short"))
       }}
     >
       {props.value ? null : (
         <MenuItem disabled value="">
-          Select an asset
+          {t("generic.assets.select-an-asset")}
         </MenuItem>
       )}
       {props.showXLM ? (
@@ -175,7 +202,7 @@ function AssetSelector(props: AssetSelectorProps) {
           value={Asset.native().getCode()}
         />
       ) : null}
-      {assets
+      {visibleAssets
         .filter(asset => !asset.isNative())
         .map(asset => (
           <AssetItem
@@ -185,7 +212,23 @@ function AssetSelector(props: AssetSelectorProps) {
             testnet={props.testnet}
             value={asset.getCode()}
           />
-        ))}
+      ))}
+      {hiddenAssets && !showHidden && (
+        <MenuItem value="showHidden">{t("generic.assets.show-hidden")}</MenuItem>
+      )}
+      {hiddenAssets && showHidden && <ListSubheader>{t("generic.assets.hidden-assets")}</ListSubheader>}
+      {hiddenAssets && (
+        hiddenAssets.map(asset => (
+            <AssetItem
+              asset={asset}
+              disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.equals(asset))}
+              key={stringifyAsset(asset)}
+              testnet={props.testnet}
+              value={asset.getCode()}
+              style={{ display: showHidden ? "" : "none" }}
+            />
+          ))
+      )}
     </TextField>
   )
 }
