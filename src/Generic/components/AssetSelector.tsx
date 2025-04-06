@@ -127,7 +127,7 @@ function AssetSelector(props: AssetSelectorProps) {
     (event: React.ChangeEvent<{ name?: any; value: any }>, child: React.ComponentElement<AssetItemProps, any>) => {
       if (child.props.value === "showHidden") {
         setShowHidden(true)
-        setOpen(true)
+        requestAnimationFrame(() => setOpen(true))
         return
       }
       const matchingAsset = assets.find(asset => asset.equals(child.props.asset))
