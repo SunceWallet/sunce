@@ -215,7 +215,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
       const [destination, query] = scanResult.split("?")
 
       // handle plain address or Kraken-style uri (<destination>?dt=<memoid>)
-      if (isStellarAddress(destination)) {
+      if (isPublicKey(destination) || isStellarAddress(destination)) {
         setValue("destination", destination)
 
         if (!query) {
