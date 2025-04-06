@@ -103,5 +103,11 @@
   },
   "user-interface": {
     "copied-to-clipboard": "Скопировано в буфер обмена."
+  },
+  "assets": {
+    "show-hidden": "Показать скрытые...",
+    "hidden-assets": "Скрытые активы",
+    "select-an-asset": "Выберите актив",
+    "select-an-asset-short": "Актив"
   }
 }

@@ -103,5 +103,11 @@
   },
   "user-interface": {
     "copied-to-clipboard": "Copied to clipboard."
+  },
+  "assets": {
+    "show-hidden": "Show hidden...",
+    "hidden-assets": "Hidden assets",
+    "select-an-asset": "Select an asset",
+    "select-an-asset-short": "Select"
   }
 }

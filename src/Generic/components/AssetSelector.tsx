@@ -8,6 +8,10 @@ import { makeStyles } from "@material-ui/core/styles"
 import AssetLogo from "~Assets/components/AssetLogo"
 import { BalanceLine } from "~Generic/lib/account"
 import { balancelineToAsset, stringifyAsset } from "../lib/stellar"
+import { sortBalances } from "~Generic/lib/balances"
+import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
+import { ListSubheader } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
 
 const useAssetItemStyles = makeStyles(theme => ({
   icon: {
@@ -33,6 +37,7 @@ interface AssetItemProps {
   // key + value props are expected here from React/Material-ui validation mechanisms
   key: string
   value: string
+  style?: React.CSSProperties
 }
 
 const AssetItem = React.memo(
@@ -85,6 +90,7 @@ interface AssetSelectorProps {
   onChange?: (asset: Asset) => void
   showXLM?: boolean
   style?: React.CSSProperties
+  accountId: string
   testnet: boolean
   value?: Asset
 }
@@ -92,19 +98,38 @@ interface AssetSelectorProps {
 function AssetSelector(props: AssetSelectorProps) {
   const { onChange } = props
   const classes = useAssetSelectorStyles()
+  const { assetSettings } = useAssetSettings(props.accountId)
 
   const assets = React.useMemo(
-    () => [
-      Asset.native(),
-      ...props.assets.map(asset =>
+    () => sortBalances(props.assets, assetSettings).map(asset =>
         "code" in asset && "issuer" in asset ? (asset as Asset) : balancelineToAsset(asset)
-      )
-    ],
+      ),
     [props.assets]
   )
 
+  const { t } = useTranslation()
+
+  const [showHidden, setShowHidden] = React.useState(false)
+
+  const visibleAssets = React.useMemo(() => {
+    return assets.filter(asset => assetSettings[stringifyAsset(asset)]?.visibility !== "hidden")
+  }, [props.assets, assetSettings])
+
+  const hiddenAssets = React.useMemo(() => {
+    return assets.filter(asset => assetSettings[stringifyAsset(asset)]?.visibility === "hidden")
+  }, [props.assets, assetSettings])
+
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = React.useCallback(() => setOpen(true), [])
+  const handleClose = React.useCallback(() => setOpen(false), [])
+
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<{ name?: any; value: any }>, child: React.ComponentElement<AssetItemProps, any>) => {
+      if (child.props.value === "showHidden") {
+        setShowHidden(true)
+        requestAnimationFrame(() => setOpen(true))
+        return
+      }
       const matchingAsset = assets.find(asset => asset.equals(child.props.asset))
 
       if (matchingAsset) {
@@ -152,26 +177,20 @@ function AssetSelector(props: AssetSelectorProps) {
           root: props.value ? undefined : classes.unselected,
           select: classes.select
         },
+        open,
+        onOpen: handleOpen,
+        onClose: handleClose,
         displayEmpty: !props.value,
         disableUnderline: props.disableUnderline,
-        renderValue: () => (props.value ? props.value.getCode() : "Select")
+        renderValue: () => (props.value ? props.value.getCode() : t("generic.assets.select-an-asset-short"))
       }}
     >
       {props.value ? null : (
         <MenuItem disabled value="">
-          Select an asset
+          {t("generic.assets.select-an-asset")}
         </MenuItem>
       )}
-      {props.showXLM ? (
-        <AssetItem
-          asset={Asset.native()}
-          disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.isNative())}
-          key={stringifyAsset(Asset.native())}
-          testnet={props.testnet}
-          value={Asset.native().getCode()}
-        />
-      ) : null}
-      {assets
+      {visibleAssets
         .filter(asset => !asset.isNative())
         .map(asset => (
           <AssetItem
@@ -181,7 +200,32 @@ function AssetSelector(props: AssetSelectorProps) {
             testnet={props.testnet}
             value={asset.getCode()}
           />
-        ))}
+      ))}
+      {props.showXLM ? (
+        <AssetItem
+          asset={Asset.native()}
+          disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.isNative())}
+          key={stringifyAsset(Asset.native())}
+          testnet={props.testnet}
+          value={Asset.native().getCode()}
+        />
+      ) : null}
+      {hiddenAssets && !showHidden && (
+        <MenuItem value="showHidden">{t("generic.assets.show-hidden")}</MenuItem>
+      )}
+      {hiddenAssets && showHidden && <ListSubheader>{t("generic.assets.hidden-assets")}</ListSubheader>}
+      {hiddenAssets && (
+        hiddenAssets.map(asset => (
+            <AssetItem
+              asset={asset}
+              disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.equals(asset))}
+              key={stringifyAsset(asset)}
+              testnet={props.testnet}
+              value={asset.getCode()}
+              style={{ display: showHidden ? "" : "none" }}
+            />
+          ))
+      )}
     </TextField>
   )
 }

@@ -14,6 +14,7 @@ import InlineLoader from "~Generic/components/InlineLoader"
 import { BalanceLine } from "~Generic/lib/account"
 import { sortBalances } from "~Generic/lib/balances"
 import ScrollableBalanceItem, { getBalanceItemMinMaxWidth } from "./ScrollableBalanceItem"
+import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
 
 function isAssetMatchingBalance(asset: Asset, balance: BalanceLine): boolean {
   return balance.asset_type === "native"
@@ -125,9 +126,10 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
   const swipeableContainerRef = React.useRef<HTMLDivElement | null>(null)
   const [currentStep, setCurrentStep] = React.useState(0)
   const [spring, setSpring] = useSpring(() => ({ x: 0 }))
+  const { assetSettings } = useAssetSettings(props.account.accountID)
 
-  const nativeBalance: Horizon.BalanceLineNative = accountData.balances.find(
-    (balance): balance is Horizon.BalanceLineNative => balance.asset_type === "native"
+  const nativeBalance: Horizon.HorizonApi.BalanceLineNative = accountData.balances.find(
+    (balance): balance is Horizon.HorizonApi.BalanceLineNative => balance.asset_type === "native"
   ) || {
     asset_type: "native",
     balance: "0",
@@ -137,8 +139,8 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
 
   const isAccountActivated = Number.parseFloat(nativeBalance.balance) > 0
 
-  const trustedAssets = sortBalances(accountData.balances)
-    .filter((balance): balance is Horizon.BalanceLineAsset => balance.asset_type !== "native")
+  const trustedAssets = sortBalances(accountData.balances, assetSettings)
+    .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
     .map(balance => new Asset(balance.asset_code, balance.asset_issuer))
 
   const balancesPerStep = Math.max(Math.floor((window.innerWidth - 32 - 32) / getBalanceItemMinMaxWidth()[1]), 2)

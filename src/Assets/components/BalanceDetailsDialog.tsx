@@ -5,7 +5,9 @@ import { Asset, Horizon } from "@stellar/stellar-sdk"
 import Dialog from "@material-ui/core/Dialog"
 import Divider from "@material-ui/core/Divider"
 import List from "@material-ui/core/List"
+import IconButton from "@material-ui/core/IconButton"
 import AddIcon from "@material-ui/icons/Add"
+import EditIcon from "@material-ui/icons/Edit"
 import { Account } from "~App/contexts/accounts"
 import * as routes from "~App/routes"
 import { FullscreenDialogTransition } from "~App/theme"
@@ -21,35 +23,38 @@ import { getAccountMinimumBalance, getSpendableBalance, stringifyAsset } from "~
 import DialogBody from "~Layout/components/DialogBody"
 import AddAssetDialog from "./AddAssetDialog"
 import BalanceDetailsListItem from "./BalanceDetailsListItem"
+import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
 
-function isAssetMatchingBalance(asset: Asset, balance: BalanceLine): boolean {
-  return balance.asset_type === "native"
-    ? asset.isNative()
-    : balance.asset_code === asset.getCode() && balance.asset_issuer === asset.getIssuer()
+type AssetBalance = {
+  asset: Asset
+  balance: BalanceLine
 }
 
 interface TrustedAssetsProps {
   account: Account
-  accountData: AccountData
-  assets: Asset[]
+  assetBalances: AssetBalance[]
   hmargin: string | number
   hpadding: string | number
   onOpenAssetDetails: (asset: Asset) => void
   openOffers: Horizon.ServerApi.OfferRecord[]
   olderOffersAvailable?: boolean
+  isEditMode: boolean
+  assetSettings: Platform.AssetSettingsMap
+  onToggleAssetVisibility: (asset: Asset) => void
 }
 
 const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProps) {
   return (
     <>
-      {props.assets.map(asset => {
-        const balance = props.accountData.balances.find(bal => isAssetMatchingBalance(asset, bal))
+      {props.assetBalances.map(({ asset, balance }) => {
         const openOffers = props.openOffers.filter(
           offer =>
             (offer.buying.asset_code === asset.code && offer.buying.asset_issuer === asset.issuer) ||
             (offer.selling.asset_code === asset.code && offer.selling.asset_issuer === asset.issuer)
         )
         const badgeCount = props.olderOffersAvailable && openOffers.length >= 10 ? "10+" : openOffers.length
+        const visibilityMode = props.assetSettings[stringifyAsset(asset)]?.visibility
+
         return (
           <BalanceDetailsListItem
             key={stringifyAsset(asset)}
@@ -64,6 +69,9 @@ const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProp
             }}
             testnet={props.account.testnet}
             isOwnAsset={props.account.accountID === asset.getIssuer()}
+            isEditMode={props.isEditMode}
+            visibilityMode={visibilityMode}
+            onToggleVisibility={() => props.onToggleAssetVisibility(asset)}
           />
         )
       })}
@@ -133,6 +141,22 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const isSmallScreen = useIsMobile()
   const router = useRouter()
   const { t } = useTranslation()
+  const [isEditMode, setIsEditMode] = React.useState(false)
+  const { assetSettings, toggleVisibilityMode } = useAssetSettings(props.account.accountID)
+  const [trustedAssets, setTrustedAssets] = React.useState<AssetBalance[]>([])
+
+  // Sort assets on initial render and when edit mode changes
+  React.useEffect(() => {
+    if (isEditMode) return
+    const assets = sortBalances(accountData.balances, assetSettings)
+      .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
+      .map(balance => ({
+        asset: new Asset(balance.asset_code, balance.asset_issuer),
+        balance,
+      }))
+
+    setTrustedAssets(assets)
+  }, [accountData.balances, assetSettings, isEditMode])
 
   const openAddAssetDialog = React.useCallback(
     () => router.history.push(routes.manageAccountAssets(props.account.id)),
@@ -151,9 +175,9 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const openAssetDetails = (asset: Asset) =>
     router.history.push(routes.assetDetails(props.account.id, stringifyAsset(asset)))
 
-  const trustedAssets = sortBalances(accountData.balances)
-    .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
-    .map(balance => new Asset(balance.asset_code, balance.asset_issuer))
+  const toggleEditMode = () => {
+    setIsEditMode(!isEditMode)
+  }
 
   const nativeBalance = accountData.balances.find(
     (balance): balance is Horizon.HorizonApi.BalanceLineNative => balance.asset_type === "native"
@@ -164,7 +188,20 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const itemHMargin = 0
 
   return (
-    <DialogBody excessWidth={12} top={<MainTitle onBack={props.onClose} title={props.account.name} />}>
+    <DialogBody 
+      excessWidth={12} 
+      top={
+        <MainTitle 
+          onBack={props.onClose} 
+          title={props.account.name}
+          actions={
+            <IconButton onClick={toggleEditMode} color={isEditMode ? "primary" : "default"}>
+              <EditIcon />
+            </IconButton>
+          }
+        />
+      }
+    >
       <List style={{ paddingLeft: hpadding, paddingRight: hpadding, margin: "0 -8px" }}>
         <ButtonListItem
           gutterBottom
@@ -180,13 +217,15 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
         </ButtonListItem>
         <TrustedAssets
           account={props.account}
-          accountData={accountData}
-          assets={trustedAssets}
+          assetBalances={trustedAssets}
           hmargin={itemHMargin}
           hpadding={itemHPadding}
           onOpenAssetDetails={openAssetDetails}
           openOffers={openOrders}
           olderOffersAvailable={olderOffersAvailable}
+          isEditMode={isEditMode}
+          assetSettings={assetSettings}
+          onToggleAssetVisibility={toggleVisibilityMode}
         />
       </List>
       <Divider style={{ margin: "16px 0" }} />

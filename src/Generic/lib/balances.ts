@@ -1,6 +1,7 @@
 import BigNumber from "big.js"
 import { Horizon } from "@stellar/stellar-sdk"
 import { BalanceLine } from "./account"
+import { stringifyAsset } from "./stellar"
 
 function addThousandsSeparators(digits: string, thousandsSeparator: string) {
   const digitGroups: string[] = []
@@ -69,8 +70,8 @@ export function formatBalance(input: BigNumber | string, options: BalanceFormatt
   )
 }
 
-export function sortBalances(balances: BalanceLine[]) {
-  const sorter = (balance1: Horizon.BalanceLineAsset, balance2: Horizon.BalanceLineAsset) => {
+export function sortBalances(balances: BalanceLine[], assetSettings: Platform.AssetSettingsMap = {}) {
+  const sorter = (balance1: Horizon.HorizonApi.BalanceLineAsset, balance2: Horizon.HorizonApi.BalanceLineAsset) => {
     if (Number.parseFloat(balance1.balance) === 0 && Number.parseFloat(balance2.balance) !== 0) {
       return 1
     } else if (Number.parseFloat(balance1.balance) !== 0 && Number.parseFloat(balance2.balance) === 0) {
@@ -81,9 +82,14 @@ export function sortBalances(balances: BalanceLine[]) {
   }
 
   const nativeBalance = balances.find(balance => balance.asset_type === "native")
+  const favoriteAssets = balances.filter(balance => balance.asset_type !== "native" && assetSettings[stringifyAsset(balance)]?.visibility === "favorite")
+  const hiddenAssets = balances.filter(balance => balance.asset_type !== "native" && assetSettings[stringifyAsset(balance)]?.visibility === "hidden")
+  const otherAssets = balances.filter(balance => balance.asset_type !== "native" && [undefined, "default"].indexOf(assetSettings[stringifyAsset(balance)]?.visibility) >= 0)
 
   return [
-    ...balances.filter((balance): balance is Horizon.BalanceLineAsset => balance.asset_type !== "native").sort(sorter),
+    ...favoriteAssets.sort(sorter),
+    ...otherAssets.sort(sorter),
+    ...hiddenAssets.sort(sorter),
     ...(nativeBalance ? [nativeBalance] : [])
   ]
 }
