@@ -2,6 +2,8 @@ import { Horizon } from "@stellar/stellar-sdk"
 import BigNumber from "big.js"
 import React from "react"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
+import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
+import useVisibleBalances from "~Generic/hooks/useVisibleBalances"
 import { BalanceLine } from "~Generic/lib/account"
 import { formatBalance, sortBalances, BalanceFormattingOptions } from "~Generic/lib/balances"
 import { balancelineToAsset, stringifyAsset } from "~Generic/lib/stellar"
@@ -73,12 +75,14 @@ const isOwnAsset = (accountId: string, balance: BalanceLine) => {
 
 // tslint:disable-next-line no-shadowed-variable
 export const MultipleBalances = React.memo(function MultipleBalances(props: MultipleBalancesProps) {
+  const { assetSettings } = useAssetSettings(props.accountId)
+
   if (props.balances.length === 0) {
     return <></>
   }
-
+  
   const Balance = props.component || SingleBalance
-  const balances = sortBalances(props.balances)
+  const balances = sortBalances(props.balances, assetSettings)
 
   return (
     <span onClick={props.onClick} style={props.onClick ? { cursor: "pointer" } : undefined}>
@@ -106,12 +110,14 @@ function AccountBalances(props: {
   component?: React.ComponentType<SingleBalanceProps>
   onClick?: () => void
   publicKey: string
-  testnet: boolean
+  testnet: boolean,
+  showHidden?: boolean
 }) {
   const accountData = useLiveAccountData(props.publicKey, props.testnet)
+  const balances = useVisibleBalances(accountData, props.showHidden ?? true)
 
   return accountData.balances.length > 0 ? (
-    <MultipleBalances balances={accountData.balances} accountId={accountData.account_id} component={props.component} onClick={props.onClick} />
+    <MultipleBalances balances={balances} accountId={accountData.account_id} component={props.component} onClick={props.onClick} />
   ) : (
     <MultipleBalances balances={[zeroXLMBalance] as any} accountId={accountData.account_id} component={props.component} onClick={props.onClick} />
   )

@@ -148,17 +148,14 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   // Sort assets on initial render and when edit mode changes
   React.useEffect(() => {
     if (isEditMode) return
-    const assets = sortBalances(accountData.balances)
+    const assets = sortBalances(accountData.balances, assetSettings)
       .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
       .map(balance => ({
         asset: new Asset(balance.asset_code, balance.asset_issuer),
         balance,
       }))
 
-    const favoriteAssets = assets.filter(({ asset }) => assetSettings[stringifyAsset(asset)]?.visibility === "favorite")
-    const defaultAssets = assets.filter(({ asset }) => [undefined, "default"].indexOf(assetSettings[stringifyAsset(asset)]?.visibility) >= 0)
-    const hiddenAssets = assets.filter(({ asset }) => assetSettings[stringifyAsset(asset)]?.visibility === "hidden")
-    setTrustedAssets([...favoriteAssets, ...defaultAssets, ...hiddenAssets])
+    setTrustedAssets(assets)
   }, [accountData.balances, assetSettings, isEditMode])
 
   const openAddAssetDialog = React.useCallback(

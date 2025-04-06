@@ -304,6 +304,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
             style={{ alignSelf: "center" }}
             testnet={props.testnet}
             value={formValues.asset}
+            accountId={props.accountData.account_id}
           />
         }
         control={form.control}

@@ -8,6 +8,8 @@ import { makeStyles } from "@material-ui/core/styles"
 import AssetLogo from "~Assets/components/AssetLogo"
 import { BalanceLine } from "~Generic/lib/account"
 import { balancelineToAsset, stringifyAsset } from "../lib/stellar"
+import { sortBalances } from "~Generic/lib/balances"
+import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
 
 const useAssetItemStyles = makeStyles(theme => ({
   icon: {
@@ -85,6 +87,7 @@ interface AssetSelectorProps {
   onChange?: (asset: Asset) => void
   showXLM?: boolean
   style?: React.CSSProperties
+  accountId: string
   testnet: boolean
   value?: Asset
 }
@@ -92,11 +95,12 @@ interface AssetSelectorProps {
 function AssetSelector(props: AssetSelectorProps) {
   const { onChange } = props
   const classes = useAssetSelectorStyles()
+  const { assetSettings } = useAssetSettings(props.accountId)
 
   const assets = React.useMemo(
     () => [
       Asset.native(),
-      ...props.assets.map(asset =>
+      ...sortBalances(props.assets, assetSettings).map(asset =>
         "code" in asset && "issuer" in asset ? (asset as Asset) : balancelineToAsset(asset)
       )
     ],
