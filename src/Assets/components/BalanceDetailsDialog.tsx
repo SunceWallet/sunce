@@ -40,7 +40,6 @@ interface TrustedAssetsProps {
   olderOffersAvailable?: boolean
   isEditMode: boolean
   assetSettings: Platform.AssetSettingsMap
-  onToggleAssetVisibility: (asset: Asset) => void
 }
 
 const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProps) {
@@ -67,11 +66,10 @@ const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProp
               marginLeft: props.hmargin,
               marginRight: props.hmargin
             }}
+            accountId={props.account.accountID}
             testnet={props.account.testnet}
             isOwnAsset={props.account.accountID === asset.getIssuer()}
             isEditMode={props.isEditMode}
-            visibilityMode={visibilityMode}
-            onToggleVisibility={() => props.onToggleAssetVisibility(asset)}
           />
         )
       })}
@@ -101,6 +99,7 @@ const NativeBalanceItems = React.memo(function NativeBalanceItems(props: NativeB
           marginLeft: props.hmargin,
           marginRight: props.hmargin
         }}
+        accountId={props.account.accountID}
         testnet={props.account.testnet}
       />
       <BalanceDetailsListItem
@@ -142,7 +141,7 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const router = useRouter()
   const { t } = useTranslation()
   const [isEditMode, setIsEditMode] = React.useState(false)
-  const { assetSettings, toggleVisibilityMode } = useAssetSettings(props.account.accountID)
+  const { assetSettings } = useAssetSettings(props.account.accountID)
   const [trustedAssets, setTrustedAssets] = React.useState<AssetBalance[]>([])
 
   // Sort assets on initial render and when edit mode changes
@@ -225,7 +224,6 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
           olderOffersAvailable={olderOffersAvailable}
           isEditMode={isEditMode}
           assetSettings={assetSettings}
-          onToggleAssetVisibility={toggleVisibilityMode}
         />
       </List>
       <Divider style={{ margin: "16px 0" }} />
