@@ -124,6 +124,7 @@ function AccountCard(props: AccountCardProps) {
                 <AccountBalances
                   publicKey={props.account.cosignerOf || props.account.publicKey}
                   testnet={props.account.testnet}
+                  showHidden={false}
                 />
               </React.Suspense>
             </Box>

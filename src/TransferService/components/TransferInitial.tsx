@@ -163,6 +163,7 @@ function TransferInitial(props: TransferInitialProps) {
           showXLM={props.type === "deposit"}
           testnet={account.testnet}
           value={formValues.asset || undefined}
+          accountId={account.accountID}
         >
           {props.transferableAssets.length === 0 ? (
             <MenuItem disabled value="">

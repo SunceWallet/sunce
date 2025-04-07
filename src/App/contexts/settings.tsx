@@ -40,6 +40,8 @@ interface ContextType {
   toggleShowClaimableBalanceTxs: () => void
   trustedServices: TrustedService[]
   updateAvailable: boolean
+  accountAssetSettings: Platform.AccountAssetSettingsMap
+  setAssetSettings: (accountId: string, assetKey: string, mode: Platform.AssetSettings) => void
 }
 
 interface SettingsState extends Platform.SettingsData {
@@ -55,7 +57,8 @@ const initialSettings: SettingsState = {
   testnet: false,
   showDust: false,
   showClaimableBalanceTxs: false,
-  trustedServices: []
+  trustedServices: [],
+  accountAssetSettings: {}
 }
 
 const initialIgnoredSignatureRequests: string[] = []
@@ -86,7 +89,9 @@ const SettingsContext = React.createContext<ContextType>({
   toggleShowDust: () => undefined,
   toggleShowClaimableBalanceTxs: () => undefined,
   trustedServices: initialSettings.trustedServices,
-  updateAvailable: false
+  updateAvailable: false,
+  accountAssetSettings: initialSettings.accountAssetSettings,
+  setAssetSettings: () => undefined
 })
 
 export function SettingsProvider(props: Props) {
@@ -172,6 +177,17 @@ export function SettingsProvider(props: Props) {
       .catch(trackError)
   }
 
+  const setAssetSettings = (accountId: string, assetKey: string, assetSettings: Platform.AssetSettings) => {
+    const updateAssetSettings = {
+      ...settings.accountAssetSettings,
+      [accountId]: {
+        ...(settings.accountAssetSettings[accountId] || {}),
+        [assetKey]: assetSettings
+      }
+    }
+    updateSettings({ accountAssetSettings: updateAssetSettings })
+  }
+
   const contextValue: ContextType = {
     agreedToTermsAt: settings.agreedToTermsAt,
     biometricLock: settings.biometricLock,
@@ -196,7 +212,9 @@ export function SettingsProvider(props: Props) {
     toggleShowDust,
     toggleShowClaimableBalanceTxs,
     trustedServices: settings.trustedServices,
-    updateAvailable
+    updateAvailable,
+    accountAssetSettings: settings.accountAssetSettings,
+    setAssetSettings,
   }
 
   return <SettingsContext.Provider value={contextValue}>{props.children}</SettingsContext.Provider>

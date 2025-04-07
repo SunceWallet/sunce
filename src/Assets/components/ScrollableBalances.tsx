@@ -14,6 +14,8 @@ import InlineLoader from "~Generic/components/InlineLoader"
 import { BalanceLine } from "~Generic/lib/account"
 import { sortBalances } from "~Generic/lib/balances"
 import ScrollableBalanceItem, { getBalanceItemMinMaxWidth } from "./ScrollableBalanceItem"
+import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
+import useVisibleBalances from "~Generic/hooks/useVisibleBalances"
 
 function isAssetMatchingBalance(asset: Asset, balance: BalanceLine): boolean {
   return balance.asset_type === "native"
@@ -125,9 +127,10 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
   const swipeableContainerRef = React.useRef<HTMLDivElement | null>(null)
   const [currentStep, setCurrentStep] = React.useState(0)
   const [spring, setSpring] = useSpring(() => ({ x: 0 }))
+  const { assetSettings } = useAssetSettings(props.account.accountID)
 
-  const nativeBalance: Horizon.BalanceLineNative = accountData.balances.find(
-    (balance): balance is Horizon.BalanceLineNative => balance.asset_type === "native"
+  const nativeBalance: Horizon.HorizonApi.BalanceLineNative = accountData.balances.find(
+    (balance): balance is Horizon.HorizonApi.BalanceLineNative => balance.asset_type === "native"
   ) || {
     asset_type: "native",
     balance: "0",
@@ -137,12 +140,14 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
 
   const isAccountActivated = Number.parseFloat(nativeBalance.balance) > 0
 
-  const trustedAssets = sortBalances(accountData.balances)
-    .filter((balance): balance is Horizon.BalanceLineAsset => balance.asset_type !== "native")
+  const balances = useVisibleBalances(accountData, false)
+
+  const trustedAssets = sortBalances(balances, assetSettings)
+    .filter((balance): balance is Horizon.HorizonApi.BalanceLineAsset => balance.asset_type !== "native")
     .map(balance => new Asset(balance.asset_code, balance.asset_issuer))
 
   const balancesPerStep = Math.max(Math.floor((window.innerWidth - 32 - 32) / getBalanceItemMinMaxWidth()[1]), 2)
-  const stepCount = Math.ceil(accountData.balances.length / balancesPerStep)
+  const stepCount = Math.ceil(balances.length / balancesPerStep)
 
   const getStepX = (step: number) => {
     step = Math.min(Math.max(step, 0), stepCount - 1)
@@ -214,7 +219,7 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
         <ScrollableBalanceItem
           key={stringifyAsset(asset)}
           ref={domElement => (domElement ? balanceItemsRef.current.set(index, domElement) : undefined)}
-          balance={accountData.balances.find(balance => isAssetMatchingBalance(asset, balance))!}
+          balance={balances.find(balance => isAssetMatchingBalance(asset, balance))!}
           compact={props.compact}
           onClick={props.onClick && isAccountActivated ? handleClick : undefined}
           testnet={props.account.testnet}
@@ -224,7 +229,7 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
       <ScrollableBalanceItem
         key={stringifyAsset(Asset.native())}
         ref={domElement =>
-          domElement ? balanceItemsRef.current.set(accountData.balances.length - 1, domElement) : undefined
+          domElement ? balanceItemsRef.current.set(balances.length - 1, domElement) : undefined
         }
         balance={nativeBalance}
         compact={props.compact}
@@ -233,7 +238,7 @@ function ScrollableBalances(props: ScrollableBalancesProps) {
       />
     ],
     [
-      accountData.balances,
+      balances,
       handleClick,
       isAccountActivated,
       nativeBalance,

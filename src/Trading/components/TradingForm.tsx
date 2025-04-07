@@ -266,6 +266,7 @@ function TradingForm(props: Props) {
                 style={{ flexGrow: 1, marginRight: 24, maxWidth: 150, width: "25%" }}
                 testnet={props.account.testnet}
                 value={primaryAsset}
+                accountId={props.accountData.account_id}
               />
             }
             control={form.control}
@@ -351,6 +352,7 @@ function TradingForm(props: Props) {
                 style={{ flexGrow: 1, marginRight: 24, maxWidth: 150, width: "25%" }}
                 testnet={props.account.testnet}
                 value={secondaryAsset}
+                accountId={props.accountData.account_id}
               />
             }
             control={form.control}

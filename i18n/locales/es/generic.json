@@ -98,5 +98,11 @@
   },
   "user-interface": {
     "copied-to-clipboard": "Copiado a Portapapeles."
+  },
+  "assets": {
+    "show-hidden": "Mostrar ocultos...",
+    "hidden-assets": "Activos ocultos",
+    "select-an-asset": "Seleccionar un activo",
+    "select-an-asset-short": "Activo"
   }
 }
