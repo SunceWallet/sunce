@@ -23,6 +23,7 @@ import AssetDetailsActions from "./AssetDetailsActions"
 import AssetLogo from "./AssetLogo"
 import SpendableBalanceBreakdown from "./SpendableBalanceBreakdown"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
+import VisibilityIconButton from "./VisibilityIconButton"
 
 const capitalize = (text: string) => text[0].toUpperCase() + text.substr(1)
 
@@ -360,9 +361,16 @@ function AssetDetailsDialog(props: Props) {
             title={
               asset.isNative()
                 ? "Stellar Lumens (XLM)"
-                : metadata && metadata.name
-                ? `${metadata.name} (${asset.getCode()})`
-                : asset.getCode()
+                : (<>
+                    {metadata && metadata.name
+                      ? `${metadata.name} (${asset.getCode()})`
+                      : asset.getCode()}
+                    <VisibilityIconButton
+                      accountId={props.account.accountID}
+                      asset={asset}
+                    />
+                  </>
+                )
             }
             titleStyle={{
               maxWidth: isSmallScreen ? "calc(100% - 75px)" : "calc(100% - 100px)",

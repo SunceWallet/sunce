@@ -79,6 +79,9 @@ function MainTitle(props: Props) {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            display: "flex",
+            flexDirection: "row",
+            gap: 8,
             ...props.titleStyle
           }}
         >
