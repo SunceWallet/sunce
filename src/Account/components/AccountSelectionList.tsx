@@ -90,7 +90,7 @@ const AccountSelectionListItem = React.memo(
           primary={props.account.name}
           secondary={
             <React.Suspense fallback={<InlineLoader />}>
-              <AccountBalances publicKey={props.account.accountID} testnet={props.account.testnet} />
+              <AccountBalances publicKey={props.account.accountID} testnet={props.account.testnet} showHidden={false} />
             </React.Suspense>
           }
         />
