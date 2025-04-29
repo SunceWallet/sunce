@@ -4,6 +4,7 @@ import { Asset, Operation, Horizon, Transaction } from "@stellar/stellar-sdk"
 import Dialog from "@material-ui/core/Dialog"
 import ClearIcon from "@material-ui/icons/Clear"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
+import SendIcon from "@material-ui/icons/Send"
 import { Account } from "~App/contexts/accounts"
 import { trackError } from "~App/contexts/notifications"
 import * as routes from "~App/routes"
@@ -41,7 +42,7 @@ function AssetDetailsActions(props: Props) {
   )
 
   const createAddAssetTransaction = async (options: { limit?: string } = {}) => {
-    const operations = [Operation.changeTrust({ asset, limit: options.limit, withMuxing: true })]
+    const operations = [Operation.changeTrust({ asset, limit: options.limit })]
     return createTransaction(operations, {
       accountData,
       horizon: props.horizon,
@@ -76,6 +77,11 @@ function AssetDetailsActions(props: Props) {
     [asset, props.account.id, router.history]
   )
 
+  const sendThisAsset = React.useCallback(
+    () => router.history.push(routes.createPayment(props.account.id, stringifyAsset(asset))),
+    [asset, props.account.id, router.history]
+  )
+
   return (
     <>
       <DialogActionsBox desktopStyle={dialogActionsBoxStyle} smallDialog>
@@ -86,6 +92,9 @@ function AssetDetailsActions(props: Props) {
             </ActionButton>
             <ActionButton icon={<SwapHorizIcon />} onClick={tradeThisAsset} type="primary">
               {t("account.add-asset.action.trade")}
+            </ActionButton>
+            <ActionButton icon={<SendIcon />} onClick={sendThisAsset} type="primary">
+              {t("account.action.send")}
             </ActionButton>
           </>
         ) : (

@@ -78,6 +78,7 @@ interface PaymentFormProps {
   ) => void
   openOrdersCount: number
   preselectedParams?: PaymentParams
+  canChangePreselectedParams?: boolean
   testnet: boolean
   trustedAssets: Asset[]
   txCreationPending?: boolean
@@ -265,7 +266,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     () => (
       <TextField
         autoFocus={import.meta.env.VITE_PLATFORM !== "ios"}
-        disabled={Boolean(preselectedParams?.destination)}
+        disabled={!props.canChangePreselectedParams}
         error={Boolean(form.errors.destination)}
         fullWidth
         inputProps={{
@@ -299,7 +300,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
           <AssetSelector
             assets={props.accountData.balances}
             disableUnderline
-            disabled={Boolean(preselectedParams?.asset)}
+            disabled={!props.canChangePreselectedParams}
             showXLM
             style={{ alignSelf: "center" }}
             testnet={props.testnet}
@@ -343,7 +344,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     () => (
       <PriceInput
         assetCode={assetSelector}
-        disabled={Boolean(preselectedParams?.amount)}
+        disabled={!props.canChangePreselectedParams}
         error={Boolean(form.errors.amount)}
         inputRef={form.register({
           required: t<string>("payment.validation.no-price"),
@@ -380,7 +381,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
   const memoInput = React.useMemo(
     () => (
       <TextField
-        disabled={Boolean(preselectedParams?.memo)}
+        disabled={!props.canChangePreselectedParams}
         error={Boolean(form.errors.memoValue)}
         inputProps={{ maxLength: 28 }}
         label={form.errors.memoValue ? form.errors.memoValue.message : memoMetadata.label}
@@ -481,6 +482,7 @@ interface Props {
   actionsRef: RefStateObject
   openOrdersCount: number
   preselectedParams?: PaymentParams
+  canChangePreselectedParams?: boolean
   testnet: boolean
   trustedAssets: Asset[]
   txCreationPending?: boolean
