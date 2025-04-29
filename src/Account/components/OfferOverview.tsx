@@ -1,13 +1,9 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
-import ListItemText from "@material-ui/core/ListItemText"
 import { Account } from "~App/contexts/accounts"
 import { useLiveAccountOffers } from "~Generic/hooks/stellar-subscriptions"
 import { useRouter } from "~Generic/hooks/userinterface"
 import * as routes from "~App/routes"
-import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { List, ListSubheader, makeStyles } from "@material-ui/core"
 import { breakpoints } from "~App/theme"
@@ -41,7 +37,6 @@ function OfferOverview(props: Props) {
   const offerHistory = useLiveAccountOffers(props.account.accountID, props.account.testnet)
   const { t } = useTranslation()
 
-  console.log(routes.tradeAsset(props.account.id))
   const openTrading = () => {
     router.history.push(routes.tradeAsset(props.account.id))
   }

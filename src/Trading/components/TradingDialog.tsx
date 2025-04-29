@@ -22,7 +22,6 @@ import DialogBody from "~Layout/components/DialogBody"
 import TransactionSender from "~Transaction/components/TransactionSender"
 import MainActionSelection from "./MainActionSelection"
 import TradingForm from "./TradingForm"
-import OfferList from "~Account/components/OfferList"
 
 interface TradingDialogProps {
   account: Account

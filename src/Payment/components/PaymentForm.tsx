@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core"
+import { Box } from "@material-ui/core"
 import ButtonBase from "@material-ui/core/ButtonBase"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import TextField from "@material-ui/core/TextField"
@@ -96,8 +96,6 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     placeholder: t("payment.memo-metadata.placeholder.optional"),
     requiredType: undefined
   })
-  const [callback, setCallback] = React.useState<string>("")
-  const [payStellarUri, setPayStellarUri] = React.useState<PayStellarUri>()
   const form = useForm<PaymentFormValues>({
     defaultValues: {
       amount: "",
@@ -180,7 +178,6 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
 
   const handlePaymentLink = React.useCallback((uri: PayStellarUri) => {
     setValue("destination", uri.destination)
-    setPayStellarUri(uri)
 
     if (uri.amount) {
       setValue("amount", uri.amount)
@@ -195,9 +192,6 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
       setValue("memoValue", uri.memo)
     }
 
-    if (uri.callback) {
-      setCallback(uri.callback)
-    }
   }, [])
 
   const handleQRScan = React.useCallback(
