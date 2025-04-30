@@ -1,3 +1,4 @@
+import { AllInclusive } from "@material-ui/icons"
 import { Horizon } from "@stellar/stellar-sdk"
 import BigNumber from "big.js"
 import React from "react"
@@ -34,13 +35,13 @@ export const SingleBalance = React.memo(function SingleBalance(props: SingleBala
   const [integerPart, decimalPart = ""] = formattedBalance.split(".")
   return (
     <span style={{ whiteSpace: "nowrap", ...props.style }}>
-      <span style={{ display: "inline-block" }}>
+      <span style={{ display: "inline-block", verticalAlign: 'top' }}>
         {balance.gte(0) ? null : <span>-&nbsp;</span>}
         {!props.showInfinity && <span style={{ fontWeight: 300 }}>
           {integerPart}
           <span style={{ opacity: 0.8 }}>{decimalPart ? "." + decimalPart : ""}</span>
         </span>}
-        {props.showInfinity &&<span style={{ display: "inline-block", fontWeight: 300, transform: "scale(1.5)" }}>∞</span>}
+        {props.showInfinity && <AllInclusive style={{ height: "1.2rem", width: "1.2rem" }} />}
       </span>
       {props.assetCode ? (
         <>
