@@ -1,0 +1,252 @@
+{
+  "authentication": {
+    "sidebar": {
+      "headline": "Authentifizierung",
+      "info": {
+        "1": "Der Asset-Emittent verlangt, dass Sie sich mit Ihrem Konto bei seinem Dienst anmelden.",
+        "2": "Eine Authentifizierungstransaktion wird signiert, um den Besitz dieses Kontos nachzuweisen."
+      }
+    }
+  },
+  "deposit-success": {
+    "action": {
+      "close": "Schließen"
+    },
+    "body": {
+      "deposit-pending": "Einzahlung ausstehend",
+      "info": {
+        "1": "{{domain}} wartet auf Ihre Einzahlung.",
+        "2": "Das Guthaben wird Ihrem Stellar-Konto gutgeschrieben, sobald die Einzahlung dem Asset-Emittenten gutgeschrieben wurde."
+      }
+    },
+    "sidebar": {
+      "headline": "Fertig",
+      "info": "Ihre Einzahlung wurde akzeptiert und wird vom Asset-Emittenten bearbeitet, sobald Ihre Zahlung eintrifft."
+    }
+  },
+  "form-builder": {
+    "placeholder": {
+      "optional": "(Optional) {{name}}"
+    }
+  },
+  "initial": {
+    "action": {
+      "proceed": "Weiter"
+    },
+    "body": {
+      "asset-selector": {
+        "label": {
+          "deposit": "Asset",
+          "short": "Asset",
+          "withdrawal": "Auszuzahlendes Asset"
+        },
+        "no-assets": "Keine auszahlbaren Assets"
+      },
+      "method-selector": {
+        "info-item": {
+          "asset": "Bitte wählen Sie einen Typ aus",
+          "no-asset": "Wählen Sie zuerst ein Asset aus"
+        },
+        "label": {
+          "deposit": "Einzahlungsart",
+          "withdrawal": "Auszahlungsart"
+        }
+      }
+    },
+    "sidebar": {
+      "deposit": {
+        "headline": "Konto aufladen",
+        "info": {
+          "1": "Kaufen Sie Stellar Lumen (XLM) oder zahlen Sie Assets ein, um Ihr Konto aufzuladen. Senden Sie USD von Ihrem Bankkonto, ETH von Ihrer Ethereum-Wallet usw.",
+          "2": "Sunce fungiert lediglich als Client für den vom Asset-Emittenten angebotenen Dienst."
+        }
+      },
+      "withdrawal": {
+        "headline": "Was möchten Sie auszahlen?",
+        "info": {
+          "1": "Zahlen Sie Assets von Ihrem Konto aus, z. B. USD auf Ihr Bankkonto oder ETH an Ihre Ethereum-Wallet.",
+          "2": "Sunce fungiert lediglich als Client für den vom Asset-Emittenten angebotenen Dienst."
+        }
+      }
+    }
+  },
+  "kyc-denied": {
+    "sidebar": {
+      "headline": "Know Your Customer (KYC)",
+      "info": "Sie wurden abgelehnt – der Dienst ist für Sie deaktiviert. Bitte kontaktieren Sie den Asset-Emittenten."
+    }
+  },
+  "kyc-pending": {
+    "action": {
+      "continue": "Weiter",
+      "open-again": "Erneut öffnen"
+    },
+    "body": {
+      "additional-info-needed": "Zusätzliche Informationen erforderlich"
+    },
+    "sidebar": {
+      "headline": "Know Your Customer (KYC)",
+      "info": {
+        "1": "Der Dienst funktioniert nur, wenn Sie persönliche Informationen über sich angeben.",
+        "2": "Dies geschieht normalerweise aus rechtlichen Gründen."
+      }
+    }
+  },
+  "no-withdrawable-assets": {
+    "action": {
+      "add-asset": "Asset hinzufügen"
+    },
+    "body": {
+      "no-withdrawable-assets": "Dieses Konto enthält keine auszahlbaren Assets."
+    }
+  },
+  "purchase-lumens": {
+    "sidebar": {
+      "headline": "Stellar Lumen kaufen",
+      "info": {
+        "1": "Wir bieten Optionen zum Kauf von Lumen an, die keinen Stellar-Asset-Emittenten involvieren.",
+        "2": " Stellar Lumen (XLM) sind die nativen Token im Stellar-Netzwerk. Sie werden unter anderem zur Bezahlung von Transaktionsgebühren verwendet."
+      }
+    }
+  },
+  "title": {
+    "deposit": "Guthaben einzahlen",
+    "withdrawal": "Guthaben auszahlen"
+  },
+  "transaction-details": {
+    "action": {
+      "done": "Fertig",
+      "withdraw": "Auszahlen"
+    },
+    "body": {
+      "amount": {
+        "error": {
+          "amount-greater-than-balance": "Angegebener Betrag übersteigt Guthaben"
+        },
+        "label": {
+          "deposit": "Einzuzahlender Betrag",
+          "withdrawal": "Auszuzahlender Betrag"
+        }
+      },
+      "amount-to-receive": {
+        "label": "Zu erhaltender Betrag"
+      },
+      "deposit-instructions": {
+        "label": "Einzahlungsanweisungen"
+      },
+      "eta": {
+        "label": "ETA",
+        "not-available": "N/V"
+      },
+      "fees": {
+        "label": "Gebühren",
+        "value": {
+          "unknown": "unbekannt"
+        }
+      },
+      "information": {
+        "label": "Informationen"
+      }
+    },
+    "sidebar": {
+      "deposit": {
+        "headline": "Einzahlungsübersicht",
+        "info": {
+          "1": "Stellen Sie sicher, dass Sie das Guthaben an das richtige Ziel senden.",
+          "2": "Der Asset-Emittent schreibt die Token gut, sobald Ihre Einzahlung gutgeschrieben wurde."
+        }
+      },
+      "withdrawal": {
+        "headline": "Fast fertig",
+        "info": {
+          "1": "Prüfen Sie das Formular und geben Sie gegebenenfalls einen Auszahlungsbetrag an.",
+          "2": "Die Auszahlung ist fast bereit."
+        }
+      }
+    }
+  },
+  "transaction-status": {
+    "error": {
+      "rejected": {
+        "deposit": "Einzahlung abgelehnt",
+        "withdrawal": "Auszahlung abgelehnt"
+      },
+      "contact": "Bitte kontaktieren Sie {{domain}}."
+    },
+    "incomplete": {
+      "already-redirected": {
+        "info": {
+          "1": "{{domain}} überprüft Ihre persönlichen Daten. Bitte versuchen Sie es später erneut.",
+          "2": "Geschätzte Zeit bis zur Fertigstellung: {{eta}}"
+        }
+      },
+      "not-redirected": {
+        "info": "{{domain}} verlangt von Ihnen die Angabe zusätzlicher Informationen."
+      }
+    },
+    "more-info-url": {
+      "info": "Für weitere Informationen besuchen Sie"
+    },
+    "pending-user-transfer-start": {
+      "info": "{{domain}} benötigt weitere Informationen von Ihnen."
+    }
+  },
+  "withdrawal-success": {
+    "action": {
+      "close": "Schließen"
+    },
+    "body": {
+      "withdrawal-in-progress": "Auszahlung läuft",
+      "info": {
+        "1": "{{domain}} führt die Auszahlung durch.",
+        "2": "Das Guthaben wurde von Ihrem Stellar-Konto abgebucht und sollte dem Auszahlungsziel in Kürze gutgeschrieben werden."
+      }
+    },
+    "sidebar": {
+      "headline": "Fertig",
+      "info": "Ihre Auszahlung wurde akzeptiert und wird vom Asset-Emittenten bearbeitet."
+    }
+  },
+  "transfer-details": {
+    "action": {
+      "proceed": "Weiter"
+    },
+    "body": {
+      "destination": {
+        "name": "Zielkonto"
+      },
+      "dest_extra": {
+        "name": "Zusätzliche Zieldaten (keine Beschreibung)"
+      },
+      "min-max-amount": {
+        "label": "Betrag",
+        "max-amount": "Max. {{amount}} {{assetCode}}",
+        "min-amount": "Min. {{amount}} {{assetCode}}",
+        "not-enough-funds": "Sie haben nicht genügend Guthaben."
+      },
+      "fee": {
+        "helper-text": "Wird von {{domain}} berechnet",
+        "label": {
+          "deposit": "Einzahlungsgebühr",
+          "withdrawal": "Auszahlungsgebühr"
+        }
+      }
+    },
+    "sidebar": {
+      "deposit": {
+        "headline": "Einzahlungsdetails",
+        "info": {
+          "1": "Weitere Details zu Ihrer beabsichtigten Einzahlung.",
+          "2": "Abhängig von den Anforderungen des Asset-Emittenten müssen Sie hier möglicherweise zusätzliche Informationen eingeben."
+        }
+      },
+      "withdrawal": {
+        "headline": "Auszahlungsdetails",
+        "info": {
+          "1": "Weitere Details zu Ihrer beabsichtigten Auszahlung.",
+          "2": "Abhängig von den Anforderungen des Asset-Emittenten müssen Sie hier möglicherweise zusätzliche Informationen eingeben."
+        }
+      }
+    }
+  }
+}

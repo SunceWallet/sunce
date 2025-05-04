@@ -1,0 +1,114 @@
+{
+  "account-merge": {
+    "summary": {
+      "account": "Konto",
+      "merge-into": "Zusammenführen mit"
+    },
+    "title": "Konto zusammenführen"
+  },
+  "change-trust": {
+    "summary": {
+      "asset": "Asset",
+      "issued-by": "Ausgegeben von",
+      "limit": {
+        "label": "Limit",
+        "value": {
+          "unlimited": "Unbegrenzt",
+          "limited-to": "Begrenzt auf {{limit}} {{code}}"
+        }
+      }
+    },
+    "title": {
+      "add-asset": "Asset hinzufügen",
+      "remove-asset": "Asset entfernen"
+    }
+  },
+  "create-account": {
+    "summary": {
+      "account": "Zu erstellendes Konto",
+      "funding-account": "Finanzierendes Konto",
+      "funding-amount": "Finanzierungsbetrag"
+    },
+    "title": "Konto erstellen"
+  },
+  "manage-buy-offer": {
+    "title": {
+      "create": "Kauforder erstellen",
+      "delete": "Kauforder",
+      "update": "Kauforder aktualisieren"
+    }
+  },
+  "manage-data": {
+    "title": "Kontodaten festlegen"
+  },
+  "manage-offer": {
+    "summary": {
+      "buy": "Kaufen",
+      "sell": "Verkaufen"
+    }
+  },
+  "manage-sell-offer": {
+    "title": {
+      "create": "Verkaufsorder erstellen",
+      "delete": "Verkaufsorder",
+      "update": "Verkaufsorder aktualisieren"
+    }
+  },
+  "offer-details": {
+    "string": "Kaufe {{price}} {{buyingCode}} für {{amount}} {{sellingCode}}"
+  },
+  "payment": {
+    "summary": {
+      "amount": "Betrag",
+      "destination": "Ziel",
+      "source": "Quelle"
+    },
+    "title": "Zahlung"
+  },
+  "set-options": {
+    "add-signer": {
+      "summary": {
+        "account": "Konto, dem Signer hinzugefügt wird",
+        "key-weight": "Schlüsselgewicht",
+        "new-signer": "Neuer Signer"
+      },
+      "title": "Signer hinzufügen"
+    },
+    "change-signature-setup": {
+      "summary": {
+        "key-thresholds": {
+          "label": "Neue Schlüsselschwellenwerte",
+          "value": {
+            "low": "Niedriger Schwellenwert: {{threshold}}",
+            "medium": "Mittlerer Schwellenwert: {{threshold}}",
+            "high": "Hoher Schwellenwert: {{threshold}}"
+          }
+        },
+        "required-signatures": "Neuer Signaturschwellenwert"
+      },
+      "title": "Signaturkonfiguration ändern"
+    },
+    "remove-signer": {
+      "summary": {
+        "account": "Konto, von dem Signer entfernt wird",
+        "signer": "Signer"
+      },
+      "title": "Signer entfernen"
+    },
+    "set-account-options": {
+      "title": "Kontooptionen festlegen"
+    },
+    "set-home-domain": {
+      "title": "Home-Domain festlegen"
+    },
+    "set-inflation-destination": {
+      "summary": {
+        "new-destination": "Neues Ziel"
+      },
+      "title": "Inflationsziel festlegen"
+    },
+    "set-master-key-weight": {
+      "title": "Hauptschlüsselgewicht festlegen"
+    }
+  }
+}

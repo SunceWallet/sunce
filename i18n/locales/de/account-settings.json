@@ -1,0 +1,239 @@
+{
+  "account-deletion": {
+    "action": {
+      "cancel": "Abbrechen",
+      "confirm": "Bestätigen",
+      "delete": "Entfernen",
+      "merge": {
+        "long": "Zusammenführen mit",
+        "short": "Zusammenführen"
+      }
+    },
+    "confirm": {
+      "title": "Löschung bestätigen",
+      "text": {
+        "confirm": "Sind Sie sicher?",
+        "delete": "Das Konto wird gelöscht",
+        "merge": "und das restliche Guthaben wird übertragen"
+      }
+    },
+    "remaining-funds": {
+      "text": "Restguthaben senden an"
+    },
+    "text": {
+      "1": "Sind Sie sicher, dass Sie das Konto \"{{accountName}}\" aus Sunce entfernen möchten? Sie können es weiterhin an anderer Stelle nutzen, wenn Sie den geheimen Schlüssel sichern.",
+      "2": "Stellen Sie sicher, dass Sie Ihren geheimen Schlüssel sichern oder das Guthaben in ein anderes Konto übertragen, da noch Mittel vorhanden sind!"
+    },
+    "title": "Löschung des Kontos bestätigen",
+    "warning-dialog": {
+      "close": {
+        "label": "OK"
+      }
+    },
+    "warnings": {
+      "cannot-merge": {
+        "text": "Das Konto kann noch nicht zusammengeführt werden. Zuerst müssen Sie alle offenen Handelsaufträge stornieren und alle Assets entfernen.",
+        "title": "Manuelle Aktion erforderlich"
+      }
+    }
+  },
+  "custom-trustline": {
+    "action": {
+      "cancel": "Abbrechen",
+      "trust": {
+        "long": "Asset hinzufügen",
+        "short": "Hinzufügen"
+      }
+    },
+    "textfield": {
+      "code": {
+        "label": "Code"
+      },
+      "issuer": {
+        "label": "Emittent",
+        "placeholder": "Öffentlicher Schlüssel des Emittenten"
+      },
+      "limit": {
+        "label": "Limit (optional)",
+        "placeholder": "Limit für dieses Asset / maximaler Kontostand"
+      }
+    },
+    "title": "Benutzerdefiniertes Asset hinzufügen"
+  },
+  "export-key": {
+    "action": {
+      "confirm": "Fertig",
+      "reveal": {
+        "long": "Schlüssel anzeigen",
+        "short": "Klicken, um den geheimen Schlüssel anzuzeigen"
+      }
+    },
+    "info": {
+      "backup": {
+        "title": "Sichern Sie jetzt Ihren geheimen Schlüssel",
+        "paragraph-1": "Die Sicherung des geheimen Schlüssels ist der einzige Weg, um Ihre Mittel wiederherzustellen, falls Sie Ihr Passwort vergessen oder keinen Zugriff mehr auf Ihr Gerät haben.",
+        "paragraph-2": "Notieren Sie den Schlüssel oder drucken Sie ihn aus. Bewahren Sie ihn an einem sicheren Ort auf und teilen Sie ihn mit niemandem."
+      },
+      "export": {
+        "paragraph-1": "Die Sicherung des geheimen Schlüssels ist der einzige Weg, um Ihre Mittel wiederherzustellen, falls Sie Ihr Passwort vergessen oder keinen Zugriff mehr auf Ihr Gerät haben.",
+        "paragraph-2": "Notieren Sie den Schlüssel oder drucken Sie ihn aus. Bewahren Sie ihn an einem sicheren Ort auf und teilen Sie ihn mit niemandem."
+      },
+      "secret-key": "Notieren Sie den Schlüssel auf Papier und bewahren Sie ihn an einem sicheren Ort auf.",
+      "tap-to-copy": "Zum Kopieren tippen"
+    },
+    "textfield": {
+      "password": {
+        "label": "Passwort"
+      }
+    },
+    "title": {
+      "default": "Geheimen Schlüssel exportieren",
+      "initial-backup": "Sicherung des geheimen Schlüssels"
+    }
+  },
+  "manage-signers": {
+    "action": {
+      "add-signer": "Signer hinzufügen",
+      "apply": {
+        "long": "Änderungen übernehmen",
+        "short": "Übernehmen"
+      },
+      "cancel": "Abbrechen",
+      "proceed": "Fortfahren"
+    },
+    "preset-description": {
+      "m-out-of-n": "Fügen Sie Signer hinzu oder entfernen Sie diese. Eine einzelne Signatur autorisiert Transaktionen.",
+      "m-out-of-n_plural": "Fügen Sie Signer hinzu oder entfernen Sie diese. {{ count }} Signaturen autorisieren Transaktionen.",
+      "one-out-of-n": "Fügen Sie Signer hinzu oder entfernen Sie diese. Jeder einzelne Signer kann Transaktionen autorisieren.",
+      "single-signature": "Wählen Sie den Schlüssel, der als einziger Signer des Kontos fungieren soll."
+    },
+    "preset-description-extra": {
+      "m-out-of-n": "Gehen Sie zu „Konto hinzufügen“ > „Konto beitreten“ in der gemeinsam signierenden Sunce Wallet, um einen neuen Mitsignaturschlüssel zu erstellen.",
+      "one-out-of-n": "Gehen Sie zu „Konto hinzufügen“ > „Konto beitreten“ in der gemeinsam signierenden Sunce Wallet, um einen neuen Mitsignaturschlüssel zu erstellen."
+    },
+    "preset-selector": {
+      "options": {
+        "m-out-of-n": {
+          "primary": "Kollektive Signatur",
+          "secondary": "Mehrere Signer müssen eine Transaktion unterschreiben."
+        },
+        "one-out-of-n": {
+          "primary": "Backup-Schlüssel",
+          "secondary": "Jeder Signer kann Transaktionen selbstständig unterschreiben."
+        },
+        "single-signature": {
+          "primary": "Einzelsignatur",
+          "secondary": "Keine Co-Signer. Nur ein Schlüsselpaar."
+        }
+      },
+      "title": "Wählen Sie, wie Ihr Konto funktionieren soll"
+    },
+    "signers-editor": {
+      "list": {
+        "item": {
+          "weight": "Gewicht",
+          "local-key": "Lokaler Schlüssel"
+        }
+      },
+      "new-signer": {
+        "label": "Öffentlicher Schlüssel oder Stellar-Adresse",
+        "placeholder": {
+          "long": "GABC… oder Adresse",
+          "short": "GABCDEFGHIJK… oder alice*example.org"
+        }
+      },
+      "threshold": {
+        "primary": "Erforderliche Signaturen",
+        "secondary": "Anzahl der Signaturen zur Autorisierung von Transaktionen"
+      },
+      "validation": {
+        "existing-signer": "Der Signer existiert bereits.",
+        "integer-required": "Es muss eine ganze Zahl sein.",
+        "invalid-stellar-address": "Es wird ein öffentlicher Schlüssel oder eine Stellar-Adresse erwartet."
+      }
+    },
+    "title": {
+      "long": "Signer verwalten",
+      "short": "Kontosigner verwalten"
+    },
+    "validation": {
+      "no-signers": "Keine Signer mehr vorhanden. Sperren Sie sich nicht aus!",
+      "invalid-weight-type": "Das Gewicht muss eine ganze Zahl sein",
+      "threshold-higher-than-weights": "Der Schwellenwert ist höher als die Summe der Schlüsselgewichte",
+      "no-threshold": "Bitte legen Sie einen Schwellenwert fest"
+    }
+  },
+  "set-password": {
+    "action": {
+      "change-password": {
+        "long": "Passwort ändern",
+        "short": "Ändern"
+      },
+      "remove-password": {
+        "long": "Passwort entfernen",
+        "short": "Entfernen"
+      }
+    },
+    "notification": {
+      "password-changed": "Passwort geändert.",
+      "password-set": "Passwort gesetzt.",
+      "password-removed": "Passwort entfernt."
+    },
+    "textfield": {
+      "prev-password": {
+        "label": "Aktuelles Passwort"
+      },
+      "next-password": {
+        "label": "Neues Passwort"
+      },
+      "next-password-repeat": {
+        "label": "Neues Passwort wiederholen"
+      }
+    },
+    "title": {
+      "change-password": "Passwort ändern",
+      "set-password": "Passwort festlegen"
+    },
+    "validation": {
+      "next-password-missing": "Geben Sie ein Passwort ein oder wählen Sie „Passwort entfernen“.",
+      "next-password-repeat-missing": "Bitte wiederholen Sie das Passwort.",
+      "passwords-no-match": "Die Passwörter stimmen nicht überein",
+      "previous-password-missing": "Das aktuelle Passwort fehlt."
+    }
+  },
+  "settings": {
+    "delete-account": {
+      "text": {
+        "primary": "Konto zusammenführen oder entfernen"
+      }
+    },
+    "export-secret-key": {
+      "text": {
+        "primary": "Geheimen Schlüssel exportieren",
+        "secondary": "Schlüssel entschlüsseln und anzeigen"
+      }
+    },
+    "multi-sig": {
+      "text": {
+        "primary": "Multi-Signatur",
+        "secondary": {
+          "cosigner-of": "Dieses Konto ist Co-Signer von",
+          "short": "Co-Signer verwalten",
+          "long": "Konto in ein Multi-Signatur-Konto umwandeln und Co-Signer verwalten"
+        }
+      }
+    },
+    "set-password": {
+      "text": {
+        "primary": {
+          "account-protected": "Passwort ändern",
+          "account-not-protected": "Passwort festlegen"
+        },
+        "secondary": {
+          "account-protected": "Ihr Konto ist durch ein Passwort geschützt",
+          "account-not-protected": "Ihr Konto ist nicht geschützt"
+        }
+      }
+    }
+  }
+}

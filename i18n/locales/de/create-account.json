@@ -1,0 +1,86 @@
+{
+  "action": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "create": "Konto erstellen",
+    "import": "Konto importieren",
+    "join-shared": "Konto hinzufügen"
+  },
+  "action-selection": {
+    "create": {
+      "description": "Ein neues, leeres Konto erstellen",
+      "label": "Konto erstellen"
+    },
+    "import": {
+      "description": "Konto aus Backup wiederherstellen",
+      "label": "Konto importieren"
+    },
+    "join-shared": {
+      "description": "Ein geteiltes Konto mitzeichnen",
+      "label": "Konto beitreten"
+    }
+  },
+  "base-name": {
+    "mainnet": "Mein Konto",
+    "testnet": "Mein Testnet-Konto"
+  },
+  "confirm": {
+    "text": "Sie sind dabei, ein Konto ohne Passwortschutz zu erstellen. Jeder, der Zugriff auf Ihr Gerät hat, hat auch Zugriff auf Ihr Kontoguthaben. <1 /> <3 /> Sind Sie sicher, dass Sie fortfahren möchten, ohne ein Passwort einzurichten?",
+    "title": "Ohne Passwort fortfahren"
+  },
+  "header": {
+    "placeholder": {
+      "mainnet": "Neues Konto",
+      "testnet": "Neues Testnet-Konto"
+    }
+  },
+  "inputs": {
+    "import": {
+      "helper-text": "Ein geheimer Stellar-Schlüssel ist 56 alphanumerische Zeichen lang und beginnt mit einem S",
+      "placeholder": "SABCDEFGH…",
+      "label": "Geheimer Schlüssel",
+      "title": "Bestehendes importieren"
+    },
+    "multisig-account": {
+      "explanation-long": "Stellen Sie sicher, dass das Konto, dem Sie beitreten möchten, über mindestens 2 XLM verfügt, damit Sie als Mitzeichner hinzugefügt werden können.",
+      "explanation-short": "Stellen Sie sicher, dass das Konto, dem Sie beitreten möchten, aufgeladen wurde.",
+      "helper-text": "Die Adresse (öffentlicher Schlüssel) des Multi-Signatur-Kontos",
+      "placeholder": "GABCDEFGH…",
+      "label": "Multi-Signatur-Konto"
+    },
+    "password": {
+      "label": "Passwort",
+      "placeholder": "Passwort eingeben"
+    },
+    "password-repeat": {
+      "label": "Passwort wiederholen",
+      "placeholder": "Passwort wiederholen"
+    }
+  },
+  "options": {
+    "cosigner": {
+      "label": "Geteiltem Konto beitreten",
+      "description": "Ein Multi-Signatur-Konto mitzeichnen"
+    },
+    "cosigner-import": {
+      "label": "Ist Mitzeichner eines geteilten Kontos",
+      "description": "Schlüssel ist Signierer eines anderen Kontos"
+    },
+    "import": {
+      "label": "Geheimen Schlüssel importieren",
+      "description": "Konto aus Backup wiederherstellen"
+    },
+    "password": {
+      "label": "Passwortschutz",
+      "protected": "Ihr geheimer Schlüssel wird verschlüsselt",
+      "unprotected": "Ihr geheimer Schlüssel bleibt ungeschützt"
+    }
+  },
+  "validation": {
+    "invalid-key": "Ungültiger geheimer Stellar-Schlüssel.",
+    "no-account-name": "Kein Kontoname eingegeben.",
+    "no-password": "Kein Passwort eingegeben.",
+    "password-no-match": "Passwörter stimmen nicht überein.",
+    "same-account": "Dieses Konto wurde bereits hinzugefügt."
+  }
+}
