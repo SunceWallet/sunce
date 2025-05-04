@@ -21,6 +21,7 @@ import { getAllSources, isNotFoundError } from "./stellar"
 import { isMuxedAddress } from "./stellar-address"
 import { MultisigTransactionResponse } from "./multisig-service"
 import { getPaymentSummary } from "./paymentSummary"
+import { getAccountTransactionThreshold } from "./threshold"
 
 /** in stroops */
 const maximumFeeToSpend = 1_000_000
@@ -201,11 +202,13 @@ export async function requiresRemoteSignatures(horizon: Server, transaction: Tra
 
   return accounts.some(account => {
     const thisWalletSigner = account.signers.find(signer => signer.key === walletPublicKey)
+    if (!thisWalletSigner || thisWalletSigner.weight === 0) {
+      return false
+    }
 
+    const accountThreshold = getAccountTransactionThreshold(account, transaction)
     // requires another signature?
-    return thisWalletSigner
-      ? thisWalletSigner.weight === 0 || thisWalletSigner.weight < account.thresholds.high_threshold
-      : true
+    return thisWalletSigner.weight < accountThreshold
   })
 }
 
