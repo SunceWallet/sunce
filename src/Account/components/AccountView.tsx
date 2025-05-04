@@ -26,7 +26,7 @@ import { warningColor, FullscreenDialogTransition } from "~App/theme"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useClipboard, useIsMobile, useRouter } from "~Generic/hooks/userinterface"
 import { getLastArgumentFromURL } from "~Generic/lib/url"
-import { matchesRoute } from "~Generic/lib/routes"
+import { matchesRoute, matchesRouteWithParams } from "~Generic/lib/routes"
 import { InlineErrorBoundary, HideOnError } from "~Generic/components/ErrorBoundaries"
 import { DialogsContext } from "~App/contexts/dialogs"
 
@@ -136,7 +136,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     !matchesRoute(router.location.pathname, routes.manageAccountAssets("*"))
   const showAssetTrading = matchesRoute(router.location.pathname, routes.tradeAsset("*"))
   const showBalanceDetails = matchesRoute(router.location.pathname, routes.balanceDetails("*"))
-  const showCreatePayment = matchesRoute(router.location.pathname, routes.createPayment("*"))
+  const showCreatePayment = matchesRouteWithParams(router.location.pathname, routes.createPayment(":accountId", ":assetId?"))
   const showDeposit = matchesRoute(router.location.pathname, routes.depositAsset("*"))
   const showLumenPurchase = matchesRoute(router.location.pathname, routes.purchaseLumens("*"))
   const showReceivePayment = matchesRoute(router.location.pathname, routes.receivePayment("*"))
@@ -415,13 +415,13 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
             </React.Suspense>
           </Dialog>
           <Dialog
-            open={showCreatePayment}
+            open={!!showCreatePayment}
             fullScreen
             onClose={closeDialog}
             TransitionComponent={FullscreenDialogTransition}
           >
             <React.Suspense fallback={<ViewLoading />}>
-              <PaymentDialog account={props.account} onClose={closeDialog} />
+              <PaymentDialog account={props.account} assetId={showCreatePayment?.assetId} onClose={closeDialog} />
             </React.Suspense>
           </Dialog>
           <Dialog

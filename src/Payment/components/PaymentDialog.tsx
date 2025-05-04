@@ -1,12 +1,12 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { trackError } from "~App/contexts/notifications"
 import { useLiveAccountData, useLiveAccountOffers } from "~Generic/hooks/stellar-subscriptions"
-import { useDialogActions } from "~Generic/hooks/userinterface"
+import { useDialogActions, useRouter } from "~Generic/hooks/userinterface"
 import { AccountData } from "~Generic/lib/account"
-import { getAssetsFromBalances } from "~Generic/lib/stellar"
+import { getAssetsFromBalances, parseAssetID } from "~Generic/lib/stellar"
 import DialogBody from "~Layout/components/DialogBody"
 import TestnetBadge from "~Generic/components/TestnetBadge"
 import { Box } from "~Layout/components/Box"
@@ -19,6 +19,7 @@ import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
 interface Props {
   account: Account
   accountData: AccountData
+  assetId?: string
   horizon: Horizon.Server
   onClose: () => void
   openOrdersCount: number
@@ -30,6 +31,11 @@ function PaymentDialog(props: Props) {
   const dialogActionsRef = useDialogActions()
   const { t } = useTranslation()
   const [txCreationPending, setTxCreationPending] = React.useState(false)
+
+  const preselectedParams = useMemo(
+    () => (props.assetId ? { asset: parseAssetID(props.assetId) } : undefined),
+    [props.assetId]
+  )
 
   const handleSubmit = React.useCallback(
     async (
@@ -80,6 +86,8 @@ function PaymentDialog(props: Props) {
         actionsRef={dialogActionsRef}
         onSubmit={handleSubmit}
         openOrdersCount={props.openOrdersCount}
+        preselectedParams={preselectedParams}
+        canChangePreselectedParams={true}
         testnet={props.account.testnet}
         trustedAssets={trustedAssets}
         txCreationPending={txCreationPending}
@@ -88,7 +96,7 @@ function PaymentDialog(props: Props) {
   )
 }
 
-function ConnectedPaymentDialog(props: Pick<Props, "account" | "onClose"> & { onSubmissionCompleted?: () => void }) {
+function ConnectedPaymentDialog(props: Pick<Props, "account" | "assetId" | "onClose"> & { onSubmissionCompleted?: () => void }) {
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
   const { offers: openOrders } = useLiveAccountOffers(props.account.accountID, props.account.testnet)
 
