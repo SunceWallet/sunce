@@ -63,7 +63,7 @@ const initialSettings: SettingsState = {
 
 const initialIgnoredSignatureRequests: string[] = []
 
-const multiSignatureCoordinator = import.meta.env.VITE_MULTISIG_SERVICE || "v1.multisig.satoshipay.io"
+const multiSignatureCoordinator = import.meta.env.VITE_MULTISIG_SERVICE || "v1.multisig.sunce.app"
 
 const SettingsContext = React.createContext<ContextType>({
   agreedToTermsAt: initialSettings.agreedToTermsAt,
