@@ -83,7 +83,7 @@ jobs:
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             CSC_LINK: ${{ secrets.APPLE_CERT_P12 }}
             CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
-            CSC_NAME: "Developer ID Application: ${{ secrets.APPLE_DEVELOPER_ID }}"
+            CSC_NAME: ${{ secrets.APPLE_DEVELOPER_ID }}
             NOTARIZE: "true"
             NOTARIZE_APPLE_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
             NOTARIZE_APPLE_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
