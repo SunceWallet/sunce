@@ -47,6 +47,8 @@ msi:
   warningsAsErrors: false
 
 mac:
+  type: development
+  sign: true
   hardenedRuntime: true
   entitlements: ./electron/build/entitlements.mac.inherit.plist
   category: public.app-category.productivity
