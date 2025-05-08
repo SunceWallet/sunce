@@ -18,7 +18,7 @@ module.exports = async function(params) {
 
   console.log("Running Mac aftersign hook...")
 
-  const buildConfig = yaml.load(fs.readFileSync(require.resolve("../electron-build.yml"), "utf-8"))
+  const buildConfig = yaml.load(fs.readFileSync(require.resolve("../electron-build.yml"), "utf-8"), { json: true })
   const appId = buildConfig.appId
 
   const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`)
