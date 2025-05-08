@@ -29,12 +29,13 @@ jobs:
         fail-fast: false
 
         matrix:
-          os: [ windows-latest, ubuntu-latest, macos-latest ]
+#          os: [ windows-latest, ubuntu-latest, macos-latest ]
+          os: [ macos-latest ]
           include:
-            - os: windows-latest
-              script: "build:win"
-            - os: ubuntu-latest
-              script: "build:linux"
+#            - os: windows-latest
+#              script: "build:win"
+#            - os: ubuntu-latest
+#              script: "build:linux"
             - os: macos-latest
               script: "build:mac"
 
