@@ -59,4 +59,4 @@ linux:
   target: [AppImage:x64]
 
 afterPack: ./scripts/electron-builder-afterpack.js
-afterSign: ./scripts/electron-builder-aftersign.js
+#afterSign: ./scripts/electron-builder-aftersign.js
