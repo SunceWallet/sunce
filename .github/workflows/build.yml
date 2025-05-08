@@ -66,7 +66,42 @@ jobs:
           run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
           continue-on-error: true
 
+        - name: Setup macOS Certificate
+          if: matrix.os == 'macos-latest'
+          uses: apple-actions/import-codesign-certs@v1
+          with:
+            p12-file-base64: ${{ secrets.APPLE_CERT_P12 }}
+            p12-password: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
+            team-id: ${{ secrets.APPLE_TEAM_ID }}
+
         - name: Build and Publish
           run: npm run ${{matrix.script}}
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
+            APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+            CSC_LINK: ${{ secrets.APPLE_CERT_P12 }}
+            CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
+            CSC_NAME: ${{ secrets.APPLE_DEVELOPER_ID }}
+
+        - name: Notarize macOS App
+          if: matrix.os == 'macos-latest'
+          run: |
+            # Find the .app file
+            APP_PATH=$(find dist -name "*.app" -type d)
+            
+            # Create a temporary zip file for notarization
+            ditto -c -k --keepParent "$APP_PATH" "app.zip"
+            
+            # Submit for notarization
+            xcrun notarytool submit "app.zip" \
+              --apple-id "${{ secrets.APPLE_DEVELOPER_ID }}" \
+              --password "${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}" \
+              --team-id "${{ secrets.APPLE_TEAM_ID }}" \
+              --wait
+            
+            # Staple the notarization ticket
+            xcrun stapler staple "$APP_PATH"
+            
+            # Clean up
+            rm app.zip
