@@ -50,6 +50,7 @@ mac:
   type: development
   hardenedRuntime: true
   entitlements: ./electron/build/entitlements.mac.inherit.plist
+  entitlementsInherit: ./electron/build/entitlements.mac.inherit.plist
   category: public.app-category.productivity
 
 linux:
