@@ -81,10 +81,8 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+            APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
             CSC_LINK: ${{ secrets.APPLE_CERT_P12 }}
             CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
             CSC_NAME: ${{ secrets.APPLE_DEVELOPER_ID }}
             NOTARIZE: "true"
-            NOTARIZE_APPLE_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
-            NOTARIZE_APPLE_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-            NOTARIZE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}

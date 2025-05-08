@@ -18,7 +18,7 @@ module.exports = async function(params) {
 
   console.log("Running Mac aftersign hook...")
 
-  const buildConfig = yaml.safeLoad(fs.readFileSync(require.resolve("../electron-build.yml"), "utf-8"))
+  const buildConfig = yaml.load(fs.readFileSync(require.resolve("../electron-build.yml"), "utf-8"))
   const appId = buildConfig.appId
 
   const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`)
@@ -33,8 +33,9 @@ module.exports = async function(params) {
   await notarize.notarize({
     appBundleId: appId,
     appPath: appPath,
-    appleId: process.env.APPLE_ID || fail("APPLE_ID has not been set."),
-    appleIdPassword: process.env.APPLE_ID_PASSWORD || fail("APPLE_ID_PASSWORD has not been set.")
+    appleId: process.env.APPLE_DEVELOPER_ID || fail("APPLE_DEVELOPER_ID has not been set."),
+    appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD || fail("APPLE_APP_SPECIFIC_PASSWORD has not been set."),
+    teamId: process.env.APPLE_TEAM_ID || fail("APPLE_TEAM_ID has not been set.")
   })
 
   console.log(`Done notarizing ${appId}`)
