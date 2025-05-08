@@ -30,6 +30,11 @@ module.exports = async function(params) {
   console.log(`Starting notarization of ${appId} at ${appPath}`)
   console.log(`This will likely take a while…`)
 
+  if (!appId) {
+    throw new Error("appBundleId is not defined in configuration");
+  }
+  console.log(`Using appBundleId: ${appId}`);
+
   await notarize.notarize({
     tool: 'notarytool',
     teamId: process.env.APPLE_TEAM_ID || fail("APPLE_TEAM_ID has not been set."),
