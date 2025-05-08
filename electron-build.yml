@@ -48,6 +48,7 @@ msi:
 
 mac:
   type: development
+  sign: true
   hardenedRuntime: true
   entitlements: ./electron/build/entitlements.mac.inherit.plist
   category: public.app-category.productivity
@@ -57,4 +58,4 @@ linux:
   target: [AppImage:x64]
 
 afterPack: ./scripts/electron-builder-afterpack.js
-afterSign: ./scripts/electron-builder-aftersign.js
+afterafterAllArtifactBuild: ./scripts/electron-builder-afterall.js
