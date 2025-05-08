@@ -72,7 +72,8 @@ jobs:
           env:
             APPLE_CERT_P12: ${{ secrets.APPLE_CERT_P12 }}
 
-        - name: Build and Publish
+        - name: Build macOS (signed)
+          if: matrix.os == 'macos-latest'
           run: npm run ${{matrix.script}}
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,3 +82,9 @@ jobs:
             APPLE_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             NOTARIZE: true
+
+        - name: Build app (other platforms)
+          if: matrix.os != 'macos-latest'
+          run: npm run ${{matrix.script}}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
