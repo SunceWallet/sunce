@@ -5,6 +5,10 @@ const { execSync } = require('child_process');
 
 function signFile(file) {
   console.log(`Signing: ${file}`);
+  if (!fs.existsSync(file)) {
+    console.warn(`⚠️ Skipping signing: ${file} does not exist`);
+    return;
+  }
   execSync(`codesign --force --deep --options runtime "${file}"`, {
     stdio: 'inherit'
   });
