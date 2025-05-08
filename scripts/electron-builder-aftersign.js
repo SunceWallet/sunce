@@ -1,45 +1,33 @@
-// See: https://medium.com/@TwitterArchiveEraser/notarize-electron-apps-7a5f988406db
+const { notarize } = require('@electron/notarize');
+const path = require('path');
+const fs = require('fs');
 
-const fs = require("fs")
-const yaml = require("js-yaml")
-const path = require("path")
-const notarize = require("electron-notarize")
+exports.default = async function notarizing(context) {
+  const { electronPlatformName, appOutDir, packager } = context;
 
-exports.default = async function(params) {
-  // Only notarize the app on Mac OS only.
-  if (process.platform !== "darwin") {
-    return
+  if (electronPlatformName !== 'darwin') return;
+  if (!process.env.NOTARIZE || process.env.NOTARIZE.toLowerCase() === 'false') {
+    console.log('Skipping notarization. Set NOTARIZE=true to enable it.');
+    return;
   }
 
-  if (!process.env.NOTARIZE || process.env.NOTARIZE.toLowerCase() === "false") {
-    console.log("Skipping notarization. Set NOTARIZE=true to notarize the Mac app.")
-    return
-  }
-
-  console.log("Running Mac aftersign hook...")
-
-  const appId = "org.montelibero.sunce"
-
-  const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`)
+  const appName = packager.appInfo.productFilename;
+  const appPath = path.join(appOutDir, `${appName}.app`);
 
   if (!fs.existsSync(appPath)) {
-    throw new Error(`Cannot find application at: ${appPath}`)
+    throw new Error(`App not found at ${appPath}`);
   }
 
-  console.log(`Starting notarization of ${appId} at ${appPath}`)
-  console.log(`This will likely take a while…`)
+  console.log(`Notarizing app: ${appPath}`);
 
-  await notarize.notarize({
-    appBundleId: appId,
-    appPath: appPath,
-    appleId: process.env.APPLE_ID || fail("APPLE_ID has not been set."),
-    appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD || fail("APPLE_APP_SPECIFIC_PASSWORD has not been set.")
-  })
+  await notarize({
+    appBundleId: 'org.montelibero.sunce',
+    appPath,
+    appleId: process.env.APPLE_ID,
+    appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD,
+    teamId: process.env.APPLE_TEAM_ID,
+    tool: 'notarytool',
+  });
 
-  console.log(`Done notarizing ${appId}`)
-}
-
-function fail(message) {
-  console.error(message)
-  process.exit(1)
-}
+  console.log('Notarization completed.');
+};
