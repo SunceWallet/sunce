@@ -35,7 +35,7 @@ module.exports = async function(params) {
     teamId: process.env.APPLE_TEAM_ID || fail("APPLE_TEAM_ID has not been set."),
     appBundleId: appId,
     appPath: appPath,
-    appleId: process.env.APPLE_DEVELOPER_ID || fail("APPLE_DEVELOPER_ID has not been set."),
+    appleId: process.env.APPLE_ID || fail("APPLE_ID has not been set."),
     appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD || fail("APPLE_APP_SPECIFIC_PASSWORD has not been set.")
   })
 
