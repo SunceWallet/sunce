@@ -97,6 +97,7 @@
     "threads": "^1.7.0"
   },
   "devDependencies": {
+    "@electron/notarize": "^2.5.0",
     "@storybook/addon-actions": "^7.6.8",
     "@storybook/addons": "^7.6.8",
     "@storybook/cli": "^8.6.7",
