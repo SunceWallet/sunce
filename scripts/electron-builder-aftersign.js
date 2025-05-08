@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 
 function signFile(file) {
   console.log(`Signing: ${file}`);
-  execSync(`codesign --force --deep --options runtime --sign "${process.env.CSC_NAME}" "${file}"`, {
+  execSync(`codesign --force --deep --options runtime "${file}"`, {
     stdio: 'inherit'
   });
 }
