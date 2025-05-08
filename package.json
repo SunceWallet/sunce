@@ -133,7 +133,7 @@
     "crypto-browserify": "^3.12.0",
     "debug": "^4.1.1",
     "electron": "^35.0.0",
-    "electron-builder": "^24.13.1",
+    "electron-builder": "^23.6.0",
     "electron-builder-squirrel-windows": "^25.1.8",
     "electron-notarize": "^0.2.0",
     "electron-reload": "^1.5.0",
