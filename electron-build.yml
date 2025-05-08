@@ -49,6 +49,7 @@ msi:
 mac:
   hardenedRuntime: true
   entitlements: ./electron/build/entitlements.mac.inherit.plist
+  entitlementsInherit: ./electron/build/entitlements.mac.inherit.plist
   category: public.app-category.productivity
   target: ["dmg", "zip"]
   gatekeeperAssess: false
