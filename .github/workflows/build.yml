@@ -66,52 +66,18 @@ jobs:
           run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
           continue-on-error: true
 
+        - name: Prepare certificate
+          if: matrix.os == 'macos-latest'
+          run: echo "$APPLE_CERT_P12" | base64 --decode > certificate.p12
+          env:
+            APPLE_CERT_P12: ${{ secrets.APPLE_CERT_P12 }}
+
         - name: Build and Publish
           run: npm run ${{matrix.script}}
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Decode and Import Certificate
-          if: matrix.os == 'macos-latest'
-          run: |
-            echo "CERT password is length: ${#APPLE_CERT_P12_PASSWORD}"
-            echo "$APPLE_CERT_P12" | base64 --decode > certificate.p12
-            security create-keychain -p "" build.keychain
-            security default-keychain -s build.keychain
-            security unlock-keychain -p "" build.keychain
-            security import certificate.p12 -k build.keychain --password "$APPLE_CERT_P12_PASSWORD" -T /usr/bin/codesign
-            security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-
-        - name: Sign app
-          if: matrix.os == 'macos-latest'
-          run: |
-            codesign --deep --force --verify --verbose \
-              --sign "Developer ID Application" \
-              "dist/mac/Sunce Wallet.app"
-
-        - name: Notarize app
-          if: matrix.os == 'macos-latest'
-          run: |
-            ditto -c -k --sequesterRsrc --keepParent "dist/mac/Sunce Wallet.app" SunceWallet.zip
-            xcrun altool --notarize-app \
-              --primary-bundle-id "com.sunce.wallet" \
-              --username "$APPLE_DEVELOPER_ID" \
-              --password "$APP_SPECIFIC_PASSWORD" \
-              --file SunceWallet.zip \
-              --output-format xml > notarization_response.plist
-
-            REQUEST_UUID=$(defaults read notarization_response.plist notarization-upload:RequestUUID)
-            echo "Waiting for notarization to complete..."
-            while true; do
-              STATUS=$(xcrun altool --notarization-info "$REQUEST_UUID" --username "$APPLE_DEVELOPER_ID" --password "$APP_SPECIFIC_PASSWORD" | grep -i "Status:" | awk '{print $2}')
-              if [[ "$STATUS" == "in" ]]; then
-                sleep 30
-              else
-                echo "Notarization status: $STATUS"
-                break
-              fi
-            done
-
-        - name: Staple app
-          if: matrix.os == 'macos-latest'
-          run: |
-            xcrun stapler staple "dist/mac/Sunce Wallet.app"
+            CSC_LINK: file://certificate.p12
+            CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
+            APPLE_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
+            APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+            NOTARIZE: true
