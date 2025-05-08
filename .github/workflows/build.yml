@@ -82,26 +82,8 @@ jobs:
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             CSC_LINK: ${{ secrets.APPLE_CERT_P12 }}
             CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
-            CSC_NAME: ${{ secrets.APPLE_DEVELOPER_ID }}
-
-        - name: Notarize macOS App
-          if: matrix.os == 'macos-latest'
-          run: |
-            # Find the .app file
-            APP_PATH=$(find dist -name "*.app" -type d)
-            
-            # Create a temporary zip file for notarization
-            ditto -c -k --keepParent "$APP_PATH" "app.zip"
-            
-            # Submit for notarization
-            xcrun notarytool submit "app.zip" \
-              --apple-id "${{ secrets.APPLE_DEVELOPER_ID }}" \
-              --password "${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}" \
-              --team-id "${{ secrets.APPLE_TEAM_ID }}" \
-              --wait
-            
-            # Staple the notarization ticket
-            xcrun stapler staple "$APP_PATH"
-            
-            # Clean up
-            rm app.zip
+            CSC_NAME: "Developer ID Application: ${{ secrets.APPLE_DEVELOPER_ID }}"
+            NOTARIZE: "true"
+            NOTARIZE_APPLE_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
+            NOTARIZE_APPLE_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+            NOTARIZE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
