@@ -29,12 +29,13 @@ jobs:
         fail-fast: false
 
         matrix:
-          os: [ windows-latest, ubuntu-latest, macos-latest ]
+#          os: [ windows-latest, ubuntu-latest, macos-latest ]
+          os: [ macos-latest ]
           include:
-            - os: windows-latest
-              script: "build:win"
-            - os: ubuntu-latest
-              script: "build:linux"
+#            - os: windows-latest
+#              script: "build:win"
+#            - os: ubuntu-latest
+#              script: "build:linux"
             - os: macos-latest
               script: "build:mac"
 
@@ -71,6 +72,10 @@ jobs:
           run: echo "$APPLE_CERT_P12" | base64 --decode > certificate.p12
           env:
             APPLE_CERT_P12: ${{ secrets.APPLE_CERT_P12 }}
+
+        - name: Debug build config
+          if: matrix.os == 'macos-latest'
+          run: grep -A5 '^mac:' electron-build.yml || true
 
         - name: Build macOS (signed)
           if: matrix.os == 'macos-latest'
