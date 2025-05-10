@@ -1,7 +1,7 @@
 import { TFunction } from "i18next"
 import { CustomError } from "./errors"
 
-interface TxSubmissionResponse {
+export interface TxSubmissionResponse {
   data: any
   status: number
 }
