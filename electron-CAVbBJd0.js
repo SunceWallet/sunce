@@ -1,2 +1,0 @@
-import{bU as u,a5 as b}from"./app-BId2UBC2.js";let a=1;function I(o,...n){const t=a++;return window.electron.sendIPCMessage(o,{args:n,callID:t}),new Promise((s,c)=>{const i=window.electron.subscribeToIPCMessages(o,(w,r)=>{if(!(!r||typeof r!="object"||r.callID!==t))if(i(),"error"in r&&r.error){const e=r.error,l=e.__extraProps?u(e,e.__extraProps||[]):void 0;c(b(e.name,e.message,l))}else s(r.result)})})}function P(o,n){return window.electron.subscribeToIPCMessages(o,(t,s)=>n(s))}export{I as call,P as subscribeToMessages};
-//# sourceMappingURL=electron-CAVbBJd0.js.map
