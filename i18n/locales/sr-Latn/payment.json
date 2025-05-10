@@ -1,0 +1,46 @@
+{
+  "actions": {
+    "dismiss": "Zatvori",
+    "submit": "Pošalji odmah"
+  },
+  "memo-metadata": {
+    "label": {
+      "default": "Memo",
+      "id": "Memo (ID)",
+      "text": "Memo (tekst)"
+    },
+    "placeholder": {
+      "optional": "Opis (opciono)",
+      "mandatory": "Opis (obavezno)"
+    }
+  },
+  "inputs": {
+    "destination": {
+      "label": "Adresa primaoca",
+      "placeholder": "GABCD..., MABCD... ili alice*example.org"
+    },
+    "price": {
+      "label": "Iznos",
+      "placeholder": "Maks. {{amount}}"
+    }
+  },
+  "note": {
+    "multisig-pubkey": "Adresa multi-sig računa, a ne tvoj lokalni potpisni ključ.",
+    "issuance": "Izabrana aktiva je izdata sa tvog računa. Novi tokeni će biti kreirani prilikom slanja"
+  },
+  "title": {
+    "send": "Pošalji sredstva",
+    "receive": "Primi sredstva"
+  },
+  "validation": {
+    "memo-required": "Postavi memo prilikom slanja sredstava ka {{destination}}",
+    "memo-too-long": "Memo je predugačak.",
+    "no-destination": "Primalac nije naveden.",
+    "no-price": "Iznos nije naveden.",
+    "not-enough-funds": "Nedovoljno sredstava.",
+    "invalid-destination": "Očekivana je javna adresa ili Stellar adresa.",
+    "invalid-price": "Nevažeći iznos.",
+    "integer-memo-required": "Memo mora biti ceo broj.",
+    "asset-missing": "Nijedna aktiva nije izabrana."
+  }
+}

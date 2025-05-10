@@ -1,0 +1,68 @@
+{
+  "action": {
+    "add-asset": "Dodaj aktivu",
+    "submit": "Postavi nalog"
+  },
+  "action-selection": {
+    "buy": {
+      "description": "Kupi određenu količinu aktive na decentralizovanoj berzi",
+      "label": "Kupi aktivu"
+    },
+    "sell": {
+      "description": "Zameni određenu količinu aktive za drugu",
+      "label": "Prodaj aktivu"
+    }
+  },
+  "advanced": {
+    "header": "Napredno"
+  },
+  "inputs": {
+    "estimated-costs": {
+      "label": {
+        "buy": "Procenjeni trošak",
+        "sell": "Procenjeni prihod"
+      }
+    },
+    "primary-amount": {
+      "label": {
+        "buy": "Količina za kupovinu",
+        "sell": "Količina za prodaju"
+      },
+      "max-button": {
+        "label": "Maks"
+      },
+      "placeholder": "Maks. {{amount}}"
+    },
+    "primary-asset-selector": {
+      "label": {
+        "buy": "Kupuješ",
+        "sell": "Prodaješ"
+      }
+    },
+    "secondary-asset-selector": {
+      "label": {
+        "buy": "Plaćanje",
+        "sell": "Prijem"
+      }
+    }
+  },
+  "no-assets-info": "Ovaj račun još uvek ne koristi nijednu aktivu osim Stellar Lumensa.",
+  "issuance": "Aktiva {{ asset }} je izdata sa tvog računa. Novi tokeni će biti kreirani tokom trgovine",
+  "title": "Trgovina",
+  "trading-price": {
+    "default-label": "Cena (limit)",
+    "label": "Cena po {{unit}} (limit)"
+  },
+  "validation": {
+    "primary-amount-missing": "Količina nije navedena.",
+    "primary-asset-missing": "Nijedna aktiva nije izabrana.",
+    "invalid-amount": "Nevažeća količina.",
+    "invalid-price": "Nevažeća cena",
+    "not-enough-balance": "Premašuje raspoloživi saldo",
+    "secondary-asset-missing": "Nijedna aktiva nije izabrana."
+  },
+  "warning": {
+    "title": "Upozorenje",
+    "message": "Razlika između kupovne i prodajne cene je oko {{spread}}%."
+  }
+}

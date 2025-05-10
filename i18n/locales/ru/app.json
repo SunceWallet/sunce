@@ -22,7 +22,7 @@
       "tooltip": "Доступно обновление"
     },
     "title": {
-      "testnet": "Testnet Accounts",
+      "testnet": "Аккаунты Testnet",
       "mainnet": "Мои адреса"
     }
   },

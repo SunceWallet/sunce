@@ -19,7 +19,7 @@
     },
     "language": {
       "auto-detect": {
-        "label": "auto"
+        "label": "автоматически"
       },
       "text": {
         "primary": "Язык",
@@ -87,7 +87,7 @@
     },
     "create-claimable-balance": {
       "text": {
-        "primary": "Показывать траназакции Create Claimable Balance",
+        "primary": "Показывать транзакции Create Claimable Balance",
         "secondary": {
           "hidden": "Транзакции Create Claimable Balance скрыты в списке транзакций",
           "shown": "Транзакции Create Claimable Balance видны в списке транзакций"

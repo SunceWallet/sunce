@@ -1,0 +1,239 @@
+{
+  "account-deletion": {
+    "action": {
+      "cancel": "Otkaži",
+      "confirm": "Potvrdi",
+      "delete": "Ukloni",
+      "merge": {
+        "long": "Spoji sa",
+        "short": "Spoji"
+      }
+    },
+    "confirm": {
+      "title": "Potvrdi brisanje",
+      "text": {
+        "confirm": "Da li si siguran/na?",
+        "delete": "Račun će biti obrisan",
+        "merge": "a preostala sredstva prebačena"
+      }
+    },
+    "remaining-funds": {
+      "text": "Pošalji preostala sredstva na"
+    },
+    "text": {
+      "1": "Da li stvarno želiš da ukloniš račun „{{accountName}}“ iz Sunce-a? I dalje ga možeš koristiti negde drugde ako sačuvaš tajni ključ.",
+      "2": " Sačuvaj tajni ključ ili spoji sredstva na drugi svoj račun, pošto još ima sredstava na ovom!"
+    },
+    "title": "Potvrdi uklanjanje računa",
+    "warning-dialog": {
+      "close": {
+        "label": "U redu"
+      }
+    },
+    "warnings": {
+      "cannot-merge": {
+        "text": "Račun još ne može biti spojen. Prvo otkaži sve naloge za trgovinu i ukloni sve aktive.",
+        "title": "Potrebna ručna radnja"
+      }
+    }
+  },
+  "custom-trustline": {
+    "action": {
+      "cancel": "Otkaži",
+      "trust": {
+        "long": "Poveri aktivu",
+        "short": "Poveri"
+      }
+    },
+    "textfield": {
+      "code": {
+        "label": "Kod"
+      },
+      "issuer": {
+        "label": "Izdavalac",
+        "placeholder": "Javni ključ izdavaoca"
+      },
+      "limit": {
+        "label": "Limit (opciono)",
+        "placeholder": "Limit poverenja u ovu aktivu / maksimalni iznos"
+      }
+    },
+    "title": "Dodaj prilagođenu aktivu"
+  },
+  "export-key": {
+    "action": {
+      "confirm": "Završeno",
+      "reveal": {
+        "long": "Prikaži ključ",
+        "short": "Klikni da prikažeš tajni ključ"
+      }
+    },
+    "info": {
+      "backup": {
+        "title": "Sačuvaj svoj tajni ključ sada",
+        "paragraph-1": "Bekap tajnog ključa je jedini način da povratiš sredstva ako zaboraviš lozinku ili izgubiš pristup uređaju.",
+        "paragraph-2": "Zapiši ključ ili ga odštampaj. Čuvaj ga na sigurnom mestu i ne deli ga ni sa kim."
+      },
+      "export": {
+        "paragraph-1": "Bekap tajnog ključa je jedini način da povratiš sredstva ako zaboraviš lozinku ili izgubiš pristup uređaju.",
+        "paragraph-2": "Zapiši ključ ili ga odštampaj. Čuvaj ga na sigurnom mestu i ne deli ga ni sa kim."
+      },
+      "secret-key": "Zapiši ključ na papir i sačuvaj ga na sigurnom mestu.",
+      "tap-to-copy": "Klikni za kopiranje"
+    },
+    "textfield": {
+      "password": {
+        "label": "Lozinka"
+      }
+    },
+    "title": {
+      "default": "Izvoz tajnog ključa",
+      "initial-backup": "Bekap tajnog ključa"
+    }
+  },
+  "manage-signers": {
+    "action": {
+      "add-signer": "Dodaj potpisnika",
+      "apply": {
+        "long": "Primeni izmene",
+        "short": "Primeni"
+      },
+      "cancel": "Otkaži",
+      "proceed": "Nastavi"
+    },
+    "preset-description": {
+      "m-out-of-n": "Dodaj ili ukloni potpisnike sa računa. Bilo koji potpis će autorizovati transakcije.",
+      "m-out-of-n_plural": "Dodaj ili ukloni potpisnike sa računa. Potrebno je {{count}} potpisa za autorizaciju transakcija.",
+      "one-out-of-n": "Dodaj ili ukloni potpisnike sa računa. Svaki pojedinačni potpisnik može autorizovati transakcije.",
+      "single-signature": "Izaberi ključ koji će biti jedini potpisnik računa."
+    },
+    "preset-description-extra": {
+      "m-out-of-n": "Idi na „Dodaj račun“ > „Pridruži se računu“ u Sunce novčaniku potpisnika da kreiraš novi ključ.",
+      "one-out-of-n": "Idi na „Dodaj račun“ > „Pridruži se računu“ u Sunce novčaniku potpisnika da kreiraš novi ključ."
+    },
+    "preset-selector": {
+      "options": {
+        "m-out-of-n": {
+          "primary": "Zajedničko potpisivanje",
+          "secondary": "Više potpisnika mora potpisati transakciju."
+        },
+        "one-out-of-n": {
+          "primary": "Rezervni ključevi",
+          "secondary": "Svaki potpisnik može sam potpisati transakcije."
+        },
+        "single-signature": {
+          "primary": "Jedan potpis",
+          "secondary": "Bez dodatnih potpisnika. Samo jedan par ključeva."
+        }
+      },
+      "title": "Izaberi kako će tvoj račun funkcionisati"
+    },
+    "signers-editor": {
+      "list": {
+        "item": {
+          "weight": "Težina",
+          "local-key": "Lokalni ključ"
+        }
+      },
+      "new-signer": {
+        "label": "Javni ključ ili Stellar adresa",
+        "placeholder": {
+          "long": "GABC… ili adresa",
+          "short": "GABCDEFGHIJK… ili alice*example.org"
+        }
+      },
+      "threshold": {
+        "primary": "Potrebni potpisi",
+        "secondary": "Broj potpisa potreban za autorizaciju transakcija"
+      },
+      "validation": {
+        "existing-signer": "Ovaj potpisnik je već dodat.",
+        "integer-required": "Mora biti ceo broj.",
+        "invalid-stellar-address": "Očekivan je javni ključ ili Stellar adresa."
+      }
+    },
+    "title": {
+      "long": "Upravljanje potpisnicima",
+      "short": "Potpisnici računa"
+    },
+    "validation": {
+      "no-signers": "Nema potpisnika. Nemoj zaključati sebe!",
+      "invalid-weight-type": "Težina mora biti ceo broj",
+      "threshold-higher-than-weights": "Prag je veći od ukupne težine ključeva",
+      "no-threshold": "Postavi prag"
+    }
+  },
+  "set-password": {
+    "action": {
+      "change-password": {
+        "long": "Promeni lozinku",
+        "short": "Promeni"
+      },
+      "remove-password": {
+        "long": "Ukloni lozinku",
+        "short": "Ukloni"
+      }
+    },
+    "notification": {
+      "password-changed": "Lozinka je promenjena.",
+      "password-set": "Lozinka je postavljena.",
+      "password-removed": "Lozinka je uklonjena."
+    },
+    "textfield": {
+      "prev-password": {
+        "label": "Trenutna lozinka"
+      },
+      "next-password": {
+        "label": "Nova lozinka"
+      },
+      "next-password-repeat": {
+        "label": "Ponovi novu lozinku"
+      }
+    },
+    "title": {
+      "change-password": "Promena lozinke",
+      "set-password": "Postavi lozinku"
+    },
+    "validation": {
+      "next-password-missing": "Unesi lozinku ili izaberi „ukloni lozinku“.",
+      "next-password-repeat-missing": "Ponovi lozinku.",
+      "passwords-no-match": "Lozinke se ne poklapaju",
+      "previous-password-missing": "Trenutna lozinka nije uneta."
+    }
+  },
+  "settings": {
+    "delete-account": {
+      "text": {
+        "primary": "Spoji ili ukloni račun"
+      }
+    },
+    "export-secret-key": {
+      "text": {
+        "primary": "Izvezi tajni ključ",
+        "secondary": "Dekriptuj i prikaži tajni ključ"
+      }
+    },
+    "multi-sig": {
+      "text": {
+        "primary": "Multi-potpis",
+        "secondary": {
+          "cosigner-of": "Ovaj račun je potpisnik za",
+          "short": "Upravljanje potpisnicima",
+          "long": "Učini račun multi-potpisnim i upravljaj potpisnicima"
+        }
+      }
+    },
+    "set-password": {
+      "text": {
+        "primary": {
+          "account-protected": "Promeni lozinku",
+          "account-not-protected": "Postavi lozinku"
+        },
+        "secondary": {
+          "account-protected": "Tvoj račun je zaštićen lozinkom",
+          "account-not-protected": "Tvoj račun nije zaštićen"
+        }
+      }
+    }
+  }
+}

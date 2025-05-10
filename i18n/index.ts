@@ -1,6 +1,7 @@
 export const languageNames: { [type: string]: string } = {
   ["en"]: "English",
   ["ru"]: "Русский",
+  ["sr-Latn"]: "Srpski",
   ["de"]: "Deutsch",
   ["it"]: "Italiano",
   ["es"]: "Español"

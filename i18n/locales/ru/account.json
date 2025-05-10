@@ -35,7 +35,7 @@
     "lumen": {
       "description": {
         "label": "Описание",
-        "text": "Основной токен сети Stellar.\n\n Каждый аккаунт в сети имеет баланс луменов. Лумены используются для оплаты комиссий за транзакции."
+        "text": "Основной токен сети Stellar.\n\nКаждый аккаунт в сети имеет баланс люменов. Люмены используются для оплаты комиссий за транзакции."
       }
     },
     "general": {
@@ -133,7 +133,7 @@
         "secondary": "Ваш баланс, вкл. недоступное"
       },
       "trustline-reserve": {
-        "primary": "Резерв трастлайнов",
+        "primary": "Резерв линий доверия",
         "secondary": "На каждый баланс, не в XLM"
       }
     }
@@ -237,11 +237,11 @@
   "transactions": {
     "action": {
       "friendbot": {
-        "description": "Получите немного бесплатных тестовых луменов",
+        "description": "Получите немного бесплатных тестовых люменов",
         "label": "Обратиться к friendbot"
       },
       "navigate-to-deposit": {
-        "description": "Через кредитную карту, банковский перевод и т.д.",
+        "description": "Через кредитную карту, банковский перевод и т. д.",
         "label": "Пополнить счет"
       }
     },
@@ -260,7 +260,7 @@
           "cancel": "Отменить ордер",
           "update": "Обновить ордер"
         },
-        "buy": "Купить {{buyingAmount}} {{buyingCode}} за {{sellingAmount}} {{sellingCode}}",
+        "buy": "Купить {{buyingAmount}} {{buyingCode}} за {{sellingAmount}} {{sellingCode}} ",
         "sell": "Продать {{sellingAmount}} {{sellingCode}} за {{buyingAmount}} {{buyingCode}}"
       },
       "item": {
@@ -383,7 +383,7 @@
       "multi-sig-account": "Аккаунт с мультиподписью",
       "security-service": "Защита {{service}}"
     },
-    "placeholder": "Название аккаунта...",
+    "placeholder": "Название аккаунта…",
     "testnet": "Тестовая сеть"
   }
 }

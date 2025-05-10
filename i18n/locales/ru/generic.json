@@ -48,7 +48,7 @@
     "unexpected-action-error": "Неожиданное действие: {{action}}",
     "unexpected-state-error": "Обнаружено неожиданное состояние: {{state}}",
     "unexpected-response-type-error": "Неожиданный тип ответа: {{type}} / ${dataType}",
-    "unexpected-stellar-uri-type-error": "Запрос {{incomingURI}} не поддерживается",
+    "unexpected-stellar-uri-type-error": "Запрос {{incomingURI}} не поддерживается.",
     "unknown-error": "Произошла неизвестная ошибка.",
     "update-already-running-error": "Обновление уже запущено!",
     "wrong-password-error": "Неверный пароль.",

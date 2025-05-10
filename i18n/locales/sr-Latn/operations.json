@@ -1,0 +1,114 @@
+{
+  "account-merge": {
+    "summary": {
+      "account": "Račun",
+      "merge-into": "Spoji sa"
+    },
+    "title": "Spajanje računa"
+  },
+  "change-trust": {
+    "summary": {
+      "asset": "Aktiva",
+      "issued-by": "Izdato od",
+      "limit": {
+        "label": "Limit",
+        "value": {
+          "unlimited": "Bez ograničenja",
+          "limited-to": "Ograničeno na {{limit}} {{code}}"
+        }
+      }
+    },
+    "title": {
+      "add-asset": "Dodaj aktivu",
+      "remove-asset": "Ukloni aktivu"
+    }
+  },
+  "create-account": {
+    "summary": {
+      "account": "Račun za kreiranje",
+      "funding-account": "Račun koji finansira",
+      "funding-amount": "Iznos finansiranja"
+    },
+    "title": "Kreiraj račun"
+  },
+  "manage-buy-offer": {
+    "title": {
+      "create": "Kreiraj nalog za kupovinu",
+      "delete": "Nalog za kupovinu",
+      "update": "Ažuriraj nalog za kupovinu"
+    }
+  },
+  "manage-data": {
+    "title": "Postavi podatke o računu"
+  },
+  "manage-offer": {
+    "summary": {
+      "buy": "Kupovina",
+      "sell": "Prodaja"
+    }
+  },
+  "manage-sell-offer": {
+    "title": {
+      "create": "Kreiraj nalog za prodaju",
+      "delete": "Nalog za prodaju",
+      "update": "Ažuriraj nalog za prodaju"
+    }
+  },
+  "offer-details": {
+    "string": "Kupi {{price}} {{buyingCode}} za {{amount}} {{sellingCode}}"
+  },
+  "payment": {
+    "summary": {
+      "amount": "Iznos",
+      "destination": "Primaoc",
+      "source": "Pošiljalac"
+    },
+    "title": "Plaćanje"
+  },
+  "set-options": {
+    "add-signer": {
+      "summary": {
+        "account": "Račun na koji se dodaje potpisnik",
+        "key-weight": "Težina ključa",
+        "new-signer": "Novi potpisnik"
+      },
+      "title": "Dodaj potpisnika"
+    },
+    "change-signature-setup": {
+      "summary": {
+        "key-thresholds": {
+          "label": "Novi pragovi za ključeve",
+          "value": {
+            "low": "Nizak prag: {{threshold}}",
+            "medium": "Srednji prag: {{threshold}}",
+            "high": "Visok prag: {{threshold}}"
+          }
+        },
+        "required-signatures": "Novi prag težine ključeva"
+      },
+      "title": "Promeni podešavanje potpisa"
+    },
+    "remove-signer": {
+      "summary": {
+        "account": "Račun sa kojeg se uklanja potpisnik",
+        "signer": "Potpisnik"
+      },
+      "title": "Ukloni potpisnika"
+    },
+    "set-account-options": {
+      "title": "Postavi opcije računa"
+    },
+    "set-home-domain": {
+      "title": "Postavi glavni domen"
+    },
+    "set-inflation-destination": {
+      "summary": {
+        "new-destination": "Nova destinacija"
+      },
+      "title": "Postavi destinaciju inflacije"
+    },
+    "set-master-key-weight": {
+      "title": "Postavi težinu glavnog ključa"
+    }
+  }
+}

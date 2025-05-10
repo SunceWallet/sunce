@@ -1,0 +1,389 @@
+{
+  "action": {
+    "receive": "Primi",
+    "send": "Pošalji"
+  },
+  "add-asset": {
+    "action": {
+      "add-asset": "Dodaj aktivu na račun",
+      "remove": "Ukloni",
+      "trade": "Trguj"
+    },
+    "button": {
+      "add-custom-asset": {
+        "label": "Dodaj prilagođenu aktivu"
+      }
+    },
+    "item": {
+      "issuer": {
+        "secondary": {
+          "one-asset": "Jedna odgovarajuća aktiva",
+          "more-than-one-asset": "{{amount}} odgovarajućih aktiva"
+        }
+      },
+      "no-result": {
+        "primary": "Nema odgovarajuće aktive",
+        "secondary": "Nijedna aktiva ili izdavalac ne odgovaraju pretrazi"
+      }
+    },
+    "search-field": {
+      "placeholder": "Pretraži aktive po kodu ili nazivu…"
+    },
+    "title": "Dodaj aktivu"
+  },
+  "asset-details": {
+    "lumen": {
+      "description": {
+        "label": "Opis",
+        "text": "Izvorni token Stellar mreže.\n\nSvaki račun na mreži ima saldo lumensa. Lumensi se koriste za plaćanje transakcijskih naknada."
+      }
+    },
+    "general": {
+      "account-flags": {
+        "auth-required": "Potrebna autorizacija od izdavaoca",
+        "auth-not-required": "Autorizacija nije potrebna",
+        "auth-revocable": "Autorizacija opoziva",
+        "auth-not-revocable": "Autorizacija neopoziva",
+        "auth-immutable": "Ove zastavice su nepromenljive",
+        "auth-mutable": "Izdavalac može da menja ove zastavice",
+        "label": "Zastavice računa"
+      },
+      "anchor-asset": {
+        "label": "Povezana sa"
+      },
+      "conditions": {
+        "label": "Uslovi"
+      },
+      "description": {
+        "label": "Opis"
+      },
+      "issuing-account": {
+        "label": "Izdavački račun"
+      },
+      "organisation": {
+        "address": {
+          "label": "Adresa"
+        },
+        "dba": {
+          "label": "Posluje kao"
+        },
+        "description": {
+          "label": "Opis"
+        },
+        "email": {
+          "label": "Email adresa"
+        },
+        "name": {
+          "label": "Naziv organizacije"
+        },
+        "phone-number": {
+          "label": "Telefonski broj"
+        },
+        "website": {
+          "label": "Veb sajt"
+        }
+      },
+      "redemption-instructions": {
+        "label": "Uputstvo za iskup"
+      }
+    }
+  },
+  "balance-details": {
+    "button": {
+      "add-asset": {
+        "label": "Dodaj aktivu na svoj račun"
+      }
+    },
+    "item": {
+      "spendable-balance": {
+        "primary": "Raspoloživi saldo"
+      }
+    },
+    "spendable-balances": {
+      "base-reserve": {
+        "primary": "Osnovna rezerva",
+        "secondary": "Fiksna osnovna rezerva"
+      },
+      "data-reserve": {
+        "primary": "Rezerva za podatke",
+        "secondary": "Polja sa podacima računa"
+      },
+      "headline": "Iznosi u XLM",
+      "open-orders-reserve": {
+        "primary": "Rezerva za otvorene naloge",
+        "secondary": "Rezerva po nalogu"
+      },
+      "selling-liabilities": {
+        "primary": "Količina za prodaju",
+        "secondary": "Obavezano otvorenim nalozima"
+      },
+      "signers-reserve": {
+        "primary": "Rezerva za potpisnike",
+        "secondary": {
+          "single-key": "Rezerva za jedan ključ",
+          "multiple-keys": "Glavni ključ + potpisnici"
+        }
+      },
+      "spendable-balance": {
+        "primary": "Raspoloživi saldo",
+        "secondary": "Slobodno upotrebljiv iznos"
+      },
+      "total-balance": {
+        "primary": "Ukupan saldo",
+        "secondary": "Tvoj saldo, uključujući neupotrebljiv deo"
+      },
+      "trustline-reserve": {
+        "primary": "Rezerva za trustline-ove",
+        "secondary": "Za svaki ne-XLM saldo"
+      }
+    }
+  },
+  "saved-addresses": {
+    "title": "Sačuvane adrese",
+    "search-field": {
+      "placeholder": "Pretraga po imenu ili adresi…"
+    },
+    "item": {
+      "no-result": {
+        "primary": "Nema rezultata",
+        "secondary": "Nijedno ime ili adresa ne odgovaraju pretrazi"
+      }
+    },
+    "button": {
+      "add": {
+        "label": "Dodaj adresu"
+      }
+    }
+  },
+  "saved-address-details": {
+    "address": {
+      "label": "Adresa",
+      "placeholder": "Adresa"
+    },
+    "label": {
+      "label": "Oznaka",
+      "placeholder": "Oznaka"
+    },
+    "validation": {
+      "no-address": "Adresa nije uneta",
+      "no-label": "Oznaka nije uneta",
+      "label-too-long": "Oznaka je predugačka. Maksimalno {{max}} karaktera",
+      "invalid-address": "Adresa nije validna"
+    },
+    "button": {
+      "add": {
+        "label": "Sačuvaj"
+      },
+      "remove": {
+        "label": "Ukloni"
+      }
+    }
+  },
+  "context-menu": {
+    "account-settings": {
+      "label": "Podešavanja računa"
+    },
+    "assets-and-balances": {
+      "label": "Aktive i salda"
+    },
+    "deposit": {
+      "label": "Dodaj sredstva"
+    },
+    "trade": {
+      "label": "Trguj"
+    },
+    "transactions": {
+      "label": "Transakcije"
+    },
+    "withdraw": {
+      "label": "Povuci"
+    },
+    "saved-addresses": {
+      "label": "Sačuvane adrese"
+    }
+  },
+  "cosigner": {
+    "not-cosigner-yet": {
+      "label": "Tvoj javni ključ:",
+      "note": "Tvoj ključ još uvek nije potpisnik ovog računa. Zamoli vlasnika računa da te doda."
+    }
+  },
+  "purchase-lumens": {
+    "legal-confirmation": {
+      "action": {
+        "confirm": "Razumem"
+      }
+    },
+    "moonpay": {
+      "text": {
+        "primary": "MoonPay",
+        "secondary": "Kupi Stellar lumene odmah koristeći svoju karticu ili Apple Pay"
+      },
+      "legal-confirmation": "Bićeš preusmeren na moonpay.io, servis treće strane. Proces uplate vodi Moon Pay Ltd, ne Sunce ili Montelibero. <1 /> <2 /> Kontaktiraj podršku na moonpay.io za pitanja u vezi tvoje uplate."
+    },
+    "title": "Kupi Stellar lumene"
+  },
+  "remove-trustline": {
+    "action": {
+      "cancel": "Otkaži",
+      "remove": "Ukloni"
+    },
+    "text": {
+      "warning": "Ne možeš ukloniti ovu aktivu dok njen saldo nije nula.",
+      "info": "Uklanjaš <1>{{asset}}</1> sa računa „{{accountName}}“."
+    },
+    "title": "Potvrdi uklanjanje aktive"
+  },
+  "transactions": {
+    "action": {
+      "friendbot": {
+        "description": "Dobij besplatne testnet lumene",
+        "label": "Zatraži friendbota"
+      },
+      "navigate-to-deposit": {
+        "description": "Putem kartice, banke itd.",
+        "label": "Uplati sredstva"
+      }
+    },
+    "offer-list": {
+      "text": {
+        "buy": "Kupi <1 /> za <3 />",
+        "sell": "Prodaj <1 /> za <3 />",
+        "for": "za"
+      },
+      "title": "Otvoreni nalozi"
+    },
+    "transaction-list": {
+      "offer-description": {
+        "prefix": {
+          "default": "Nalog",
+          "cancel": "Otkaži nalog",
+          "update": "Ažuriraj nalog"
+        },
+        "buy": "Kupi {{buyingAmount}} {{buyingCode}} za {{sellingAmount}} {{sellingCode}}",
+        "sell": "Prodaj {{sellingAmount}} {{sellingCode}} za {{buyingAmount}} {{buyingCode}}"
+      },
+      "item": {
+        "from": "Od",
+        "to": "Ka",
+        "memo": "Memo",
+        "remote-public-keys": {
+          "more": "više"
+        },
+        "trust": {
+          "add-trust": "Poveri aktivu {{asset}}",
+          "remove-trust": "Ukloni poverenje u aktivu {{asset}}"
+        }
+      },
+      "load-more": {
+        "label": "Učitaj još"
+      },
+      "title": "Nedavne transakcije"
+    },
+    "signature-request-list": {
+      "title": {
+        "requests-to-cosign": "Transakcije za potpisivanje",
+        "requests-waiting-for-others": "Čeka se dodatni potpis"
+      }
+    }
+  },
+  "transaction-review": {
+    "action": {
+      "confirm": "Potvrdi",
+      "cancel-order": "Otkaži nalog",
+      "dismiss": "Zatvori",
+      "inspect": "Pregledaj",
+      "show-more": "Prikaži više detalja"
+    },
+    "account-creation-warning": {
+      "primary": "Finansiranje novog računa",
+      "secondary": "Finansira se prazan račun. Proveri da li je destinacija ispravna."
+    },
+    "add-signer-warning": {
+      "primary": "Dodavanje potpisnika",
+      "secondary": "Proveri da li dodaješ pravog potpisnika. Pogrešan ključ može zaključati tvoj račun zauvek."
+    },
+    "dangerous-transaction-warning": {
+      "primary": "Transakciju pokreće nepoznat račun",
+      "secondary": "Pažljivo pregledaj. U slučaju sumnje, bolje zatvori."
+    },
+    "dismissal": {
+      "action": {
+        "cancel": "Otkaži",
+        "confirm": "Potvrdi"
+      },
+      "header": "Zatvori čekajuću multi-sig transakciju?",
+      "title": "Potvrda"
+    },
+    "signers": {
+      "heading-details": {
+        "single-signature": "Jedan potpis",
+        "default-signatures": "{{threshold}} od {{length}} potpisa",
+        "custom-consensus": "Prilagođeni konsenzus multi-sig"
+      },
+      "label": "Potpisnici {{details}}"
+    },
+    "signer-status": {
+      "tooltip": {
+        "has-signed": "Potpisano",
+        "has-not-signed": "Čeka se potpis"
+      }
+    },
+    "summary": {
+      "item": {
+        "account": {
+          "label": "Račun"
+        },
+        "authenticating-account": {
+          "label": "Autentifikujući račun"
+        },
+        "expiry": {
+          "label": "Ističe"
+        },
+        "max-fee": {
+          "label": "Maksimalna naknada"
+        },
+        "service": {
+          "label": "Servis"
+        },
+        "submission": {
+          "label": "Slanje"
+        },
+        "tx-hash": {
+          "label": "Hash transakcije"
+        }
+      }
+    },
+    "textfield": {
+      "password": {
+        "label": "Lozinka"
+      }
+    },
+    "title": {
+      "transaction": "Transakcija",
+      "payment": "Plaćanje",
+      "delete-orders-operation": "Brisanje naloga za trgovinu",
+      "web-auth": "Veb autentifikacija"
+    },
+    "transaction-memo": {
+      "label": "{{type}} Memo"
+    },
+    "validation": {
+      "no-account-data": "Greška: nema podataka o izvornom računu u pretplati.",
+      "no-manage-data-operation": "Greška: veb autentifikacija mora sadržati manage_data operaciju.",
+      "password-required": "Lozinka je obavezna"
+    }
+  },
+  "title": {
+    "password-status": {
+      "protected": "Zaštićeno lozinkom",
+      "unprotected": "Bez lozinke"
+    },
+    "tooltip": {
+      "multi-sig-account": "Multi-sig račun",
+      "security-service": "{{service}} zaštita"
+    },
+    "placeholder": "Naziv računa…",
+    "testnet": "Testnet"
+  }
+}
