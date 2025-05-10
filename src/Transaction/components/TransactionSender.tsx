@@ -8,7 +8,7 @@ import { SettingsContext, SettingsContextType } from "~App/contexts/settings"
 import { useHorizon } from "~Generic/hooks/stellar"
 import { useIsMobile } from "~Generic/hooks/userinterface"
 import { isWrongPasswordError, getErrorTranslation } from "~Generic/lib/errors"
-import { explainSubmissionErrorResponse } from "~Generic/lib/horizonErrors"
+import { explainSubmissionErrorResponse, TxSubmissionResponse } from "~Generic/lib/horizonErrors"
 import { resolveMultiSignatureCoordinator } from "~Generic/lib/multisig-discovery"
 import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
 import { hasSigned, requiresRemoteSignatures, signTransaction } from "~Generic/lib/transaction"
@@ -202,7 +202,7 @@ class TransactionSender extends React.Component<Props, State> {
       this.setState({ passwordError: null, signedTransaction: signedTx, unsignedTransaction: unsignedTx })
       return this.submitSignedTransaction(signedTx, unsignedTx)
     } catch (error) {
-      if (isWrongPasswordError(error)) {
+      if (isWrongPasswordError(error) && error instanceof Error) {
         this.setState({ passwordError: error })
         return
       } else {
@@ -250,7 +250,7 @@ class TransactionSender extends React.Component<Props, State> {
         onSubmissionCompleted(signedTx)
       }, completionCallbackDelay)
     } catch (error) {
-      if (onSubmissionFailure) {
+      if (onSubmissionFailure && error instanceof Error) {
         onSubmissionFailure(error, signedTx)
       }
     }
@@ -300,13 +300,14 @@ class TransactionSender extends React.Component<Props, State> {
 
     try {
       let promise: ReturnType<typeof netWorker.submitSignature>
-      const multiSignatureServiceURL = await resolveMultiSignatureCoordinator(
-        this.props.settings.multiSignatureCoordinator
-      )
 
       if (this.state.signatureRequest) {
         promise = netWorker.submitSignature(this.state.signatureRequest, signedTransaction.toEnvelope().toXDR("base64"))
       } else {
+        const multiSignatureServiceURL = await resolveMultiSignatureCoordinator(
+          this.props.settings.multiSignatureCoordinator
+        )
+
         if (signedTransaction.signatures.length !== 1) {
           throw Error(
             `Internal error: Expected exactly one signature on new multi-sig transaction. Got ${signedTransaction.signatures.length}.`
@@ -334,7 +335,7 @@ class TransactionSender extends React.Component<Props, State> {
       return result
     } catch (error) {
       // re-throw refined error
-      throw explainSubmissionErrorResponse(error, this.props.t)
+      throw explainSubmissionErrorResponse(error as TxSubmissionResponse | undefined, this.props.t)
     }
   }
 
@@ -346,7 +347,7 @@ class TransactionSender extends React.Component<Props, State> {
       this.setState({ submissionType: SubmissionType.thirdParty })
       return await promise
     } catch (error) {
-      throw explainSubmissionErrorResponse(error, this.props.t)
+      throw explainSubmissionErrorResponse(error as TxSubmissionResponse | undefined, this.props.t)
     }
   }
 
