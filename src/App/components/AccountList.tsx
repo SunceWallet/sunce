@@ -31,8 +31,49 @@ const useCardStyles = makeStyles({
     width: "100%",
     padding: "16px 24px",
     textOverflow: "ellipsis"
-  }
+  },
+  hasOverflow: {
+    overflow: "visible",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: "50px",
+      background: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 50%, rgb(255, 255, 255) 100%)",
+    },
+  },
 })
+
+function useOverflowDetection(ref: React.RefObject<HTMLElement>, threshold = 10) {
+  const [hasOverflow, setHasOverflow] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!ref.current) return
+
+    const checkOverflow = () => {
+      if (ref.current) {
+        const { scrollHeight, clientHeight } = ref.current
+        setHasOverflow(scrollHeight - clientHeight > threshold)
+      }
+    }
+
+    const observer = new MutationObserver(checkOverflow)
+    observer.observe(ref.current, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    })
+
+    // Initial check
+    checkOverflow()
+
+    return () => observer.disconnect()
+  }, [ref.current, threshold])
+
+  return hasOverflow
+}
 
 const StyledCard = (props: {
   children?: React.ReactNode
@@ -97,6 +138,9 @@ interface AccountCardProps {
 
 function AccountCard(props: AccountCardProps) {
   const router = useRouter()
+  const styles = useCardStyles()
+  const contentRef = React.useRef<HTMLDivElement>(null)
+  const hasOverflow = useOverflowDetection(contentRef)
 
   const onClick = () => router.history.push(routes.account(props.account.id))
   const pendingSignatureRequests = props.pendingSignatureRequests.filter(
@@ -109,7 +153,14 @@ function AccountCard(props: AccountCardProps) {
   return (
     <StyledCard elevation={5} onClick={onClick} style={{ background: "white", color: "black" }}>
       <StyledBadge badgeContent={badgeContent} color="secondary" style={{ width: "100%" }}>
-        <VerticalLayout minHeight="100px" justifyContent="space-evenly" textAlign="left" width="100%">
+        <VerticalLayout
+          ref={contentRef}
+          height="100px"
+          justifyContent="space-evenly"
+          textAlign="left"
+          width="100%"
+          className={hasOverflow ? styles.hasOverflow : ''}
+        >
           <InlineErrorBoundary>
             <HorizontalLayout margin="0 0 12px">
               <Typography variant="h5" style={{ flexGrow: 1, fontSize: 20 }}>
