@@ -40,7 +40,7 @@
     "request-failed-error": "Zahtev ka {{target}} nije uspeo (status {{status}}): {{message}}",
     "stellar-address-not-found-error": "Stellar adresa nije pronađena: {{address}}",
     "stellar-address-request-failed-error": "Rezolucija Stellar adrese {{address}} nije uspela.",
-    "stellar-uri-verification-error": "Potpis Stellar URI-ja ne može biti verifikovan.",
+    "stellar-uri-verification-error": "Potpis Stellar URI ne može biti verifikovan.",
     "stellar-uri-callback-format-error": "Callback za Stellar URI nije validan: {{reason}}",
     "submission-failed-error": "Slanje transakcije ka {{endpoint}} nije uspelo (status {{status}}): {{message}}",
     "testnet-endpoint-not-available-error": "{{service}} ne pruža testnet endpoint.",

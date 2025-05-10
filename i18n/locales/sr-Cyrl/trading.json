@@ -1,0 +1,68 @@
+{
+  "action": {
+    "add-asset": "Додај активу",
+    "submit": "Постави налог"
+  },
+  "action-selection": {
+    "buy": {
+      "description": "Купи одређену количину активе на децентрализованој берзи",
+      "label": "Купи активу"
+    },
+    "sell": {
+      "description": "Замени одређену количину активе за другу",
+      "label": "Продај активу"
+    }
+  },
+  "advanced": {
+    "header": "Напредно"
+  },
+  "inputs": {
+    "estimated-costs": {
+      "label": {
+        "buy": "Процењени трошак",
+        "sell": "Процењени приход"
+      }
+    },
+    "primary-amount": {
+      "label": {
+        "buy": "Количина за куповину",
+        "sell": "Количина за продају"
+      },
+      "max-button": {
+        "label": "Макс"
+      },
+      "placeholder": "Макс. {{amount}}"
+    },
+    "primary-asset-selector": {
+      "label": {
+        "buy": "Купујеш",
+        "sell": "Продајеш"
+      }
+    },
+    "secondary-asset-selector": {
+      "label": {
+        "buy": "Плаћање",
+        "sell": "Пријем"
+      }
+    }
+  },
+  "no-assets-info": "Овај рачун још увек не користи ниједну активу осим Стеллар Лумени.",
+  "issuance": "Актива {{ asset }} је издата са твог рачуна. Нови токени ће бити креирани током трговине",
+  "title": "Трговина",
+  "trading-price": {
+    "default-label": "Цена (лимит)",
+    "label": "Цена по {{unit}} (лимит)"
+  },
+  "validation": {
+    "primary-amount-missing": "Количина није наведена.",
+    "primary-asset-missing": "Ниједна актива није изабрана.",
+    "invalid-amount": "Неважећа количина.",
+    "invalid-price": "Неважећа цена",
+    "not-enough-balance": "Премашује расположиви салдо",
+    "secondary-asset-missing": "Ниједна актива није изабрана."
+  },
+  "warning": {
+    "title": "Упозорење",
+    "message": "Разлика између куповне и продајне цене је око {{spread}}%."
+  }
+}

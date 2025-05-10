@@ -1,0 +1,46 @@
+{
+  "actions": {
+    "dismiss": "Затвори",
+    "submit": "Пошаљи одмах"
+  },
+  "memo-metadata": {
+    "label": {
+      "default": "Мемо",
+      "id": "Мемо (ИД)",
+      "text": "Мемо (текст)"
+    },
+    "placeholder": {
+      "optional": "Опис (опционо)",
+      "mandatory": "Опис (обавезно)"
+    }
+  },
+  "inputs": {
+    "destination": {
+      "label": "Адреса примаоца",
+      "placeholder": "GABCD..., MABCD... или алице*еxампле.орг"
+    },
+    "price": {
+      "label": "Износ",
+      "placeholder": "Макс. {{amount}}"
+    }
+  },
+  "note": {
+    "multisig-pubkey": "Адреса мулти-сиг рачуна, а не твој локални потписни кључ.",
+    "issuance": "Изабрана актива је издата са твог рачуна. Нови токени ће бити креирани приликом слања"
+  },
+  "title": {
+    "send": "Пошаљи средства",
+    "receive": "Прими средства"
+  },
+  "validation": {
+    "memo-required": "Постави мемо приликом слања средстава ка {{destination}}",
+    "memo-too-long": "Мемо је предугачак.",
+    "no-destination": "Прималац није наведен.",
+    "no-price": "Износ није наведен.",
+    "not-enough-funds": "Недовољно средстава.",
+    "invalid-destination": "Очекивана је јавна адреса или Стеллар адреса.",
+    "invalid-price": "Неважећи износ.",
+    "integer-memo-required": "Мемо мора бити цео број.",
+    "asset-missing": "Ниједна актива није изабрана."
+  }
+}

@@ -55,7 +55,7 @@
     }
   },
   "offer-details": {
-    "string": "Kupi {{price}} {{buyingCode}} za {{amount}} {{sellingCode}}"
+    "string": "Kupi {{amount}} {{buyingCode}} za {{price}} {{sellingCode}}"
   },
   "payment": {
     "summary": {
