@@ -7,7 +7,7 @@ export const assetDetails = (accountID: string, assetID: string) => `/account/${
 export const balanceDetails = (accountID: string) => `/account/${accountID}/balances`
 export const changeAccountPassword = (accountID: string) => `/account/${accountID}/settings/password`
 export const createAccount = (testnet: boolean) => `/account/create/${testnet ? "testnet" : "mainnet"}`
-export const createPayment = (accountID: string) => `/account/${accountID}/send`
+export const createPayment = (accountID: string, preselectedAsset?: string) => `/account/${accountID}/send${preselectedAsset ? `/${preselectedAsset}` : ''}`
 export const deleteAccount = (accountID: string) => `/account/${accountID}/settings/delete`
 export const depositAsset = (accountID: string) => `/account/${accountID}/deposit`
 export const exportSecretKey = (accountID: string) => `/account/${accountID}/settings/export`
