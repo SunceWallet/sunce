@@ -1,0 +1,64 @@
+{
+  "no-accounts": {
+    "action": {
+      "dismiss": "Verwerfen"
+    },
+    "info": {
+      "1": "Keine Konten für das angegebene Netzwerk gefunden.",
+      "2": "Sie müssen ein Konto importieren, bevor Sie Transaktionsanfragen signieren können."
+    },
+    "title": "Transaktion vorgeschlagen"
+  },
+  "payment": {
+    "account-selector": "Wählen Sie das zu verwendende Konto aus",
+    "action": {
+      "dismiss": "Verwerfen",
+      "select": "Auswählen"
+    },
+    "error": {
+      "no-activated-accounts": "Keine aktivierten Konten gefunden.",
+      "no-accounts-with-trustline": "Keine Konten mit passender Trustline gefunden."
+    },
+    "uri-content": {
+      "message": "Nachricht"
+    }
+  },
+  "transaction": {
+    "account-selector": {
+      "source-account": "Wählen Sie das Quellkonto aus",
+      "signing-account": "Wählen Sie das Konto aus, das die Transaktion signieren wird"
+    },
+    "action": {
+      "dismiss": "Verwerfen",
+      "select": "Auswählen"
+    },
+    "error": {
+      "signer-not-imported": "Die Transaktionsanfrage gab '{{signer}}' als Ziel-Signer an, aber dieses Konto ist nicht importiert.",
+      "no-eligible-accounts": "Kein geeignetes Konto gefunden."
+    },
+    "hint": "Hinweis",
+    "uri-content": {
+      "message": "Nachricht"
+    },
+    "warning": "Der Ursprung dieser Anfrage kann nicht verifiziert werden! Im Zweifelsfall ablehnen."
+  },
+  "stellar-uri": {
+    "header": {
+      "origin-domain": "Die folgende Transaktion wurde von <1>{{originDomain}}<3> vorgeschlagen",
+      "warning": "Der Ursprung dieser Anfrage kann nicht verifiziert werden! Im Zweifelsfall ablehnen."
+    },
+    "title": "Transaktion vorgeschlagen"
+  },
+  "verify-trusted-service": {
+    "action": {
+      "trust": "Vertrauen",
+      "cancel": "Abbrechen"
+    },
+    "info": {
+      "1": "Sie haben eine Stellar-URI von einem unbekannten Ursprung geöffnet",
+      "2": "Wenn Sie dieser Domain vertrauen, können Sie diesen Dienst zu Ihrer Liste der vertrauenswürdigen Dienste hinzufügen.",
+      "3": "Sie können Ihre Liste der vertrauenswürdigen Dienste jederzeit in den Anwendungseinstellungen einsehen und bearbeiten."
+    },
+    "title": "Vertrauenswürdigen Dienst verifizieren"
+  }
+}

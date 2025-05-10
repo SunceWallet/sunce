@@ -6,6 +6,7 @@ import translationEN from "../../i18n/en"
 import translationES from "../../i18n/es"
 import translationIT from "../../i18n/it"
 import translationRU from "../../i18n/ru"
+import translationDE from "../../i18n/de"
 
 i18n
   .use(LanguageDetector)
@@ -28,6 +29,9 @@ i18n
       },
       ru: {
         translation: translationRU
+      },
+      de: {
+        translation: translationDE
       }
     }
   })

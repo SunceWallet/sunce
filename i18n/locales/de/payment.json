@@ -1,0 +1,46 @@
+{
+  "actions": {
+    "dismiss": "Verwerfen",
+    "submit": "Jetzt senden"
+  },
+  "memo-metadata": {
+    "label": {
+      "default": "Memo",
+      "id": "Memo (ID)",
+      "text": "Memo (Text)"
+    },
+    "placeholder": {
+      "optional": "Beschreibung (optional)",
+      "mandatory": "Beschreibung (erforderlich)"
+    }
+  },
+  "inputs": {
+    "destination": {
+      "label": "Zieladresse",
+      "placeholder": "GABCD..., MABCD... oder alice*example.org"
+    },
+    "price": {
+      "label": "Betrag",
+      "placeholder": "Max. {{amount}}"
+    }
+  },
+  "note": {
+    "multisig-pubkey": "Adresse des Multi-Signatur-Kontos, nicht Ihr lokaler Mitzeichner-Schlüssel.",
+    "issuance": "Ausgewähltes Asset wird von Ihrem Konto ausgegeben. Beim Senden werden neue Token erstellt."
+  },
+  "title": {
+    "send": "Guthaben senden",
+    "receive": "Guthaben empfangen"
+  },
+  "validation": {
+    "memo-required": "Geben Sie ein Memo an, wenn Sie Guthaben an {{destination}} senden",
+    "memo-too-long": "Memo zu lang.",
+    "no-destination": "Kein Ziel angegeben.",
+    "no-price": "Kein Betrag angegeben.",
+    "not-enough-funds": "Nicht genügend Guthaben.",
+    "invalid-destination": "Öffentlicher Schlüssel oder Stellar-Adresse erwartet.",
+    "invalid-price": "Ungültiger Betrag.",
+    "integer-memo-required": "Memo muss eine ganze Zahl sein.",
+    "asset-missing": "Kein Asset ausgewählt."
+  }
+}

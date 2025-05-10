@@ -1,0 +1,85 @@
+{
+  "account-list": {
+    "add-account-card": {
+      "label": "Konto hinzufügen"
+    },
+    "badges": {
+      "tooltip": {
+        "multi-sig": "Multi-Signatur-Konto",
+        "security-service": "{{service}}-Schutz"
+      }
+    }
+  },
+  "all-accounts": {
+    "switch": {
+      "label": "Testnet"
+    },
+    "update": {
+      "notification": {
+        "start": "Update-Download wird gestartet...",
+        "success": "Download ist bereit und wird beim nächsten Neustart installiert!"
+      },
+      "tooltip": "Update verfügbar"
+    },
+    "title": {
+      "testnet": "Testnet-Konten",
+      "mainnet": "Meine Konten"
+    }
+  },
+  "notification": {
+    "desktop": {
+      "new-signature-request": {
+        "title": "Neue Transaktion zum Mitzeichnen",
+        "body": "Von {{signersHavingSigned}}"
+      },
+      "received-payment": {
+        "title": "Zahlung erhalten | {{account}}",
+        "body": "{{amount}} {{assetCode}} erhalten"
+      },
+      "trade-completed": {
+        "title": "Handel abgeschlossen | {{account}}"
+      }
+    },
+    "details": {
+      "action": {
+        "dismiss": "Schließen"
+      },
+      "support": "Haben Sie ein Problem mit der App? <1/> Kontaktieren Sie uns über",
+      "title": "Fehler",
+      "offline": "Offline"
+    },
+    "permission": {
+      "app-notification": {
+        "error": "In den Betriebssystemeinstellungen aktivieren",
+        "granted": {
+          "title": "Benachrichtigungen aktiviert",
+          "text": "Sunce Wallet zeigt jetzt Benachrichtigungen an"
+        },
+        "message": "App-Benachrichtigungen aktivieren"
+      },
+      "protocol-handler": {
+        "error": "Sunce konnte nicht als Standardhandler registriert werden.",
+        "message": "Möchten Sie, dass Sunce interaktive Stellar-Links auf diesem Computer verarbeitet (empfohlen)?",
+        "success": "Sunce erfolgreich als Standardhandler registriert.",
+        "tooltip": {
+          "dismiss": "Ablehnen",
+          "install": "Zulassen"
+        }
+      }
+    }
+  },
+  "terms-and-conditions": {
+    "action": {
+      "confirm": "Bestätigen"
+    },
+    "header": "Willkommen bei Sunce Wallet",
+    "checkbox": {
+      "1": {
+        "label": "Ich verstehe, dass ich für die Sicherheit meiner Gelder verantwortlich bin und dass Sunce Wallet meine Gelder im Falle eines Datenverlusts oder wenn ich meine Zugangsdaten verliere, nicht wiederherstellen kann."
+      },
+      "2": {
+        "label": "Ich habe <1>die Allgemeinen Geschäftsbedingungen</1> <2>&amp;</2> <3>Datenschutzrichtlinie</3> von Sunce Wallet gelesen, verstanden und stimme ihnen zu."
+      }
+    }
+  }
+}

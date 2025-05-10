@@ -1,0 +1,68 @@
+{
+  "action": {
+    "add-asset": "Asset hinzufügen",
+    "submit": "Order platzieren"
+  },
+  "action-selection": {
+    "buy": {
+      "description": "Einen bestimmten Betrag eines Assets an der dezentralen Börse kaufen",
+      "label": "Asset kaufen"
+    },
+    "sell": {
+      "description": "Einen bestimmten Betrag eines Assets gegen ein anderes tauschen",
+      "label": "Asset verkaufen"
+    }
+  },
+  "advanced": {
+    "header": "Erweitert"
+  },
+  "inputs": {
+    "estimated-costs": {
+      "label": {
+        "buy": "Geschätzte Kosten",
+        "sell": "Geschätzter Ertrag"
+      }
+    },
+    "primary-amount": {
+      "label": {
+        "buy": "Zu kaufender Betrag",
+        "sell": "Zu verkaufender Betrag"
+      },
+      "max-button": {
+        "label": "Max"
+      },
+      "placeholder": "Max. {{amount}}"
+    },
+    "primary-asset-selector": {
+      "label": {
+        "buy": "Sie kaufen",
+        "sell": "Sie verkaufen"
+      }
+    },
+    "secondary-asset-selector": {
+      "label": {
+        "buy": "Ausgeben",
+        "sell": "Erhalten"
+      }
+    }
+  },
+  "no-assets-info": "Dieses Konto verwendet noch keine anderen Assets außer Stellar Lumen.",
+  "issuance": "Asset {{ asset }} wird von Ihrem Konto ausgegeben. Beim Handel werden neue Token erstellt.",
+  "title": "Handel",
+  "trading-price": {
+    "default-label": "Preis (Limit)",
+    "label": "Preis pro {{unit}} (Limit)"
+  },
+  "validation": {
+    "primary-amount-missing": "Kein Betrag angegeben.",
+    "primary-asset-missing": "Kein Asset ausgewählt.",
+    "invalid-amount": "Ungültiger Betrag angegeben.",
+    "invalid-price": "Ungültiger Preis",
+    "not-enough-balance": "Überschreitet Ihr verfügbares Guthaben",
+    "secondary-asset-missing": "Kein Asset ausgewählt."
+  },
+  "warning": {
+    "title": "Warnung",
+    "message": "Der Spread zwischen Kauf- und Verkaufspreis beträgt etwa {{spread}}%."
+  }
+}

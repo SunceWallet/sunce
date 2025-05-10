@@ -1,0 +1,112 @@
+{
+  "settings": {
+    "biometric-lock": {
+      "text": {
+        "primary": {
+          "default": "Fingerabdrucksperre",
+          "ios": "Face ID / Touch ID"
+        },
+        "secondary": {
+          "disabled": "Biometrische Authentifizierung ist deaktiviert",
+          "enabled": "Biometrische Authentifizierung ist aktiviert",
+          "not-enrolled": "Konfigurieren Sie die biometrische Authentifizierung in den Einstellungen Ihres Betriebssystems"
+        }
+      },
+      "prompt": {
+        "enable": "Entsperren Sie Ihr Gerät einmal, um die Funktion zu aktivieren.",
+        "disable": "Entsperren Sie Ihr Gerät, um die automatische Sperre zu deaktivieren."
+      }
+    },
+    "language": {
+      "auto-detect": {
+        "label": "Automatisch"
+      },
+      "text": {
+        "primary": "Sprache",
+        "secondary": "Ändern Sie hier die Sprache der Benutzeroberfläche"
+      }
+    },
+    "memo": {
+      "text": {
+        "primary": "Memos anzeigen",
+        "secondary": {
+          "hidden": "Memos sind in der Transaktionsübersicht ausgeblendet",
+          "shown": "Memos sind in der Transaktionsübersicht angezeigt"
+        }
+      }
+    },
+    "multi-sig": {
+      "text": {
+        "primary": "Multi-Signatur aktivieren",
+        "secondary": {
+          "enabled": "Multi-Signatur-Funktionen sind aktiviert",
+          "disabled": "Multi-Signatur-Funktionen sind deaktiviert"
+        }
+      }
+    },
+    "protocol-handler": {
+      "text": {
+        "primary": "Stellar-Protokollanfragen verarbeiten",
+        "secondary": {
+          "default": "Sunce verarbeitet alle Stellar-Links",
+          "non-default": "Sunce zur Verarbeitung aller Stellar-URIs festlegen"
+        }
+      }
+    },
+    "testnet": {
+      "text": {
+        "primary": "Testnet-Konten anzeigen",
+        "secondary": {
+          "cannot-disable": "Kann nicht deaktiviert werden, da Sie bereits Testnet-Konten hinzugefügt haben",
+          "hidden": "Testnet-Konten sind ausgeblendet",
+          "shown": "Testnet-Konten sind angezeigt"
+        }
+      }
+    },
+    "title": "Einstellungen",
+    "trusted-services": {
+      "text": {
+        "primary": "Vertrauenswürdige Dienste verwalten",
+        "secondary": "Vertrauenswürdige Dienste entfernen"
+      }
+    },
+    "saved-addresses-export": {
+      "text": {
+        "primary": "Gespeicherte Adressen importieren/exportieren",
+        "secondary": "Schnellzugriff auf alle gespeicherten Adressen im JSON-Format"
+      }
+    },
+    "dust": {
+      "text": {
+        "primary": "Staub-Transaktionen anzeigen",
+        "secondary": {
+          "hidden": "Transaktionen kleiner als 0,01 XLM sind in der Transaktionsliste ausgeblendet",
+          "shown": "Transaktionen kleiner als 0,01 XLM sind in der Transaktionsliste angezeigt"
+        }
+      }
+    },
+    "create-claimable-balance": {
+      "text": {
+        "primary": "'Create Claimable Balance'-Transaktionen anzeigen",
+        "secondary": {
+          "hidden": "'Create Claimable Balance'-Transaktionen sind in der Transaktionsliste ausgeblendet",
+          "shown": "'Create Claimable Balance'-Transaktionen sind in der Transaktionsliste angezeigt"
+        }
+      }
+    }
+  },
+  "trusted-services": {
+    "info": "Vertrauenswürdige Dienste sind Webdienste, denen erlaubt ist, mit der Sunce Wallet zu interagieren, indem sie Kontodaten anfordern oder Transaktionen vorschlagen. Sie können einen neuen Dienst hinzufügen, sobald dieser versucht, mit Sunce zu interagieren.",
+    "service-selection": {
+      "action": {
+        "cancel": "Abbrechen",
+        "confirm": "Bestätigen"
+      },
+      "confirm": {
+        "title": "Entfernung bestätigen",
+        "text": "Der Dienst wird von Ihrer Vertrauensliste entfernt. Sind Sie sicher?"
+      },
+      "no-services": "Keine vertrauenswürdigen Dienste"
+    }
+  }
+}

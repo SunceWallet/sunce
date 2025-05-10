@@ -1,0 +1,113 @@
+{
+  "dialog-actions": {
+    "close": {
+      "label": "Schließen"
+    },
+    "retry": {
+      "label": "Wiederholen"
+    }
+  },
+  "error": {
+    "asset-not-depositable-error": "Asset {{asset}} scheint über {{domain}} nicht einzahlbar zu sein",
+    "asset-not-withdrawable-error": "Asset {{asset}} scheint über {{domain}} nicht auszahlbar zu sein",
+    "boundary": {
+      "header": "Hoppla, etwas ist schiefgegangen...",
+      "contact-us": "Kontaktieren Sie uns über"
+    },
+    "bad-response-error": "Ungültige Antwort ({{status}}) vom {{server}}-Server",
+    "bad-transaction-error": "Ungültige Transaktion übergeben. Erwartet wurde Transaction oder TransactionRecord, erhalten wurde: {{transaction}}",
+    "bio-auth-test-canceled": "Biometrische Authentifizierung abgebrochen",
+    "cosigner-lacking-key": "Schlüsselpaar kann nicht als Mitzeichner eines Kontos hinzugefügt werden, da kein öffentlicher Schlüssel für das mitzuzeichnende Konto angegeben wurde",
+    "expected-json-response-error": "Es wurde erwartet, dass {{url}} eine JSON-Antwort zurückgibt. Der Inhaltstyp war stattdessen {{contentType}}.",
+    "existing-account-error": "Ein Konto mit diesem Namen existiert bereits.",
+    "fetch-account-data-error": "Kontodaten von {{account}} können nicht von {{horizon}} abgerufen werden",
+    "fetch-signature-requests-error": "Abrufen von Signaturanfragen fehlgeschlagen: {{response}} \nDienst: {{service}}",
+    "fetch-web-auth-challenge-error": "Web-Authentifizierungs-Challenge kann nicht abgerufen werden",
+    "http-request-error": "HTTP-Abruf fehlgeschlagen: {{response}} \nDienst: {{service}}",
+    "invariant-violation-error": "Invarianzverletzung: {{message}}",
+    "low-reserve-order-error": "Order kann nicht platziert werden, da der verfügbare XLM-Saldo zu niedrig ist.",
+    "memo-already-specified-error": "Benutzerdefiniertes Memo kann nicht gesetzt werden. Der Föderationseintrag von {{destination}} gibt bereits ein Memo an.",
+    "missing-info-error": "Transaktion kann nicht erstellt werden, da {{transferServer}} nicht alle erforderlichen Informationen gesendet hat.",
+    "multi-sig-config-threshold-lock": "Signaturschwellenwert zu hoch. Sie würden Ihr Konto sperren.",
+    "multi-sig-config-threshold-too-low": "Signaturschwellenwert zu niedrig.",
+    "multi-sig-event-stream-double-errored-error": "Multi-Signatur-Aktualisierungsereignisstrom ist doppelt fehlgeschlagen: {{url}}",
+    "multi-sig-service-not-locatable": "Multi-Signatur-Dienst kann nicht gefunden werden: {{domain}}",
+    "no-callback-url-error": "Kann nicht an Multi-Signatur-Dienst zurücksenden. Signaturanfrage hat keine Callback-URL festgelegt.",
+    "non-existent-destination-error": "Zahlung in {{assetCode}} nicht möglich, da das Zielkonto noch nicht existiert. Kontoerstellungen müssen immer über XLM erfolgen.",
+    "only-interactive-kyc-supported-error": "Nur interaktive KYCs werden unterstützt.",
+    "password-required-error": "Konto {{accountName}} ist passwortgeschützt, aber es wurde kein Passwort übergeben.",
+    "promise-timeout-error": "Promise nach {{timeout}}ms abgelaufen (Timeout)",
+    "request-failed-error": "Anfrage an {{target}} mit Status {{status}} fehlgeschlagen: {{message}}",
+    "stellar-address-not-found-error": "Stellar-Adresse nicht gefunden: {{address}}",
+    "stellar-address-request-failed-error": "Auflösung der Stellar-Adresse {{address}} fehlgeschlagen.",
+    "stellar-uri-verification-error": "Signatur der Stellar-URI konnte nicht verifiziert werden.",
+    "stellar-uri-callback-format-error": "Callback der Stellar-URI ist ungültig: {{reason}}",
+    "submission-failed-error": "Übermittlung der Transaktion an {{endpoint}} mit Status {{status}} fehlgeschlagen: {{message}}",
+    "testnet-endpoint-not-available-error": "{{service}} stellt keinen Testnet-Endpunkt bereit.",
+    "timeout-error": "Zeitüberschreitung der Anfrage",
+    "unexpected-action-error": "Unerwartete Aktion: {{action}}",
+    "unexpected-state-error": "Unerwarteter Zustand aufgetreten: {{state}}",
+    "unexpected-response-type-error": "Unerwarteter Antworttyp: {{type}} / ${dataType}",
+    "unexpected-stellar-uri-type-error": "Eingehende URI {{incomingURI}} entspricht keinem erwarteten Typ.",
+    "unknown-error": "Ein unbekannter Fehler ist aufgetreten.",
+    "update-already-running-error": "Update läuft bereits!",
+    "wrong-password-error": "Falsches Passwort.",
+    "wrong-request-start-error": "Erwartet wurde, dass die Anfrage mit 'web+stellar:' beginnt",
+    "submission-error": {
+      "default": "Transaktion vom Netzwerk abgelehnt. Fehlercode(s): {{codes}}",
+      "internal-server-error": "Der Server hatte Probleme bei der Verarbeitung dieser Anfrage. Bitte versuchen Sie es erneut.",
+      "op-result-code": {
+        "op_cross_self": "Die Order würde einer Ihrer offenen Orders entgegenwirken.",
+        "op_has_sub_entries": "Konto hat noch Trustlines (Assets) oder offene Handelsorders.",
+        "op_immutable_set": "Konto ist unveränderlich (AUTH_IMMUTABLE Flag gesetzt).",
+        "op_line_full": "Der Saldo des Zielkontos würde das Vertrauenslimit des Ziels für das Asset überschreiten.",
+        "op_low_reserve": "Transaktion vom Netzwerk abgelehnt. Der Saldo des Quell- oder Zielkontos würde unter das Mindestguthaben fallen.",
+        "op_no_account": "Zielkonto existiert nicht.",
+        "op_no_issuer": "Asset ist ungültig. Falscher Asset-Emittent.",
+        "op_no_trust": "Zielkonto vertraut dem Asset nicht, das Sie senden möchten.",
+        "op_offer_not_found": "Angebot existiert nicht.",
+        "op_self_not_allowed": "Konto kann Assets, die es selbst ausgegeben hat, nicht vertrauen.",
+        "op_underfunded": "Nicht genügend Guthaben, um diese Operation durchzuführen."
+      },
+      "prefix": {
+        "server-error": "Serverfehler"
+      },
+      "tx-result-code": {
+        "insufficient_fee": "Netzwerk erfordert höhere Gebühren als in der Transaktion festgelegt.",
+        "internal_error": "Ein unbekannter Fehler ist auf dem Stellar-Server aufgetreten.",
+        "no_account": "Quellkonto nicht gefunden.",
+        "tx_bad_auth": "Zu wenige gültige Signaturen oder falsches Netzwerk.",
+        "tx_bad_auth_extra": "Unbenutzte Signaturen an Transaktion angehängt.",
+        "tx_bad_seq": "Sequenznummer stimmt nicht überein. Bitte erstellen Sie die Transaktion neu.",
+        "tx_insufficient_balance": "Ungenügendes Guthaben. Saldo würde unter die Mindestreserve fallen.",
+        "tx_too_late": "Transaktionsentwurf ist abgelaufen. Versuchen Sie es erneut."
+      },
+      "timeout": "Der Server hat nicht geantwortet. Bitte versuchen Sie es erneut."
+    }
+  },
+  "qr-reader": {
+    "action": {
+      "cancel": "Abbrechen"
+    }
+  },
+  "submission-progress": {
+    "pending": "An Netzwerk übermitteln ...",
+    "success": {
+      "default": "Erfolgreich",
+      "multisig": "Warte auf fehlende Signaturen",
+      "third-party": "Warte auf Autorisierung durch Drittanbieterdienst"
+    }
+  },
+  "testnet-badge": {
+    "label": "Testnet"
+  },
+  "user-interface": {
+    "copied-to-clipboard": "In die Zwischenablage kopiert."
+  },
+  "assets": {
+    "show-hidden": "Ausgeblendete anzeigen...",
+    "hidden-assets": "Ausgeblendete Assets",
+    "select-an-asset": "Ein Asset auswählen",
+    "select-an-asset-short": "Auswählen"
+  }
+}
