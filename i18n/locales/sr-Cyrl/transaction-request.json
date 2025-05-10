@@ -17,7 +17,7 @@
     },
     "error": {
       "no-activated-accounts": "Нема активираних рачуна.",
-      "no-accounts-with-trustline": "Нема рачуна са одговарајућим трустлине-ом."
+      "no-accounts-with-trustline": "Нема рачуна са одговарајућим трастлајном."
     },
     "uri-content": {
       "message": "Порука"
