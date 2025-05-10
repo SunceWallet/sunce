@@ -23,10 +23,10 @@ i18n
       en: {
         translation: translationEN
       },
-      srLatn: {
+      "sr-Latn": {
         translation: translationSRLatn
       },
-      srCyrl: {
+      "sr-Cyrl": {
         translation: translationSRCyrl
       },
       es: {
