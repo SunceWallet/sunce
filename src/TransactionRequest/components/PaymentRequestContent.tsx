@@ -103,7 +103,7 @@ function PaymentRequestContent(props: PaymentRequestContentProps) {
     testnet
   )
   const accountData = accountDataSet.find(acc => acc.account_id === props.selectedAccount?.publicKey)
-  const asset = React.useMemo(() => (assetCode && assetIssuer ? new Asset(assetCode, assetIssuer) : Asset.native()), [
+  const asset = React.useMemo(() => (assetCode && assetIssuer ? new Asset(assetCode, assetIssuer) : undefined), [
     assetCode,
     assetIssuer
   ])
@@ -151,7 +151,7 @@ function PaymentRequestContent(props: PaymentRequestContentProps) {
           testnet={testnet}
         />
       ) : (
-        <Typography align="center" color="error" variant="h6" style={{ paddingTop: 16 }}>
+        asset && <Typography align="center" color="error" variant="h6" style={{ paddingTop: 16 }}>
           {asset.code === "XLM"
             ? t("transaction-request.payment.error.no-activated-accounts")
             : t("transaction-request.payment.error.no-accounts-with-trustline")}
