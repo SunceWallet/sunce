@@ -171,10 +171,12 @@ function BalanceListItem(props: BalanceListItemProps) {
   return (
     <ListItem button={Boolean(props.onClick) as any} className={className} onClick={props.onClick} style={props.style}>
       {props.isEditMode && props.accountId && (
-        <VisibilityIconButton
-          accountId={props.accountId}
-          asset={asset}
-        />
+        <ListItemIcon className={classes.icon} style={{minWidth: "30px", marginRight: "8px" }}>
+          <VisibilityIconButton
+            accountId={props.accountId}
+            asset={asset}
+          />
+        </ListItemIcon>
       )}
       <ListItemIcon className={classes.icon}>
         <Badge badgeContent={props.badgeCount} classes={{ badge: classes.badge }} color="primary">
