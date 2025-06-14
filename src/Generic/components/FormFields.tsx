@@ -107,7 +107,7 @@ export const ReadOnlyTextfield = React.memo(function ReadOnlyTextfield(props: Re
   const InputProps: InputProps = {
     disableUnderline: disableUnderline === false ? false : true,
     multiline,
-    disabled: true,
+    disabled: false,
     readOnly: true,
     ...props.InputProps
   }
