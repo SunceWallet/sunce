@@ -294,11 +294,11 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
           <AssetSelector
             assets={props.accountData.balances}
             disableUnderline
-            disabled={!props.canChangePreselectedParams}
+            disabled={!props.canChangePreselectedParams && !!preselectedParams?.asset}
             showXLM
             style={{ alignSelf: "center" }}
             testnet={props.testnet}
-            value={formValues.asset}
+            value={formValues.asset || undefined}
             accountId={props.accountData.account_id}
           />
         }
@@ -338,7 +338,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     () => (
       <PriceInput
         assetCode={assetSelector}
-        disabled={!props.canChangePreselectedParams}
+        disabled={!props.canChangePreselectedParams && !!preselectedParams?.amount}
         error={Boolean(form.errors.amount)}
         inputRef={form.register({
           required: t<string>("payment.validation.no-price"),
@@ -375,7 +375,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
   const memoInput = React.useMemo(
     () => (
       <TextField
-        disabled={!props.canChangePreselectedParams}
+        disabled={!props.canChangePreselectedParams && !!preselectedParams?.memo}
         error={Boolean(form.errors.memoValue)}
         inputProps={{ maxLength: 28 }}
         label={form.errors.memoValue ? form.errors.memoValue.message : memoMetadata.label}
@@ -454,7 +454,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
 
   return (
     <>
-      <form id={formID} noValidate onSubmit={form.handleSubmit(handleFormSubmission)}>
+      <form id={formID} onSubmit={form.handleSubmit(handleFormSubmission)}>
         {destinationInput}
         <HorizontalLayout justifyContent="space-between" alignItems="top" margin="0 -24px" wrap="wrap">
           {priceInput}
