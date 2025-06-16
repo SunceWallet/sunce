@@ -18,11 +18,6 @@ const useStyles = makeStyles({
       color: "rgba(0, 0, 0, 0.38)"
     }
   },
-  visibilityIconContainer: {
-    marginRight: 8,
-    display: "inline-flex",
-    alignItems: "center"
-  }
 })
 
 interface Props {
@@ -51,7 +46,6 @@ function VisibilityIconButton(props: Props) {
   }
 
   return (
-    <div className={classes.visibilityIconContainer}>
       <IconButton
         size="small"
         onClick={(e) => {
@@ -61,7 +55,6 @@ function VisibilityIconButton(props: Props) {
       >
         {icon}
       </IconButton>
-    </div>
   )
 }
 
