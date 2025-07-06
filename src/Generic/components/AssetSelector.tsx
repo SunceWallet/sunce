@@ -130,7 +130,10 @@ function AssetSelector(props: AssetSelectorProps) {
   const showHidden = showHiddenClicked || hiddenAssetSelected
 
   const [open, setOpen] = React.useState(false)
-  const handleOpen = React.useCallback(() => setOpen(true), [])
+  const handleOpen = React.useCallback(() => {
+    setOpen(true)
+    setSearchFieldValue("")
+  }, [])
   const handleClose = React.useCallback(() => setOpen(false), [])
 
   const handleChange = React.useCallback(
@@ -209,7 +212,7 @@ function AssetSelector(props: AssetSelectorProps) {
         renderValue: () => (props.value ? props.value.getCode() : t("generic.assets.select-an-asset-short"))
       }}
     >
-      {!props.disabled &&
+      {!props.disabled && assets.length > 10 &&
         <MenuItem
           disableRipple
           className={classes.searchField}
