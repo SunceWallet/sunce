@@ -12,6 +12,7 @@ import { sortBalances } from "~Generic/lib/balances"
 import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
 import { ListSubheader } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
+import { SearchField } from "./FormFields"
 
 const useAssetItemStyles = makeStyles(theme => ({
   icon: {
@@ -70,6 +71,9 @@ const useAssetSelectorStyles = makeStyles({
   },
   unselected: {
     opacity: 0.5
+  },
+  searchField: {
+    backgroundColor: "white !important",
   }
 })
 
@@ -102,14 +106,14 @@ function AssetSelector(props: AssetSelectorProps) {
 
   const assets = React.useMemo(
     () => sortBalances(props.assets, assetSettings).map(asset =>
-        "code" in asset && "issuer" in asset ? (asset as Asset) : balancelineToAsset(asset)
-      ),
+      "code" in asset && "issuer" in asset ? (asset as Asset) : balancelineToAsset(asset)
+    ),
     [props.assets]
   )
 
   const { t } = useTranslation()
 
-  const [showHidden, setShowHidden] = React.useState(false)
+  const [showHiddenClicked, setShowHiddenClicked] = React.useState(false)
 
   const visibleAssets = React.useMemo(() => {
     return assets.filter(asset => assetSettings[stringifyAsset(asset)]?.visibility !== "hidden")
@@ -119,6 +123,12 @@ function AssetSelector(props: AssetSelectorProps) {
     return assets.filter(asset => assetSettings[stringifyAsset(asset)]?.visibility === "hidden")
   }, [props.assets, assetSettings])
 
+  const hiddenAssetSelected = React.useMemo(() =>
+    !!props.value && !!hiddenAssets.find(a => a.getCode() === props.value?.getCode())
+    , [hiddenAssets, props.value])
+
+  const showHidden = showHiddenClicked || hiddenAssetSelected
+
   const [open, setOpen] = React.useState(false)
   const handleOpen = React.useCallback(() => setOpen(true), [])
   const handleClose = React.useCallback(() => setOpen(false), [])
@@ -126,7 +136,7 @@ function AssetSelector(props: AssetSelectorProps) {
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<{ name?: any; value: any }>, child: React.ComponentElement<AssetItemProps, any>) => {
       if (child.props.value === "showHidden") {
-        setShowHidden(true)
+        setShowHiddenClicked(true)
         requestAnimationFrame(() => setOpen(true))
         return
       }
@@ -134,6 +144,7 @@ function AssetSelector(props: AssetSelectorProps) {
 
       if (matchingAsset) {
         if (onChange) {
+          setSearchFieldValue("")
           onChange(matchingAsset)
         }
       } else {
@@ -145,6 +156,19 @@ function AssetSelector(props: AssetSelectorProps) {
     },
     [assets, onChange]
   )
+
+  const [searchFieldValue, setSearchFieldValue] = React.useState("")
+  const onSearchFieldChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchFieldValue(event.currentTarget.value || "")
+  }, [])
+
+  const matchesSearch = React.useCallback((asset: Asset) =>
+    asset.getCode().toLowerCase().indexOf(searchFieldValue.toLowerCase()) >= 0
+    , [searchFieldValue])
+
+  const visibleAndFilteredAssets = React.useMemo(() => {
+    return visibleAssets.filter(asset => !asset.isNative() && matchesSearch(asset))
+  }, [visibleAssets, searchFieldValue])
 
   return (
     <TextField
@@ -160,7 +184,7 @@ function AssetSelector(props: AssetSelectorProps) {
       placeholder="Select an asset"
       select
       style={{ flexShrink: 0, ...props.style }}
-      value={props.value ? props.value.getCode() : ""}
+      value={props.value && !open ? props.value.getCode() : ""}
       FormHelperTextProps={{
         className: classes.helperText
       }}
@@ -185,13 +209,29 @@ function AssetSelector(props: AssetSelectorProps) {
         renderValue: () => (props.value ? props.value.getCode() : t("generic.assets.select-an-asset-short"))
       }}
     >
-      {props.value ? null : (
-        <MenuItem disabled value="">
-          {t("generic.assets.select-an-asset")}
+      {!props.disabled &&
+        <MenuItem
+          disableRipple
+          className={classes.searchField}
+        >
+          <SearchField
+            autoFocus
+            fullWidth
+            variant="standard"
+            onChange={onSearchFieldChange}
+            placeholder={t("generic.assets.select-an-asset")}
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              e.stopPropagation();
+            }}
+            onKeyUp={(e) => {
+              e.stopPropagation();
+            }}
+            className={classes.searchField}
+          />
         </MenuItem>
-      )}
-      {visibleAssets
-        .filter(asset => !asset.isNative())
+      }
+      {visibleAndFilteredAssets
         .map(asset => (
           <AssetItem
             asset={asset}
@@ -200,8 +240,8 @@ function AssetSelector(props: AssetSelectorProps) {
             testnet={props.testnet}
             value={asset.getCode()}
           />
-      ))}
-      {props.showXLM ? (
+        ))}
+      {props.showXLM && matchesSearch(Asset.native()) ? (
         <AssetItem
           asset={Asset.native()}
           disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.isNative())}
@@ -215,7 +255,9 @@ function AssetSelector(props: AssetSelectorProps) {
       )}
       {hiddenAssets && showHidden && <ListSubheader>{t("generic.assets.hidden-assets")}</ListSubheader>}
       {hiddenAssets && (
-        hiddenAssets.map(asset => (
+        hiddenAssets
+          .filter(matchesSearch)
+          .map(asset => (
             <AssetItem
               asset={asset}
               disabled={props.disabledAssets && props.disabledAssets.some(someAsset => someAsset.equals(asset))}
