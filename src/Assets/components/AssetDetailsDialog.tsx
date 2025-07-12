@@ -17,7 +17,7 @@ import { SingleBalance } from "~Account/components/AccountBalances"
 import DialogBody from "~Layout/components/DialogBody"
 import { AccountName } from "~Generic/components/Fetchers"
 import { ReadOnlyTextfield } from "~Generic/components/FormFields"
-import { VerticalLayout } from "~Layout/components/Box"
+import { Box, VerticalLayout } from "~Layout/components/Box"
 import MainTitle from "~Generic/components/MainTitle"
 import AssetDetailsActions from "./AssetDetailsActions"
 import AssetLogo from "./AssetLogo"
@@ -321,6 +321,9 @@ const useAssetDetailStyles = makeStyles({
     [breakpoints.down(600)]: {
       marginLeft: 39
     }
+  },
+  toolbar: {
+    marginLeft: "-4px"
   }
 })
 
@@ -362,14 +365,10 @@ function AssetDetailsDialog(props: Props) {
               asset.isNative()
                 ? "Stellar Lumens (XLM)"
                 : (<>
-                    {metadata && metadata.name
-                      ? `${metadata.name} (${asset.getCode()})`
-                      : asset.getCode()}
-                    <VisibilityIconButton
-                      accountId={props.account.accountID}
-                      asset={asset}
-                    />
-                  </>
+                  {metadata && metadata.name
+                    ? `${metadata.name} (${asset.getCode()})`
+                    : asset.getCode()}
+                </>
                 )
             }
             titleStyle={{
@@ -378,8 +377,15 @@ function AssetDetailsDialog(props: Props) {
             }}
           />
           <Typography className={classes.domain} variant="subtitle1">
-            {balance ? (
+            {balance ? (<>
               <SingleBalance assetCode={asset.getCode()} balance={balance.balance} />
+              <Box className={classes.toolbar}>
+                <VisibilityIconButton
+                  accountId={props.account.accountID}
+                  asset={asset}
+                />
+              </Box>
+            </>
             ) : asset.isNative() ? (
               "stellar.org"
             ) : (

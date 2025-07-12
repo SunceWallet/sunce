@@ -1,32 +1,32 @@
 <h1 align="center">Sunce Wallet</h1>
 
 <p align="center">
-  <a href="https://github.com/Montelibero/mtl_sunce/releases/latest">
-    <img alt="Latest stable release" src="https://badgen.net/github/release/Montelibero/mtl_sunce/stable" />
+  <a href="https://github.com/SunceWallet/sunce/releases/latest">
+    <img alt="Latest stable release" src="https://badgen.net/github/release/SunceWallet/sunce/stable" />
   </a>
-  <a href="https://github.com/Montelibero/mtl_sunce/releases/latest">
+  <a href="https://github.com/SunceWallet/sunce/releases/latest">
     <img alt="MacOS" src="https://badgen.net/badge/icon/MacOS?icon=apple&label&color=cyan" />
   </a>
-  <a href="https://github.com/Montelibero/mtl_sunce/releases/latest">
+  <a href="https://github.com/SunceWallet/sunce/releases/latest">
     <img alt="Windows" src="https://badgen.net/badge/icon/Windows?icon=windows&label&color=cyan" />
   </a>
-  <a href="https://github.com/Montelibero/mtl_sunce/releases/latest">
+  <a href="https://github.com/SunceWallet/sunce/releases/latest">
     <img alt="Android" src="https://badgen.net/badge/icon/Android?icon=googleplay&label&color=cyan" />
   </a>
-  <a href="https://github.com/Montelibero/mtl_sunce/releases/latest">
+  <a href="https://github.com/SunceWallet/sunce/releases/latest">
     <img alt="iOS" src="https://badgen.net/badge/icon/iOS?icon=apple&label&color=cyan" />
   </a>
 </p>
 
 <br />
 
-User-friendly Montelibero wallet for the Stellar ecosystem. Featuring multi-signature, custom assets management and more.
+User-friendly Stellar wallet for the Stellar ecosystem. Featuring multi-signature, custom assets management and more.
 
 Runs on Mac OS, Windows, Linux, Android and iOS.
 
 ## Download
 
-See <https://github.com/Montelibero/mtl_sunce/releases>. You will find the binaries there.
+See <https://github.com/SunceWallet/sunce/releases>. You will find the binaries there.
 
 ## Installation
 
@@ -35,7 +35,7 @@ See <https://github.com/Montelibero/mtl_sunce/releases>. You will find the binar
 For Windows, we decided to only support 64-bit installations of Windows. If you are running
 a 32-bit installation, please let us know by reporting an issue to survey the market demand.
 
-Simply download the latest win-x64.exe file from the [releases](https://github.com/Montelibero/mtl_sunce/releases) page and run
+Simply download the latest win-x64.exe file from the [releases](https://github.com/SunceWallet/sunce/releases) page and run
 the installer. You might need to approve installation of unsigned installer. This will only
 be required until we have a signed release available.
 
@@ -43,7 +43,7 @@ be required until we have a signed release available.
 
 For Linux, we support the portable AppImage format that works across most Linux distributions, including Ubuntu.
 
-Download the latest linux-x86_64.AppImage from the [releases](https://github.com/Montelibero/mtl_sunce/releases) page.
+Download the latest linux-x86_64.AppImage from the [releases](https://github.com/SunceWallet/sunce/releases) page.
 
 Open a terminal, navigate to the download folder and make the .AppImage an executeable with
 the following command:
