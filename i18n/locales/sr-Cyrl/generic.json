@@ -1,0 +1,113 @@
+{
+  "dialog-actions": {
+    "close": {
+      "label": "Затвори"
+    },
+    "retry": {
+      "label": "Покушај поново"
+    }
+  },
+  "error": {
+    "asset-not-depositable-error": "Актива {{asset}} изгледа да се не може депоновати путем домена {{domain}}",
+    "asset-not-withdrawable-error": "Актива {{asset}} изгледа да се не може повући путем домена {{domain}}",
+    "boundary": {
+      "header": "Упс, нешто је пошло по злу...",
+      "contact-us": "Контактирајте нас путем"
+    },
+    "bad-response-error": "Лош одговор ({{status}}) са сервера {{server}}",
+    "bad-transaction-error": "Неважећа трансакција. Очекивана је Transaction или TransactionRecord, добијено: {{transaction}}",
+    "bio-auth-test-canceled": "Биометријска аутентификација је отказана",
+    "cosigner-lacking-key": "Није могуће додати пар кључева као косигнера јер није дат јавни кључ за рачун који се потписује",
+    "expected-json-response-error": "Очекиван је JSON одговор са {{url}}. Уместо тога добијен је: {{contentType}}",
+    "existing-account-error": "Рачун са тим именом већ постоји.",
+    "fetch-account-data-error": "Не могу да преузмем податке о рачуну {{account}} са {{horizon}}",
+    "fetch-signature-requests-error": "Неуспело преузимање захтева за потписивање: {{response}} \nСервис: {{service}}",
+    "fetch-web-auth-challenge-error": "Не могу да преузмем изазов за веб аутентификацију",
+    "http-request-error": "HTTP захтев није успео: {{response}} \nСервис: {{service}}",
+    "invariant-violation-error": "Прекршено правило: {{message}}",
+    "low-reserve-order-error": "Није могуће поставити налог јер је расположиви XLM салдо пренизак.",
+    "memo-already-specified-error": "Не може се поставити сопствени мемо. Федерацијски запис за {{destination}} већ садржи мемо.",
+    "missing-info-error": "Не могу да креирам трансакцију јер {{transferServer}} није послао све потребне информације.",
+    "multi-sig-config-threshold-lock": "Праг потписа је превисок. Закључали бисте свој рачун.",
+    "multi-sig-config-threshold-too-low": "Праг потписа је пренизак.",
+    "multi-sig-event-stream-double-errored-error": "Вишеструки ток догађаја је двоструко грешан: {{url}}",
+    "multi-sig-service-not-locatable": "Мулти-сиг сервис се не може лоцирати: {{domain}}",
+    "no-callback-url-error": "Не могу да пошаљем назад Мулти-Сиг сервису. Callback URL није подешен.",
+    "non-existent-destination-error": "Не може се платити у {{assetCode}}, јер одредишни рачун још не постоји. Креирање рачуна је могуће само путем XLM-а.",
+    "only-interactive-kyc-supported-error": "Подржани су само интерактивни КYЦ поступци.",
+    "password-required-error": "Рачун {{accountName}} је заштићен лозинком, али лозинка није унета.",
+    "promise-timeout-error": "Захтев је истекао након {{timeout}}ms",
+    "request-failed-error": "Захтев ка {{target}} није успео (статус {{status}}): {{message}}",
+    "stellar-address-not-found-error": "Стеллар адреса није пронађена: {{address}}",
+    "stellar-address-request-failed-error": "Резолуција Стеллар адресе {{address}} није успела.",
+    "stellar-uri-verification-error": "Потпис Стеллар URI не може бити верификован.",
+    "stellar-uri-callback-format-error": "Callback за Стеллар URI није валидан: {{reason}}",
+    "submission-failed-error": "Слање трансакције ка {{endpoint}} није успело (статус {{status}}): {{message}}",
+    "testnet-endpoint-not-available-error": "{{service}} не пружа тестнет ендпоинт.",
+    "timeout-error": "Захтев је истекао",
+    "unexpected-action-error": "Неочекивана акција: {{action}}",
+    "unexpected-state-error": "Неочекивано стање: {{state}}",
+    "unexpected-response-type-error": "Неочекиван тип одговора: {{type}} / ${dataType}",
+    "unexpected-stellar-uri-type-error": "Долазни URI {{incomingURI}} не одговара ниједном познатом типу.",
+    "unknown-error": "Дошло је до непознате грешке.",
+    "update-already-running-error": "Ажурирање је већ у току!",
+    "wrong-password-error": "Погрешна лозинка.",
+    "wrong-request-start-error": "Захтев мора почети са 'web+stellar:'",
+    "submission-error": {
+      "default": "Трансакција је одбијена од мреже. Код(ови) грешке: {{codes}}",
+      "internal-server-error": "Сервер има потешкоћа са обрадом захтева. Покушајте поново.",
+      "op-result-code": {
+        "op_cross_self": "Ова понуда би се сударила са вашом сопственом понудом.",
+        "op_has_sub_entries": "Рачун и даље има трастлајнове или отворене налоге за трговину.",
+        "op_immutable_set": "Рачун је непроменљив (постављена заставица АУТХ_ИММУТАБЛЕ).",
+        "op_line_full": "Салдо одредишног рачуна би премашио поверење у активу.",
+        "op_low_reserve": "Трансакција је одбијена јер би салдо био испод минималног.",
+        "op_no_account": "Одредишни рачун не постоји.",
+        "op_no_issuer": "Неважећа актива. Неточан издавалац.",
+        "op_no_trust": "Одредишни рачун не верује активи коју покушавате да пошаљете.",
+        "op_offer_not_found": "Понуда не постоји.",
+        "op_self_not_allowed": "Рачун не може веровати активама које је сам издао.",
+        "op_underfunded": "Недовољно средстава за извршење операције."
+      },
+      "prefix": {
+        "server-error": "Грешка сервера"
+      },
+      "tx-result-code": {
+        "insufficient_fee": "Мрежа захтева већу накнаду него што је подешена у трансакцији.",
+        "internal_error": "Непозната грешка на Стеллар серверу.",
+        "no_account": "Изворни рачун није пронађен.",
+        "tx_bad_auth": "Премало валидних потписа или погрешна мрежа.",
+        "tx_bad_auth_extra": "Вишак неискоришћених потписа у трансакцији.",
+        "tx_bad_seq": "Број секвенце не одговара. Креирајте трансакцију поново.",
+        "tx_insufficient_balance": "Недовољан салдо. Пашће испод минималног резерве.",
+        "tx_too_late": "Трансакција је истекла. Покушајте поново."
+      },
+      "timeout": "Сервер није одговорио. Покушајте поново."
+    }
+  },
+  "qr-reader": {
+    "action": {
+      "cancel": "Откажи"
+    }
+  },
+  "submission-progress": {
+    "pending": "Шаљем на мрежу...",
+    "success": {
+      "default": "Успешно",
+      "multisig": "Чекам преостале потписе",
+      "third-party": "Чекам одобрење треће стране"
+    }
+  },
+  "testnet-badge": {
+    "label": "Тестнет"
+  },
+  "user-interface": {
+    "copied-to-clipboard": "Копирано."
+  },
+  "assets": {
+    "show-hidden": "Прикажи сакривене...",
+    "hidden-assets": "Сакривене активе",
+    "select-an-asset": "Изаберите активу",
+    "select-an-asset-short": "Изабери"
+  }
+}

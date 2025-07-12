@@ -1,0 +1,85 @@
+{
+  "account-list": {
+    "add-account-card": {
+      "label": "Dodaj račun"
+    },
+    "badges": {
+      "tooltip": {
+        "multi-sig": "Multi-sig račun",
+        "security-service": "{{service}} zaštita"
+      }
+    }
+  },
+  "all-accounts": {
+    "switch": {
+      "label": "Testnet"
+    },
+    "update": {
+      "notification": {
+        "start": "Preuzimanje ažuriranja je započeto...",
+        "success": "Preuzimanje je spremno i biće instalirano pri sledećem pokretanju!"
+      },
+      "tooltip": "Dostupno ažuriranje"
+    },
+    "title": {
+      "testnet": "Testnet računi",
+      "mainnet": "Moji računi"
+    }
+  },
+  "notification": {
+    "desktop": {
+      "new-signature-request": {
+        "title": "Nova transakcija za potpisivanje",
+        "body": "Od {{signersHavingSigned}}"
+      },
+      "received-payment": {
+        "title": "Primljeno plaćanje | {{account}}",
+        "body": "Primljeno {{amount}} {{assetCode}}"
+      },
+      "trade-completed": {
+        "title": "Zamena završena | {{account}}"
+      }
+    },
+    "details": {
+      "action": {
+        "dismiss": "Zatvori"
+      },
+      "support": "Imate problem sa aplikacijom? <1/> Kontaktirajte nas putem",
+      "title": "Greška",
+      "offline": "Niste povezani"
+    },
+    "permission": {
+      "app-notification": {
+        "error": "Omogućite u podešavanjima operativnog sistema",
+        "granted": {
+          "title": "Obaveštenja su omogućena",
+          "text": "Sunce Wallet će sada prikazivati obaveštenja"
+        },
+        "message": "Omogući obaveštenja aplikacije"
+      },
+      "protocol-handler": {
+        "error": "Nije moguće registrovati Sunce kao podrazumevani otvarač.",
+        "message": "Želite li da Sunce otvara interaktivne Stellar linkove na ovom računaru (preporučeno)?",
+        "success": "Sunce je uspešno registrovan kao podrazumevani otvarač.",
+        "tooltip": {
+          "dismiss": "Zatvori",
+          "install": "Instaliraj"
+        }
+      }
+    }
+  },
+  "terms-and-conditions": {
+    "action": {
+      "confirm": "Potvrdi"
+    },
+    "header": "Dobrodošli u Sunce Wallet",
+    "checkbox": {
+      "1": {
+        "label": "Razumem da sam odgovoran za bezbednost svojih sredstava i da Sunce Wallet ne može da ih povrati u slučaju gubitka podataka ili pristupnih podataka."
+      },
+      "2": {
+        "label": "Pročitao/la sam, razumeo/la i slažem se sa <1>Uslovima korišćenja</1> <2>&amp;</2> <3>Politikom privatnosti</3> Sunce Wallet-a."
+      }
+    }
+  }
+}

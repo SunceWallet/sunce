@@ -1,0 +1,113 @@
+{
+  "dialog-actions": {
+    "close": {
+      "label": "Zatvori"
+    },
+    "retry": {
+      "label": "Pokušaj ponovo"
+    }
+  },
+  "error": {
+    "asset-not-depositable-error": "Aktiva {{asset}} izgleda da se ne može deponovati putem domena {{domain}}",
+    "asset-not-withdrawable-error": "Aktiva {{asset}} izgleda da se ne može povući putem domena {{domain}}",
+    "boundary": {
+      "header": "Ups, nešto je pošlo po zlu...",
+      "contact-us": "Kontaktirajte nas putem"
+    },
+    "bad-response-error": "Loš odgovor ({{status}}) sa servera {{server}}",
+    "bad-transaction-error": "Nevažeća transakcija. Očekivana je Transaction ili TransactionRecord, dobijeno: {{transaction}}",
+    "bio-auth-test-canceled": "Biometrijska autentifikacija je otkazana",
+    "cosigner-lacking-key": "Nije moguće dodati par ključeva kao kosignera jer nije dat javni ključ za račun koji se potpisuje",
+    "expected-json-response-error": "Očekivan je JSON odgovor sa {{url}}. Umesto toga dobijen je: {{contentType}}",
+    "existing-account-error": "Račun sa tim imenom već postoji.",
+    "fetch-account-data-error": "Ne mogu da preuzmem podatke o računu {{account}} sa {{horizon}}",
+    "fetch-signature-requests-error": "Neuspelo preuzimanje zahteva za potpisivanje: {{response}} \nServis: {{service}}",
+    "fetch-web-auth-challenge-error": "Ne mogu da preuzmem izazov za veb autentifikaciju",
+    "http-request-error": "HTTP zahtev nije uspeo: {{response}} \nServis: {{service}}",
+    "invariant-violation-error": "Prekršeno pravilo: {{message}}",
+    "low-reserve-order-error": "Nije moguće postaviti nalog jer je raspoloživi XLM saldo prenizak.",
+    "memo-already-specified-error": "Ne može se postaviti sopstveni memo. Federacijski zapis za {{destination}} već sadrži memo.",
+    "missing-info-error": "Ne mogu da kreiram transakciju jer {{transferServer}} nije poslao sve potrebne informacije.",
+    "multi-sig-config-threshold-lock": "Prag potpisa je previsok. Zaključali biste svoj račun.",
+    "multi-sig-config-threshold-too-low": "Prag potpisa je prenizak.",
+    "multi-sig-event-stream-double-errored-error": "Višestruki tok događaja je dvostruko grešan: {{url}}",
+    "multi-sig-service-not-locatable": "Multi-sig servis se ne može locirati: {{domain}}",
+    "no-callback-url-error": "Ne mogu da pošaljem nazad Multi-Sig servisu. Callback URL nije podešen.",
+    "non-existent-destination-error": "Ne može se platiti u {{assetCode}}, jer odredišni račun još ne postoji. Kreiranje računa je moguće samo putem XLM-a.",
+    "only-interactive-kyc-supported-error": "Podržani su samo interaktivni KYC postupci.",
+    "password-required-error": "Račun {{accountName}} je zaštićen lozinkom, ali lozinka nije uneta.",
+    "promise-timeout-error": "Zahtev je istekao nakon {{timeout}}ms",
+    "request-failed-error": "Zahtev ka {{target}} nije uspeo (status {{status}}): {{message}}",
+    "stellar-address-not-found-error": "Stellar adresa nije pronađena: {{address}}",
+    "stellar-address-request-failed-error": "Rezolucija Stellar adrese {{address}} nije uspela.",
+    "stellar-uri-verification-error": "Potpis Stellar URI ne može biti verifikovan.",
+    "stellar-uri-callback-format-error": "Callback za Stellar URI nije validan: {{reason}}",
+    "submission-failed-error": "Slanje transakcije ka {{endpoint}} nije uspelo (status {{status}}): {{message}}",
+    "testnet-endpoint-not-available-error": "{{service}} ne pruža testnet endpoint.",
+    "timeout-error": "Zahtev je istekao",
+    "unexpected-action-error": "Neočekivana akcija: {{action}}",
+    "unexpected-state-error": "Neočekivano stanje: {{state}}",
+    "unexpected-response-type-error": "Neočekivan tip odgovora: {{type}} / {{dataType}}",
+    "unexpected-stellar-uri-type-error": "Dolazni URI {{incomingURI}} ne odgovara nijednom poznatom tipu.",
+    "unknown-error": "Došlo je do nepoznate greške.",
+    "update-already-running-error": "Ažuriranje je već u toku!",
+    "wrong-password-error": "Pogrešna lozinka.",
+    "wrong-request-start-error": "Zahtev mora početi sa 'web+stellar:'",
+    "submission-error": {
+      "default": "Transakcija je odbijena od mreže. Kod(ovi) greške: {{codes}}",
+      "internal-server-error": "Server ima poteškoća sa obradom zahteva. Pokušajte ponovo.",
+      "op-result-code": {
+        "op_cross_self": "Ova ponuda bi se sudarila sa vašom sopstvenom ponudom.",
+        "op_has_sub_entries": "Račun i dalje ima trustline-ove ili otvorene naloge za trgovinu.",
+        "op_immutable_set": "Račun je nepromenljiv (postavljena zastavica AUTH_IMMUTABLE).",
+        "op_line_full": "Saldo odredišnog računa bi premašio poverenje u aktivu.",
+        "op_low_reserve": "Transakcija je odbijena jer bi saldo bio ispod minimalnog.",
+        "op_no_account": "Odredišni račun ne postoji.",
+        "op_no_issuer": "Nevažeća aktiva. Netočan izdavalac.",
+        "op_no_trust": "Odredišni račun ne veruje aktivi koju pokušavate da pošaljete.",
+        "op_offer_not_found": "Ponuda ne postoji.",
+        "op_self_not_allowed": "Račun ne može verovati aktivama koje je sam izdao.",
+        "op_underfunded": "Nedovoljno sredstava za izvršenje operacije."
+      },
+      "prefix": {
+        "server-error": "Greška servera"
+      },
+      "tx-result-code": {
+        "insufficient_fee": "Mreža zahteva veću naknadu nego što je podešena u transakciji.",
+        "internal_error": "Nepoznata greška na Stellar serveru.",
+        "no_account": "Izvorni račun nije pronađen.",
+        "tx_bad_auth": "Premalo validnih potpisa ili pogrešna mreža.",
+        "tx_bad_auth_extra": "Višak neiskorišćenih potpisa u transakciji.",
+        "tx_bad_seq": "Broj sekvence ne odgovara. Kreirajte transakciju ponovo.",
+        "tx_insufficient_balance": "Nedovoljan saldo. Pašće ispod minimalnog rezerve.",
+        "tx_too_late": "Transakcija je istekla. Pokušajte ponovo."
+      },
+      "timeout": "Server nije odgovorio. Pokušajte ponovo."
+    }
+  },
+  "qr-reader": {
+    "action": {
+      "cancel": "Otkaži"
+    }
+  },
+  "submission-progress": {
+    "pending": "Šaljem na mrežu...",
+    "success": {
+      "default": "Uspešno",
+      "multisig": "Čekam preostale potpise",
+      "third-party": "Čekam odobrenje treće strane"
+    }
+  },
+  "testnet-badge": {
+    "label": "Testnet"
+  },
+  "user-interface": {
+    "copied-to-clipboard": "Kopirano."
+  },
+  "assets": {
+    "show-hidden": "Prikaži sakrivene...",
+    "hidden-assets": "Sakrivene aktive",
+    "select-an-asset": "Izaberite aktivu",
+    "select-an-asset-short": "Izaberi"
+  }
+}

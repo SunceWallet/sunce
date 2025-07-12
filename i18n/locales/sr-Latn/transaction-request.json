@@ -1,0 +1,64 @@
+{
+  "no-accounts": {
+    "action": {
+      "dismiss": "Zatvori"
+    },
+    "info": {
+      "1": "Nisu pronađeni računi za navedenu mrežu.",
+      "2": "Moraš da uvezeš račun pre nego što potpisuješ transakcije."
+    },
+    "title": "Predložena transakcija"
+  },
+  "payment": {
+    "account-selector": "Izaberi račun koji će biti korišćen",
+    "action": {
+      "dismiss": "Zatvori",
+      "select": "Izaberi"
+    },
+    "error": {
+      "no-activated-accounts": "Nema aktiviranih računa.",
+      "no-accounts-with-trustline": "Nema računa sa odgovarajućim trustline-om."
+    },
+    "uri-content": {
+      "message": "Poruka"
+    }
+  },
+  "transaction": {
+    "account-selector": {
+      "source-account": "Izaberi izvorni račun",
+      "signing-account": "Izaberi račun koji će potpisati transakciju"
+    },
+    "action": {
+      "dismiss": "Zatvori",
+      "select": "Izaberi"
+    },
+    "error": {
+      "signer-not-imported": "U zahtevu za transakciju je naveden potpisnik '{{signer}}', ali taj račun nije uvezen.",
+      "no-eligible-accounts": "Nije pronađen nijedan odgovarajući račun."
+    },
+    "hint": "Savjet",
+    "uri-content": {
+      "message": "Poruka"
+    },
+    "warning": "Poreklo ovog zahteva ne može biti verifikovano! Odbij ako sumnjaš."
+  },
+  "stellar-uri": {
+    "header": {
+      "origin-domain": "Sledeću transakciju je predložio <1>{{originDomain}}<3>",
+      "warning": "Poreklo ovog zahteva ne može biti verifikovano! Odbij ako sumnjaš."
+    },
+    "title": "Predložena transakcija"
+  },
+  "verify-trusted-service": {
+    "action": {
+      "trust": "Poveri",
+      "cancel": "Otkaži"
+    },
+    "info": {
+      "1": "Otvorio si Stellar URI koji potiče sa nepoznatog domena",
+      "2": "Ako veruješ ovom domenu, možeš ga dodati u listu pouzdanih servisa.",
+      "3": "Svoju listu pouzdanih servisa možeš pregledati i menjati u podešavanjima aplikacije."
+    },
+    "title": "Verifikuj pouzdan servis"
+  }
+}

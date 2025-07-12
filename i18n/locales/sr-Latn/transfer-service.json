@@ -1,0 +1,252 @@
+{
+  "authentication": {
+    "sidebar": {
+      "headline": "Autentifikacija",
+      "info": {
+        "1": "Izdavalac aktive zahteva da se prijaviš koristeći svoj račun.",
+        "2": "Transakcija za autentifikaciju biće potpisana kao dokaz vlasništva nad računom."
+      }
+    }
+  },
+  "deposit-success": {
+    "action": {
+      "close": "Zatvori"
+    },
+    "body": {
+      "deposit-pending": "Uplata na čekanju",
+      "info": {
+        "1": "{{domain}} čeka tvoju uplatu.",
+        "2": "Sredstva će biti uplaćena na tvoj Stellar račun kada ih primi izdavalac aktive."
+      }
+    },
+    "sidebar": {
+      "headline": "Završeno",
+      "info": "Tvoja uplata je prihvaćena i biće obrađena kada uplata stigne izdavaocu aktive."
+    }
+  },
+  "form-builder": {
+    "placeholder": {
+      "optional": "(Opcionalno) {{name}}"
+    }
+  },
+  "initial": {
+    "action": {
+      "proceed": "Nastavi"
+    },
+    "body": {
+      "asset-selector": {
+        "label": {
+          "deposit": "Aktiva",
+          "short": "Aktiva",
+          "withdrawal": "Aktiva za povlačenje"
+        },
+        "no-assets": "Nema dostupnih aktiva za povlačenje"
+      },
+      "method-selector": {
+        "info-item": {
+          "asset": "Molimo izaberi tip",
+          "no-asset": "Prvo izaberi aktivu"
+        },
+        "label": {
+          "deposit": "Tip uplate",
+          "withdrawal": "Tip isplate"
+        }
+      }
+    },
+    "sidebar": {
+      "deposit": {
+        "headline": "Dodaj sredstva",
+        "info": {
+          "1": "Kupi Stellar lumene (XLM) ili uplati aktive. Pošalji USD sa banke, ETH iz novčanika itd.",
+          "2": "Sunce je samo klijent servisa koji nudi izdavalac aktive."
+        }
+      },
+      "withdrawal": {
+        "headline": "Šta želiš da povučeš",
+        "info": {
+          "1": "Povuci aktive sa svog računa, npr. USD u banku ili ETH u Ethereum novčanik.",
+          "2": "Sunce je samo klijent servisa koji nudi izdavalac aktive."
+        }
+      }
+    }
+  },
+  "kyc-denied": {
+    "sidebar": {
+      "headline": "Poznaj svog klijenta (KYC)",
+      "info": "Odbijeni ste – servis nije dostupan za vas. Kontaktirajte izdavaoca aktive."
+    }
+  },
+  "kyc-pending": {
+    "action": {
+      "continue": "Nastavi",
+      "open-again": "Otvori ponovo"
+    },
+    "body": {
+      "additional-info-needed": "Potreban je dodatni podatak"
+    },
+    "sidebar": {
+      "headline": "Poznaj svog klijenta (KYC)",
+      "info": {
+        "1": "Servis radi samo ako dostaviš lične podatke.",
+        "2": "Ovo se obično traži iz pravnih razloga."
+      }
+    }
+  },
+  "no-withdrawable-assets": {
+    "action": {
+      "add-asset": "Dodaj aktivu"
+    },
+    "body": {
+      "no-withdrawable-assets": "Ovaj račun nema aktivu koju je moguće povući."
+    }
+  },
+  "purchase-lumens": {
+    "sidebar": {
+      "headline": "Kupi Stellar lumene",
+      "info": {
+        "1": "Nudimo opcije za kupovinu lumena bez posredstva izdavaoca aktive.",
+        "2": "Stellar lumeni (XLM) su izvorni tokeni Stellar mreže. Koriste se za plaćanje naknada itd."
+      }
+    }
+  },
+  "title": {
+    "deposit": "Dodaj sredstva",
+    "withdrawal": "Povuci sredstva"
+  },
+  "transaction-details": {
+    "action": {
+      "done": "Završeno",
+      "withdraw": "Povuci"
+    },
+    "body": {
+      "amount": {
+        "error": {
+          "amount-greater-than-balance": "Uneseni iznos je veći od salda"
+        },
+        "label": {
+          "deposit": "Iznos za uplatu",
+          "withdrawal": "Iznos za povlačenje"
+        }
+      },
+      "amount-to-receive": {
+        "label": "Iznos koji ćeš primiti"
+      },
+      "deposit-instructions": {
+        "label": "Uputstva za uplatu"
+      },
+      "eta": {
+        "label": "Procenjeno vreme",
+        "not-available": "N/A"
+      },
+      "fees": {
+        "label": "Naknade",
+        "value": {
+          "unknown": "nepoznato"
+        }
+      },
+      "information": {
+        "label": "Informacije"
+      }
+    },
+    "sidebar": {
+      "deposit": {
+        "headline": "Pregled uplate",
+        "info": {
+          "1": "Uveri se da šalješ sredstva na ispravnu destinaciju.",
+          "2": "Izdavalac aktive će uplatiti tokene kada primi sredstva."
+        }
+      },
+      "withdrawal": {
+        "headline": "Skoro gotovo",
+        "info": {
+          "1": "Proveri formu i unesi iznos za povlačenje ako je potrebno.",
+          "2": "Povlačenje je skoro spremno."
+        }
+      }
+    }
+  },
+  "transaction-status": {
+    "error": {
+      "rejected": {
+        "deposit": "Uplata je odbijena",
+        "withdrawal": "Povlačenje je odbijeno"
+      },
+      "contact": "Kontaktiraj {{domain}}."
+    },
+    "incomplete": {
+      "already-redirected": {
+        "info": {
+          "1": "{{domain}} proverava tvoje lične podatke. Pokušaj kasnije.",
+          "2": "Procenjeno vreme do završetka: {{eta}}"
+        }
+      },
+      "not-redirected": {
+        "info": "{{domain}} zahteva dodatne informacije od tebe."
+      }
+    },
+    "more-info-url": {
+      "info": "Za više informacija, poseti"
+    },
+    "pending-user-transfer-start": {
+      "info": "{{domain}} zahteva još informacija od tebe."
+    }
+  },
+  "withdrawal-success": {
+    "action": {
+      "close": "Zatvori"
+    },
+    "body": {
+      "withdrawal-in-progress": "Povlačenje u toku",
+      "info": {
+        "1": "{{domain}} obrađuje tvoje povlačenje.",
+        "2": "Sredstva su skinuta sa tvog Stellar računa i uskoro će biti uplaćena na destinaciju."
+      }
+    },
+    "sidebar": {
+      "headline": "Završeno",
+      "info": "Tvoje povlačenje je prihvaćeno i biće obrađeno od strane izdavaoca aktive."
+    }
+  },
+  "transfer-details": {
+    "action": {
+      "proceed": "Nastavi"
+    },
+    "body": {
+      "destination": {
+        "name": "Račun primaoca"
+      },
+      "dest_extra": {
+        "name": "Dodatni podaci o primaocu (nema opisa)"
+      },
+      "min-max-amount": {
+        "label": "Iznos",
+        "max-amount": "Maks. {{amount}} {{assetCode}}",
+        "min-amount": "Min. {{amount}} {{assetCode}}",
+        "not-enough-funds": "Nemaš dovoljno sredstava."
+      },
+      "fee": {
+        "helper-text": "Kako naplaćuje {{domain}}",
+        "label": {
+          "deposit": "Naknada za uplatu",
+          "withdrawal": "Naknada za povlačenje"
+        }
+      }
+    },
+    "sidebar": {
+      "deposit": {
+        "headline": "Detalji o uplati",
+        "info": {
+          "1": "Dodatni detalji o tvojoj uplati.",
+          "2": "U zavisnosti od zahteva izdavaoca aktive, možda ćeš morati uneti dodatne informacije."
+        }
+      },
+      "withdrawal": {
+        "headline": "Detalji o povlačenju",
+        "info": {
+          "1": "Dodatni detalji o tvojoj uplati.",
+          "2": "U zavisnosti od zahteva izdavaoca aktive, možda ćeš morati uneti dodatne informacije."
+        }
+      }
+    }
+  }
+}

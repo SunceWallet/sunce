@@ -7,6 +7,8 @@ import translationES from "../../i18n/es"
 import translationIT from "../../i18n/it"
 import translationRU from "../../i18n/ru"
 import translationDE from "../../i18n/de"
+import translationSRLatn from "../../i18n/sr-Latn"
+import translationSRCyrl from "../../i18n/sr-Cyrl"
 
 i18n
   .use(LanguageDetector)
@@ -20,6 +22,12 @@ i18n
     resources: {
       en: {
         translation: translationEN
+      },
+      "sr-Latn": {
+        translation: translationSRLatn
+      },
+      "sr-Cyrl": {
+        translation: translationSRCyrl
       },
       es: {
         translation: translationES

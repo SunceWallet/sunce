@@ -1,0 +1,389 @@
+{
+  "action": {
+    "receive": "Прими",
+    "send": "Пошаљи"
+  },
+  "add-asset": {
+    "action": {
+      "add-asset": "Додај активу на рачун",
+      "remove": "Уклони",
+      "trade": "Тргуј"
+    },
+    "button": {
+      "add-custom-asset": {
+        "label": "Додај прилагођену активу"
+      }
+    },
+    "item": {
+      "issuer": {
+        "secondary": {
+          "one-asset": "Једна одговарајућа актива",
+          "more-than-one-asset": "{{amount}} одговарајућих актива"
+        }
+      },
+      "no-result": {
+        "primary": "Нема одговарајуће активе",
+        "secondary": "Ниједна актива или издавалац не одговарају претрази"
+      }
+    },
+    "search-field": {
+      "placeholder": "Претражи активе по коду или називу…"
+    },
+    "title": "Додај активу"
+  },
+  "asset-details": {
+    "lumen": {
+      "description": {
+        "label": "Опис",
+        "text": "Изворни токен Стеллар мреже.\n\nСваки рачун на мрежи има салдо лумена. Лумени се користе за плаћање трансакцијских накнада."
+      }
+    },
+    "general": {
+      "account-flags": {
+        "auth-required": "Потребна ауторизација од издаваоца",
+        "auth-not-required": "Ауторизација није потребна",
+        "auth-revocable": "Ауторизација опозива",
+        "auth-not-revocable": "Ауторизација неопозива",
+        "auth-immutable": "Ове заставице су непроменљиве",
+        "auth-mutable": "Издавалац може да мења ове заставице",
+        "label": "Заставице рачуна"
+      },
+      "anchor-asset": {
+        "label": "Повезана са"
+      },
+      "conditions": {
+        "label": "Услови"
+      },
+      "description": {
+        "label": "Опис"
+      },
+      "issuing-account": {
+        "label": "Издавачки рачун"
+      },
+      "organisation": {
+        "address": {
+          "label": "Адреса"
+        },
+        "dba": {
+          "label": "Послује као"
+        },
+        "description": {
+          "label": "Опис"
+        },
+        "email": {
+          "label": "Email адреса"
+        },
+        "name": {
+          "label": "Назив организације"
+        },
+        "phone-number": {
+          "label": "Телефонски број"
+        },
+        "website": {
+          "label": "Веб сајт"
+        }
+      },
+      "redemption-instructions": {
+        "label": "Упутство за искуп"
+      }
+    }
+  },
+  "balance-details": {
+    "button": {
+      "add-asset": {
+        "label": "Додај активу на свој рачун"
+      }
+    },
+    "item": {
+      "spendable-balance": {
+        "primary": "Расположиви салдо"
+      }
+    },
+    "spendable-balances": {
+      "base-reserve": {
+        "primary": "Основна резерва",
+        "secondary": "Фиксна основна резерва"
+      },
+      "data-reserve": {
+        "primary": "Резерва за податке",
+        "secondary": "Поља са подацима рачуна"
+      },
+      "headline": "Износи у XLM",
+      "open-orders-reserve": {
+        "primary": "Резерва за отворене налоге",
+        "secondary": "Резерва по налогу"
+      },
+      "selling-liabilities": {
+        "primary": "Количина за продају",
+        "secondary": "Обавезано отвореним налозима"
+      },
+      "signers-reserve": {
+        "primary": "Резерва за потписнике",
+        "secondary": {
+          "single-key": "Резерва за један кључ",
+          "multiple-keys": "Главни кључ + потписници"
+        }
+      },
+      "spendable-balance": {
+        "primary": "Расположиви салдо",
+        "secondary": "Слободно употребљив износ"
+      },
+      "total-balance": {
+        "primary": "Укупан салдо",
+        "secondary": "Твој салдо, укључујући неупотребљив део"
+      },
+      "trustline-reserve": {
+        "primary": "Резерва трастлајна",
+        "secondary": "За сваки не-XLM салдо"
+      }
+    }
+  },
+  "saved-addresses": {
+    "title": "Сачуване адресе",
+    "search-field": {
+      "placeholder": "Претрага по имену или адреси…"
+    },
+    "item": {
+      "no-result": {
+        "primary": "Нема резултата",
+        "secondary": "Ниједно име или адреса не одговарају претрази"
+      }
+    },
+    "button": {
+      "add": {
+        "label": "Додај адресу"
+      }
+    }
+  },
+  "saved-address-details": {
+    "address": {
+      "label": "Адреса",
+      "placeholder": "Адреса"
+    },
+    "label": {
+      "label": "Ознака",
+      "placeholder": "Ознака"
+    },
+    "validation": {
+      "no-address": "Адреса није унета",
+      "no-label": "Ознака није унета",
+      "label-too-long": "Ознака је предугачка. Максимално {{max}} карактера",
+      "invalid-address": "Адреса није валидна"
+    },
+    "button": {
+      "add": {
+        "label": "Сачувај"
+      },
+      "remove": {
+        "label": "Уклони"
+      }
+    }
+  },
+  "context-menu": {
+    "account-settings": {
+      "label": "Подешавања рачуна"
+    },
+    "assets-and-balances": {
+      "label": "Активе и салда"
+    },
+    "deposit": {
+      "label": "Додај средства"
+    },
+    "trade": {
+      "label": "Тргуј"
+    },
+    "transactions": {
+      "label": "Трансакције"
+    },
+    "withdraw": {
+      "label": "Повуци"
+    },
+    "saved-addresses": {
+      "label": "Сачуване адресе"
+    }
+  },
+  "cosigner": {
+    "not-cosigner-yet": {
+      "label": "Твој јавни кључ:",
+      "note": "Твој кључ још увек није потписник овог рачуна. Замоли власника рачуна да те дода."
+    }
+  },
+  "purchase-lumens": {
+    "legal-confirmation": {
+      "action": {
+        "confirm": "Разумем"
+      }
+    },
+    "moonpay": {
+      "text": {
+        "primary": "MoonPay",
+        "secondary": "Купи Стеллар лумене одмах користећи своју картицу или Apple Pay"
+      },
+      "legal-confirmation": " Бићеш преусмерен на moonpay.io, сервис треће стране. Процес уплате води Moon Pay Ltd, не Сунце или Монтелиберо. <1 /> <2 /> Контактирај подршку на moonpay.io за питања у вези твоје уплате."
+    },
+    "title": "Купи Стеллар лумене"
+  },
+  "remove-trustline": {
+    "action": {
+      "cancel": "Откажи",
+      "remove": "Уклони"
+    },
+    "text": {
+      "warning": "Не можеш уклонити ову активу док њен салдо није нула.",
+      "info": "Уклањаш <1>{{asset}}</1> са рачуна „{{accountName}}“."
+    },
+    "title": "Потврди уклањање активе"
+  },
+  "transactions": {
+    "action": {
+      "friendbot": {
+        "description": "Добиј бесплатне тестнет лумене",
+        "label": "Затражи фриендбота"
+      },
+      "navigate-to-deposit": {
+        "description": "Путем картице, банке итд.",
+        "label": "Уплати средства"
+      }
+    },
+    "offer-list": {
+      "text": {
+        "buy": "Купи <1 /> за <3 />",
+        "sell": "Продај <1 /> за <3 />",
+        "for": "за"
+      },
+      "title": "Отворени налози"
+    },
+    "transaction-list": {
+      "offer-description": {
+        "prefix": {
+          "default": "Налог",
+          "cancel": "Откажи налог",
+          "update": "Ажурирај налог"
+        },
+        "buy": "Купи {{buyingAmount}} {{buyingCode}} за {{sellingAmount}} {{sellingCode}}",
+        "sell": "Продај {{sellingAmount}} {{sellingCode}} за {{buyingAmount}} {{buyingCode}}"
+      },
+      "item": {
+        "from": "Од",
+        "to": "Ка",
+        "memo": "Мемо",
+        "remote-public-keys": {
+          "more": "више"
+        },
+        "trust": {
+          "add-trust": "Повери активу {{asset}}",
+          "remove-trust": "Уклони поверење у активу {{asset}}"
+        }
+      },
+      "load-more": {
+        "label": "Учитај још"
+      },
+      "title": "Недавне трансакције"
+    },
+    "signature-request-list": {
+      "title": {
+        "requests-to-cosign": "Трансакције за потписивање",
+        "requests-waiting-for-others": "Чека се додатни потпис"
+      }
+    }
+  },
+  "transaction-review": {
+    "action": {
+      "confirm": "Потврди",
+      "cancel-order": "Откажи налог",
+      "dismiss": "Затвори",
+      "inspect": "Прегледај",
+      "show-more": "Прикажи више детаља"
+    },
+    "account-creation-warning": {
+      "primary": "Финансирање новог рачуна",
+      "secondary": "Финансира се празан рачун. Провери да ли је дестинација исправна."
+    },
+    "add-signer-warning": {
+      "primary": "Додавање потписника",
+      "secondary": "Провери да ли додајеш правог потписника. Погрешан кључ може закључати твој рачун заувек."
+    },
+    "dangerous-transaction-warning": {
+      "primary": "Трансакцију покреће непознат рачун",
+      "secondary": "Пажљиво прегледај. У случају сумње, боље затвори."
+    },
+    "dismissal": {
+      "action": {
+        "cancel": "Откажи",
+        "confirm": "Потврди"
+      },
+      "header": "Затвори чекајућу мулти-сиг трансакцију?",
+      "title": "Потврда"
+    },
+    "signers": {
+      "heading-details": {
+        "single-signature": "Један потпис",
+        "default-signatures": "{{threshold}} од {{length}} потписа",
+        "custom-consensus": "Прилагођени консензус мулти-сиг"
+      },
+      "label": "Потписници {{details}}"
+    },
+    "signer-status": {
+      "tooltip": {
+        "has-signed": "Потписано",
+        "has-not-signed": "Чека се потпис"
+      }
+    },
+    "summary": {
+      "item": {
+        "account": {
+          "label": "Рачун"
+        },
+        "authenticating-account": {
+          "label": "Аутентификујући рачун"
+        },
+        "expiry": {
+          "label": "Истиче"
+        },
+        "max-fee": {
+          "label": "Максимална накнада"
+        },
+        "service": {
+          "label": "Сервис"
+        },
+        "submission": {
+          "label": "Слање"
+        },
+        "tx-hash": {
+          "label": "Хеш трансакције"
+        }
+      }
+    },
+    "textfield": {
+      "password": {
+        "label": "Лозинка"
+      }
+    },
+    "title": {
+      "transaction": "Трансакција",
+      "payment": "Плаћање",
+      "delete-orders-operation": "Брисање налога за трговину",
+      "web-auth": "Веб аутентификација"
+    },
+    "transaction-memo": {
+      "label": "{{type}} Мемо"
+    },
+    "validation": {
+      "no-account-data": "Грешка: нема података о изворном рачуну у претплати.",
+      "no-manage-data-operation": "Грешка: веб аутентификација мора садржати манаге_дата операцију.",
+      "password-required": "Лозинка је обавезна"
+    }
+  },
+  "title": {
+    "password-status": {
+      "protected": "Заштићено лозинком",
+      "unprotected": "Без лозинке"
+    },
+    "tooltip": {
+      "multi-sig-account": "Мулти-сиг рачун",
+      "security-service": "{{service}} заштита"
+    },
+    "placeholder": "Назив рачуна…",
+    "testnet": "Тестнет"
+  }
+}

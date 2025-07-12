@@ -1,0 +1,114 @@
+{
+  "account-merge": {
+    "summary": {
+      "account": "Рачун",
+      "merge-into": "Споји са"
+    },
+    "title": "Спајање рачуна"
+  },
+  "change-trust": {
+    "summary": {
+      "asset": "Актива",
+      "issued-by": "Издато од",
+      "limit": {
+        "label": "Лимит",
+        "value": {
+          "unlimited": "Без ограничења",
+          "limited-to": "Ограничено на {{limit}} {{code}}"
+        }
+      }
+    },
+    "title": {
+      "add-asset": "Додај активу",
+      "remove-asset": "Уклони активу"
+    }
+  },
+  "create-account": {
+    "summary": {
+      "account": "Рачун за креирање",
+      "funding-account": "Рачун који финансира",
+      "funding-amount": "Износ финансирања"
+    },
+    "title": "Креирај рачун"
+  },
+  "manage-buy-offer": {
+    "title": {
+      "create": "Креирај налог за куповину",
+      "delete": "Налог за куповину",
+      "update": "Ажурирај налог за куповину"
+    }
+  },
+  "manage-data": {
+    "title": "Постави податке о рачуну"
+  },
+  "manage-offer": {
+    "summary": {
+      "buy": "Куповина",
+      "sell": "Продаја"
+    }
+  },
+  "manage-sell-offer": {
+    "title": {
+      "create": "Креирај налог за продају",
+      "delete": "Налог за продају",
+      "update": "Ажурирај налог за продају"
+    }
+  },
+  "offer-details": {
+    "string": "Купи {{amount}} {{buyingCode}} за {{price}} {{sellingCode}}"
+  },
+  "payment": {
+    "summary": {
+      "amount": "Износ",
+      "destination": "Примаоц",
+      "source": "Пошиљалац"
+    },
+    "title": "Плаћање"
+  },
+  "set-options": {
+    "add-signer": {
+      "summary": {
+        "account": "Рачун на који се додаје потписник",
+        "key-weight": "Тежина кључа",
+        "new-signer": "Нови потписник"
+      },
+      "title": "Додај потписника"
+    },
+    "change-signature-setup": {
+      "summary": {
+        "key-thresholds": {
+          "label": "Нови прагови за кључеве",
+          "value": {
+            "low": "Низак праг: {{threshold}}",
+            "medium": "Средњи праг: {{threshold}}",
+            "high": "Висок праг: {{threshold}}"
+          }
+        },
+        "required-signatures": "Нови праг тежине кључева"
+      },
+      "title": "Промени подешавање потписа"
+    },
+    "remove-signer": {
+      "summary": {
+        "account": "Рачун са којег се уклања потписник",
+        "signer": "Потписник"
+      },
+      "title": "Уклони потписника"
+    },
+    "set-account-options": {
+      "title": "Постави опције рачуна"
+    },
+    "set-home-domain": {
+      "title": "Постави главни домен"
+    },
+    "set-inflation-destination": {
+      "summary": {
+        "new-destination": "Нова дестинација"
+      },
+      "title": "Постави дестинацију инфлације"
+    },
+    "set-master-key-weight": {
+      "title": "Постави тежину главног кључа"
+    }
+  }
+}

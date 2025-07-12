@@ -19,7 +19,7 @@
     },
     "language": {
       "auto-detect": {
-        "label": "auto"
+        "label": "автоматически"
       },
       "text": {
         "primary": "Язык",

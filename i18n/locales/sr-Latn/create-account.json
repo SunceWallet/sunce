@@ -1,0 +1,86 @@
+{
+  "action": {
+    "cancel": "Otkaži",
+    "confirm": "Potvrdi",
+    "create": "Kreiraj račun",
+    "import": "Uvezi račun",
+    "join-shared": "Dodaj račun"
+  },
+  "action-selection": {
+    "create": {
+      "description": "Kreiraj novi prazan račun",
+      "label": "Kreiraj račun"
+    },
+    "import": {
+      "description": "Vrati račun iz bekapa",
+      "label": "Uvezi račun"
+    },
+    "join-shared": {
+      "description": "Potpiši zajednički račun",
+      "label": "Pridruži se"
+    }
+  },
+  "base-name": {
+    "mainnet": "Moj račun",
+    "testnet": "Moj testnet račun"
+  },
+  "confirm": {
+    "text": "Kreiraš račun bez zaštite lozinkom. Svako ko ima pristup tvom uređaju imaće pristup i tvojim sredstvima. <1 /> <3 /> Da li si siguran/na da želiš da nastaviš bez lozinke?",
+    "title": "Nastavi bez lozinke"
+  },
+  "header": {
+    "placeholder": {
+      "mainnet": "Novi račun",
+      "testnet": "Novi testnet račun"
+    }
+  },
+  "inputs": {
+    "import": {
+      "helper-text": "Stellar tajni ključ ima 56 alfanumeričkih karaktera i počinje sa S",
+      "placeholder": "SABCDEFGH…",
+      "label": "Tajni ključ",
+      "title": "Uvezi postojeći"
+    },
+    "multisig-account": {
+      "explanation-long": "Uveri se da račun ima bar 2 XLM kako bi mogao da te doda kao potpisnika.",
+      "explanation-short": "Uveri se da je račun finansiran.",
+      "helper-text": "Adresa (javni ključ) multi-sig računa",
+      "placeholder": "GABCDEFGH…",
+      "label": "Multi-sig račun"
+    },
+    "password": {
+      "label": "Lozinka",
+      "placeholder": "Unesi lozinku"
+    },
+    "password-repeat": {
+      "label": "Ponovi lozinku",
+      "placeholder": "Ponovi lozinku"
+    }
+  },
+  "options": {
+    "cosigner": {
+      "label": "Pridruži se zajedničkom računu",
+      "description": "Potpisuj multi-sig račun"
+    },
+    "cosigner-import": {
+      "label": "Potpisuje zajednički račun",
+      "description": "Ključ je potpisnik drugog računa"
+    },
+    "import": {
+      "label": "Uvezi tajni ključ",
+      "description": "Vrati račun iz bekapa"
+    },
+    "password": {
+      "label": "Zaštita lozinkom",
+      "protected": "Tvoj tajni ključ biće šifrovan",
+      "unprotected": "Tvoj tajni ključ neće biti zaštićen"
+    }
+  },
+  "validation": {
+    "invalid-key": "Nevažeći Stellar tajni ključ.",
+    "no-account-name": "Nije uneto ime računa.",
+    "no-password": "Lozinka nije uneta.",
+    "password-no-match": "Lozinke se ne poklapaju.",
+    "same-account": "Ovaj račun je već dodat."
+  }
+}

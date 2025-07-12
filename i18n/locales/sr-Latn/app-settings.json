@@ -1,0 +1,112 @@
+{
+  "settings": {
+    "biometric-lock": {
+      "text": {
+        "primary": {
+          "default": "Otključavanje otiskom prsta",
+          "ios": "Face ID / Touch ID"
+        },
+        "secondary": {
+          "disabled": "Biometrijska autentifikacija je onemogućena",
+          "enabled": "Biometrijska autentifikacija je omogućena",
+          "not-enrolled": "Podesite biometrijsku autentifikaciju u podešavanjima operativnog sistema"
+        }
+      },
+      "prompt": {
+        "enable": "Otključajte uređaj jednom da biste omogućili ovu opciju.",
+        "disable": "Otključajte uređaj da biste onemogućili automatsko zaključavanje."
+      }
+    },
+    "language": {
+      "auto-detect": {
+        "label": "auto"
+      },
+      "text": {
+        "primary": "Jezik",
+        "secondary": "Ovde promenite jezik korisničkog interfejsa"
+      }
+    },
+    "memo": {
+      "text": {
+        "primary": "Prikaži memo",
+        "secondary": {
+          "hidden": "Memo-i su sakriveni u pregledu transakcija",
+          "shown": "Memo-i su prikazani u pregledu transakcija"
+        }
+      }
+    },
+    "multi-sig": {
+      "text": {
+        "primary": "Omogući Multi-Sig",
+        "secondary": {
+          "enabled": "Multi-Sig funkcije su omogućene",
+          "disabled": "Multi-Sig funkcije su onemogućene"
+        }
+      }
+    },
+    "protocol-handler": {
+      "text": {
+        "primary": "Otvaraj Stellar linkove",
+        "secondary": {
+          "default": "Sunce otvara sve Stellar linkove",
+          "non-default": "Omogući da Sunce otvara sve Stellar URI-je"
+        }
+      }
+    },
+    "testnet": {
+      "text": {
+        "primary": "Prikaži Testnet račune",
+        "secondary": {
+          "cannot-disable": "Ne može se onemogućiti jer ste već dodali testnet račune",
+          "hidden": "Testnet računi su sakriveni",
+          "shown": "Testnet računi su prikazani"
+        }
+      }
+    },
+    "title": "Podešavanja",
+    "trusted-services": {
+      "text": {
+        "primary": "Upravljaj Pouzdanim Uslugama",
+        "secondary": "Ukloni Pouzdane Usluge"
+      }
+    },
+    "saved-addresses-export": {
+      "text": {
+        "primary": "Uvoz/Izvoz sačuvanih adresa",
+        "secondary": "Brz pristup svim sačuvanim adresama u JSON formatu"
+      }
+    },
+    "dust": {
+      "text": {
+        "primary": "Prikaži vrlo male transakcije",
+        "secondary": {
+          "hidden": "Transakcije manje od 0.01 XLM su sakrivene u listi transakcija",
+          "shown": "Transakcije manje od 0.01 XLM su prikazane u listi transakcija"
+        }
+      }
+    },
+    "create-claimable-balance": {
+      "text": {
+        "primary": "Prikaži transakcije kreiranja Claimable Balance",
+        "secondary": {
+          "hidden": "Transakcije kreiranja Claimable Balance su sakrivene u listi transakcija",
+          "shown": "Transakcije kreiranja Claimable Balance su prikazane u listi transakcija"
+        }
+      }
+    }
+  },
+  "trusted-services": {
+    "info": "Pouzdane usluge su veb servisi koji mogu da komuniciraju sa Sunce novčanikom tražeći podatke o računu ili predlažući transakcije.",
+    "service-selection": {
+      "action": {
+        "cancel": "Otkaži",
+        "confirm": "Potvrdi"
+      },
+      "confirm": {
+        "title": "Potvrdi uklanjanje",
+        "text": "Usluga će biti uklonjena sa tvoje liste poverenja. Da li si siguran/na?"
+      },
+      "no-services": "Nema pouzdanih usluga"
+    }
+  }
+}
