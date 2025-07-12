@@ -121,11 +121,11 @@ export const ReadOnlyTextfield = React.memo(function ReadOnlyTextfield(props: Re
   )
 })
 
-export const SearchField = React.memo(function SearchField(props: Omit<OutlinedTextFieldProps, "variant">) {
+export const SearchField = React.memo(function SearchField(props: TextFieldProps) {
   return (
     <TextField
       fullWidth
-      variant="outlined"
+      variant={props.variant || "outlined"}
       {...props}
       InputProps={{
         endAdornment: (
