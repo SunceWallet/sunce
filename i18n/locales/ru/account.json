@@ -99,6 +99,9 @@
         "primary": "Доступный баланс"
       }
     },
+    "search-field": {
+      "placeholder": "Искать по имени…"
+    },
     "spendable-balances": {
       "base-reserve": {
         "primary": "Базовый резерв",

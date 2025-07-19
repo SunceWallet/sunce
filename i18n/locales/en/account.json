@@ -99,6 +99,9 @@
         "primary": "Spendable balance"
       }
     },
+    "search-field": {
+      "placeholder": "Search assets…"
+    },
     "spendable-balances": {
       "base-reserve": {
         "primary": "Base reserve",

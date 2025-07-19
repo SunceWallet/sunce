@@ -24,6 +24,7 @@ import DialogBody from "~Layout/components/DialogBody"
 import AddAssetDialog from "./AddAssetDialog"
 import BalanceDetailsListItem from "./BalanceDetailsListItem"
 import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
+import { SearchField } from "~Generic/components/FormFields"
 
 type AssetBalance = {
   asset: Asset
@@ -40,12 +41,29 @@ interface TrustedAssetsProps {
   olderOffersAvailable?: boolean
   isEditMode: boolean
   assetSettings: Platform.AssetSettingsMap
+  searchFieldValue: string
 }
 
 const TrustedAssets = React.memo(function TrustedAssets(props: TrustedAssetsProps) {
+  const filteredAssets = React.useMemo(() => {
+    if (!props.searchFieldValue.trim()) {
+      return props.assetBalances
+    }
+
+    const searchTerm = props.searchFieldValue.toLowerCase().trim()
+    return props.assetBalances.filter(({ asset }) => {
+      // Search by asset code
+      if (asset.code.toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      return false
+    })
+  }, [props.assetBalances, props.searchFieldValue])
+
   return (
     <>
-      {props.assetBalances.map(({ asset, balance }) => {
+      {filteredAssets.map(({ asset, balance }) => {
         const openOffers = props.openOffers.filter(
           offer =>
             (offer.buying.asset_code === asset.code && offer.buying.asset_issuer === asset.issuer) ||
@@ -186,12 +204,17 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
   const itemHPadding = 16
   const itemHMargin = 0
 
+  const [searchFieldValue, setSearchFieldValue] = React.useState("")
+  const onSearchFieldChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchFieldValue(event.target.value)
+  }, [])
+
   return (
-    <DialogBody 
-      excessWidth={12} 
+    <DialogBody
+      excessWidth={12}
       top={
-        <MainTitle 
-          onBack={props.onClose} 
+        <MainTitle
+          onBack={props.onClose}
           title={props.account.name}
           actions={
             <IconButton onClick={toggleEditMode} color={isEditMode ? "primary" : "default"}>
@@ -201,6 +224,12 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
         />
       }
     >
+      <SearchField
+        autoFocus
+        onChange={onSearchFieldChange}
+        value={searchFieldValue}
+        placeholder={t("account.balance-details.search-field.placeholder")}
+      />
       <List style={{ paddingLeft: hpadding, paddingRight: hpadding, margin: "0 -8px" }}>
         <ButtonListItem
           gutterBottom
@@ -224,6 +253,7 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
           olderOffersAvailable={olderOffersAvailable}
           isEditMode={isEditMode}
           assetSettings={assetSettings}
+          searchFieldValue={searchFieldValue}
         />
       </List>
       <Divider style={{ margin: "16px 0" }} />

@@ -99,6 +99,9 @@
         "primary": "Verfügbarer Saldo"
       }
     },
+    "search-field": {
+      "placeholder": "Assets suchen…"
+    },
     "spendable-balances": {
       "base-reserve": {
         "primary": "Basisreserve",
