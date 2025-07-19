@@ -209,6 +209,8 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
     setSearchFieldValue(event.target.value)
   }, [])
 
+  const xlmMatchesSearch = Asset.native().code.toLowerCase().includes(searchFieldValue.toLocaleLowerCase())
+
   return (
     <DialogBody
       excessWidth={12}
@@ -258,7 +260,7 @@ function BalanceDetailsDialog(props: BalanceDetailsProps) {
       </List>
       <Divider style={{ margin: "16px 0" }} />
       <List style={{ paddingLeft: hpadding, paddingRight: hpadding, margin: "0 -8px 8px" }}>
-        {nativeBalance ? (
+        {(nativeBalance && xlmMatchesSearch) ? (
           <NativeBalanceItems
             account={props.account}
             accountData={accountData}
