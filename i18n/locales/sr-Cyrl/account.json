@@ -99,6 +99,9 @@
         "primary": "Расположиви салдо"
       }
     },
+    "search-field": {
+      "placeholder": "Претражи активе…"
+    },
     "spendable-balances": {
       "base-reserve": {
         "primary": "Основна резерва",

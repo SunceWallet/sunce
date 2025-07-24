@@ -57,7 +57,7 @@ export const PriceInput = React.memo(function PriceInput(props: PriceInputProps)
     <InputField
       {...textfieldProps}
       inputProps={{
-        pattern: "[0-9]*",
+        pattern: "^[0-9]*(.[0-9]+)?$",
         inputMode: "decimal"
       }}
       InputProps={{
