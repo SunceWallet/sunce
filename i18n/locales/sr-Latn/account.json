@@ -99,6 +99,9 @@
         "primary": "Raspoloživi saldo"
       }
     },
+    "search-field": {
+      "placeholder": "Pretraži aktive…"
+    },
     "spendable-balances": {
       "base-reserve": {
         "primary": "Osnovna rezerva",

@@ -99,6 +99,9 @@
         "primary": "Saldo spendibile"
       }
     },
+    "search-field": {
+      "placeholder": "Cerca asset…"
+    },
     "spendable-balances": {
       "base-reserve": {
         "primary": "Riserva di base",
