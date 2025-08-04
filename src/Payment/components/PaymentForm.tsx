@@ -256,10 +256,18 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     [handleQRScan, handleContractListClick]
   )
 
+  const focused = React.useMemo(() => {
+    if (!preselectedParams || !preselectedParams.destination) return "destination"
+    if (!preselectedParams.amount) return "amount"
+    if (!preselectedParams.asset) return "asset"
+    if (!preselectedParams.memo) return "memo"
+    return "destination"
+  }, [preselectedParams])
+
   const destinationInput = React.useMemo(
     () => (
       <TextField
-        autoFocus={import.meta.env.VITE_PLATFORM !== "ios"}
+        autoFocus={import.meta.env.VITE_PLATFORM !== "ios" && focused === "destination"}
         disabled={!props.canChangePreselectedParams}
         error={Boolean(form.errors.destination)}
         fullWidth
@@ -284,7 +292,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         placeholder={t("payment.inputs.destination.placeholder")}
       />
     ),
-    [form, qrReaderAdornment, preselectedParams, setValue, t]
+    [form, focused, qrReaderAdornment, preselectedParams, setValue, t]
   )
 
   const assetSelector = React.useMemo(
@@ -292,6 +300,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
       <Controller
         as={
           <AssetSelector
+            autoFocus={import.meta.env.VITE_PLATFORM !== "ios" && focused === "asset"}
             assets={props.accountData.balances}
             disableUnderline
             disabled={!props.canChangePreselectedParams && !!preselectedParams?.asset}
@@ -306,7 +315,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         name="asset"
       />
     ),
-    [form, formValues.asset, preselectedParams, props.accountData.balances, props.testnet]
+    [form, focused, formValues.asset, preselectedParams, props.accountData.balances, props.testnet]
   )
 
   const maxSendButton = React.useMemo(
@@ -337,6 +346,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
   const priceInput = React.useMemo(
     () => (
       <PriceInput
+        autoFocus={import.meta.env.VITE_PLATFORM !== "ios" && focused === "amount"}
         assetCode={assetSelector}
         disabled={!props.canChangePreselectedParams && !!preselectedParams?.amount}
         error={Boolean(form.errors.amount)}
@@ -369,12 +379,13 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         }}
       />
     ),
-    [assetSelector, form, isSmallScreen, preselectedParams, spendableBalance, t]
+    [assetSelector, focused, form, isSmallScreen, preselectedParams, spendableBalance, t]
   )
 
   const memoInput = React.useMemo(
     () => (
       <TextField
+        autoFocus={import.meta.env.VITE_PLATFORM !== "ios" && focused === "memo"}
         disabled={!props.canChangePreselectedParams && !!preselectedParams?.memo}
         error={Boolean(form.errors.memoValue)}
         inputProps={{ maxLength: 28 }}
