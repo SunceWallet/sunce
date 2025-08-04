@@ -31,7 +31,7 @@ function MaybeIcon(props: MaybeIconProps) {
   )
 }
 
-const useActionButtonStyles = makeStyles(theme => ({
+const useActionButtonStyles = makeStyles((theme) => ({
   inlineDialogActionsBox: {
     alignItems: "stretch",
     margin: "32px 0 0",
