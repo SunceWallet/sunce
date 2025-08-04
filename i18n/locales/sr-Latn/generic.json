@@ -87,6 +87,7 @@
   },
   "qr-reader": {
     "action": {
+      "upload": "Otvori iz fajla",
       "cancel": "Otkaži"
     }
   },

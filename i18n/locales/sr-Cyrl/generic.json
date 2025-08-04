@@ -87,6 +87,7 @@
   },
   "qr-reader": {
     "action": {
+      "upload": "Отвори из фајла",
       "cancel": "Откажи"
     }
   },
