@@ -15,11 +15,13 @@ interface Props {
 interface ContextType {
   uri: StellarUri | null
   clearURI: () => void
+  setURI: (uri: StellarUri) => void
 }
 
 const initialValues: ContextType = {
   uri: null,
-  clearURI: () => undefined
+  clearURI: () => undefined,
+  setURI: () => undefined
 }
 
 const TransactionRequestContext = React.createContext<ContextType>(initialValues)
@@ -48,7 +50,7 @@ export function TransactionRequestProvider(props: Props) {
   }, [])
 
   React.useEffect(() => {
-    const unsubscribe = subscribeToDeepLinkURLs(async incomingURI => {
+    const unsubscribe = subscribeToDeepLinkURLs(async (incomingURI) => {
       const url = new URL(incomingURI)
       switch (url.pathname) {
         case StellarUriType.Transaction:
@@ -68,10 +70,12 @@ export function TransactionRequestProvider(props: Props) {
       }
     })
     return unsubscribe
-  }, [verifyStellarURI])
+  }, [verifyStellarURI, t])
 
   return (
-    <TransactionRequestContext.Provider value={{ uri, clearURI }}>{props.children}</TransactionRequestContext.Provider>
+    <TransactionRequestContext.Provider value={{ uri, clearURI, setURI }}>
+      {props.children}
+    </TransactionRequestContext.Provider>
   )
 }
 

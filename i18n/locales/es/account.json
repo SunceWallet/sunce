@@ -1,7 +1,8 @@
 {
   "action": {
     "receive": "Recibir",
-    "send": "Enviar"
+    "send": "Enviar",
+    "scan": "Escanea"
   },
   "add-asset": {
     "action": {

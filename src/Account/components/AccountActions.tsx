@@ -6,17 +6,14 @@ import { Account } from "~App/contexts/accounts"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
 import QRCodeIcon from "~Icons/components/QRCode"
+import QRReaderIcon from "~Icons/components/QRReader"
 
-export const useButtonStyles = makeStyles(theme => ({
+export const useButtonStyles = makeStyles((theme) => ({
   desktop: {
     margin: "0",
     padding: "24px 0 0",
-
-    "& $button:last-child:not(:first-child)": {
-      marginLeft: 40
-    }
+    gap: "20px"
   },
-  mobile: {},
   hidden: {
     paddingTop: 0
   },
@@ -45,6 +42,7 @@ interface AccountActionsProps {
   hidden?: boolean
   onCreatePayment: () => void
   onReceivePayment: () => void
+  onScanQRCode?: () => void
 }
 
 function AccountActions(props: AccountActionsProps) {
@@ -52,8 +50,11 @@ function AccountActions(props: AccountActionsProps) {
   const classes = useButtonStyles()
   const className = `${props.bottomOfScreen ? classes.mobile : classes.desktop} ${props.hidden ? classes.hidden : ""}`
   const isDisabled =
-    accountData.balances.length === 0 || !accountData.signers.some(signer => signer.key === props.account.publicKey)
+    accountData.balances.length === 0 || !accountData.signers.some((signer) => signer.key === props.account.publicKey)
   const { t } = useTranslation()
+
+  const showScanButton = Boolean(props.onScanQRCode)
+
   return (
     <DialogActionsBox className={className} hidden={props.hidden}>
       <ActionButton
@@ -73,6 +74,16 @@ function AccountActions(props: AccountActionsProps) {
       >
         {t("account.action.send")}
       </ActionButton>
+      {showScanButton && (
+        <ActionButton
+          className={`${classes.button} ${classes.secondaryButton}`}
+          icon={<QRReaderIcon style={{ fontSize: "140%" }} />}
+          onClick={props.onScanQRCode}
+          variant="contained"
+        >
+          {t("account.action.scan")}
+        </ActionButton>
+      )}
     </DialogActionsBox>
   )
 }
