@@ -1,7 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
-import { Box } from "@material-ui/core"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import useMediaQuery from "@material-ui/core/useMediaQuery"
 import TextField from "@material-ui/core/TextField"
@@ -53,9 +52,7 @@ function CustomTrustlineDialog(props: Props) {
   const savedAddressesAdornment = React.useMemo(
     () => (
       <InputAdornment disableTypography position="end">
-        <Box onClick={handleSavedAddressesClick} style={{ cursor: "pointer" }}>
-          <AccountBoxIcon />
-        </Box>
+        <AccountBoxIcon onClick={handleSavedAddressesClick} style={{ cursor: "pointer" }} />
       </InputAdornment>
     ),
     [handleSavedAddressesClick]
