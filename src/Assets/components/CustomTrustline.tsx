@@ -1,10 +1,14 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
+import { Box } from "@material-ui/core"
+import InputAdornment from "@material-ui/core/InputAdornment"
 import useMediaQuery from "@material-ui/core/useMediaQuery"
 import TextField from "@material-ui/core/TextField"
+import AccountBoxIcon from "@material-ui/icons/AccountBox"
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser"
 import { Account } from "~App/contexts/accounts"
+import { DialogsContext } from "~App/contexts/dialogs"
 import { AccountData } from "~Generic/lib/account"
 import DialogBody from "~Layout/components/DialogBody"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
@@ -26,10 +30,36 @@ function CustomTrustlineDialog(props: Props) {
   const [limit, setLimit] = React.useState("")
   const isWidthMax450 = useMediaQuery("(max-width:450px)")
   const { t } = useTranslation()
+  const { openSavedAddresses } = React.useContext(DialogsContext)
 
   const createTransaction = () =>
     props.createAddAssetTransaction(new Asset(code, issuerPublicKey), { limit: limit || undefined })
   const addCustomAsset = () => props.sendTransaction(createTransaction)
+
+  const handleOnSavedAddressClick = React.useCallback(
+    (address: string) => {
+      setIssuerPublicKey(address)
+      openSavedAddresses(null)
+    },
+    [openSavedAddresses]
+  )
+
+  const handleSavedAddressesClick = React.useCallback(() => {
+    openSavedAddresses({
+      onSelect: handleOnSavedAddressClick
+    })
+  }, [handleOnSavedAddressClick, openSavedAddresses])
+
+  const savedAddressesAdornment = React.useMemo(
+    () => (
+      <InputAdornment disableTypography position="end">
+        <Box onClick={handleSavedAddressesClick} style={{ cursor: "pointer" }}>
+          <AccountBoxIcon />
+        </Box>
+      </InputAdornment>
+    ),
+    [handleSavedAddressesClick]
+  )
 
   return (
     <DialogBody
@@ -53,6 +83,9 @@ function CustomTrustlineDialog(props: Props) {
           name="asset-issuer"
           value={issuerPublicKey}
           onChange={event => setIssuerPublicKey(event.target.value)}
+          InputProps={{
+            endAdornment: savedAddressesAdornment
+          }}
         />
         <TextField
           inputProps={{
