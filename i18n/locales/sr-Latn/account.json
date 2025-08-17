@@ -1,7 +1,8 @@
 {
   "action": {
     "receive": "Primi",
-    "send": "Pošalji"
+    "send": "Pošalji",
+    "scan": "Skani"
   },
   "add-asset": {
     "action": {

@@ -109,14 +109,12 @@ export function SettingsProvider(props: Props) {
     Promise.all([loadIgnoredSignatureRequestHashes(), loadSettings()])
       .then(([loadedSignatureReqHashes, loadedSettings]) => {
         setIgnoredSignatureRequests(loadedSignatureReqHashes)
-        setSettings(prev => ({ ...prev, ...loadedSettings, initialized: true }))
+        setSettings((prev) => ({ ...prev, ...loadedSettings, initialized: true }))
       })
       .catch(trackError)
 
     isBiometricAuthAvailable().then(setBiometricAvailability)
-    getUpdater()
-      .isUpdateAvailable()
-      .then(setUpdateAvailable)
+    getUpdater().isUpdateAvailable().then(setUpdateAvailable)
 
     // Can't really cancel loading the settings
     const unsubscribe = () => undefined
@@ -214,7 +212,7 @@ export function SettingsProvider(props: Props) {
     trustedServices: settings.trustedServices,
     updateAvailable,
     accountAssetSettings: settings.accountAssetSettings,
-    setAssetSettings,
+    setAssetSettings
   }
 
   return <SettingsContext.Provider value={contextValue}>{props.children}</SettingsContext.Provider>
