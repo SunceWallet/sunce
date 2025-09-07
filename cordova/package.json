@@ -5,8 +5,8 @@
   "displayName": "Sunce Wallet",
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-secure-storage": {},
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "cordova": "^12.0.0",
+    "cordova-android": "^14.0.1",
     "cordova-clipboard": "^1.2.1",
     "cordova-plugin-dialogs": "^2.0.1",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
@@ -45,7 +46,6 @@
     "@moodlehq/cordova-plugin-local-notification": "^0.9.0-moodle.12",
     "@red-mobile/cordova-plugin-barcodescanner": "^9.1.0",
     "compare-func": "^2.0.0",
-    "cordova-android": "^14.0.0",
     "cordova-fetch": "^4.0.0",
     "cordova-ios": "^7.1.1",
     "cordova-plugin-badge": "^0.8.9",
