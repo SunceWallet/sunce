@@ -1,2 +1,0 @@
-import{R as e,$ as o,b1 as n,aa as c}from"./app-Cy__C2ke.js";import{L as s}from"./LumenPurchaseOptions-szMlNXQK.js";import"./app-stage2-D86-9mwG.js";function l(t){const{t:a}=o();return e.createElement(n,{top:e.createElement(c,{onBack:t.onClose,title:a("account.purchase-lumens.title")})},e.createElement(s,{account:t.account,onCloseDialog:t.onClose}))}const r=e.memo(l);export{r as default};
-//# sourceMappingURL=LumenPurchaseDialog-DB8CjMlt.js.map
