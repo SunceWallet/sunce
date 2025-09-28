@@ -88,7 +88,7 @@ jobs:
           if: matrix.os == 'macos-latest'
           run: |
             source ./scripts/signing-env-ci.sh mac
-            NOTARIZE=true npm run build:mac -- -c.forceCodeSigning=true
+            NOTARIZE=true npm run build:mac -- -c.forceCodeSigning=true --config.mac.notarize.teamId=G6UAKU7FQM
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             NOTARIZE: true
