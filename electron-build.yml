@@ -50,10 +50,14 @@ mac:
   hardenedRuntime: true
   entitlements: ./electron/build/entitlements.mac.inherit.plist
   category: public.app-category.finance
+  notarize:
+    tool: notarytool
+    appleApiKey: "@env:APPLE_API_KEY"
+    appleApiKeyId: "@env:APPLE_API_KEY_ID"
+    appleApiIssuer: "@env:APPLE_API_ISSUER"
 
 linux:
   category: Utility
   target: [AppImage:x64]
 
 afterPack: ./scripts/electron-builder-afterpack.js
-afterSign: ./scripts/electron-builder-aftersign.js
