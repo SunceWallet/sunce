@@ -96,7 +96,7 @@ jobs:
             APPLE_ID: ${{ secrets.APPLE_USER }}
             APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-            CSC_LINK: $RUNNER_TEMP/DeveloperID.p12
+            CSC_LINK: $CERTIFICATE_PATH
             CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
 
         - name: Build and Publish (Other OS)
