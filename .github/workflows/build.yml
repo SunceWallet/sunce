@@ -73,7 +73,7 @@ jobs:
           if: matrix.os == 'macos-latest'
           uses: apple-actions/import-codesign-certs@v2
           with:
-            p12-file-base64: ${{ secrets.APPLE_DEV_CERT_P12 }}
+            p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APPLICATION_CERT_P12 }}
             p12-password: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
 
         - name: Write App Store Connect API key (.p8)
