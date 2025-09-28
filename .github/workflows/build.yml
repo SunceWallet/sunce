@@ -97,7 +97,15 @@ jobs:
             APPLE_API_ISSUER: ${{ env.APPLE_API_ISSUER }}
             NOTARIZE: true
           run: |
-            npm run build:mac -- -c.forceCodeSigning=true --config.mac.notarize.teamId=G6UAKU7FQM
+            npm run build:mac -- -c.forceCodeSigning=true
+
+        - name: Verify codesign (macOS)
+          if: matrix.os == 'macos-latest'
+          run: |
+            APP="electron/dist/mac/Sunce Wallet.app"
+            echo "Authority chain:" && codesign -dv --verbose=4 "$APP" 2>&1 | sed -n 's/^Authority=//p'
+            echo "Verify deep:" && codesign --verify --deep --strict --verbose=2 "$APP"
+            echo "BundleId:" && defaults read "$APP/Contents/Info" CFBundleIdentifier
 
         - name: Build and Publish (Other OS)
           if: matrix.os != 'macos-latest'
