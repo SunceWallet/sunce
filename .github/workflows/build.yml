@@ -66,7 +66,38 @@ jobs:
           run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
           continue-on-error: true
 
+        - name: Install Apple certificate (macOS)
+          if: matrix.os == 'macos-latest'
+          env:
+            APPLE_DEV_CERT_P12: ${{ secrets.APPLE_DEV_CERT_P12 }}
+            APPLE_CERT_P12_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
+          run: |
+            CERTIFICATE_PATH=$RUNNER_TEMP/DeveloperID.p12
+            KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+            
+            echo -n "$APPLE_DEV_CERT_P12" | base64 --decode > $CERTIFICATE_PATH
+            
+            security create-keychain -p "$APPLE_CERT_P12_PASSWORD" $KEYCHAIN_PATH
+            security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+            security unlock-keychain -p "$APPLE_CERT_P12_PASSWORD" $KEYCHAIN_PATH
+            
+            security import $CERTIFICATE_PATH -P "$APPLE_CERT_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+            security list-keychain -d user -s $KEYCHAIN_PATH
+
         - name: Build and Publish
-          run: npm run ${{matrix.script}}
+          run: |
+            if [ "${{ matrix.os }}" = "macos-latest" ]; then
+              npm run build:mac:signed
+            else
+              npm run ${{ matrix.script }}
+            fi
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NOTARIZE: true
+            APPLE_ID: ${{ secrets.APPLE_USER }}
+            APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+
+        - name: Clean up keychain (macOS)
+          if: matrix.os == 'macos-latest'
+          run: |
+            security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
