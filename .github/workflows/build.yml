@@ -83,8 +83,6 @@ jobs:
             
             security import $CERTIFICATE_PATH -P "$APPLE_CERT_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
             security list-keychain -d user -s $KEYCHAIN_PATH
-            # Add the created keychain to the search list
-            security list-keychain -d user -s login.keychain $KEYCHAIN_PATH
             security list-keychain -d user -a | xargs -I {} security list-keychain -d user -s {} $KEYCHAIN_PATH
 
         - name: Build and Publish (macOS)
@@ -98,7 +96,7 @@ jobs:
             APPLE_ID: ${{ secrets.APPLE_USER }}
             APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-            CSC_LINK: ${{ secrets.APPLE_DEV_CERT_P12 }}
+            CSC_LINK: $RUNNER_TEMP/DeveloperID.p12
             CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
 
         - name: Build and Publish (Other OS)
