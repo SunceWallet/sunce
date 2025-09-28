@@ -15,6 +15,14 @@ directories:
 files:
   - "./dist/*"
   - "./electron/lib/**"
+  - "!**/*.map"
+  - "!**/test{,s}/**"
+  - "!**/__tests__/**"
+  - "!**/*.md"
+  - "!**/docs{,/**}"
+  - "!**/examples{,/**}"
+  - "!**/benchmark{,/**}"
+  - "!**/scripts{,/**}"
 
 publish:
   - provider: github

@@ -96,7 +96,8 @@ jobs:
             APPLE_API_KEY: ${{ env.APPLE_API_KEY }}
             APPLE_API_KEY_ID: ${{ env.APPLE_API_KEY_ID }}
             APPLE_API_ISSUER: ${{ env.APPLE_API_ISSUER }}
-            NOTARIZE: true
+            DEBUG: "electron-builder,electron-osx-sign*,app-builder,macos-sign,electron-notarize"
+            DEBUG_COLORS: "false"
           run: |
             npm run build:mac -- -c.forceCodeSigning=true
 
