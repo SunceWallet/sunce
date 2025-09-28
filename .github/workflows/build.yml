@@ -29,7 +29,8 @@ jobs:
         fail-fast: false
 
         matrix:
-          os: [ windows-latest, ubuntu-latest, macos-latest ]
+#          os: [ windows-latest, ubuntu-latest, macos-latest ]
+          os: [ macos-latest ]
           include:
             - os: windows-latest
               script: "build:win"
@@ -96,7 +97,7 @@ jobs:
             APPLE_ID: ${{ secrets.APPLE_USER }}
             APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-            CSC_LINK: $RUNNER_TEMP/DeveloperID.p12
+            CSC_LINK: ${{ runner.temp }}/DeveloperID.p12
             CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
 
         - name: Build and Publish (Other OS)
