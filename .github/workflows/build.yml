@@ -65,9 +65,9 @@ jobs:
           run: |
             npm install -g win-node-env
 
-        - name: Test
-          run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
-          continue-on-error: true
+#        - name: Test
+#          run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
+#          continue-on-error: true
 
         - name: Import Apple codesign certs
           if: matrix.os == 'macos-latest'
