@@ -56,5 +56,4 @@ linux:
   category: Utility
   target: [AppImage:x64]
 
-afterSign: ./scripts/electron-builder-aftersign.js
 afterPack: ./scripts/electron-builder-afterpack.js
