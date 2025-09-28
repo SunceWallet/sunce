@@ -9,4 +9,5 @@ export CSC_KEY_PASSWORD
 if [ "$PLATFORM" = "mac" ]; then
   export APPLE_ID
   export APPLE_ID_PASSWORD
+  export APPLE_APP_SPECIFIC_PASSWORD
 fi

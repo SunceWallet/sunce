@@ -94,6 +94,7 @@ jobs:
             NOTARIZE: true
             APPLE_ID: ${{ secrets.APPLE_USER }}
             APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+            APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             CSC_LINK: ${{ secrets.APPLE_DEV_CERT_P12 }}
             CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
 
