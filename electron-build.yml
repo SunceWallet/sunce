@@ -1,5 +1,5 @@
 # Don't change the appId! See <https://www.electron.build/configuration/nsis#guid-vs-application-name>
-appId: org.montelibero.sunce
+appId: app.sunce
 productName: Sunce Wallet
 copyright: Copyright © 2024 Montelibero SW-Team
 artifactName: Sunce-Wallet-${version}-${os}-${arch}.${ext}
