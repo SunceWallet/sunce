@@ -84,18 +84,24 @@ jobs:
             security import $CERTIFICATE_PATH -P "$APPLE_CERT_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
             security list-keychain -d user -s $KEYCHAIN_PATH
 
-        - name: Build and Publish
+        - name: Build and Publish (macOS)
+          if: matrix.os == 'macos-latest'
           run: |
-            if [ "${{ matrix.os }}" = "macos-latest" ]; then
-              npm run build:mac:signed
-            else
-              npm run ${{ matrix.script }}
-            fi
+            source ./scripts/signing-env-ci.sh mac
+            NOTARIZE=true npm run build:mac -- -c.forceCodeSigning=true
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             NOTARIZE: true
             APPLE_ID: ${{ secrets.APPLE_USER }}
             APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+            CSC_LINK: ${{ secrets.APPLE_DEV_CERT_P12 }}
+            CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
+
+        - name: Build and Publish (Other OS)
+          if: matrix.os != 'macos-latest'
+          run: npm run ${{ matrix.script }}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Clean up keychain (macOS)
           if: matrix.os == 'macos-latest'
