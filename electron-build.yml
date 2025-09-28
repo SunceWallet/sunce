@@ -50,7 +50,7 @@ mac:
   hardenedRuntime: true
   entitlements: ./electron/build/entitlements.mac.inherit.plist
   category: public.app-category.productivity
-  identity: "Developer ID Application: Montelibero DOO (G6UAKU7FQM)"
+  identity: "Montelibero DOO (G6UAKU7FQM)"
   notarize:
     teamId: G6UAKU7FQM
 
