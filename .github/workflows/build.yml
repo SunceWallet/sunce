@@ -40,6 +40,8 @@ jobs:
               script: "build:mac"
 
       runs-on: ${{ matrix.os }}
+      env:
+        ELECTRON_ENABLE_LOGGING: true
       steps:
         - uses: actions/checkout@v4
 
@@ -67,38 +69,23 @@ jobs:
           run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
           continue-on-error: true
 
-        - name: Install Apple certificate (macOS)
+        - name: Import Apple codesign certs
           if: matrix.os == 'macos-latest'
-          env:
-            APPLE_DEV_CERT_P12: ${{ secrets.APPLE_DEV_CERT_P12 }}
-            APPLE_CERT_P12_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
-          run: |
-            CERTIFICATE_PATH=$RUNNER_TEMP/DeveloperID.p12
-            KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-            
-            echo -n "$APPLE_DEV_CERT_P12" | base64 --decode > $CERTIFICATE_PATH
-            
-            security create-keychain -p "$APPLE_CERT_P12_PASSWORD" $KEYCHAIN_PATH
-            security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-            security unlock-keychain -p "$APPLE_CERT_P12_PASSWORD" $KEYCHAIN_PATH
-            
-            security import $CERTIFICATE_PATH -P "$APPLE_CERT_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-            security list-keychain -d user -s $KEYCHAIN_PATH
-            security list-keychain -d user -a | xargs -I {} security list-keychain -d user -s {} $KEYCHAIN_PATH
+          uses: apple-actions/import-codesign-certs@v2
+          with:
+            p12-file-base64: ${{ secrets.APPLE_DEV_CERT_P12 }}
+            p12-password: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
 
         - name: Build and Publish (macOS)
           if: matrix.os == 'macos-latest'
-          run: |
-            source ./scripts/signing-env-ci.sh mac
-            NOTARIZE=true npm run build:mac -- -c.forceCodeSigning=true --config.mac.notarize.teamId=G6UAKU7FQM
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            NOTARIZE: true
             APPLE_ID: ${{ secrets.APPLE_USER }}
             APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
             APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-            CSC_LINK: ${{ runner.temp }}/DeveloperID.p12
-            CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
+            NOTARIZE: true
+          run: |
+            npm run build:mac -- -c.forceCodeSigning=true --config.mac.notarize.teamId=G6UAKU7FQM
 
         - name: Build and Publish (Other OS)
           if: matrix.os != 'macos-latest'
