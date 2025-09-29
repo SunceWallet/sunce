@@ -39,7 +39,7 @@ export default function DataImportDialog() {
   const classes = useStyles()
   const router = useRouter()
   
-  const { accounts, createAccount, renameAccount, refreshAccounts } = React.useContext(AccountsContext)
+  const { accounts, createAccount, renameAccount } = React.useContext(AccountsContext)
   const { savedAddresses, bulkUpdate } = React.useContext(SavedAddressesContext)
   const { accountAssetSettings, setAssetSettings } = React.useContext(SettingsContext)
   
@@ -51,8 +51,6 @@ export default function DataImportDialog() {
   const handleBack = () => {
     router.history.push(routes.settings())
   }
-
-
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -96,9 +94,6 @@ export default function DataImportDialog() {
 
         setImportResults(results)
         
-        // Force refresh account list after import
-        await refreshAccounts()
-        
         if (results.errors.length > 0) {
           setError(`Import completed with errors:\n${results.errors.join('\n')}`)
         } else {
@@ -132,26 +127,22 @@ export default function DataImportDialog() {
     <DialogBody>
       <DialogContent style={{ flexGrow: 0, padding: 0 }}>
         <DialogContentText align="justify" style={{ marginTop: 8 }}>
-          {t("app-settings.import.title", "Импорт данных")}
+          {t("app-settings.import.title")}
         </DialogContentText>
 
         <Typography variant="body1" paragraph style={{ marginLeft: 24, marginRight: 24 }}>
-          {t("app-settings.import.description", 
-            "Выберите файл экспорта для импорта аккаунтов, контактов и настроек. " +
-            "Существующие данные будут аккуратно обновлены.")}
+          {t("app-settings.import.description")}
         </Typography>
         
         <Typography variant="body2" color="textSecondary" paragraph style={{ marginLeft: 24, marginRight: 24 }}>
-          {t("app-settings.import.warning", 
-            "Внимание: Импорт добавит новые данные и обновит существующие. " +
-            "Названия существующих аккаунтов не изменятся.")}
+          {t("app-settings.import.warning")}
         </Typography>
 
         {isImporting && (
           <div className={classes.progress} style={{ marginLeft: 24, marginRight: 24 }}>
             <CircularProgress size={24} />
             <Typography variant="body2" style={{ marginLeft: 16 }}>
-              {t("app-settings.import.importing", "Импорт данных...")}
+              {t("app-settings.import.importing")}
             </Typography>
           </div>
         )}
@@ -179,13 +170,13 @@ export default function DataImportDialog() {
       
       <DialogActionsBox>
         <ActionButton onClick={handleBack} disabled={isImporting}>
-          {t("app-settings.import.cancel", "Назад")}
+          {t("app-settings.import.cancel")}
         </ActionButton>
         <ActionButton 
           onClick={handleImportClick} 
           disabled={isImporting}
         >
-          {t("app-settings.import.import", "Выбрать файл")}
+          {t("app-settings.import.import")}
         </ActionButton>
       </DialogActionsBox>
     </DialogBody>

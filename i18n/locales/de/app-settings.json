@@ -76,6 +76,18 @@
         "secondary": "Schnellzugriff auf alle gespeicherten Adressen im JSON-Format"
       }
     },
+    "data-export": {
+      "text": {
+        "primary": "Wallet-Daten exportieren",
+        "secondary": "Alle Daten herunterladen: Konten, Kontakte und Einstellungen"
+      }
+    },
+    "data-import": {
+      "text": {
+        "primary": "Wallet-Daten importieren",
+        "secondary": "Daten aus Exportdatei laden"
+      }
+    },
     "dust": {
       "text": {
         "primary": "Staub-Transaktionen anzeigen",
@@ -107,18 +119,6 @@
         "text": "Der Dienst wird von Ihrer Vertrauensliste entfernt. Sind Sie sicher?"
       },
       "no-services": "Keine vertrauenswürdigen Dienste"
-    },
-    "data-export": {
-      "text": {
-        "primary": "Wallet-Daten exportieren",
-        "secondary": "Alle Daten herunterladen: Konten, Kontakte und Einstellungen"
-      }
-    },
-    "data-import": {
-      "text": {
-        "primary": "Wallet-Daten importieren",
-        "secondary": "Daten aus Exportdatei laden"
-      }
     }
   },
   "export": {

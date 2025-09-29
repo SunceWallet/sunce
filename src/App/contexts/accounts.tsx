@@ -30,14 +30,12 @@ interface NewAccountData {
 interface ContextValue {
   accounts: Account[]
   networkSwitch: NetworkID
-  refreshKey: number
   changePassword(accountID: string, prevPassword: string, nextPassword: string): Promise<any>
   createAccount(accountData: NewAccountData): Promise<Account>
   deleteAccount(accountID: string): Promise<any>
   removePassword(accountID: string, prevPassword: string): Promise<any>
   renameAccount(accountID: string, newName: string): Promise<any>
   toggleNetwork(): void
-  refreshAccounts(): Promise<void>
 }
 
 /**
@@ -156,7 +154,6 @@ interface Props {
 export function AccountsProvider(props: Props) {
   const [accounts, setAccounts] = React.useState<Account[]>(initialAccounts)
   const [networkSwitch, setNetworkSwitch] = React.useState<NetworkID>("mainnet")
-  const [refreshKey, setRefreshKey] = React.useState(0)
 
   React.useEffect(() => {
     const keyStore = getKeyStore()
@@ -247,31 +244,15 @@ export function AccountsProvider(props: Props) {
     setNetworkSwitch(prevNetwork => (prevNetwork === "mainnet" ? "testnet" : "mainnet"))
   }
 
-  const refreshAccounts = async () => {
-    const keyStore = getKeyStore()
-    try {
-      const keyIDs = await keyStore.getKeyIDs()
-      const loadedAccounts = await Promise.all(keyIDs.map(keyID => createAccountInstance(keyStore, keyID)))
-      setAccounts(loadedAccounts)
-      setNetworkSwitch(getInitialNetwork(loadedAccounts))
-      // Force refresh key for component re-rendering
-      setRefreshKey(prev => prev + 1)
-    } catch (error) {
-      trackError(error)
-    }
-  }
-
   const contextValue: ContextValue = {
     accounts,
     networkSwitch,
-    refreshKey,
     changePassword,
     createAccount,
     deleteAccount,
     removePassword,
     renameAccount,
-    toggleNetwork,
-    refreshAccounts
+    toggleNetwork
   }
 
   return <AccountsContext.Provider value={contextValue}>{props.children}</AccountsContext.Provider>

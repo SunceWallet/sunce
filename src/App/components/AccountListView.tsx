@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 })
 
 function AllAccountsPage() {
-  const { accounts, networkSwitch, toggleNetwork, refreshAccounts, refreshKey } = React.useContext(AccountsContext)
+  const { accounts, networkSwitch, toggleNetwork } = React.useContext(AccountsContext)
   const router = useRouter()
   const settings = React.useContext(SettingsContext)
   const { showNotification } = React.useContext(NotificationsContext)
@@ -63,7 +63,6 @@ function AllAccountsPage() {
       }
     }
   }, [settings.updateAvailable, showNotification, updater, t])
-
 
   const updateButton = (
     <Tooltip title={t("app.all-accounts.update.tooltip")}>
@@ -134,7 +133,6 @@ function AllAccountsPage() {
       <DialogBody backgroundColor="unset" top={headerContent}>
         <VerticalLayout justifyContent="space-between" grow margin="16px 0 0">
           <AccountList
-            key={refreshKey}
             accounts={accounts}
             testnet={networkSwitch === "testnet"}
             onCreatePubnetAccount={() => router.history.push(routes.newAccount(false))}

@@ -67,6 +67,18 @@
         "secondary": "Accesso rapido a tutti gli indirizzi salvati in formato JSON"
       }
     },
+    "data-export": {
+      "text": {
+        "primary": "Esporta dati del portafoglio",
+        "secondary": "Scarica tutti i dati: account, contatti e impostazioni"
+      }
+    },
+    "data-import": {
+      "text": {
+        "primary": "Importa dati del portafoglio",
+        "secondary": "Carica dati dal file di esportazione"
+      }
+    },
     "dust": {
       "text": {
         "primary": "Mostra transazioni di polvere",
@@ -98,18 +110,6 @@
         "text": "Il servizio verrà rimosso dal tuo elenco di fiducia. Sei sicuro?"
       },
       "no-services": "Nessun servizio affidabile"
-    },
-    "data-export": {
-      "text": {
-        "primary": "Esporta dati del portafoglio",
-        "secondary": "Scarica tutti i dati: account, contatti e impostazioni"
-      }
-    },
-    "data-import": {
-      "text": {
-        "primary": "Importa dati del portafoglio",
-        "secondary": "Carica dati dal file di esportazione"
-      }
     }
   },
   "export": {

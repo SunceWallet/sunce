@@ -76,6 +76,18 @@
         "secondary": "Brz pristup svim sačuvanim adresama u JSON formatu"
       }
     },
+    "data-export": {
+      "text": {
+        "primary": "Izvoz podataka novčanika",
+        "secondary": "Preuzmi sve podatke: naloge, kontakte i podešavanja"
+      }
+    },
+    "data-import": {
+      "text": {
+        "primary": "Uvoz podataka novčanika",
+        "secondary": "Učitaj podatke iz datoteke izvoza"
+      }
+    },
     "dust": {
       "text": {
         "primary": "Prikaži vrlo male transakcije",
@@ -107,18 +119,6 @@
         "text": "Usluga će biti uklonjena sa tvoje liste poverenja. Da li si siguran/na?"
       },
       "no-services": "Nema pouzdanih usluga"
-    },
-    "data-export": {
-      "text": {
-        "primary": "Izvoz podataka novčanika",
-        "secondary": "Preuzmi sve podatke: naloge, kontakte i podešavanja"
-      }
-    },
-    "data-import": {
-      "text": {
-        "primary": "Uvoz podataka novčanika",
-        "secondary": "Učitaj podatke iz datoteke izvoza"
-      }
     }
   },
   "export": {

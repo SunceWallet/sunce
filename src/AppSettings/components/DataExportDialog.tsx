@@ -67,26 +67,22 @@ export default function DataExportDialog() {
     <DialogBody>
       <DialogContent style={{ flexGrow: 0, padding: 0 }}>
         <DialogContentText align="justify" style={{ marginTop: 8 }}>
-          {t("app-settings.export.title", "Экспорт данных")}
+          {t("app-settings.export.title")}
         </DialogContentText>
 
         <Typography variant="body1" paragraph style={{ marginLeft: 24, marginRight: 24 }}>
-          {t("app-settings.export.description", 
-            "Будет создан файл с вашими аккаунтами, контактами и настройками токенов. " +
-            "Приватные ключи будут включены в экспорт.")}
+          {t("app-settings.export.description")}
         </Typography>
         
         <Typography variant="body2" color="textSecondary" paragraph style={{ marginLeft: 24, marginRight: 24 }}>
-          {t("app-settings.export.warning", 
-            "Внимание: Файл экспорта содержит конфиденциальную информацию. " +
-            "Храните его в безопасном месте и не передавайте третьим лицам.")}
+          {t("app-settings.export.warning")}
         </Typography>
 
         {isExporting && (
           <div className={classes.progress} style={{ marginLeft: 24, marginRight: 24 }}>
             <CircularProgress size={24} />
             <Typography variant="body2" style={{ marginLeft: 16 }}>
-              {t("app-settings.export.exporting", "Создание файла экспорта...")}
+              {t("app-settings.export.exporting")}
             </Typography>
           </div>
         )}
@@ -100,10 +96,10 @@ export default function DataExportDialog() {
       
       <DialogActionsBox>
         <ActionButton onClick={handleBack} disabled={isExporting}>
-          {t("app-settings.export.cancel", "Назад")}
+          {t("app-settings.export.cancel")}
         </ActionButton>
         <ActionButton onClick={handleExport} disabled={isExporting || accounts.length === 0}>
-          {t("app-settings.export.export", "Экспортировать")}
+          {t("app-settings.export.export")}
         </ActionButton>
       </DialogActionsBox>
     </DialogBody>

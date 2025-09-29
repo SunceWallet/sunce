@@ -35,10 +35,6 @@ const SettingsDialogs = React.memo(function SettingsDialogs() {
   const showDataExport = matchesRoute(router.location.pathname, routes.dataExport())
   const showDataImport = matchesRoute(router.location.pathname, routes.dataImport())
 
-  const handleClose = () => {
-    router.history.push(routes.settings())
-  }
-
   if (showDataImport) {
     return <DataImportDialog />
   }
