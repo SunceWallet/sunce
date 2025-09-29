@@ -52,6 +52,12 @@ export default function DataImportDialog() {
     router.history.push(routes.settings())
   }
 
+  const handleClear = () => {
+    setError(null)
+    setSuccess(null)
+    setImportResults(null)
+  }
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
@@ -107,6 +113,8 @@ export default function DataImportDialog() {
         setError(`Не удалось импортировать данные: ${err}`)
       } finally {
         setIsImporting(false)
+        // Сбрасываем значение input, чтобы можно было выбрать тот же файл снова
+        event.target.value = ""
       }
     }
     
@@ -171,6 +179,11 @@ export default function DataImportDialog() {
         <ActionButton onClick={handleBack} disabled={isImporting}>
           {t("app-settings.import.cancel", "Назад")}
         </ActionButton>
+        {(error || success) && (
+          <ActionButton onClick={handleClear} disabled={isImporting}>
+            Очистить
+          </ActionButton>
+        )}
         <ActionButton 
           onClick={handleImportClick} 
           disabled={isImporting}
