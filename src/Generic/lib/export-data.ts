@@ -17,6 +17,10 @@ export interface ExportedAccount {
   publicKey: string
   privateKey: string | null
   encryptedPrivateKey?: string
+  encryptionMetadata?: {
+    nonce: string
+    iterations: number
+  }
   testnet: boolean
   cosignerOf?: string
   tokenPreferences: Platform.AssetSettingsMap
@@ -52,6 +56,7 @@ export async function createExportData(
       
       let privateKey: string | null = null
       let encryptedPrivateKey: string | undefined = undefined
+      let encryptionMetadata: { nonce: string; iterations: number } | undefined = undefined
 
       if (publicData.password) {
         // Если аккаунт защищен паролем, получаем зашифрованные данные
@@ -67,6 +72,14 @@ export async function createExportData(
             if (keyData && keyData.private) {
               // Конвертируем в base64 для удобства
               encryptedPrivateKey = btoa(keyData.private)
+              
+              // Сохраняем метаданные шифрования
+              if (keyData.metadata) {
+                encryptionMetadata = {
+                  nonce: keyData.metadata.nonce,
+                  iterations: keyData.metadata.iterations
+                }
+              }
             } else {
               console.warn(`Не удалось найти зашифрованные данные для аккаунта ${account.name}`)
             }
@@ -97,6 +110,7 @@ export async function createExportData(
         publicKey: account.publicKey,
         privateKey,
         encryptedPrivateKey,
+        encryptionMetadata,
         testnet: account.testnet,
         cosignerOf: account.cosignerOf,
         tokenPreferences: convertedTokenPreferences
@@ -209,24 +223,36 @@ async function saveAccountDirectly(
     cosignerOf: accountData.cosignerOf
   }
 
-  // Подготавливаем приватные данные
-  let privateData: PrivateKeyData
   if (accountData.privateKey) {
-    // Обычный приватный ключ
-    privateData = { privateKey: accountData.privateKey }
+    // Обычный приватный ключ - используем стандартный API
+    const privateData: PrivateKeyData = { privateKey: accountData.privateKey }
+    await keyStore.saveKey(accountId, "", privateData, publicData)
   } else if (accountData.encryptedPrivateKey) {
-    // Зашифрованный приватный ключ - декодируем из base64
+    // Зашифрованный приватный ключ - сохраняем напрямую в localStorage
     try {
-      privateData = { privateKey: atob(accountData.encryptedPrivateKey) }
+      const rawKeys = localStorage.getItem("sunce:keys")
+      const keysData = rawKeys ? JSON.parse(rawKeys) : {}
+      
+      // Восстанавливаем структуру данных с метаданными
+      keysData[accountId] = {
+        metadata: accountData.encryptionMetadata || {
+          nonce: "default-nonce", // fallback
+          iterations: 250000
+        },
+        public: publicData,
+        private: atob(accountData.encryptedPrivateKey) // Декодируем из base64
+      }
+      
+      // Сохраняем обратно в localStorage
+      localStorage.setItem("sunce:keys", JSON.stringify(keysData))
+      
+      console.log(`Восстановлен зашифрованный аккаунт: ${accountData.name}`)
     } catch (error) {
-      throw new Error(`Не удалось декодировать зашифрованный приватный ключ: ${error}`)
+      throw new Error(`Не удалось восстановить зашифрованный аккаунт ${accountData.name}: ${error}`)
     }
   } else {
     throw new Error("Отсутствует приватный ключ")
   }
-
-  // Сохраняем через key store
-  await keyStore.saveKey(accountId, "", privateData, publicData)
   
   return accountId
 }
