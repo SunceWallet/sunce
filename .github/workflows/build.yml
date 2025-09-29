@@ -116,8 +116,3 @@ jobs:
           run: npm run ${{ matrix.script }}
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-        - name: Clean up keychain (macOS)
-          if: matrix.os == 'macos-latest'
-          run: |
-            security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
