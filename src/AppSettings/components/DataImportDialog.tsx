@@ -39,7 +39,7 @@ export default function DataImportDialog() {
   const classes = useStyles()
   const router = useRouter()
   
-  const { accounts, renameAccount, refreshAccounts } = React.useContext(AccountsContext)
+  const { accounts, createAccount, renameAccount, refreshAccounts } = React.useContext(AccountsContext)
   const { savedAddresses, bulkUpdate } = React.useContext(SavedAddressesContext)
   const { accountAssetSettings, setAssetSettings } = React.useContext(SettingsContext)
   
@@ -85,6 +85,7 @@ export default function DataImportDialog() {
           accounts,
           savedAddresses,
           accountAssetSettings,
+          createAccount,
           renameAccount,
           bulkUpdate,
           (accountID, tokenKey, settings) => {
@@ -95,7 +96,7 @@ export default function DataImportDialog() {
 
         setImportResults(results)
         
-        // Принудительно обновляем список аккаунтов
+        // Принудительно обновляем список аккаунтов после импорта
         await refreshAccounts()
         
         if (results.errors.length > 0) {

@@ -3,7 +3,7 @@ import { SavedAddresses } from "~App/contexts/savedAddresses"
 // @ts-ignore
 import { Platform } from "~shared/types/platform"
 import getKeyStore from "~Platform/key-store"
-// import { Keypair } from "@stellar/stellar-sdk" // Не используется в текущей реализации
+import { Keypair } from "@stellar/stellar-sdk"
 
 export interface ExportData {
   version: string
@@ -259,6 +259,7 @@ export async function importWalletData(
   existingAccounts: Account[],
   existingContacts: SavedAddresses,
   existingTokenPreferences: Platform.AccountAssetSettingsMap,
+  createAccount: (accountData: any) => Promise<Account>,
   updateAccountName: (accountID: string, newName: string) => Promise<void>,
   updateContacts: (contacts: SavedAddresses) => void,
   updateTokenPreferences: (accountID: string, tokenKey: string, settings: Platform.AssetSettings) => void
@@ -323,9 +324,45 @@ export async function importWalletData(
         }
 
         try {
-          // Создаем аккаунт напрямую через key store
-          await saveAccountDirectly(accountData, keyStore)
+          // Создаем аккаунт через стандартный API, как при обычном создании
+          let keypair: Keypair
           
+          if (accountData.privateKey) {
+            // Обычный приватный ключ
+            keypair = Keypair.fromSecret(accountData.privateKey)
+          } else if (accountData.encryptedPrivateKey) {
+            // Зашифрованный приватный ключ - используем прямое сохранение
+            await saveAccountDirectly(accountData, keyStore)
+            
+            // Добавляем настройки токенов для нового аккаунта
+            const convertedTokenPreferences: Platform.AssetSettingsMap = {}
+            for (const [tokenKey, settings] of Object.entries(accountData.tokenPreferences)) {
+              const originalKey = parseTokenFormat(tokenKey)
+              convertedTokenPreferences[originalKey] = settings
+            }
+
+            // Обновляем настройки токенов для нового аккаунта
+            const accountID = accountData.cosignerOf || accountData.publicKey
+            Object.entries(convertedTokenPreferences).forEach(([tokenKey, settings]) => {
+              updateTokenPreferences(accountID, tokenKey, settings)
+            })
+
+            results.importedAccounts++
+            continue
+          } else {
+            results.errors.push(`Не удалось создать аккаунт ${accountData.name}: отсутствует приватный ключ`)
+            continue
+          }
+
+          // Создаем аккаунт через стандартный API
+          const newAccount = await createAccount({
+            name: accountData.name,
+            keypair,
+            password: null, // Импортируем без пароля
+            testnet: accountData.testnet,
+            cosignerOf: accountData.cosignerOf
+          })
+
           // Добавляем настройки токенов для нового аккаунта
           const convertedTokenPreferences: Platform.AssetSettingsMap = {}
           for (const [tokenKey, settings] of Object.entries(accountData.tokenPreferences)) {
@@ -334,10 +371,8 @@ export async function importWalletData(
           }
 
           // Обновляем настройки токенов для нового аккаунта
-          // Используем правильный accountID для cosigner аккаунтов
-          const accountID = accountData.cosignerOf || accountData.publicKey
           Object.entries(convertedTokenPreferences).forEach(([tokenKey, settings]) => {
-            updateTokenPreferences(accountID, tokenKey, settings)
+            updateTokenPreferences(newAccount.accountID, tokenKey, settings)
           })
 
           results.importedAccounts++
