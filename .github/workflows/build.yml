@@ -30,7 +30,6 @@ jobs:
 
         matrix:
           os: [ windows-latest, ubuntu-latest, macos-latest ]
-#          os: [ macos-latest ]
           include:
             - os: windows-latest
               script: "build:win"
@@ -40,8 +39,6 @@ jobs:
               script: "build:mac"
 
       runs-on: ${{ matrix.os }}
-      env:
-        ELECTRON_ENABLE_LOGGING: true
       steps:
         - uses: actions/checkout@v4
 
