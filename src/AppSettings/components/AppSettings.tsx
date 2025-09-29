@@ -11,6 +11,7 @@ import { isDefaultProtocolClient, setAsDefaultProtocolClient } from "~Platform/p
 import { availableLanguages } from "../../../i18n/index"
 import ManageTrustedServicesDialog from "./ManageTrustedServicesDialog"
 import SavedAddressesExportDialog from "./SavedAddressesExportDialog"
+import DataExportDialog from "./DataExportDialog"
 import {
   BiometricLockSetting,
   HideMemoSetting,
@@ -21,14 +22,23 @@ import {
   ShowClaimableBalanceSetting,
   ShowDustSetting,
   TestnetSetting,
-  TrustedServicesSetting
+  TrustedServicesSetting,
+  DataExportSetting
 } from "./Settings"
 
 const SettingsDialogs = React.memo(function SettingsDialogs() {
   const router = useRouter()
   const showManageTrustedServices = matchesRoute(router.location.pathname, routes.manageTrustedServices())
   const showSavedAddressesExport = matchesRoute(router.location.pathname, routes.savedAddressesExport())
+  const showDataExport = matchesRoute(router.location.pathname, routes.dataExport())
 
+  const handleClose = () => {
+    router.history.push(routes.settings())
+  }
+
+  if (showDataExport) {
+    return <DataExportDialog />
+  }
   if (showSavedAddressesExport) {
     return <SavedAddressesExportDialog />
   }
@@ -57,6 +67,10 @@ function AppSettings() {
   ])
 
   const navigateToSavedAddressesExport = React.useCallback(() => router.history.push(routes.savedAddressesExport()), [
+    router.history
+  ])
+
+  const navigateToDataExport = React.useCallback(() => router.history.push(routes.dataExport()), [
     router.history
   ])
 
@@ -102,6 +116,7 @@ function AppSettings() {
         <ProtocolHandlerSetting isDefaultHandler={isDefaultHandler} onClick={setDefaultClient} />
         <TrustedServicesSetting onClick={navigateToTrustedServices} />
         <SavedAddressesExportSetting onClick={navigateToSavedAddressesExport} />
+        <DataExportSetting onClick={navigateToDataExport} />
       </List>
       <SettingsDialogs />
     </Carousel>

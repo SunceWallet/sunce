@@ -76,6 +76,12 @@
         "secondary": "Quick access to all the saved addresses in JSON-format"
       }
     },
+    "data-export": {
+      "text": {
+        "primary": "Export Wallet Data",
+        "secondary": "Download all data: accounts, contacts and settings"
+      }
+    },
     "dust": {
       "text": {
         "primary": "Show dust transactions",
@@ -108,5 +114,13 @@
       },
       "no-services": "No trusted services"
     }
+  },
+  "export": {
+    "title": "Export Data",
+    "description": "A file will be created with your accounts, contacts and token settings. Private keys will be included in the export.",
+    "warning": "Warning: The export file contains confidential information. Keep it in a safe place and do not share it with third parties.",
+    "exporting": "Creating export file...",
+    "cancel": "Cancel",
+    "export": "Export"
   }
 }
