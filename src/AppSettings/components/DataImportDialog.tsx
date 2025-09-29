@@ -98,9 +98,13 @@ export default function DataImportDialog() {
         // Принудительно обновляем список аккаунтов
         await refreshAccounts()
         
-        // Принудительно обновляем страницу, чтобы аккаунты отобразились
+        // Отправляем событие для принудительного обновления списка аккаунтов
         if (results.importedAccounts > 0) {
-          window.location.reload()
+          // Создаем кастомное событие для обновления списка аккаунтов
+          const event = new CustomEvent('accountsUpdated', { 
+            detail: { importedCount: results.importedAccounts } 
+          })
+          window.dispatchEvent(event)
         }
         
         if (results.errors.length > 0) {
