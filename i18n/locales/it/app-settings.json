@@ -67,6 +67,18 @@
         "secondary": "Accesso rapido a tutti gli indirizzi salvati in formato JSON"
       }
     },
+    "data-export": {
+      "text": {
+        "primary": "Esporta dati del portafoglio",
+        "secondary": "Scarica tutti i dati: account, contatti e impostazioni"
+      }
+    },
+    "data-import": {
+      "text": {
+        "primary": "Importa dati del portafoglio",
+        "secondary": "Carica dati dal file di esportazione"
+      }
+    },
     "dust": {
       "text": {
         "primary": "Mostra transazioni di polvere",
@@ -99,5 +111,21 @@
       },
       "no-services": "Nessun servizio affidabile"
     }
+  },
+  "export": {
+    "title": "Esporta dati",
+    "description": "Verrà creato un file con i tuoi account, contatti e impostazioni dei token. Le chiavi private saranno incluse nell'esportazione.",
+    "warning": "Attenzione: Il file di esportazione contiene informazioni riservate. Conservalo in un luogo sicuro e non condividerlo con terze parti.",
+    "exporting": "Creazione file di esportazione...",
+    "cancel": "Annulla",
+    "export": "Esporta"
+  },
+  "import": {
+    "title": "Importa dati",
+    "description": "Seleziona un file di esportazione per importare account, contatti e impostazioni. I dati esistenti verranno aggiornati con cura.",
+    "warning": "Attenzione: L'importazione aggiungerà nuovi dati e aggiornerà quelli esistenti. I nomi degli account esistenti non cambieranno.",
+    "importing": "Importazione dati...",
+    "cancel": "Indietro",
+    "import": "Seleziona file"
   }
 }
