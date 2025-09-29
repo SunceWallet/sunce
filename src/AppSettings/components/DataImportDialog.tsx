@@ -58,7 +58,7 @@ export default function DataImportDialog() {
     const file = event.target.files?.[0]
     if (!file) return
 
-    // Очищаем предыдущие результаты при выборе нового файла
+    // Clear previous results when selecting a new file
     setError(null)
     setSuccess(null)
     setImportResults(null)
@@ -69,16 +69,16 @@ export default function DataImportDialog() {
         const content = e.target?.result as string
         const importData: ExportData = JSON.parse(content)
         
-        // Валидация структуры файла
+        // Validate file structure
         if (!importData.version || !importData.accounts || !importData.contacts) {
-          throw new Error("Неверный формат файла экспорта")
+          throw new Error("Invalid export file format")
         }
 
         setIsImporting(true)
         setError(null)
         setSuccess(null)
 
-        // Убираем ограничение на пустые профили - импорт теперь возможен в любые профили
+        // Remove restriction on empty profiles - import is now possible in any profile
 
         const results = await importWalletData(
           importData,
@@ -89,33 +89,33 @@ export default function DataImportDialog() {
           renameAccount,
           bulkUpdate,
           (accountID, tokenKey, settings) => {
-            // Обновляем настройки токенов для аккаунта
+            // Update token settings for the account
             setAssetSettings(accountID, tokenKey, settings)
           }
         )
 
         setImportResults(results)
         
-        // Принудительно обновляем список аккаунтов после импорта
+        // Force refresh account list after import
         await refreshAccounts()
         
         if (results.errors.length > 0) {
-          setError(`Импорт завершен с ошибками:\n${results.errors.join('\n')}`)
+          setError(`Import completed with errors:\n${results.errors.join('\n')}`)
         } else {
           setSuccess(
-            `Импорт успешно завершен!\n` +
-            `Импортировано аккаунтов: ${results.importedAccounts}\n` +
-            `Обновлено аккаунтов: ${results.updatedAccounts}\n` +
-            `Импортировано контактов: ${results.importedContacts}\n` +
-            `Обновлено контактов: ${results.updatedContacts}`
+            `Import completed successfully!\n` +
+            `Imported accounts: ${results.importedAccounts}\n` +
+            `Updated accounts: ${results.updatedAccounts}\n` +
+            `Imported contacts: ${results.importedContacts}\n` +
+            `Updated contacts: ${results.updatedContacts}`
           )
         }
       } catch (err) {
-        console.error("Ошибка при импорте данных:", err)
-        setError(`Не удалось импортировать данные: ${err}`)
+        console.error("Error during data import:", err)
+        setError(`Failed to import data: ${err}`)
       } finally {
         setIsImporting(false)
-        // Сбрасываем значение input, чтобы можно было выбрать тот же файл снова
+        // Reset input value to allow selecting the same file again
         event.target.value = ""
       }
     }

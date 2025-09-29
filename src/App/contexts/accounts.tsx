@@ -254,7 +254,7 @@ export function AccountsProvider(props: Props) {
       const loadedAccounts = await Promise.all(keyIDs.map(keyID => createAccountInstance(keyStore, keyID)))
       setAccounts(loadedAccounts)
       setNetworkSwitch(getInitialNetwork(loadedAccounts))
-      // Принудительно обновляем ключ для перерендеринга компонентов
+      // Force refresh key for component re-rendering
       setRefreshKey(prev => prev + 1)
     } catch (error) {
       trackError(error)

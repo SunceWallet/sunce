@@ -56,8 +56,8 @@ export default function DataExportDialog() {
       
       downloadExportFile(exportData)
     } catch (err) {
-      console.error("Ошибка при экспорте данных:", err)
-      setError("Не удалось экспортировать данные. Попробуйте еще раз.")
+      console.error("Error during data export:", err)
+      setError("Failed to export data. Please try again.")
     } finally {
       setIsExporting(false)
     }
