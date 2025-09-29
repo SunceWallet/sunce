@@ -16,8 +16,8 @@ export interface ExportedAccount {
   name: string
   publicKey: string
   privateKey: string | null
-  encryptedPrivateKey?: string
-  encryptionMetadata?: {
+  encryptedPrivateKey?: {
+    data: string
     nonce: string
     iterations: number
   }
@@ -55,8 +55,7 @@ export async function createExportData(
       const publicData = await keyStore.getPublicKeyData(account.id)
       
       let privateKey: string | null = null
-      let encryptedPrivateKey: string | undefined = undefined
-      let encryptionMetadata: { nonce: string; iterations: number } | undefined = undefined
+      let encryptedPrivateKey: { data: string; nonce: string; iterations: number } | undefined = undefined
 
       if (publicData.password) {
         // Если аккаунт защищен паролем, получаем зашифрованные данные
@@ -70,15 +69,11 @@ export async function createExportData(
             const rawKeys = await getEncryptedKeysFromStorage()
             const keyData = rawKeys[account.id]
             if (keyData && keyData.private) {
-              // Конвертируем в base64 для удобства
-              encryptedPrivateKey = btoa(keyData.private)
-              
-              // Сохраняем метаданные шифрования
-              if (keyData.metadata) {
-                encryptionMetadata = {
-                  nonce: keyData.metadata.nonce,
-                  iterations: keyData.metadata.iterations
-                }
+              // Создаем объект с зашифрованными данными и метаданными
+              encryptedPrivateKey = {
+                data: btoa(keyData.private), // Конвертируем в base64 для удобства
+                nonce: keyData.metadata?.nonce || "default-nonce",
+                iterations: keyData.metadata?.iterations || 250000
               }
             } else {
               console.warn(`Не удалось найти зашифрованные данные для аккаунта ${account.name}`)
@@ -110,7 +105,6 @@ export async function createExportData(
         publicKey: account.publicKey,
         privateKey,
         encryptedPrivateKey,
-        encryptionMetadata,
         testnet: account.testnet,
         cosignerOf: account.cosignerOf,
         tokenPreferences: convertedTokenPreferences
@@ -235,12 +229,12 @@ async function saveAccountDirectly(
       
       // Восстанавливаем структуру данных с метаданными
       keysData[accountId] = {
-        metadata: accountData.encryptionMetadata || {
-          nonce: "default-nonce", // fallback
-          iterations: 250000
+        metadata: {
+          nonce: accountData.encryptedPrivateKey.nonce,
+          iterations: accountData.encryptedPrivateKey.iterations
         },
         public: publicData,
-        private: atob(accountData.encryptedPrivateKey) // Декодируем из base64
+        private: atob(accountData.encryptedPrivateKey.data) // Декодируем из base64
       }
       
       // Сохраняем обратно в localStorage
