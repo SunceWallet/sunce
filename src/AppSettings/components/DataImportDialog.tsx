@@ -46,25 +46,22 @@ export default function DataImportDialog() {
   const [isImporting, setIsImporting] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [success, setSuccess] = React.useState<string | null>(null)
-  const [importResults, setImportResults] = React.useState<any>(null)
+  const [, setImportResults] = React.useState<any>(null)
 
   const handleBack = () => {
     router.history.push(routes.settings())
   }
 
-  const handleClear = () => {
-    setError(null)
-    setSuccess(null)
-    setImportResults(null)
-  }
 
-  const handleGoToAccounts = () => {
-    router.history.push(routes.allAccounts())
-  }
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
+
+    // Очищаем предыдущие результаты при выборе нового файла
+    setError(null)
+    setSuccess(null)
+    setImportResults(null)
 
     const reader = new FileReader()
     reader.onload = async (e) => {
@@ -101,6 +98,11 @@ export default function DataImportDialog() {
         // Принудительно обновляем список аккаунтов
         await refreshAccounts()
         
+        // Принудительно обновляем страницу, чтобы аккаунты отобразились
+        if (results.importedAccounts > 0) {
+          window.location.reload()
+        }
+        
         if (results.errors.length > 0) {
           setError(`Импорт завершен с ошибками:\n${results.errors.join('\n')}`)
         } else {
@@ -111,13 +113,6 @@ export default function DataImportDialog() {
             `Импортировано контактов: ${results.importedContacts}\n` +
             `Обновлено контактов: ${results.updatedContacts}`
           )
-          
-          // Если были импортированы новые аккаунты, предлагаем перейти на главную страницу
-          if (results.importedAccounts > 0) {
-            setTimeout(() => {
-              router.history.push(routes.allAccounts())
-            }, 2000) // Переходим через 2 секунды, чтобы пользователь увидел сообщение
-          }
         }
       } catch (err) {
         console.error("Ошибка при импорте данных:", err)
@@ -190,16 +185,6 @@ export default function DataImportDialog() {
         <ActionButton onClick={handleBack} disabled={isImporting}>
           {t("app-settings.import.cancel", "Назад")}
         </ActionButton>
-        {(error || success) && (
-          <ActionButton onClick={handleClear} disabled={isImporting}>
-            Очистить
-          </ActionButton>
-        )}
-        {success && importResults?.importedAccounts > 0 && (
-          <ActionButton onClick={handleGoToAccounts} disabled={isImporting}>
-            Перейти к аккаунтам
-          </ActionButton>
-        )}
         <ActionButton 
           onClick={handleImportClick} 
           disabled={isImporting}
