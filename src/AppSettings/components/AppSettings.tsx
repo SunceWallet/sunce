@@ -12,6 +12,7 @@ import { availableLanguages } from "../../../i18n/index"
 import ManageTrustedServicesDialog from "./ManageTrustedServicesDialog"
 import SavedAddressesExportDialog from "./SavedAddressesExportDialog"
 import DataExportDialog from "./DataExportDialog"
+import DataImportDialog from "./DataImportDialog"
 import {
   BiometricLockSetting,
   HideMemoSetting,
@@ -23,7 +24,8 @@ import {
   ShowDustSetting,
   TestnetSetting,
   TrustedServicesSetting,
-  DataExportSetting
+  DataExportSetting,
+  DataImportSetting
 } from "./Settings"
 
 const SettingsDialogs = React.memo(function SettingsDialogs() {
@@ -31,11 +33,15 @@ const SettingsDialogs = React.memo(function SettingsDialogs() {
   const showManageTrustedServices = matchesRoute(router.location.pathname, routes.manageTrustedServices())
   const showSavedAddressesExport = matchesRoute(router.location.pathname, routes.savedAddressesExport())
   const showDataExport = matchesRoute(router.location.pathname, routes.dataExport())
+  const showDataImport = matchesRoute(router.location.pathname, routes.dataImport())
 
   const handleClose = () => {
     router.history.push(routes.settings())
   }
 
+  if (showDataImport) {
+    return <DataImportDialog />
+  }
   if (showDataExport) {
     return <DataExportDialog />
   }
@@ -71,6 +77,10 @@ function AppSettings() {
   ])
 
   const navigateToDataExport = React.useCallback(() => router.history.push(routes.dataExport()), [
+    router.history
+  ])
+
+  const navigateToDataImport = React.useCallback(() => router.history.push(routes.dataImport()), [
     router.history
   ])
 
@@ -117,6 +127,7 @@ function AppSettings() {
         <TrustedServicesSetting onClick={navigateToTrustedServices} />
         <SavedAddressesExportSetting onClick={navigateToSavedAddressesExport} />
         <DataExportSetting onClick={navigateToDataExport} />
+        <DataImportSetting onClick={navigateToDataImport} />
       </List>
       <SettingsDialogs />
     </Carousel>

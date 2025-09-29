@@ -82,6 +82,12 @@
         "secondary": "Download all data: accounts, contacts and settings"
       }
     },
+    "data-import": {
+      "text": {
+        "primary": "Import Wallet Data",
+        "secondary": "Load data from export file"
+      }
+    },
     "dust": {
       "text": {
         "primary": "Show dust transactions",
@@ -122,5 +128,13 @@
     "exporting": "Creating export file...",
     "cancel": "Cancel",
     "export": "Export"
+  },
+  "import": {
+    "title": "Import Data",
+    "description": "Select an export file to import accounts, contacts and settings. Existing data will be carefully updated.",
+    "warning": "Warning: Import will add new data and update existing ones. Names of existing accounts will not change.",
+    "importing": "Importing data...",
+    "cancel": "Back",
+    "import": "Select File"
   }
 }

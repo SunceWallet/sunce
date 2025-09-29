@@ -3,6 +3,7 @@ import { SavedAddresses } from "~App/contexts/savedAddresses"
 // @ts-ignore
 import { Platform } from "~shared/types/platform"
 import getKeyStore from "~Platform/key-store"
+// import { Keypair } from "@stellar/stellar-sdk" // Не используется в текущей реализации
 
 export interface ExportData {
   version: string
@@ -59,15 +60,18 @@ export async function createExportData(
           await keyStore.getPrivateKeyData(account.id, "")
         } catch (error) {
           // Если не получилось, значит нужен пароль - сохраняем зашифрованные данные
-          // Получаем сырые данные из localStorage для зашифрованного приватного ключа
-          const rawKeys = localStorage.getItem("sunce:keys")
-          if (rawKeys) {
-            const keysData = JSON.parse(rawKeys)
-            const keyData = keysData[account.id]
+          try {
+            // Используем более надежный способ получения зашифрованных данных
+            const rawKeys = await getEncryptedKeysFromStorage()
+            const keyData = rawKeys[account.id]
             if (keyData && keyData.private) {
               // Конвертируем в base64 для удобства
               encryptedPrivateKey = btoa(keyData.private)
+            } else {
+              console.warn(`Не удалось найти зашифрованные данные для аккаунта ${account.name}`)
             }
+          } catch (storageError) {
+            console.warn(`Не удалось получить зашифрованные данные для аккаунта ${account.name}:`, storageError)
           }
         }
       } else {
@@ -97,6 +101,15 @@ export async function createExportData(
         cosignerOf: account.cosignerOf,
         tokenPreferences: convertedTokenPreferences
       })
+
+      // Логируем информацию о типе экспортированного ключа
+      if (encryptedPrivateKey) {
+        console.log(`Экспортирован зашифрованный ключ для аккаунта: ${account.name}`)
+      } else if (privateKey) {
+        console.log(`Экспортирован обычный ключ для аккаунта: ${account.name}`)
+      } else {
+        console.warn(`Не удалось экспортировать ключ для аккаунта: ${account.name}`)
+      }
     } catch (error) {
       console.warn(`Не удалось экспортировать данные для аккаунта ${account.name}:`, error)
       // Продолжаем с базовыми данными
@@ -135,4 +148,208 @@ export function downloadExportFile(data: ExportData, filename: string = "sunce-w
   document.body.removeChild(link)
   
   URL.revokeObjectURL(url)
+}
+
+/**
+ * Обратное преобразование формата токена с CODE-ISSUER на ISSUER:CODE
+ */
+function parseTokenFormat(tokenKey: string): string {
+  if (tokenKey === "XLM") {
+    return "XLM"
+  }
+  const [code, issuer] = tokenKey.split("-")
+  return `${issuer}:${code}`
+}
+
+/**
+ * Получает зашифрованные данные из хранилища
+ * Работает в разных окружениях (web, Electron, Cordova)
+ */
+async function getEncryptedKeysFromStorage(): Promise<any> {
+  // В веб-окружении используем localStorage
+  if (typeof localStorage !== 'undefined') {
+    const rawKeys = localStorage.getItem("sunce:keys")
+    return rawKeys ? JSON.parse(rawKeys) : {}
+  }
+  
+  // В других окружениях можно добавить специфичную логику
+  // Например, через IPC для Electron или Cordova
+  console.warn("localStorage недоступен, зашифрованные ключи не могут быть экспортированы")
+  return {}
+}
+
+/**
+ * Генерирует следующий доступный ID для аккаунта
+ */
+function getNextAccountId(): string {
+  const keys = localStorage.getItem("sunce:keys")
+  if (!keys) return "1"
+  
+  const keysData = JSON.parse(keys)
+  const existingIds = Object.keys(keysData).map(id => parseInt(id, 10)).filter(id => !isNaN(id))
+  const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0
+  return String(maxId + 1)
+}
+
+/**
+ * Прямо сохраняет аккаунт в localStorage, обходя стандартные процедуры
+ */
+async function saveAccountDirectly(
+  accountData: ExportedAccount,
+  keyStore: any
+): Promise<string> {
+  const accountId = getNextAccountId()
+  
+  // Подготавливаем публичные данные
+  const publicData: PublicKeyData = {
+    name: accountData.name,
+    publicKey: accountData.publicKey,
+    password: Boolean(accountData.encryptedPrivateKey),
+    testnet: accountData.testnet,
+    cosignerOf: accountData.cosignerOf
+  }
+
+  // Подготавливаем приватные данные
+  let privateData: PrivateKeyData
+  if (accountData.privateKey) {
+    // Обычный приватный ключ
+    privateData = { privateKey: accountData.privateKey }
+  } else if (accountData.encryptedPrivateKey) {
+    // Зашифрованный приватный ключ - декодируем из base64
+    try {
+      privateData = { privateKey: atob(accountData.encryptedPrivateKey) }
+    } catch (error) {
+      throw new Error(`Не удалось декодировать зашифрованный приватный ключ: ${error}`)
+    }
+  } else {
+    throw new Error("Отсутствует приватный ключ")
+  }
+
+  // Сохраняем через key store
+  await keyStore.saveKey(accountId, "", privateData, publicData)
+  
+  return accountId
+}
+
+/**
+ * Импортирует данные пользователя
+ */
+export async function importWalletData(
+  importData: ExportData,
+  existingAccounts: Account[],
+  existingContacts: SavedAddresses,
+  existingTokenPreferences: Platform.AccountAssetSettingsMap,
+  updateAccountName: (accountID: string, newName: string) => Promise<void>,
+  updateContacts: (contacts: SavedAddresses) => void,
+  updateTokenPreferences: (accountID: string, tokenKey: string, settings: Platform.AssetSettings) => void
+): Promise<{
+  importedAccounts: number
+  updatedAccounts: number
+  importedContacts: number
+  updatedContacts: number
+  errors: string[]
+}> {
+  const results = {
+    importedAccounts: 0,
+    updatedAccounts: 0,
+    importedContacts: 0,
+    updatedContacts: 0,
+    errors: [] as string[]
+  }
+
+  // Получаем key store
+  const keyStore = await getKeyStore()
+
+  // Создаем карту существующих аккаунтов по publicKey
+  const existingAccountsMap = new Map<string, Account>()
+  existingAccounts.forEach(account => {
+    existingAccountsMap.set(account.publicKey, account)
+  })
+
+  // Импортируем аккаунты
+  for (const accountData of importData.accounts) {
+    try {
+      const existingAccount = existingAccountsMap.get(accountData.publicKey)
+      
+      if (existingAccount) {
+        // Аккаунт уже существует - НЕ трогаем название, только добавляем/обновляем настройки токенов
+        try {
+          // Конвертируем настройки токенов обратно в формат ISSUER:CODE
+          const convertedTokenPreferences: Platform.AssetSettingsMap = {}
+          for (const [tokenKey, settings] of Object.entries(accountData.tokenPreferences)) {
+            const originalKey = parseTokenFormat(tokenKey)
+            convertedTokenPreferences[originalKey] = settings
+          }
+          
+          // Добавляем/обновляем настройки токенов (заменяем совпадения)
+          // Получаем существующие настройки и объединяем с новыми
+          const existingPreferences = existingTokenPreferences[existingAccount.accountID] || {}
+          const mergedPreferences = { ...existingPreferences, ...convertedTokenPreferences }
+          
+          // Обновляем каждый токен отдельно
+          Object.entries(mergedPreferences).forEach(([tokenKey, settings]) => {
+            updateTokenPreferences(existingAccount.accountID, tokenKey, settings)
+          })
+          results.updatedAccounts++
+        } catch (error) {
+          results.errors.push(`Не удалось обновить настройки токенов для аккаунта ${existingAccount.name}: ${error}`)
+        }
+      } else {
+        // Новый аккаунт - создаем полностью
+        if (!accountData.privateKey && !accountData.encryptedPrivateKey) {
+          results.errors.push(`Не удалось создать аккаунт ${accountData.name}: отсутствует приватный ключ`)
+          continue
+        }
+
+        try {
+          // Создаем аккаунт напрямую через key store
+          await saveAccountDirectly(accountData, keyStore)
+          
+          // Добавляем настройки токенов для нового аккаунта
+          const convertedTokenPreferences: Platform.AssetSettingsMap = {}
+          for (const [tokenKey, settings] of Object.entries(accountData.tokenPreferences)) {
+            const originalKey = parseTokenFormat(tokenKey)
+            convertedTokenPreferences[originalKey] = settings
+          }
+
+          // Обновляем настройки токенов для нового аккаунта
+          Object.entries(convertedTokenPreferences).forEach(([tokenKey, settings]) => {
+            updateTokenPreferences(accountData.publicKey, tokenKey, settings)
+          })
+
+          results.importedAccounts++
+        } catch (error) {
+          results.errors.push(`Не удалось создать аккаунт ${accountData.name}: ${error}`)
+        }
+      }
+    } catch (error) {
+      results.errors.push(`Ошибка при обработке аккаунта ${accountData.name}: ${error}`)
+    }
+  }
+
+  // Импортируем контакты
+  const newContacts = { ...existingContacts }
+  let contactsChanged = false
+
+  for (const [address, contactData] of Object.entries(importData.contacts)) {
+    if (newContacts[address]) {
+      // Контакт существует - обновляем label
+      if (newContacts[address].label !== contactData.label) {
+        newContacts[address] = contactData
+        contactsChanged = true
+        results.updatedContacts++
+      }
+    } else {
+      // Новый контакт
+      newContacts[address] = contactData
+      contactsChanged = true
+      results.importedContacts++
+    }
+  }
+
+  if (contactsChanged) {
+    updateContacts(newContacts)
+  }
+
+  return results
 }
