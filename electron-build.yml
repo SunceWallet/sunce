@@ -1,5 +1,5 @@
 # Don't change the appId! See <https://www.electron.build/configuration/nsis#guid-vs-application-name>
-appId: org.montelibero.sunce
+appId: app.sunce
 productName: Sunce Wallet
 copyright: Copyright © 2024 Montelibero SW-Team
 artifactName: Sunce-Wallet-${version}-${os}-${arch}.${ext}
@@ -15,6 +15,14 @@ directories:
 files:
   - "./dist/*"
   - "./electron/lib/**"
+  - "!**/*.map"
+  - "!**/test{,s}/**"
+  - "!**/__tests__/**"
+  - "!**/*.md"
+  - "!**/docs{,/**}"
+  - "!**/examples{,/**}"
+  - "!**/benchmark{,/**}"
+  - "!**/scripts{,/**}"
 
 publish:
   - provider: github
@@ -49,11 +57,11 @@ msi:
 mac:
   hardenedRuntime: true
   entitlements: ./electron/build/entitlements.mac.inherit.plist
-  category: public.app-category.productivity
+  entitlementsInherit: ./electron/build/entitlements.mac.inherit.plist
+  category: public.app-category.finance
 
 linux:
   category: Utility
   target: [AppImage:x64]
 
 afterPack: ./scripts/electron-builder-afterpack.js
-afterSign: ./scripts/electron-builder-aftersign.js
