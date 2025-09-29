@@ -102,7 +102,7 @@ export async function createExportData(
 
       exportedAccounts.push({
         name: account.name,
-        publicKey: account.publicKey,
+        publicKey: account.accountID, // Используем accountID вместо publicKey для корректной работы с cosigner
         privateKey,
         encryptedPrivateKey,
         testnet: account.testnet,
@@ -211,7 +211,7 @@ async function saveAccountDirectly(
   // Подготавливаем публичные данные
   const publicData: PublicKeyData = {
     name: accountData.name,
-    publicKey: accountData.publicKey,
+    publicKey: accountData.cosignerOf || accountData.publicKey, // Для cosigner используем cosignerOf, иначе publicKey
     password: Boolean(accountData.encryptedPrivateKey),
     testnet: accountData.testnet,
     cosignerOf: accountData.cosignerOf
@@ -280,15 +280,16 @@ export async function importWalletData(
   // Получаем key store
   const keyStore = await getKeyStore()
 
-  // Создаем карту существующих аккаунтов по publicKey
+  // Создаем карту существующих аккаунтов по accountID (publicKey или cosignerOf)
   const existingAccountsMap = new Map<string, Account>()
   existingAccounts.forEach(account => {
-    existingAccountsMap.set(account.publicKey, account)
+    existingAccountsMap.set(account.accountID, account)
   })
 
   // Импортируем аккаунты
   for (const accountData of importData.accounts) {
     try {
+      // Ищем существующий аккаунт по accountID (который теперь в publicKey)
       const existingAccount = existingAccountsMap.get(accountData.publicKey)
       
       if (existingAccount) {
@@ -333,8 +334,10 @@ export async function importWalletData(
           }
 
           // Обновляем настройки токенов для нового аккаунта
+          // Используем правильный accountID для cosigner аккаунтов
+          const accountID = accountData.cosignerOf || accountData.publicKey
           Object.entries(convertedTokenPreferences).forEach(([tokenKey, settings]) => {
-            updateTokenPreferences(accountData.publicKey, tokenKey, settings)
+            updateTokenPreferences(accountID, tokenKey, settings)
           })
 
           results.importedAccounts++
