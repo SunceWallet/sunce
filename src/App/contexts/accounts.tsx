@@ -30,6 +30,7 @@ interface NewAccountData {
 interface ContextValue {
   accounts: Account[]
   networkSwitch: NetworkID
+  refreshKey: number
   changePassword(accountID: string, prevPassword: string, nextPassword: string): Promise<any>
   createAccount(accountData: NewAccountData): Promise<Account>
   deleteAccount(accountID: string): Promise<any>
@@ -155,6 +156,7 @@ interface Props {
 export function AccountsProvider(props: Props) {
   const [accounts, setAccounts] = React.useState<Account[]>(initialAccounts)
   const [networkSwitch, setNetworkSwitch] = React.useState<NetworkID>("mainnet")
+  const [refreshKey, setRefreshKey] = React.useState(0)
 
   React.useEffect(() => {
     const keyStore = getKeyStore()
@@ -252,6 +254,8 @@ export function AccountsProvider(props: Props) {
       const loadedAccounts = await Promise.all(keyIDs.map(keyID => createAccountInstance(keyStore, keyID)))
       setAccounts(loadedAccounts)
       setNetworkSwitch(getInitialNetwork(loadedAccounts))
+      // Принудительно обновляем ключ для перерендеринга компонентов
+      setRefreshKey(prev => prev + 1)
     } catch (error) {
       trackError(error)
     }
@@ -260,6 +264,7 @@ export function AccountsProvider(props: Props) {
   const contextValue: ContextValue = {
     accounts,
     networkSwitch,
+    refreshKey,
     changePassword,
     createAccount,
     deleteAccount,

@@ -98,15 +98,6 @@ export default function DataImportDialog() {
         // Принудительно обновляем список аккаунтов
         await refreshAccounts()
         
-        // Отправляем событие для принудительного обновления списка аккаунтов
-        if (results.importedAccounts > 0) {
-          // Создаем кастомное событие для обновления списка аккаунтов
-          const event = new CustomEvent('accountsUpdated', { 
-            detail: { importedCount: results.importedAccounts } 
-          })
-          window.dispatchEvent(event)
-        }
-        
         if (results.errors.length > 0) {
           setError(`Импорт завершен с ошибками:\n${results.errors.join('\n')}`)
         } else {
