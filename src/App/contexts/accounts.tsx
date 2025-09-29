@@ -36,6 +36,7 @@ interface ContextValue {
   removePassword(accountID: string, prevPassword: string): Promise<any>
   renameAccount(accountID: string, newName: string): Promise<any>
   toggleNetwork(): void
+  refreshAccounts(): Promise<void>
 }
 
 /**
@@ -244,6 +245,18 @@ export function AccountsProvider(props: Props) {
     setNetworkSwitch(prevNetwork => (prevNetwork === "mainnet" ? "testnet" : "mainnet"))
   }
 
+  const refreshAccounts = async () => {
+    const keyStore = getKeyStore()
+    try {
+      const keyIDs = await keyStore.getKeyIDs()
+      const loadedAccounts = await Promise.all(keyIDs.map(keyID => createAccountInstance(keyStore, keyID)))
+      setAccounts(loadedAccounts)
+      setNetworkSwitch(getInitialNetwork(loadedAccounts))
+    } catch (error) {
+      trackError(error)
+    }
+  }
+
   const contextValue: ContextValue = {
     accounts,
     networkSwitch,
@@ -252,7 +265,8 @@ export function AccountsProvider(props: Props) {
     deleteAccount,
     removePassword,
     renameAccount,
-    toggleNetwork
+    toggleNetwork,
+    refreshAccounts
   }
 
   return <AccountsContext.Provider value={contextValue}>{props.children}</AccountsContext.Provider>
