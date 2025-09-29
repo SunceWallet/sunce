@@ -107,6 +107,34 @@
         "text": "Der Dienst wird von Ihrer Vertrauensliste entfernt. Sind Sie sicher?"
       },
       "no-services": "Keine vertrauenswürdigen Dienste"
+    },
+    "data-export": {
+      "text": {
+        "primary": "Wallet-Daten exportieren",
+        "secondary": "Alle Daten herunterladen: Konten, Kontakte und Einstellungen"
+      }
+    },
+    "data-import": {
+      "text": {
+        "primary": "Wallet-Daten importieren",
+        "secondary": "Daten aus Exportdatei laden"
+      }
     }
+  },
+  "export": {
+    "title": "Daten exportieren",
+    "description": "Eine Datei wird mit Ihren Konten, Kontakten und Token-Einstellungen erstellt. Private Schlüssel werden in den Export einbezogen.",
+    "warning": "Warnung: Die Exportdatei enthält vertrauliche Informationen. Bewahren Sie sie an einem sicheren Ort auf und teilen Sie sie nicht mit Dritten.",
+    "exporting": "Exportdatei wird erstellt...",
+    "cancel": "Abbrechen",
+    "export": "Exportieren"
+  },
+  "import": {
+    "title": "Daten importieren",
+    "description": "Wählen Sie eine Exportdatei aus, um Konten, Kontakte und Einstellungen zu importieren. Bestehende Daten werden sorgfältig aktualisiert.",
+    "warning": "Warnung: Der Import fügt neue Daten hinzu und aktualisiert bestehende. Namen bestehender Konten werden nicht geändert.",
+    "importing": "Daten werden importiert...",
+    "cancel": "Zurück",
+    "import": "Datei auswählen"
   }
 }
