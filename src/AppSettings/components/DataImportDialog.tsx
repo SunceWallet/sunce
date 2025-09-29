@@ -58,6 +58,10 @@ export default function DataImportDialog() {
     setImportResults(null)
   }
 
+  const handleGoToAccounts = () => {
+    router.history.push(routes.allAccounts())
+  }
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
@@ -107,6 +111,13 @@ export default function DataImportDialog() {
             `Импортировано контактов: ${results.importedContacts}\n` +
             `Обновлено контактов: ${results.updatedContacts}`
           )
+          
+          // Если были импортированы новые аккаунты, предлагаем перейти на главную страницу
+          if (results.importedAccounts > 0) {
+            setTimeout(() => {
+              router.history.push(routes.allAccounts())
+            }, 2000) // Переходим через 2 секунды, чтобы пользователь увидел сообщение
+          }
         }
       } catch (err) {
         console.error("Ошибка при импорте данных:", err)
@@ -182,6 +193,11 @@ export default function DataImportDialog() {
         {(error || success) && (
           <ActionButton onClick={handleClear} disabled={isImporting}>
             Очистить
+          </ActionButton>
+        )}
+        {success && importResults?.importedAccounts > 0 && (
+          <ActionButton onClick={handleGoToAccounts} disabled={isImporting}>
+            Перейти к аккаунтам
           </ActionButton>
         )}
         <ActionButton 
