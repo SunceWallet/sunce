@@ -15,16 +15,17 @@ interface Props {
 
 function QRImportDialog(props: Props) {
   const { t } = useTranslation()
-  if (isFullscreenQRPreview) {
-    // Don't show the Dialog component if this QR reader implementation shows the scanner fullscreen
-    if (props.open) {
-      // Close non-existing dialog right away, so the scanner can be re-opened
-      props.onClose()
-    }
-    return props.open ? (
-      <QRReader onError={props.onError} onScan={props.onScan} style={{ width: 256, height: 256 }} />
-    ) : null
-  }
+
+  const [scannerRequested, setScannerRequested] = React.useState(false)
+
+  const handleScan = React.useCallback((data: string | null) => {
+    setScannerRequested(false)
+    props.onScan(data)
+  }, [props.onScan])
+
+  const handleStartScan = React.useCallback(() => {
+    setScannerRequested(true)
+  }, [])
 
   /**
    * Create <input type=file>, simulate click on it.
@@ -105,6 +106,20 @@ function QRImportDialog(props: Props) {
 
     // Trigger the file selection dialog
     input.click()
+  }
+
+  if (isFullscreenQRPreview) {
+    return (
+      <Dialog open={props.open} onClose={props.onClose}>
+        {scannerRequested ? (
+          <QRReader onError={props.onError} onScan={handleScan} style={{ width: 256, height: 256 }} />
+        ) : null}
+        <DialogActionsBox>
+          <ActionButton onClick={handleUpload}>{t("generic.qr-reader.action.upload")}</ActionButton>
+          <ActionButton onClick={handleStartScan}>{t("generic.qr-reader.action.scan")}</ActionButton>
+        </DialogActionsBox>
+      </Dialog>
+    )
   }
 
   return (

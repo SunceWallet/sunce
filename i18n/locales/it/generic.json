@@ -76,7 +76,8 @@
   "qr-reader": {
     "action": {
       "upload": "Apri da file",
-      "cancel": "Annulla"
+      "cancel": "Annulla",
+      "scan": "Scansiona"
     }
   },
   "submission-progress": {

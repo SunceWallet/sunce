@@ -83,7 +83,8 @@
   "qr-reader": {
     "action": {
       "upload": "Abrir desde archivo",
-      "cancel": "Anular"
+      "cancel": "Anular",
+      "scan": "Escanear"
     }
   },
   "submission-progress": {
