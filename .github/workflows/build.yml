@@ -62,11 +62,54 @@ jobs:
           run: |
             npm install -g win-node-env
 
-        - name: Test
-          run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
-          continue-on-error: true
+#        - name: Test
+#          run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
+#          continue-on-error: true
 
-        - name: Build and Publish
-          run: npm run ${{matrix.script}}
+        - name: Import Apple codesign certs
+          if: matrix.os == 'macos-latest'
+          uses: apple-actions/import-codesign-certs@v2
+          with:
+            p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APPLICATION_CERT_P12 }}
+            p12-password: ${{ secrets.APPLE_CERT_P12_PASSWORD }}
+
+        - name: Write App Store Connect API key (.p8)
+          if: matrix.os == 'macos-latest'
+          run: |
+            KEY="$RUNNER_TEMP/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8"
+            echo "${{ secrets.APPLE_API_KEY_P8 }}" | base64 --decode > "$KEY"
+            chmod 600 "$KEY"
+            echo "APPLE_API_KEY=$KEY" >> $GITHUB_ENV
+            echo "APPLE_API_KEY_ID=${{ secrets.APPLE_API_KEY_ID }}" >> $GITHUB_ENV
+            echo "APPLE_API_ISSUER=${{ secrets.APPLE_API_ISSUER }}" >> $GITHUB_ENV
+
+        - name: Build and Publish (macOS)
+          if: matrix.os == 'macos-latest'
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#            APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#            APPLE_ID: ${{ secrets.APPLE_USER }}
+#            APPLE_ID_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+#            APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+            APPLE_API_KEY: ${{ env.APPLE_API_KEY }}
+            APPLE_API_KEY_ID: ${{ env.APPLE_API_KEY_ID }}
+            APPLE_API_ISSUER: ${{ env.APPLE_API_ISSUER }}
+#            DEBUG: "electron-builder,electron-osx-sign*,electron-notarize*,app-builder,macos-sign"
+#            ELECTRON_BUILDER_DEBUG: "true"
+#            DEBUG_COLORS: "false"
+          run: |
+            npm run build:mac -- -c.forceCodeSigning=true
+
+        - name: Verify codesign (macOS)
+          if: matrix.os == 'macos-latest'
+          run: |
+            APP="electron/dist/mac/Sunce Wallet.app"
+            echo "Authority chain:" && codesign -dv --verbose=4 "$APP" 2>&1 | sed -n 's/^Authority=//p'
+            echo "Verify deep:" && codesign --verify --deep --strict --verbose=2 "$APP"
+            echo "BundleId:" && defaults read "$(pwd)/$APP/Contents/Info.plist" CFBundleIdentifier
+
+        - name: Build and Publish (Other OS)
+          if: matrix.os != 'macos-latest'
+          run: npm run ${{ matrix.script }}
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -4,6 +4,12 @@ ENVIRONMENT="$1"
 PLATFORM="$2"
 TEMPLATE_FILE="config.template"
 
+if [ $PLATFORM == "android" ]; then
+  export BUNDLE_ID="org.montelibero.sunce"
+else
+  export BUNDLE_ID="app.sunce"
+fi
+
 cd "$(dirname $0)"
 
 if [ -f "../config/$TEMPLATE_FILE" ]; then

@@ -4,4 +4,4 @@ import { app } from "electron"
 app.name = "Sunce Wallet"
 
 // Needs to match the value in electron-build.yml
-app.setAppUserModelId("org.montelibero.sunce")
+app.setAppUserModelId("app.sunce")
