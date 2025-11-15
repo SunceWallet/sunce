@@ -1,13 +1,13 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import Divider from "@material-ui/core/Divider"
+// import Divider from "@material-ui/core/Divider"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import { makeStyles } from "@material-ui/core/styles"
-import CallMadeIcon from "@material-ui/icons/CallMade"
-import CallReceivedIcon from "@material-ui/icons/CallReceived"
+// import CallMadeIcon from "@material-ui/icons/CallMade"
+// import CallReceivedIcon from "@material-ui/icons/CallReceived"
 import ListIcon from "@material-ui/icons/List"
 import MoneyIcon from "@material-ui/icons/AttachMoney"
 import ContactsIcon from "@material-ui/icons/Contacts"
@@ -92,19 +92,20 @@ function LiveAccountContextMenuItems(
         label={t("account.context-menu.trade.label")}
         onClick={closeAndCall(props.onTrade)}
       />
-      <AccountContextMenuItem
+      {/* Temporarily hidden due to underdeveloped functionality and potential Apple moderation complexity */}
+      {/*<AccountContextMenuItem
         disabled={!isSigner || !props.onDeposit}
         icon={<CallReceivedIcon />}
         label={t("account.context-menu.deposit.label")}
         onClick={closeAndCall(accountData.balances.length > 1 ? props.onDeposit : props.onPurchaseLumens)}
-      />
-      <AccountContextMenuItem
+      />*/}
+      {/*<AccountContextMenuItem
         disabled={!activated || !props.onWithdraw}
         icon={<CallMadeIcon />}
         label={t("account.context-menu.withdraw.label")}
         onClick={closeAndCall(props.onWithdraw)}
-      />
-      <Divider />
+      />*/}
+      {/*<Divider />*/}
       <AccountContextMenuItem
         disabled={!activated || !props.onManageAssets}
         icon={<MoneyIcon />}
