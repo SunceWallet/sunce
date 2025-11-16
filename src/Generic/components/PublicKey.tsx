@@ -94,6 +94,7 @@ interface AddressProps {
   variant?: Variant
   style?: React.CSSProperties
   testnet: boolean
+  showRaw?: boolean
 }
 
 // tslint:disable-next-line no-shadowed-variable
@@ -126,6 +127,7 @@ export const Address = React.memo(function Address(props: AddressProps) {
           style={{ fontWeight: "inherit" }}
           testnet={props.testnet}
           variant={props.variant}
+          showRaw={props.showRaw}
         />
       )
     }

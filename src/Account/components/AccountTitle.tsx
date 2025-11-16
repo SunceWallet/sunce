@@ -15,8 +15,9 @@ import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useIsMobile, useRouter } from "~Generic/hooks/userinterface"
 import { containsThirdPartySigner, ThirdPartySecurityService } from "~Generic/lib/third-party-security"
 import { primaryBackgroundColor } from "~App/theme"
-import { HorizontalLayout } from "~Layout/components/Box"
+import { HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
 import MainTitle from "~Generic/components/MainTitle"
+import { CopyableAddress } from "~Generic/components/PublicKey"
 
 function clearTextSelection() {
   const selection = window.getSelection()
@@ -150,7 +151,7 @@ function TitleTextField(props: TitleTextFieldProps) {
         size: Math.max(length + 1, 4),
         style: {
           cursor: props.mode === "editing" ? "text" : "default",
-          height: 48,
+          height: "1em",
           padding: 0,
           textOverflow: "ellipsis"
         }
@@ -168,7 +169,7 @@ function TitleTextField(props: TitleTextFieldProps) {
         style: {
           color: "inherit",
           font: "inherit",
-          height: 48, // Will otherwise jump when edit icon button appears
+          height: "1em", // Will otherwise jump when edit icon button appears
           pointerEvents: props.preventClicks ? "none" : undefined
         }
       }}
@@ -190,6 +191,8 @@ interface AccountTitleProps {
   editable?: boolean
   error?: string
   name: string
+  publicKey?: string
+  testnet?: boolean
   onNavigateBack: () => void
   onRename: (newName: string) => void
   permanentlyEditing?: boolean
@@ -330,7 +333,9 @@ function AccountTitle(props: AccountTitleProps) {
           value={name}
         />
       }
+      secondaryTitle={props.publicKey && <CopyableAddress address={props.publicKey} testnet={props.testnet || false} variant="short" showRaw={true} />}
       titleColor="inherit"
+      nowrap={true}
       titleStyle={{
         overflowY: "visible"
       }}

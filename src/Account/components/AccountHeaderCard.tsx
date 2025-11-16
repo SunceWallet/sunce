@@ -51,6 +51,7 @@ interface Props {
   onDeposit?: () => void
   onManageAssets?: () => void
   onSavedAddresses?: () => void
+  onReceiveFunds?: () => void
   onPurchaseLumens?: () => void
   onRename: (newName: string) => void
   onTrade?: () => void
@@ -84,6 +85,7 @@ function AccountHeaderCard(props: Props) {
             onManageAssets={props.onManageAssets}
             onPurchaseLumens={props.onPurchaseLumens}
             onSavedAddresses={props.onSavedAddresses}
+            onReceiveFunds={props.onReceiveFunds}
             onTrade={props.onTrade}
             onWithdraw={props.onWithdraw}
             settings={settings}
@@ -155,6 +157,8 @@ function AccountHeaderCard(props: Props) {
             error={props.error}
             permanentlyEditing={props.editableAccountName && !meta.account}
             name={name}
+            publicKey={meta.account?.publicKey}
+            testnet={meta.account?.testnet}
             onNavigateBack={props.onClose}
             onRename={props.onRename}
           />
