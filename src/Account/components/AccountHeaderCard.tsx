@@ -157,7 +157,7 @@ function AccountHeaderCard(props: Props) {
             error={props.error}
             permanentlyEditing={props.editableAccountName && !meta.account}
             name={name}
-            publicKey={meta.account?.publicKey}
+            publicKey={meta.account?.accountID}
             testnet={meta.account?.testnet}
             onNavigateBack={props.onClose}
             onRename={props.onRename}
