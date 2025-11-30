@@ -151,7 +151,6 @@ function TitleTextField(props: TitleTextFieldProps) {
         size: Math.max(length + 1, 4),
         style: {
           cursor: props.mode === "editing" ? "text" : "default",
-          height: "1em",
           padding: 0,
           textOverflow: "ellipsis"
         }
@@ -161,7 +160,7 @@ function TitleTextField(props: TitleTextFieldProps) {
         className: props.mode === "editing" ? classes.underlined : "",
         disableUnderline: props.mode === "readonly",
         endAdornment: !props.showEdit ? null : (
-          <InputAdornment position="end" style={{ height: "auto" }}>
+          <InputAdornment position="end" style={{ height: "auto", gap: "12px" }}>
             {props.actions}
           </InputAdornment>
         ),
@@ -169,7 +168,6 @@ function TitleTextField(props: TitleTextFieldProps) {
         style: {
           color: "inherit",
           font: "inherit",
-          height: "1em", // Will otherwise jump when edit icon button appears
           pointerEvents: props.preventClicks ? "none" : undefined
         }
       }}
@@ -184,6 +182,12 @@ function TitleTextField(props: TitleTextFieldProps) {
     />
   )
 }
+
+const useAccountTitleClasses = makeStyles({
+  editTitleActionButton: {
+    padding: 0
+  }
+})
 
 interface AccountTitleProps {
   actions: React.ReactNode
@@ -203,6 +207,7 @@ function AccountTitle(props: AccountTitleProps) {
   const router = useRouter()
   const isSmallScreen = useIsMobile()
   const { t } = useTranslation()
+  const classes = useAccountTitleClasses()
 
   const [rawMode, setMode] = React.useState<TitleTextFieldProps["mode"]>(
     props.permanentlyEditing ? "editing" : "readonly"
@@ -281,10 +286,10 @@ function AccountTitle(props: AccountTitleProps) {
   const editActions = React.useMemo(
     () => (
       <>
-        <IconButton onClick={applyRenaming} style={{ color: "inherit" }}>
+        <IconButton onClick={applyRenaming} className={classes.editTitleActionButton} style={{ color: "inherit" }}>
           <CheckIcon />
         </IconButton>
-        <IconButton onClick={cancelRenaming} style={{ color: "inherit", marginLeft: isSmallScreen ? -12 : 0 }}>
+        <IconButton onClick={cancelRenaming} className={classes.editTitleActionButton} style={{ color: "inherit", marginLeft: isSmallScreen ? -12 : 0 }}>
           <ClearIcon />
         </IconButton>
       </>
@@ -294,7 +299,7 @@ function AccountTitle(props: AccountTitleProps) {
 
   const permanentEditActions = React.useMemo(
     () => (
-      <IconButton onClick={focusInput} style={{ color: "inherit" }}>
+      <IconButton onClick={focusInput} className={classes.editTitleActionButton} style={{ color: "inherit" }}>
         <EditIcon />
       </IconButton>
     ),
@@ -303,7 +308,7 @@ function AccountTitle(props: AccountTitleProps) {
 
   const readonlyActions = React.useMemo(
     () => (
-      <IconButton onClick={toggleMode} style={{ color: "inherit" }}>
+      <IconButton onClick={toggleMode} className={classes.editTitleActionButton} style={{ color: "inherit" }}>
         <EditIcon />
       </IconButton>
     ),
