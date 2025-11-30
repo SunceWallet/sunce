@@ -161,7 +161,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       ? 128
       : 120
     : isSmallScreen
-    ? 188
+    ? 150
     : showSendReceiveButtons
     ? 272
     : 184
@@ -292,6 +292,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
         onDeposit={navigateTo.deposit}
         onManageAssets={navigateTo.balanceDetails}
         onSavedAddresses={navigateTo.savedAddresses}
+        onReceiveFunds={navigateTo.receivePayment}
         onPurchaseLumens={navigateTo.purchaseLumens}
         onRename={performRenaming}
         onTrade={navigateTo.tradeAssets}
