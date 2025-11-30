@@ -65,21 +65,22 @@ function MainTitle(props: Props) {
         maxWidth="100%"
       >
         <VerticalLayout style={{
-              flexGrow: 1,
-              flexShrink: 1,
-              fontSize: isSmallScreen ? 20 : 24,
-              height: 50,
-              marginRight: 12,
-              minWidth: "40%",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              justifyContent: "center",
-            }}>
+          flexGrow: 1,
+          flexShrink: 1,
+          fontSize: isSmallScreen ? 20 : 24,
+          height: 50,
+          marginRight: 12,
+          minWidth: "40%",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          justifyContent: "center",
+        }}>
           <Typography
             variant="h5"
             color={props.titleColor}
             style={{
+              fontSize: "1.4rem",
               lineHeight: "1rem",
               ...props.titleStyle
             }}
