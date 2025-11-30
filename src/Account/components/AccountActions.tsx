@@ -58,14 +58,6 @@ function AccountActions(props: AccountActionsProps) {
   return (
     <DialogActionsBox className={className} hidden={props.hidden}>
       <ActionButton
-        className={`${classes.button} ${classes.secondaryButton}`}
-        icon={<QRCodeIcon style={{ fontSize: "110%" }} />}
-        onClick={props.onReceivePayment}
-        variant="contained"
-      >
-        {t("account.action.receive")}
-      </ActionButton>
-      <ActionButton
         className={classes.button}
         disabled={isDisabled}
         icon={<SendIcon style={{ fontSize: "110%" }} />}

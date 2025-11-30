@@ -168,7 +168,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       ? 128
       : 120
     : isSmallScreen
-      ? 188
+      ? 150
       : showSendReceiveButtons
         ? 272
         : 184
@@ -225,7 +225,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
   )
 
   const createNewAccount = React.useCallback(() => {
-    ;(async () => {
+    ; (async () => {
       const account = await createAccount(accountCreation)
 
       if (!accountCreation.import && !props.testnet) {
@@ -360,6 +360,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
         onDeposit={navigateTo.deposit}
         onManageAssets={navigateTo.balanceDetails}
         onSavedAddresses={navigateTo.savedAddresses}
+        onReceiveFunds={navigateTo.receivePayment}
         onPurchaseLumens={navigateTo.purchaseLumens}
         onRename={performRenaming}
         onTrade={navigateTo.tradeAssets}
@@ -561,13 +562,13 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
 
 type AccountPageProps =
   | {
-      accountCreation?: undefined
-      accountID: string
-    }
+    accountCreation?: undefined
+    accountID: string
+  }
   | {
-      accountCreation: "pubnet" | "testnet"
-      accountID?: undefined
-    }
+    accountCreation: "pubnet" | "testnet"
+    accountID?: undefined
+  }
 
 function AccountPage(props: AccountPageProps) {
   const { accounts } = React.useContext(AccountsContext)

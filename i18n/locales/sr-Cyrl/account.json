@@ -193,6 +193,9 @@
     "deposit": {
       "label": "Додај средства"
     },
+    "receive-funds": {
+      "label": "Прими средства"
+    },
     "trade": {
       "label": "Тргуј"
     },

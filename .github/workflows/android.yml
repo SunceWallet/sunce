@@ -28,7 +28,7 @@ jobs:
             packages: ''
 
         - name: Install Android SDK packages
-          run: sdkmanager "build-tools;34.0.0"
+          run: sdkmanager "build-tools;35.0.0"
 
         - name: Install project
           run: |

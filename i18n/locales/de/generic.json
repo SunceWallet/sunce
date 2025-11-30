@@ -87,7 +87,9 @@
   },
   "qr-reader": {
     "action": {
-      "cancel": "Abbrechen"
+      "upload": "Aus Datei öffnen",
+      "cancel": "Abbrechen",
+      "scan": "Scannen"
     }
   },
   "submission-progress": {

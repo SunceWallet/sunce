@@ -193,6 +193,9 @@
     "deposit": {
       "label": "Add funds"
     },
+    "receive-funds": {
+      "label": "Receive Funds"
+    },
     "trade": {
       "label": "Trade"
     },

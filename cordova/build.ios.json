@@ -3,8 +3,8 @@
     "release": {
       "deploymentTarget": "12.0",
       "codeSignIdentity": "Apple Distribution",
-      "provisioningProfile": "Sunce provision",
-      "developmentTeam": "D9Q4C3NXEE",
+      "provisioningProfile": "Sunce App Store Distribution",
+      "developmentTeam": "G6UAKU7FQM",
       "automaticProvisioning": false,
       "packageType": "app-store"
     }

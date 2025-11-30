@@ -193,6 +193,9 @@
     "deposit": {
       "label": "Einzahlen"
     },
+    "receive-funds": {
+      "label": "Guthaben empfangen"
+    },
     "trade": {
       "label": "Handeln"
     },

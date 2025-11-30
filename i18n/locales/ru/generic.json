@@ -87,7 +87,9 @@
   },
   "qr-reader": {
     "action": {
-      "cancel": "Отмена"
+      "upload": "Открыть из файла",
+      "cancel": "Отмена",
+      "scan": "Сканировать"
     }
   },
   "submission-progress": {

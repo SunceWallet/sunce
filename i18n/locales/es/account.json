@@ -193,6 +193,9 @@
     "deposit": {
       "label": "Agregar fondos"
     },
+    "receive-funds": {
+      "label": "Recibir fondos"
+    },
     "trade": {
       "label": "Comerciar"
     },

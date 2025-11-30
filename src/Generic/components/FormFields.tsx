@@ -28,8 +28,8 @@ export const QRReader = React.memo(function QRReader(props: Props) {
     (data: string | null) => {
       if (data) {
         onScan(data)
-        closeQRReader()
       }
+      closeQRReader()
     },
     [closeQRReader, onScan]
   )
