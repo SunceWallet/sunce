@@ -1,7 +1,8 @@
 {
   "action": {
     "receive": "Прими",
-    "send": "Пошаљи"
+    "send": "Пошаљи",
+    "scan": "Сканирај"
   },
   "add-asset": {
     "action": {

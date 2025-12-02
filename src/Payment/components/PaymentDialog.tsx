@@ -23,6 +23,7 @@ interface Props {
   horizon: Horizon.Server
   onClose: () => void
   openOrdersCount: number
+  preselectedParams?: any
   sendTransaction: (transaction: Transaction, signatureRequest?: MultisigTransactionResponse) => Promise<any>
 }
 
@@ -33,8 +34,8 @@ function PaymentDialog(props: Props) {
   const [txCreationPending, setTxCreationPending] = React.useState(false)
 
   const preselectedParams = useMemo(
-    () => (props.assetId ? { asset: parseAssetID(props.assetId) } : undefined),
-    [props.assetId]
+    () => props.preselectedParams || (props.assetId ? { asset: parseAssetID(props.assetId) } : undefined),
+    [props.assetId, props.preselectedParams]
   )
 
   const handleSubmit = React.useCallback(
@@ -58,9 +59,10 @@ function PaymentDialog(props: Props) {
     [props.account, props.horizon, sendTransaction]
   )
 
-  const trustedAssets = React.useMemo(() => getAssetsFromBalances(props.accountData.balances) || [Asset.native()], [
-    props.accountData.balances
-  ])
+  const trustedAssets = React.useMemo(
+    () => getAssetsFromBalances(props.accountData.balances) || [Asset.native()],
+    [props.accountData.balances]
+  )
 
   return (
     <DialogBody
@@ -96,7 +98,9 @@ function PaymentDialog(props: Props) {
   )
 }
 
-function ConnectedPaymentDialog(props: Pick<Props, "account" | "assetId" | "onClose"> & { onSubmissionCompleted?: () => void }) {
+function ConnectedPaymentDialog(
+  props: Pick<Props, "account" | "assetId" | "onClose" | "preselectedParams"> & { onSubmissionCompleted?: () => void }
+) {
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
   const { offers: openOrders } = useLiveAccountOffers(props.account.accountID, props.account.testnet)
 
@@ -109,6 +113,7 @@ function ConnectedPaymentDialog(props: Pick<Props, "account" | "assetId" | "onCl
           horizon={horizon}
           openOrdersCount={openOrders.length}
           sendTransaction={sendTransaction}
+          preselectedParams={props.preselectedParams}
         />
       )}
     </TransactionSender>

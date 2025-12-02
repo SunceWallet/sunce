@@ -29,6 +29,10 @@ import { getLastArgumentFromURL } from "~Generic/lib/url"
 import { matchesRoute, matchesRouteWithParams } from "~Generic/lib/routes"
 import { InlineErrorBoundary, HideOnError } from "~Generic/components/ErrorBoundaries"
 import { DialogsContext } from "~App/contexts/dialogs"
+import { TransactionRequestContext } from "~App/contexts/transactionRequest"
+import { isStellarUri, parseStellarUri, StellarUriType } from "@suncewallet/stellar-uri"
+import { isPublicKey, isStellarAddress } from "~Generic/lib/stellar-address"
+import QRImportDialog from "~Generic/components/QRImport"
 
 const modules = {
   AssetDetailsDialog: import("../../Assets/components/AssetDetailsDialog"),
@@ -84,7 +88,7 @@ const NotCosignerOnLedgerWarning = React.memo(function NotCosignerOnLedgerWarnin
     clipboard.copyToClipboard(props.account.publicKey)
   }, [clipboard, props.account.publicKey])
 
-  if (!props.account || !accountData || accountData.signers.some(signer => signer.key === props.account?.publicKey)) {
+  if (!props.account || !accountData || accountData.signers.some((signer) => signer.key === props.account?.publicKey)) {
     // We are still waiting for the data or this key is in fact co-signer of the account
     return null
   }
@@ -119,8 +123,13 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
   const { renameAccount } = React.useContext(AccountsContext)
   const [accountToBackup, setAccountToBackup] = React.useState<Account | null>(null)
   const [noPasswordDialogOpen, setNoPasswordDialogOpen] = React.useState(false)
+  const [isQRScannerOpen, setQRScannerOpen] = React.useState(false)
+  const [scannedPaymentData, setScannedPaymentData] = React.useState<{ destination: string; query?: string } | null>(
+    null
+  )
 
   const { openSavedAddresses } = React.useContext(DialogsContext)
+  const { setURI } = React.useContext(TransactionRequestContext)
 
   const showAccountCreation =
     matchesRoute(router.location.pathname, routes.createAccount(props.testnet), false) ||
@@ -136,7 +145,10 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     !matchesRoute(router.location.pathname, routes.manageAccountAssets("*"))
   const showAssetTrading = matchesRoute(router.location.pathname, routes.tradeAsset("*"))
   const showBalanceDetails = matchesRoute(router.location.pathname, routes.balanceDetails("*"))
-  const showCreatePayment = matchesRouteWithParams(router.location.pathname, routes.createPayment(":accountId", ":assetId?"))
+  const showCreatePayment = matchesRouteWithParams(
+    router.location.pathname,
+    routes.createPayment(":accountId", ":assetId?")
+  )
   const showDeposit = matchesRoute(router.location.pathname, routes.depositAsset("*"))
   const showLumenPurchase = matchesRoute(router.location.pathname, routes.purchaseLumens("*"))
   const showReceivePayment = matchesRoute(router.location.pathname, routes.receivePayment("*"))
@@ -144,27 +156,22 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
 
   const showSendReceiveButtons = !matchesRoute(router.location.pathname, routes.accountSettings("*"), false)
 
-  const {
-    accountCreation,
-    accountCreationErrors,
-    createAccount,
-    setAccountCreation,
-    validateAccountCreation
-  } = useAccountCreation({
-    cosigner: matchesRoute(router.location.pathname, routes.joinSharedAccount(props.testnet), false),
-    import: matchesRoute(router.location.pathname, routes.importAccount(props.testnet), false),
-    testnet: props.testnet
-  })
+  const { accountCreation, accountCreationErrors, createAccount, setAccountCreation, validateAccountCreation } =
+    useAccountCreation({
+      cosigner: matchesRoute(router.location.pathname, routes.joinSharedAccount(props.testnet), false),
+      import: matchesRoute(router.location.pathname, routes.importAccount(props.testnet), false),
+      testnet: props.testnet
+    })
 
   const headerHeight = showAccountCreation
     ? isSmallScreen
       ? 128
       : 120
     : isSmallScreen
-    ? 150
-    : showSendReceiveButtons
-    ? 272
-    : 184
+      ? 150
+      : showSendReceiveButtons
+        ? 272
+        : 184
 
   const navigateTo = React.useMemo(() => {
     const accountID = props.account?.id
@@ -188,14 +195,17 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     router.history.goBack()
   }, [router.history])
 
-  const closeDialog = navigateTo.transactions || (() => undefined)
+  const closeDialog = () => {
+    setScannedPaymentData(null)
+    return navigateTo.transactions ? navigateTo.transactions() : undefined
+  }
 
   const performRenaming = React.useCallback(
     (newName: string) => {
       if (props.account) {
         renameAccount(props.account.id, newName).catch(trackError)
       } else {
-        setAccountCreation(creation => ({
+        setAccountCreation((creation) => ({
           ...creation,
           name: newName
         }))
@@ -206,7 +216,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
 
   const updateAccountCreation = React.useCallback(
     (update: Partial<AccountCreation>) => {
-      setAccountCreation(prev => ({
+      setAccountCreation((prev) => ({
         ...prev,
         ...update
       }))
@@ -215,7 +225,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
   )
 
   const createNewAccount = React.useCallback(() => {
-    ;(async () => {
+    ; (async () => {
       const account = await createAccount(accountCreation)
 
       if (!accountCreation.import && !props.testnet) {
@@ -271,6 +281,64 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     }
   }, [accountToBackup, props.account, router.history, router.location, showAccountCreation])
 
+  // QR Scanner handlers
+  const openQRScanner = React.useCallback(() => {
+    setQRScannerOpen(true)
+  }, [])
+
+  const closeQRScanner = React.useCallback(() => {
+    setQRScannerOpen(false)
+  }, [])
+
+  const processScannedPaymentData = React.useCallback((scannedData: { destination: string; query?: string }) => {
+    const { destination, query } = scannedData
+    const preselectedParams: any = { destination }
+
+    if (query) {
+      const searchParams = new URLSearchParams(query)
+      const memoValue = searchParams.get("dt")
+
+      if (memoValue) {
+        preselectedParams.memo = memoValue
+        preselectedParams.memoType = "id"
+      }
+    }
+
+    return preselectedParams
+  }, [])
+
+  const handleQRScan = React.useCallback(
+    (data: string | null) => {
+      if (!data) return
+
+      // Handle SEP-07 URIs (both Pay and Transaction)
+      if (isStellarUri(data)) {
+        const stellarUri = parseStellarUri(data)
+        if (stellarUri.operation === StellarUriType.Pay || stellarUri.operation === StellarUriType.Transaction) {
+          // Set the URI in the TransactionRequestContext to trigger the existing SEP-07 dialog
+          setURI(stellarUri)
+          closeQRScanner()
+          return
+        }
+      }
+
+      // Handle plain address or Kraken-style URI (<destination>?dt=<memoid>)
+      const [destination, query] = data.split("?")
+
+      if (isPublicKey(destination) || isStellarAddress(destination)) {
+        // Set the scanned data in state to trigger the PaymentDialog
+        setScannedPaymentData({ destination, query })
+        closeQRScanner()
+        return
+      }
+
+      // If we get here, it's an unrecognized format
+      trackError(new Error(`Unrecognized QR code format: ${data}`))
+      closeQRScanner()
+    },
+    [setURI, closeQRScanner]
+  )
+
   const creationTitle = props.testnet
     ? t("create-account.header.placeholder.testnet")
     : t("create-account.header.placeholder.mainnet")
@@ -309,6 +377,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
                 hidden={!showSendReceiveButtons}
                 onCreatePayment={navigateTo.createPayment!}
                 onReceivePayment={navigateTo.receivePayment!}
+                onScanQRCode={openQRScanner}
               />
             </React.Suspense>
           )}
@@ -323,6 +392,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       handleBackNavigation,
       isSmallScreen,
       navigateTo,
+      openQRScanner,
       performRenaming,
       props.account,
       showAccountCreation,
@@ -379,6 +449,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
             hidden={!showSendReceiveButtons}
             onCreatePayment={navigateTo.createPayment!}
             onReceivePayment={navigateTo.receivePayment!}
+            onScanQRCode={openQRScanner}
           />
         </React.Suspense>
       ) : !props.account && !accountToBackup ? (
@@ -416,13 +487,18 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
             </React.Suspense>
           </Dialog>
           <Dialog
-            open={!!showCreatePayment}
+            open={!!showCreatePayment || !!scannedPaymentData}
             fullScreen
             onClose={closeDialog}
             TransitionComponent={FullscreenDialogTransition}
           >
             <React.Suspense fallback={<ViewLoading />}>
-              <PaymentDialog account={props.account} assetId={showCreatePayment?.assetId} onClose={closeDialog} />
+              <PaymentDialog
+                account={props.account}
+                assetId={showCreatePayment?.assetId}
+                onClose={closeDialog}
+                preselectedParams={scannedPaymentData ? processScannedPaymentData(scannedPaymentData) : undefined}
+              />
             </React.Suspense>
           </Dialog>
           <Dialog
@@ -469,6 +545,8 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
               <LumenPurchaseDialog account={props.account} onClose={closeDialog} />
             </React.Suspense>
           </Dialog>
+          {/* QR Scanner Dialog */}
+          <QRImportDialog open={isQRScannerOpen} onClose={closeQRScanner} onError={trackError} onScan={handleQRScan} />
         </>
       ) : null}
       {props.account ? null : (
@@ -484,17 +562,17 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
 
 type AccountPageProps =
   | {
-      accountCreation?: undefined
-      accountID: string
-    }
+    accountCreation?: undefined
+    accountID: string
+  }
   | {
-      accountCreation: "pubnet" | "testnet"
-      accountID?: undefined
-    }
+    accountCreation: "pubnet" | "testnet"
+    accountID?: undefined
+  }
 
 function AccountPage(props: AccountPageProps) {
   const { accounts } = React.useContext(AccountsContext)
-  const account = props.accountID ? accounts.find(someAccount => someAccount.id === props.accountID) : undefined
+  const account = props.accountID ? accounts.find((someAccount) => someAccount.id === props.accountID) : undefined
 
   if (props.accountID && !account) {
     // FIXME: Use error boundaries

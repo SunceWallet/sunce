@@ -192,7 +192,6 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
       setMemoType(uri.memoType || "text")
       setValue("memoValue", uri.memo)
     }
-
   }, [])
 
   const handleQRScan = React.useCallback(
@@ -279,7 +278,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         }}
         inputRef={form.register({
           required: t<string>("payment.validation.no-destination"),
-          validate: value =>
+          validate: (value) =>
             isPublicKey(value) ||
             isMuxedAddress(value) ||
             isStellarAddress(value) ||
@@ -288,7 +287,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         label={form.errors.destination ? form.errors.destination.message : t("payment.inputs.destination.label")}
         margin="normal"
         name="destination"
-        onChange={event => setValue("destination", event.target.value.trim())}
+        onChange={(event) => setValue("destination", event.target.value.trim())}
         placeholder={t("payment.inputs.destination.placeholder")}
       />
     ),
@@ -327,16 +326,16 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         }}
         style={{ fontSize: "inherit", fontWeight: "inherit", textAlign: "inherit" }}
       >
-        {t("payment.inputs.price.placeholder")} {formatBalance(spendableBalance.toString())}
+        {t("payment.inputs.price.placeholder", { amount: formatBalance(spendableBalance.toString()) })}
       </ButtonBase>
     ),
     [form, spendableBalance, t]
   )
 
-  const isOwnAsset = React.useMemo(() => form.getValues()["asset"]?.getIssuer() === props.accountData.account_id, [
-    form,
-    props.accountData
-  ])
+  const isOwnAsset = React.useMemo(
+    () => form.getValues()["asset"]?.getIssuer() === props.accountData.account_id,
+    [form, props.accountData]
+  )
 
   const priceInputHelperText = React.useMemo(() => {
     if (!form.getValues()["asset"] || isOwnAsset) return <span></span>
@@ -352,7 +351,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         error={Boolean(form.errors.amount)}
         inputRef={form.register({
           required: t<string>("payment.validation.no-price"),
-          validate: value => {
+          validate: (value) => {
             if (!form.getValues()["asset"]) {
               return t<string>("payment.validation.asset-missing")
             }
@@ -394,8 +393,8 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
         name="memoValue"
         inputRef={form.register({
           validate: {
-            length: value => value.length <= 28 || t<string>("payment.validation.memo-too-long"),
-            memoRequired: value =>
+            length: (value) => value.length <= 28 || t<string>("payment.validation.memo-too-long"),
+            memoRequired: (value) =>
               !memoMetadata.requiredType ||
               !matchingWellknownAccount ||
               value.length > 0 ||
@@ -406,11 +405,11 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
                   destination: matchingWellknownAccount.name
                 }
               ),
-            idPattern: value =>
+            idPattern: (value) =>
               memoType !== "id" || value.match(/^[0-9]+$/) || t<string>("payment.validation.integer-memo-required")
           }
         })}
-        onChange={event => {
+        onChange={(event) => {
           const { value } = event.target
           if (!memoMetadata.requiredType) {
             // only change memo type if no type is required
@@ -507,7 +506,7 @@ function PaymentFormContainer(props: Props) {
   const { lookupFederationRecord } = useFederationLookup()
 
   const createPaymentTx = async (horizon: Horizon.Server, account: Account, formValues: ExtendedPaymentFormValues) => {
-    const asset = props.trustedAssets.find(trustedAsset => trustedAsset.equals(formValues.asset))
+    const asset = props.trustedAssets.find((trustedAsset) => trustedAsset.equals(formValues.asset))
     const federationRecord =
       formValues.destination.indexOf("*") > -1 ? await lookupFederationRecord(formValues.destination) : null
     const destination = federationRecord ? federationRecord.account_id : formValues.destination
