@@ -122,7 +122,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
     if (preselectedParams.asset) setValue("asset", preselectedParams.asset)
     if (preselectedParams.destination) setValue("destination", preselectedParams.destination)
     if (preselectedParams.memo) setValue("memoValue", preselectedParams.memo)
-  }, [preselectedParams, setValue])
+  }, [preselectedParams])
 
   React.useEffect(() => {
     if (!isPublicKey(formValues.destination) && !isStellarAddress(formValues.destination)) {
