@@ -1,10 +1,12 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import Dialog from "@material-ui/core/Dialog"
 import DialogContent from "@material-ui/core/DialogContent"
 import { QRReader, isFullscreenQRPreview } from "~Platform/components"
 import { ActionButton, DialogActionsBox } from "./DialogActions"
 import jsQR from "jsqr"
+import { Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core"
+import { Publish, CameraAlt } from "@material-ui/icons"
 
 interface Props {
   open: boolean
@@ -17,6 +19,7 @@ function QRImportDialog(props: Props) {
   const { t } = useTranslation()
 
   const [scannerRequested, setScannerRequested] = React.useState(false)
+  const [drawerOpen, setDrawerOpen] = React.useState(false)
 
   const handleScan = React.useCallback((data: string | null) => {
     setScannerRequested(false)
@@ -24,8 +27,23 @@ function QRImportDialog(props: Props) {
   }, [props.onScan])
 
   const handleStartScan = React.useCallback(() => {
+    setDrawerOpen(false)
     setScannerRequested(true)
   }, [])
+
+  useEffect(() => {
+    if (props.open) {
+      setTimeout(() => setDrawerOpen(true), 100)
+    } else {
+      setDrawerOpen(false)
+    }
+  }, [props.open])
+
+  const handleCloseDrawer = React.useCallback(() => {
+    setDrawerOpen(false)
+    setScannerRequested(false)
+    props.onClose()
+  }, [props.onClose])
 
   /**
    * Create <input type=file>, simulate click on it.
@@ -110,14 +128,22 @@ function QRImportDialog(props: Props) {
 
   if (isFullscreenQRPreview) {
     return (
-      <Dialog open={props.open} onClose={props.onClose}>
+      <Dialog open={props.open} onClose={handleCloseDrawer}>
         {scannerRequested ? (
           <QRReader onError={props.onError} onScan={handleScan} style={{ width: 256, height: 256 }} />
         ) : null}
-        <DialogActionsBox>
-          <ActionButton onClick={handleUpload}>{t("generic.qr-reader.action.upload")}</ActionButton>
-          <ActionButton onClick={handleStartScan}>{t("generic.qr-reader.action.scan")}</ActionButton>
-        </DialogActionsBox>
+        <Drawer anchor="bottom" open={drawerOpen} onClose={handleCloseDrawer}>
+          <List>
+            <ListItem button onClick={handleUpload}>
+              <ListItemIcon><Publish /></ListItemIcon>
+              <ListItemText primary={t("generic.qr-reader.action.upload")} />
+            </ListItem>
+            <ListItem button onClick={handleStartScan}>
+              <ListItemIcon><CameraAlt /></ListItemIcon>
+              <ListItemText primary={t("generic.qr-reader.action.scan")} />
+            </ListItem>
+          </List>
+        </Drawer>
       </Dialog>
     )
   }
