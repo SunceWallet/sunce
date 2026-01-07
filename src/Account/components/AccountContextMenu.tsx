@@ -13,6 +13,7 @@ import MoneyIcon from "@material-ui/icons/AttachMoney"
 import ContactsIcon from "@material-ui/icons/Contacts"
 import SettingsIcon from "@material-ui/icons/Settings"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff"
 import { Account } from "~App/contexts/accounts"
 import { SettingsContextType } from "~App/contexts/settings"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
@@ -67,6 +68,7 @@ interface MenuProps {
   onDeposit?: () => void
   onManageAssets?: () => void
   onSavedAddresses?: () => void
+  onHiddenSenders?: () => void
   onReceiveFunds?: () => void
   onPurchaseLumens?: () => void
   onTrade?: () => void
@@ -126,6 +128,12 @@ function LiveAccountContextMenuItems(
         icon={<ContactsIcon />}
         label={t("account.context-menu.saved-addresses.label")}
         onClick={closeAndCall(props.onSavedAddresses)}
+      />
+      <AccountContextMenuItem
+        disabled={!activated || !props.onHiddenSenders}
+        icon={<VisibilityOffIcon />}
+        label={t("account.context-menu.hidden-senders.label")}
+        onClick={closeAndCall(props.onHiddenSenders)}
       />
     </>
   )
