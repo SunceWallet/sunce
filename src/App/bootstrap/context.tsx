@@ -8,23 +8,26 @@ import { StellarProvider } from "../contexts/stellar"
 import { TransactionRequestProvider } from "../contexts/transactionRequest"
 import { DialogsProvider } from "~App/contexts/dialogs"
 import { SavedAddressesProvider } from "~App/contexts/savedAddresses"
+import { HiddenSendersProvider } from "~App/contexts/hiddenSenders"
 
 export function ContextProviders(props: { children: React.ReactNode }) {
   return (
     <StellarProvider>
       <AccountsProvider>
         <SavedAddressesProvider>
-          <SettingsProvider>
-            <TransactionRequestProvider>
-              <CachingProviders>
-                <NotificationsProvider>
-                  <DialogsProvider>
-                    <SignatureDelegationProvider>{props.children}</SignatureDelegationProvider>
-                  </DialogsProvider>
-                </NotificationsProvider>
-              </CachingProviders>
-            </TransactionRequestProvider>
-          </SettingsProvider>
+          <HiddenSendersProvider>
+            <SettingsProvider>
+              <TransactionRequestProvider>
+                <CachingProviders>
+                  <NotificationsProvider>
+                    <DialogsProvider>
+                      <SignatureDelegationProvider>{props.children}</SignatureDelegationProvider>
+                    </DialogsProvider>
+                  </NotificationsProvider>
+                </CachingProviders>
+              </TransactionRequestProvider>
+            </SettingsProvider>
+          </HiddenSendersProvider>
         </SavedAddressesProvider>
       </AccountsProvider>
     </StellarProvider>

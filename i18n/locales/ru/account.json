@@ -183,6 +183,46 @@
       }
     }
   },
+  "hidden-senders": {
+    "title": "Скрытые отправители",
+    "search-field": {
+      "placeholder": "Искать по адресу или метке…"
+    },
+    "item": {
+      "no-result": {
+        "primary": "Соответствующих записей нет",
+        "secondary": "Ни один адрес или метка не соответствует вашему поиску"
+      }
+    },
+    "button": {
+      "add": {
+        "label": "Добавить адрес"
+      }
+    }
+  },
+  "hidden-senders-details": {
+    "address": {
+      "label": "Адрес",
+      "placeholder": "Адрес"
+    },
+    "label": {
+      "label": "Метка",
+      "placeholder": "Метка (необязательно)"
+    },
+    "validation": {
+      "no-address": "Введите адрес",
+      "label-too-long": "Метка слишком длинная. Максимум {{max}} символа",
+      "invalid-address": "Адрес некорректен"
+    },
+    "button": {
+      "add": {
+        "label": "Сохранить"
+      },
+      "remove": {
+        "label": "Удалить"
+      }
+    }
+  },
   "context-menu": {
     "account-settings": {
       "label": "Настройки аккаунта"
@@ -207,6 +247,9 @@
     },
     "saved-addresses": {
       "label": "Сохранённые адреса"
+    },
+    "hidden-senders": {
+      "label": "Скрытые отправители"
     }
   },
   "cosigner": {
@@ -300,6 +343,7 @@
       "cancel-order": "Отменить ордер",
       "dismiss": "Отменить",
       "inspect": "Инспектировать",
+      "hide-sender": "Скрыть транзакции от этого отправителя",
       "show-more": "Показать больше информации"
     },
     "account-creation-warning": {
