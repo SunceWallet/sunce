@@ -193,8 +193,8 @@
     "deposit": {
       "label": "Пополнить счет"
     },
-    "receive-funds": {
-      "label": "Получить средства"
+    "read-qr-code": {
+      "label": "Считать QR-код"
     },
     "trade": {
       "label": "Торговля"

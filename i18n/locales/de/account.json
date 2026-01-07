@@ -193,8 +193,8 @@
     "deposit": {
       "label": "Einzahlen"
     },
-    "receive-funds": {
-      "label": "Guthaben empfangen"
+    "read-qr-code": {
+      "label": "QR-Code lesen"
     },
     "trade": {
       "label": "Handeln"

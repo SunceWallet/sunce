@@ -193,8 +193,8 @@
     "deposit": {
       "label": "Agregar fondos"
     },
-    "receive-funds": {
-      "label": "Recibir fondos"
+    "read-qr-code": {
+      "label": "Leer código QR"
     },
     "trade": {
       "label": "Comerciar"

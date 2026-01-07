@@ -6,7 +6,6 @@ import { Account } from "~App/contexts/accounts"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
 import QRCodeIcon from "~Icons/components/QRCode"
-import QRReaderIcon from "~Icons/components/QRReader"
 
 export const useButtonStyles = makeStyles((theme) => ({
   desktop: {
@@ -36,13 +35,12 @@ export const useButtonStyles = makeStyles((theme) => ({
   }
 }))
 
-interface AccountActionsProps {
+ interface AccountActionsProps {
   account: Account
   bottomOfScreen?: boolean
   hidden?: boolean
   onCreatePayment: () => void
   onReceivePayment: () => void
-  onScanQRCode?: () => void
 }
 
 function AccountActions(props: AccountActionsProps) {
@@ -53,10 +51,16 @@ function AccountActions(props: AccountActionsProps) {
     accountData.balances.length === 0 || !accountData.signers.some((signer) => signer.key === props.account.publicKey)
   const { t } = useTranslation()
 
-  const showScanButton = Boolean(props.onScanQRCode)
-
   return (
     <DialogActionsBox className={className} hidden={props.hidden}>
+      <ActionButton
+        className={`${classes.button} ${classes.secondaryButton}`}
+        icon={<QRCodeIcon style={{ fontSize: "110%" }} />}
+        onClick={props.onReceivePayment}
+        variant="contained"
+      >
+        {t("account.action.receive")}
+      </ActionButton>
       <ActionButton
         className={classes.button}
         disabled={isDisabled}
@@ -66,16 +70,6 @@ function AccountActions(props: AccountActionsProps) {
       >
         {t("account.action.send")}
       </ActionButton>
-      {showScanButton && (
-        <ActionButton
-          className={`${classes.button} ${classes.secondaryButton}`}
-          icon={<QRReaderIcon style={{ fontSize: "140%" }} />}
-          onClick={props.onScanQRCode}
-          variant="contained"
-        >
-          {t("account.action.scan")}
-        </ActionButton>
-      )}
     </DialogActionsBox>
   )
 }

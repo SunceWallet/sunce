@@ -56,6 +56,7 @@ interface Props {
   onRename: (newName: string) => void
   onTrade?: () => void
   onWithdraw?: () => void
+  onReadQRCode?: () => void
 }
 
 function AccountHeaderCard(props: Props) {
@@ -88,6 +89,7 @@ function AccountHeaderCard(props: Props) {
             onReceiveFunds={props.onReceiveFunds}
             onTrade={props.onTrade}
             onWithdraw={props.onWithdraw}
+            onReadQRCode={props.onReadQRCode}
             settings={settings}
             showingSettings={showingSettings}
           >

@@ -365,6 +365,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
         onRename={performRenaming}
         onTrade={navigateTo.tradeAssets}
         onWithdraw={navigateTo.withdraw}
+        onReadQRCode={openQRScanner}
       >
         <HideOnError>
           {props.account ? (
@@ -377,7 +378,6 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
                 hidden={!showSendReceiveButtons}
                 onCreatePayment={navigateTo.createPayment!}
                 onReceivePayment={navigateTo.receivePayment!}
-                onScanQRCode={openQRScanner}
               />
             </React.Suspense>
           )}
@@ -449,7 +449,6 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
             hidden={!showSendReceiveButtons}
             onCreatePayment={navigateTo.createPayment!}
             onReceivePayment={navigateTo.receivePayment!}
-            onScanQRCode={openQRScanner}
           />
         </React.Suspense>
       ) : !props.account && !accountToBackup ? (
