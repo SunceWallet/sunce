@@ -18,7 +18,7 @@ import { SettingsContextType } from "~App/contexts/settings"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useIsMobile } from "~Generic/hooks/userinterface"
 import ContextMenu, { AnchorRenderProps } from "~Generic/components/ContextMenu"
-import QRCodeIcon from "~Icons/components/QRCode"
+import QRReaderIcon from "~Icons/components/QRReader"
 
 const useContextMenuItemStyles = makeStyles({
   disabled: {
@@ -71,6 +71,7 @@ interface MenuProps {
   onPurchaseLumens?: () => void
   onTrade?: () => void
   onWithdraw?: () => void
+  onReadQRCode?: () => void
   settings: SettingsContextType
   showingSettings: boolean
 }
@@ -115,10 +116,10 @@ function LiveAccountContextMenuItems(
         onClick={closeAndCall(props.onManageAssets)}
       />
       <AccountContextMenuItem
-        disabled={!activated || !props.onManageAssets}
-        icon={<QRCodeIcon style={{ fontSize: "110%" }} />}
-        label={t("account.context-menu.receive-funds.label")}
-        onClick={closeAndCall(props.onReceiveFunds)}
+        disabled={!activated || !props.onReadQRCode}
+        icon={<QRReaderIcon style={{ fontSize: "140%" }} />}
+        label={t("account.context-menu.read-qr-code.label")}
+        onClick={closeAndCall(props.onReadQRCode)}
       />
       <AccountContextMenuItem
         disabled={!activated || !props.onSavedAddresses}

@@ -29,7 +29,8 @@ function QRImportDialog(props: Props) {
   const handleStartScan = React.useCallback(() => {
     setDrawerOpen(false)
     setScannerRequested(true)
-  }, [])
+    props.onClose()
+  }, [props.onClose])
 
   useEffect(() => {
     if (props.open) {
