@@ -76,6 +76,18 @@
         "secondary": "Brz pristup svim sačuvanim adresama u JSON formatu"
       }
     },
+    "data-export": {
+      "text": {
+        "primary": "Izvoz podataka novčanika",
+        "secondary": "Preuzmi sve podatke: naloge, kontakte i podešavanja"
+      }
+    },
+    "data-import": {
+      "text": {
+        "primary": "Uvoz podataka novčanika",
+        "secondary": "Učitaj podatke iz datoteke izvoza"
+      }
+    },
     "dust": {
       "text": {
         "primary": "Prikaži vrlo male transakcije",
@@ -108,5 +120,21 @@
       },
       "no-services": "Nema pouzdanih usluga"
     }
+  },
+  "export": {
+    "title": "Izvoz podataka",
+    "description": "Biće napravljena datoteka sa tvojim nalozima, kontaktima i podešavanjima tokena. Privatni ključevi će biti uključeni u izvoz.",
+    "warning": "Upozorenje: Datoteka izvoza sadrži poverljive informacije. Čuvaj je na bezbednom mestu i ne deli je sa trećim licima.",
+    "exporting": "Kreiranje datoteke izvoza...",
+    "cancel": "Otkaži",
+    "export": "Izvezi"
+  },
+  "import": {
+    "title": "Uvoz podataka",
+    "description": "Izaberi datoteku izvoza za uvoz naloga, kontakata i podešavanja. Postojeći podaci će biti pažljivo ažurirani.",
+    "warning": "Upozorenje: Uvoz će dodati nove podatke i ažurirati postojeće. Imena postojećih naloga se neće menjati.",
+    "importing": "Uvoz podataka...",
+    "cancel": "Nazad",
+    "import": "Izaberi datoteku"
   }
 }

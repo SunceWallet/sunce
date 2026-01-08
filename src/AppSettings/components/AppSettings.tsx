@@ -11,6 +11,8 @@ import { isDefaultProtocolClient, setAsDefaultProtocolClient } from "~Platform/p
 import { availableLanguages } from "../../../i18n/index"
 import ManageTrustedServicesDialog from "./ManageTrustedServicesDialog"
 import SavedAddressesExportDialog from "./SavedAddressesExportDialog"
+import DataExportDialog from "./DataExportDialog"
+import DataImportDialog from "./DataImportDialog"
 import {
   BiometricLockSetting,
   HideMemoSetting,
@@ -21,14 +23,24 @@ import {
   ShowClaimableBalanceSetting,
   ShowDustSetting,
   TestnetSetting,
-  TrustedServicesSetting
+  TrustedServicesSetting,
+  DataExportSetting,
+  DataImportSetting
 } from "./Settings"
 
 const SettingsDialogs = React.memo(function SettingsDialogs() {
   const router = useRouter()
   const showManageTrustedServices = matchesRoute(router.location.pathname, routes.manageTrustedServices())
   const showSavedAddressesExport = matchesRoute(router.location.pathname, routes.savedAddressesExport())
+  const showDataExport = matchesRoute(router.location.pathname, routes.dataExport())
+  const showDataImport = matchesRoute(router.location.pathname, routes.dataImport())
 
+  if (showDataImport) {
+    return <DataImportDialog />
+  }
+  if (showDataExport) {
+    return <DataExportDialog />
+  }
   if (showSavedAddressesExport) {
     return <SavedAddressesExportDialog />
   }
@@ -57,6 +69,14 @@ function AppSettings() {
   ])
 
   const navigateToSavedAddressesExport = React.useCallback(() => router.history.push(routes.savedAddressesExport()), [
+    router.history
+  ])
+
+  const navigateToDataExport = React.useCallback(() => router.history.push(routes.dataExport()), [
+    router.history
+  ])
+
+  const navigateToDataImport = React.useCallback(() => router.history.push(routes.dataImport()), [
     router.history
   ])
 
@@ -102,6 +122,8 @@ function AppSettings() {
         <ProtocolHandlerSetting isDefaultHandler={isDefaultHandler} onClick={setDefaultClient} />
         <TrustedServicesSetting onClick={navigateToTrustedServices} />
         <SavedAddressesExportSetting onClick={navigateToSavedAddressesExport} />
+        <DataExportSetting onClick={navigateToDataExport} />
+        <DataImportSetting onClick={navigateToDataImport} />
       </List>
       <SettingsDialogs />
     </Carousel>

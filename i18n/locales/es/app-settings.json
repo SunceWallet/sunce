@@ -98,6 +98,34 @@
         "text": "El servicio será eliminado de tu lista de confianza. Estás seguro?"
       },
       "no-services": "No hay servicios de confianza."
+    },
+    "data-export": {
+      "text": {
+        "primary": "Exportar datos de la billetera",
+        "secondary": "Descargar todos los datos: cuentas, contactos y configuraciones"
+      }
+    },
+    "data-import": {
+      "text": {
+        "primary": "Importar datos de la billetera",
+        "secondary": "Cargar datos desde archivo de exportación"
+      }
     }
+  },
+  "export": {
+    "title": "Exportar datos",
+    "description": "Se creará un archivo con sus cuentas, contactos y configuraciones de tokens. Las claves privadas se incluirán en la exportación.",
+    "warning": "Advertencia: El archivo de exportación contiene información confidencial. Manténgalo en un lugar seguro y no lo comparta con terceros.",
+    "exporting": "Creando archivo de exportación...",
+    "cancel": "Cancelar",
+    "export": "Exportar"
+  },
+  "import": {
+    "title": "Importar datos",
+    "description": "Seleccione un archivo de exportación para importar cuentas, contactos y configuraciones. Los datos existentes se actualizarán cuidadosamente.",
+    "warning": "Advertencia: La importación agregará nuevos datos y actualizará los existentes. Los nombres de las cuentas existentes no cambiarán.",
+    "importing": "Importando datos...",
+    "cancel": "Atrás",
+    "import": "Seleccionar archivo"
   }
 }

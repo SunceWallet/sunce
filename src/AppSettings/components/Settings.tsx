@@ -16,6 +16,8 @@ import MessageIcon from "@material-ui/icons/Message"
 import TestnetIcon from "@material-ui/icons/MoneyOff"
 import ImportContacts from "@material-ui/icons/ImportContacts"
 import TrustIcon from "@material-ui/icons/VerifiedUser"
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload"
+import CloudUploadIcon from "@material-ui/icons/CloudUpload"
 import { availableLanguages, languageNames } from "../../../i18n"
 import AppSettingsItem from "./AppSettingsItem"
 
@@ -295,6 +297,50 @@ export const ProtocolHandlerSetting = React.memo(function ProtocolHandlerSetting
           ? t("app-settings.settings.protocol-handler.text.secondary.default")
           : t("app-settings.settings.protocol-handler.text.secondary.non-default")
       }
+    />
+  )
+})
+
+interface DataExportSettingProps {
+  onClick: () => void
+}
+
+export const DataExportSetting = React.memo(function DataExportSetting(props: DataExportSettingProps) {
+  const classes = useSettingsStyles(props)
+  const { t } = useTranslation()
+  return (
+    <AppSettingsItem
+      actions={
+        <ListItemIcon className={classes.caret}>
+          <ArrowRightIcon className={classes.caret} />
+        </ListItemIcon>
+      }
+      icon={<CloudDownloadIcon className={classes.icon} />}
+      onClick={props.onClick}
+      primaryText={t("app-settings.settings.data-export.text.primary")}
+      secondaryText={t("app-settings.settings.data-export.text.secondary")}
+    />
+  )
+})
+
+interface DataImportSettingProps {
+  onClick: () => void
+}
+
+export const DataImportSetting = React.memo(function DataImportSetting(props: DataImportSettingProps) {
+  const classes = useSettingsStyles(props)
+  const { t } = useTranslation()
+  return (
+    <AppSettingsItem
+      actions={
+        <ListItemIcon className={classes.caret}>
+          <ArrowRightIcon className={classes.caret} />
+        </ListItemIcon>
+      }
+      icon={<CloudUploadIcon className={classes.icon} />}
+      onClick={props.onClick}
+      primaryText={t("app-settings.settings.data-import.text.primary")}
+      secondaryText={t("app-settings.settings.data-import.text.secondary")}
     />
   )
 })
