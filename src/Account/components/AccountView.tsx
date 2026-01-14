@@ -128,7 +128,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     null
   )
 
-  const { openSavedAddresses } = React.useContext(DialogsContext)
+  const { openSavedAddresses, openHiddenSenders } = React.useContext(DialogsContext)
   const { setURI } = React.useContext(TransactionRequestContext)
 
   const showAccountCreation =
@@ -181,6 +181,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       deposit: accountID ? () => router.history.push(routes.depositAsset(accountID)) : undefined,
       balanceDetails: accountID ? () => router.history.push(routes.balanceDetails(accountID)) : undefined,
       savedAddresses: accountID ? () => openSavedAddresses({}) : undefined,
+      hiddenSenders: accountID ? () => openHiddenSenders({}) : undefined,
       createPayment: accountID ? () => router.history.push(routes.createPayment(accountID)) : undefined,
       purchaseLumens: accountID ? () => router.history.push(routes.purchaseLumens(accountID)) : undefined,
       receivePayment: accountID ? () => router.history.push(routes.receivePayment(accountID)) : undefined,
@@ -360,11 +361,13 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
         onDeposit={navigateTo.deposit}
         onManageAssets={navigateTo.balanceDetails}
         onSavedAddresses={navigateTo.savedAddresses}
+        onHiddenSenders={navigateTo.hiddenSenders}
         onReceiveFunds={navigateTo.receivePayment}
         onPurchaseLumens={navigateTo.purchaseLumens}
         onRename={performRenaming}
         onTrade={navigateTo.tradeAssets}
         onWithdraw={navigateTo.withdraw}
+        onReadQRCode={openQRScanner}
       >
         <HideOnError>
           {props.account ? (
@@ -377,7 +380,6 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
                 hidden={!showSendReceiveButtons}
                 onCreatePayment={navigateTo.createPayment!}
                 onReceivePayment={navigateTo.receivePayment!}
-                onScanQRCode={openQRScanner}
               />
             </React.Suspense>
           )}
@@ -449,7 +451,6 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
             hidden={!showSendReceiveButtons}
             onCreatePayment={navigateTo.createPayment!}
             onReceivePayment={navigateTo.receivePayment!}
-            onScanQRCode={openQRScanner}
           />
         </React.Suspense>
       ) : !props.account && !accountToBackup ? (

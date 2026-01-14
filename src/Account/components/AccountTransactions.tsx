@@ -6,6 +6,7 @@ import UpdateIcon from "@material-ui/icons/Update"
 import { Account } from "~App/contexts/accounts"
 import { SettingsContext } from "~App/contexts/settings"
 import { SignatureDelegationContext } from "~App/contexts/signatureDelegation"
+import { HiddenSendersContext } from "~App/contexts/hiddenSenders"
 import { useHorizonURLs } from "~Generic/hooks/stellar"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useIsMobile, useRouter } from "~Generic/hooks/userinterface"
@@ -16,7 +17,6 @@ import * as routes from "~App/routes"
 import MainSelectionButton from "~Generic/components/MainSelectionButton"
 import { VerticalLayout } from "~Layout/components/Box"
 import FriendbotButton from "./FriendbotButton"
-import OfferList from "./OfferList"
 import { InteractiveSignatureRequestList } from "./SignatureRequestList"
 import TransactionList from "./TransactionList"
 import { isDustTransaction } from "~Generic/lib/transaction"
@@ -29,6 +29,9 @@ const excludeClaimableFilter = (account: Account, tx: DecodedTransactionResponse
 
 const excludeDustFilter = (account: Account, tx: DecodedTransactionResponse) =>
   !isDustTransaction(tx.decodedTx, account)
+
+const excludeHiddenSendersFilter = (account: Account, tx: DecodedTransactionResponse, hiddenSenders: string[]) =>
+  !hiddenSenders.includes(tx.decodedTx.source)
 
 function PendingMultisigTransactions(props: { account: Account }) {
   const { pendingSignatureRequests } = React.useContext(SignatureDelegationContext)
@@ -76,21 +79,25 @@ function PendingMultisigTransactions(props: { account: Account }) {
 function AccountTransactions(props: { account: Account }) {
   const { account } = props
   const { showDust, showClaimableBalanceTxs } = React.useContext(SettingsContext)
+  const { hiddenSenders } = React.useContext(HiddenSendersContext)
   const { t } = useTranslation()
   const accountData = useLiveAccountData(account.accountID, account.testnet)
   const horizonURLs = useHorizonURLs(account.testnet)
   const isSmallScreen = useIsMobile()
   const [moreTxsLoadingState, handleMoreTxsFetch] = useLoadingState()
 
+  const hiddenSendersList = React.useMemo(() => Object.keys(hiddenSenders), [hiddenSenders])
+
   const txsFilter = React.useCallback(
     (txs: DecodedTransactionResponse[]) =>
       txs.filter(tx => {
         return (
           (showClaimableBalanceTxs || excludeClaimableFilter(account, tx)) &&
-          (showDust || excludeDustFilter(account, tx))
+          (showDust || excludeDustFilter(account, tx)) &&
+          excludeHiddenSendersFilter(account, tx, hiddenSendersList)
         )
       }),
-    []
+    [account, showClaimableBalanceTxs, showDust, hiddenSendersList]
   )
 
   const { transactions, olderTransactionsAvailable, fetchMoreTransactions } = useFilteredTransactions(

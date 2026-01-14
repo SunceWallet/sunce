@@ -183,6 +183,46 @@
       }
     }
   },
+  "hidden-senders": {
+    "title": "Hidden Senders",
+    "search-field": {
+      "placeholder": "Search address or label…"
+    },
+    "item": {
+      "no-result": {
+        "primary": "No matching record",
+        "secondary": "No address or label matches your search"
+      }
+    },
+    "button": {
+      "add": {
+        "label": "Add Address"
+      }
+    }
+  },
+  "hidden-senders-details": {
+    "address": {
+      "label": "Address",
+      "placeholder": "Address"
+    },
+    "label": {
+      "label": "Label",
+      "placeholder": "Label (optional)"
+    },
+    "validation": {
+      "no-address": "Address is missing",
+      "label-too-long": "Label is too long. Consider {{max}} characters max",
+      "invalid-address": "Address is invalid"
+    },
+    "button": {
+      "add": {
+        "label": "Save"
+      },
+      "remove": {
+        "label": "Remove"
+      }
+    }
+  },
   "context-menu": {
     "account-settings": {
       "label": "Account Settings"
@@ -193,8 +233,8 @@
     "deposit": {
       "label": "Add funds"
     },
-    "receive-funds": {
-      "label": "Receive Funds"
+    "read-qr-code": {
+      "label": "Read QR Code"
     },
     "trade": {
       "label": "Trade"
@@ -207,6 +247,9 @@
     },
     "saved-addresses": {
       "label": "Saved Addresses"
+    },
+    "hidden-senders": {
+      "label": "Hidden Senders"
     }
   },
   "cosigner": {
@@ -300,6 +343,7 @@
       "cancel-order": "Cancel order",
       "dismiss": "Dismiss",
       "inspect": "Inspect",
+      "hide-sender": "Hide transactions from this sender",
       "show-more": "Show more details"
     },
     "account-creation-warning": {

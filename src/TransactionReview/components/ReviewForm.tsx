@@ -6,8 +6,10 @@ import { Transaction } from "@stellar/stellar-sdk"
 import CheckIcon from "@material-ui/icons/Check"
 import CloseIcon from "@material-ui/icons/Close"
 import OpenInNewIcon from "@material-ui/icons/OpenInNew"
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff"
 import { Account } from "~App/contexts/accounts"
 import { SettingsContext } from "~App/contexts/settings"
+import { HiddenSendersContext } from "~App/contexts/hiddenSenders"
 import { RefStateObject } from "~Generic/hooks/userinterface"
 import { renderFormFieldError } from "~Generic/lib/errors"
 import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
@@ -15,9 +17,31 @@ import { openLink } from "~Platform/links"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
 import { VerticalLayout } from "~Layout/components/Box"
 import Portal from "~Generic/components/Portal"
+import Typography from "@material-ui/core/Typography"
+import { Box } from "~Layout/components/Box"
 import DismissalConfirmationDialog from "./DismissalConfirmationDialog"
 import TransactionSummary from "./TransactionSummary"
 import PasswordField from "~Generic/components/PasswordField"
+import Link from "@material-ui/core/Link"
+import makeStyles from "@material-ui/core/styles/makeStyles"
+
+
+const useLinkStyles = makeStyles(() => ({
+  linkBox: {
+    display: "flex",
+    justifyContent: "center",
+    margin: "12px 0 16px",
+    flexDirection: "column",
+    flexWrap: "wrap",
+    gap: "8px",
+    alignItems: "end",
+  },
+  link: {
+    display: "flex",
+    gap: "4px",
+    fontSize: "1.2rem",
+  }
+}))
 
 type FormErrors = { [formField in keyof FormValues]: Error | null }
 
@@ -42,7 +66,9 @@ interface Props {
 function TxConfirmationForm(props: Props) {
   const { onConfirm = () => undefined, onClose } = props
 
+  const classes = useLinkStyles()
   const settings = React.useContext(SettingsContext)
+  const { add: addHiddenSender } = React.useContext(HiddenSendersContext)
   const formID = React.useMemo(() => nanoid(), [])
   const [dismissalConfirmationPending, setDismissalConfirmationPending] = React.useState(false)
   const [errors, setErrors] = React.useState<Partial<FormErrors>>({})
@@ -75,11 +101,18 @@ function TxConfirmationForm(props: Props) {
 
   const openInStellarExpert = React.useCallback(() => {
     openLink(
-      `https://stellar.expert/explorer/${
-        props.account.testnet ? "testnet" : "public"
+      `https://stellar.expert/explorer/${props.account.testnet ? "testnet" : "public"
       }/tx/${props.transaction.hash().toString("hex")}`
     )
   }, [props.account.testnet, props.transaction])
+
+  const handleHideSender = React.useCallback(() => {
+    const senderAddress = props.transaction.source
+    addHiddenSender(senderAddress)
+    if (onClose) {
+      onClose()
+    }
+  }, [props.transaction, addHiddenSender, onClose])
 
   const handleTextFieldChange = React.useCallback(event => setFormValue("password", event.target.value), [])
 
@@ -180,10 +213,26 @@ function TxConfirmationForm(props: Props) {
             </ActionButton>
           )}
           {props.disabled && !props.signatureRequest ? (
-            <ActionButton icon={<OpenInNewIcon />} onClick={openInStellarExpert} type="secondary">
+          <Box className={classes.linkBox}>
+            <Link
+              component="button"
+              className={classes.link}
+              onClick={handleHideSender}
+            >
+              <VisibilityOffIcon />
+              {t("account.transaction-review.action.hide-sender")}
+            </Link>
+
+            <Link
+              component="button"
+              className={classes.link}
+              onClick={openInStellarExpert}
+            >
+              <OpenInNewIcon />
               {t("account.transaction-review.action.inspect")}
-            </ActionButton>
-          ) : null}
+            </Link>
+          </Box>
+        ) : null}
         </DialogActionsBox>
       </Portal>
       <DismissalConfirmationDialog

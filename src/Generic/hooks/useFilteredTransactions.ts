@@ -11,7 +11,7 @@ function useFilteredTransactions(
   const limit = 15
   const { transactions, olderTransactionsAvailable } = useLiveRecentTransactions(accountId, testnet, refetchKey)
   const fetchMore = useOlderTransactions(accountId, testnet)
-  const txs = React.useMemo(() => filter(transactions), [transactions])
+  const txs = React.useMemo(() => filter(transactions), [transactions, filter])
 
   const fetchMoreTransactions = async (count: number = 0): Promise<void> => {
     if (count >= limit) {
