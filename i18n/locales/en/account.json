@@ -144,6 +144,23 @@
   },
   "saved-addresses": {
     "title": "Saved Addresses",
+    "settings-title": "Saved Addresses Settings",
+    "export-to-file": "Export to file",
+    "export-description": "Download saved addresses as JSON file",
+    "import-from-file": "Import from file",
+    "import-description": "Upload and import saved addresses from JSON file",
+    "invalid-format": "Invalid file format",
+    "invalid-json": "Invalid JSON format",
+    "import-success": "Addresses imported successfully",
+    "delete-all": "Delete all",
+    "delete-all-description": "Remove all saved addresses",
+    "delete-all-success": "All saved addresses deleted successfully",
+    "delete-all-confirm": {
+      "title": "Confirm deletion",
+      "text": "Are you sure you want to delete all saved addresses? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
     "search-field": {
       "placeholder": "Search name or address…"
     },

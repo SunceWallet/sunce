@@ -3,10 +3,15 @@ import React from "react"
 import { FullscreenDialogTransition } from "~App/theme"
 import ViewLoading from "~Generic/components/ViewLoading"
 import SavedAddressesDialog, { SavedAddressesDialogProps } from "../../Assets/components/SavedAddressesDialog"
+import SavedAddressesSettings from "../../Assets/components/SavedAddressesSettings"
 import HiddenSendersDialog, { HiddenSendersDialogProps } from "../../Account/components/HiddenSendersDialog"
 
 interface Props {
   children: React.ReactNode
+}
+
+interface SavedAddressesSettingsDialogProps {
+  onClose?: () => void
 }
 
 interface ContextType {
@@ -14,13 +19,17 @@ interface ContextType {
   openSavedAddresses: (params: Partial<SavedAddressesDialogProps> | null) => void
   isHiddenSendersOpened: boolean
   openHiddenSenders: (params: Partial<HiddenSendersDialogProps> | null) => void
+  isSavedAddressesSettingsOpened: boolean
+  openSavedAddressesSettings: (params: Partial<SavedAddressesSettingsDialogProps> | null) => void
 }
 
 const initialValues: ContextType = {
   isSavedAddressesOpened: false,
   openSavedAddresses: () => undefined,
   isHiddenSendersOpened: false,
-  openHiddenSenders: () => undefined
+  openHiddenSenders: () => undefined,
+  isSavedAddressesSettingsOpened: false,
+  openSavedAddressesSettings: () => undefined
 }
 
 const DialogsContext = React.createContext<ContextType>(initialValues)
@@ -30,6 +39,9 @@ export function DialogsProvider(props: Props) {
     null
   )
   const [hiddenSendersDialog, setHiddenSendersDialog] = React.useState<Partial<HiddenSendersDialogProps> | null>(
+    null
+  )
+  const [savedAddressesSettingsDialog, setSavedAddressesSettingsDialog] = React.useState<Partial<SavedAddressesSettingsDialogProps> | null>(
     null
   )
 
@@ -43,11 +55,18 @@ export function DialogsProvider(props: Props) {
     setHiddenSendersDialog(null)
   }, [hiddenSendersDialog])
 
+  const closeSavedAddressesSettingsDialog = React.useCallback(() => {
+    savedAddressesSettingsDialog?.onClose?.()
+    setSavedAddressesSettingsDialog(null)
+  }, [savedAddressesSettingsDialog])
+
   const context = {
     isSavedAddressesOpened: !!savedAddressesDialog,
     openSavedAddresses: setSavedAddressesDialog,
     isHiddenSendersOpened: !!hiddenSendersDialog,
-    openHiddenSenders: setHiddenSendersDialog
+    openHiddenSenders: setHiddenSendersDialog,
+    isSavedAddressesSettingsOpened: savedAddressesSettingsDialog,
+    openSavedAddressesSettings: setSavedAddressesSettingsDialog
   }
 
   return (
@@ -72,6 +91,16 @@ export function DialogsProvider(props: Props) {
         >
           <React.Suspense fallback={<ViewLoading />}>
             <HiddenSendersDialog {...(hiddenSendersDialog || {})} onClose={closeHiddenSendersDialog} />
+          </React.Suspense>
+        </Dialog>
+        <Dialog
+          open={!!savedAddressesSettingsDialog}
+          fullScreen
+          onClose={closeSavedAddressesSettingsDialog}
+          TransitionComponent={FullscreenDialogTransition}
+        >
+          <React.Suspense fallback={<ViewLoading />}>
+            <SavedAddressesSettings {...(savedAddressesSettingsDialog || {})} onClose={closeSavedAddressesSettingsDialog} />
           </React.Suspense>
         </Dialog>
       </React.Suspense>
