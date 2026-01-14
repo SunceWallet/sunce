@@ -1,0 +1,2 @@
+import{U as i,V as v,W as p,g as l}from"./app-CStNF4WA.js";var e={},a;function f(){if(a)return e;a=1;var r=i();Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0;var t=r(v()),o=r(p()),u=(0,o.default)(t.default.createElement("path",{d:"M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"}),"SwapHoriz");return e.default=u,e}var n=f();const d=l(n);export{d as S};
+//# sourceMappingURL=SwapHoriz-DqtkMkWi.js.map
