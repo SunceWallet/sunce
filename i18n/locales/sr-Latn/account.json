@@ -144,6 +144,23 @@
   },
   "saved-addresses": {
     "title": "Sačuvane adrese",
+    "settings-title": "Podešavanja sačuvanih adresa",
+    "export-to-file": "Izvezi u fajl",
+    "export-description": "Preuzmi sačuvane adrese kao JSON fajl",
+    "import-from-file": "Uvezi iz fajla",
+    "import-description": "Otpremi i uvezi sačuvane adrese iz JSON fajla",
+    "invalid-format": "Nevažeći format fajla",
+    "invalid-json": "Nevažeći JSON format",
+    "import-success": "Adrese uspešno uvežene",
+    "delete-all": "Obriši sve",
+    "delete-all-description": "Ukloni sve sačuvane adrese",
+    "delete-all-success": "Sve sačuvane adrese uspešno obrisane",
+    "delete-all-confirm": {
+      "title": "Potvrdi brisanje",
+      "text": "Da li ste sigurni da želite da obrišete sve sačuvane adrese? Ova radnja se ne može opozvati.",
+      "cancel": "Otkaži",
+      "delete": "Obriši"
+    },
     "search-field": {
       "placeholder": "Pretraga po imenu ili adresi…"
     },

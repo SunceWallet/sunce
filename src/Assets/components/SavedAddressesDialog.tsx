@@ -2,6 +2,8 @@ import { ListItem, ListItemText } from "@material-ui/core"
 import Dialog from "@material-ui/core/Dialog"
 import List from "@material-ui/core/List"
 import AddIcon from "@material-ui/icons/Add"
+import SettingsIcon from "@material-ui/icons/Settings"
+import IconButton from "@material-ui/core/IconButton"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { FullscreenDialogTransition } from "~App/theme"
@@ -9,7 +11,8 @@ import ButtonListItem from "~Generic/components/ButtonListItem"
 import MainTitle from "~Generic/components/MainTitle"
 import { PublicKey } from "~Generic/components/PublicKey"
 import ViewLoading from "~Generic/components/ViewLoading"
-import { useIsMobile } from "~Generic/hooks/userinterface"
+import { useIsMobile, useRouter } from "~Generic/hooks/userinterface"
+import { DialogsContext } from "~App/contexts/dialogs"
 import DialogBody from "~Layout/components/DialogBody"
 import SavedAddressesDetailsDialog from "./SavedAddressesDetailsDialog"
 import { SavedAddresses, SavedAddressesContext } from "~App/contexts/savedAddresses"
@@ -132,8 +135,27 @@ function SavedAddressesDialog(props: SavedAddressesDialogProps) {
     if (!props.readonly) return openAddressDetails(address)
   }
 
+  const { openSavedAddressesSettings } = React.useContext(DialogsContext)
+
+  const navigateToSavedAddressesSettings = React.useCallback(() => {
+    openSavedAddressesSettings({})
+  }, [openSavedAddressesSettings])
+
   return (
-    <DialogBody excessWidth={12} top={<MainTitle onBack={props.onClose} title={t("account.saved-addresses.title")} />}>
+    <DialogBody
+      excessWidth={12}
+      top={
+        <MainTitle
+          onBack={props.onClose}
+          title={t("account.saved-addresses.title")}
+          actions={
+            <IconButton onClick={navigateToSavedAddressesSettings} style={{ color: "black" }}>
+              <SettingsIcon />
+            </IconButton>
+          }
+        />
+      }
+    >
       <SearchField
         autoFocus
         onChange={onSearchFieldChange}
