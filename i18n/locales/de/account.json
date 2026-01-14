@@ -144,6 +144,23 @@
   },
   "saved-addresses": {
     "title": "Gespeicherte Adressen",
+    "settings-title": "Einstellungen für gespeicherte Adressen",
+    "export-to-file": "In Datei exportieren",
+    "export-description": "Gespeicherte Adressen als JSON-Datei herunterladen",
+    "import-from-file": "Aus Datei importieren",
+    "import-description": "Gespeicherte Adressen aus JSON-Datei hochladen und importieren",
+    "invalid-format": "Ungültiges Dateiformat",
+    "invalid-json": "Ungültiges JSON-Format",
+    "import-success": "Adressen erfolgreich importiert",
+    "delete-all": "Alle löschen",
+    "delete-all-description": "Alle gespeicherten Adressen entfernen",
+    "delete-all-success": "Alle gespeicherten Adressen wurden erfolgreich gelöscht",
+    "delete-all-confirm": {
+      "title": "Löschung bestätigen",
+      "text": "Möchten Sie wirklich alle gespeicherten Adressen löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "cancel": "Abbrechen",
+      "delete": "Löschen"
+    },
     "search-field": {
       "placeholder": "Namen oder Adresse suchen…"
     },

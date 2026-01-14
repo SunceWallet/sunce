@@ -144,6 +144,23 @@
   },
   "saved-addresses": {
     "title": "Direcciónes Favoritos",
+    "settings-title": "Configuración de direcciones guardadas",
+    "export-to-file": "Exportar a archivo",
+    "export-description": "Descargar direcciones guardadas como archivo JSON",
+    "import-from-file": "Importar desde archivo",
+    "import-description": "Cargar e importar direcciones guardadas desde archivo JSON",
+    "invalid-format": "Formato de archivo inválido",
+    "invalid-json": "Formato JSON inválido",
+    "import-success": "Direcciones importadas exitosamente",
+    "delete-all": "Eliminar todas",
+    "delete-all-description": "Eliminar todas las direcciones guardadas",
+    "delete-all-success": "Todas las direcciones guardadas eliminadas exitosamente",
+    "delete-all-confirm": {
+      "title": "Confirmar eliminación",
+      "text": "¿Está seguro de que desea eliminar todas las direcciones guardadas? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "delete": "Eliminar"
+    },
     "search-field": {
       "placeholder": "Busca activo por nombre o dirección…"
     },

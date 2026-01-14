@@ -144,6 +144,23 @@
   },
   "saved-addresses": {
     "title": "Destinazioni Preferite",
+    "settings-title": "Impostazioni degli indirizzi salvati",
+    "export-to-file": "Esporta in file",
+    "export-description": "Scarica gli indirizzi salvati come file JSON",
+    "import-from-file": "Importa da file",
+    "import-description": "Carica e importa gli indirizzi salvati da file JSON",
+    "invalid-format": "Formato file non valido",
+    "invalid-json": "Formato JSON non valido",
+    "import-success": "Indirizzi importati con successo",
+    "delete-all": "Elimina tutti",
+    "delete-all-description": "Rimuovi tutti gli indirizzi salvati",
+    "delete-all-success": "Tutti gli indirizzi salvati sono stati eliminati con successo",
+    "delete-all-confirm": {
+      "title": "Conferma eliminazione",
+      "text": "Sei sicuro di voler eliminare tutti gli indirizzi salvati? Questa azione non può essere annullata.",
+      "cancel": "Annulla",
+      "delete": "Elimina"
+    },
     "search-field": {
       "placeholder": "Cerca risorse tramite nome o indirizzo…"
     },

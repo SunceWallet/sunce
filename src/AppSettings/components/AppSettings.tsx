@@ -10,14 +10,12 @@ import Carousel from "~Layout/components/Carousel"
 import { isDefaultProtocolClient, setAsDefaultProtocolClient } from "~Platform/protocol-handler"
 import { availableLanguages } from "../../../i18n/index"
 import ManageTrustedServicesDialog from "./ManageTrustedServicesDialog"
-import SavedAddressesExportDialog from "./SavedAddressesExportDialog"
 import {
   BiometricLockSetting,
   HideMemoSetting,
   LanguageSetting,
   MultiSigSetting,
   ProtocolHandlerSetting,
-  SavedAddressesExportSetting,
   ShowClaimableBalanceSetting,
   ShowDustSetting,
   TestnetSetting,
@@ -27,11 +25,7 @@ import {
 const SettingsDialogs = React.memo(function SettingsDialogs() {
   const router = useRouter()
   const showManageTrustedServices = matchesRoute(router.location.pathname, routes.manageTrustedServices())
-  const showSavedAddressesExport = matchesRoute(router.location.pathname, routes.savedAddressesExport())
 
-  if (showSavedAddressesExport) {
-    return <SavedAddressesExportDialog />
-  }
   return showManageTrustedServices ? <ManageTrustedServicesDialog /> : <></>
 })
 
@@ -53,10 +47,6 @@ function AppSettings() {
 
   const hasTestnetAccount = accounts.some(account => account.testnet)
   const navigateToTrustedServices = React.useCallback(() => router.history.push(routes.manageTrustedServices()), [
-    router.history
-  ])
-
-  const navigateToSavedAddressesExport = React.useCallback(() => router.history.push(routes.savedAddressesExport()), [
     router.history
   ])
 
@@ -101,7 +91,6 @@ function AppSettings() {
         />
         <ProtocolHandlerSetting isDefaultHandler={isDefaultHandler} onClick={setDefaultClient} />
         <TrustedServicesSetting onClick={navigateToTrustedServices} />
-        <SavedAddressesExportSetting onClick={navigateToSavedAddressesExport} />
       </List>
       <SettingsDialogs />
     </Carousel>
