@@ -147,6 +147,8 @@
     "settings-title": "Saved Addresses Settings",
     "export-to-file": "Export to file",
     "export-description": "Download saved addresses as JSON file",
+    "export-success": "File exported successfully",
+    "export-error": "Failed to export file",
     "import-from-file": "Import from file",
     "import-description": "Upload and import saved addresses from JSON file",
     "invalid-format": "Invalid file format",

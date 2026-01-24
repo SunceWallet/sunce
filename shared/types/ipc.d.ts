@@ -66,7 +66,7 @@ declare namespace IPC {
 
     [Messages.OpenLink]: (href: string) => void
 
-    [Messages.ShareFile]: (options: { message: string; subject: string; file: string }) => void
+    [Messages.ShareFile]: (options: { message: string; subject: string; content: string }) => void
 
     [Messages.DeepLinkURL]: () => string
     [Messages.IsDefaultProtocolClient]: () => boolean

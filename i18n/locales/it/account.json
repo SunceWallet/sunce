@@ -147,6 +147,8 @@
     "settings-title": "Impostazioni degli indirizzi salvati",
     "export-to-file": "Esporta in file",
     "export-description": "Scarica gli indirizzi salvati come file JSON",
+    "export-success": "File esportato con successo",
+    "export-error": "Impossibile esportare il file",
     "import-from-file": "Importa da file",
     "import-description": "Carica e importa gli indirizzi salvati da file JSON",
     "invalid-format": "Formato file non valido",

@@ -147,6 +147,8 @@
     "settings-title": "Configuración de direcciones guardadas",
     "export-to-file": "Exportar a archivo",
     "export-description": "Descargar direcciones guardadas como archivo JSON",
+    "export-success": "Archivo exportado exitosamente",
+    "export-error": "Error al exportar archivo",
     "import-from-file": "Importar desde archivo",
     "import-description": "Cargar e importar direcciones guardadas desde archivo JSON",
     "invalid-format": "Formato de archivo inválido",

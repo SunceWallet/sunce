@@ -147,6 +147,8 @@
     "settings-title": "Einstellungen für gespeicherte Adressen",
     "export-to-file": "In Datei exportieren",
     "export-description": "Gespeicherte Adressen als JSON-Datei herunterladen",
+    "export-success": "Datei erfolgreich exportiert",
+    "export-error": "Fehler beim Exportieren der Datei",
     "import-from-file": "Aus Datei importieren",
     "import-description": "Gespeicherte Adressen aus JSON-Datei hochladen und importieren",
     "invalid-format": "Ungültiges Dateiformat",

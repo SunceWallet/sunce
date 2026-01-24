@@ -12,17 +12,6 @@ interface SavedAddressesSettingsProps {
   onClose: () => void
 }
 
-// Helper function to encode UTF-8 strings to base64
-const utf8ToBase64 = (str: string): string => {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(str)
-  let binary = ""
-  for (let i = 0; i < data.length; i++) {
-    binary += String.fromCharCode(data[i])
-  }
-  return btoa(binary)
-}
-
 function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
   const { t } = useTranslation()
   const { savedAddresses, bulkUpdate } = React.useContext(SavedAddressesContext)
@@ -36,12 +25,13 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
 
     if (isMobile) {
       try {
-        // Use cordova-plugin-x-socialsharing via IPC on mobile
+        // Use cordova-plugin-file (Android) or cordova-plugin-x-socialsharing (iOS) via IPC on mobile
         await ipcCall("ShareFile", {
           message: "My Stellar contacts",
           subject: "stellar-contacts",
-          file: `data:application/json;base64,${utf8ToBase64(jsonContent)}`
+          content: jsonContent
         })
+        showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
       } catch (error) {
         console.error("Error sharing file:", error.message)
         showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))
@@ -63,6 +53,8 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
       // Clean up
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
+
+      showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
     }
   }, [savedAddresses, showNotification, t])
 

@@ -147,6 +147,8 @@
     "settings-title": "Подешавања сачуваних адреса",
     "export-to-file": "Извези у фајл",
     "export-description": "Преузми сачуване адресе као JSON фајл",
+    "export-success": "Фајл успешно извезен",
+    "export-error": "Грешка при извозу фајла",
     "import-from-file": "Увези из фајла",
     "import-description": "Отпреми и увези сачуване адресе из JSON фајла",
     "invalid-format": "Неважећи формат фајла",
