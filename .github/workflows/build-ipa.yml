@@ -2,10 +2,20 @@ name: Build iPhone artifact
 
 on:
   workflow_dispatch:
+    inputs:
+        secret_source:
+          description: 'Which secrets to use?'
+          required: true
+          default: 'default'
+          type: choice
+          options:
+            - default
+            - kosta
 
 jobs:
   build:
     runs-on: macos-14
+    environment: ${{ github.event.inputs.secret_source == 'kosta' && 'Kosta Dev' || '' }}
 
     steps:
       - uses: maxim-lobanov/setup-xcode@v1.6.0  # или последняя версия
