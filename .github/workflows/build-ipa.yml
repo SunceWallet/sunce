@@ -64,6 +64,14 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo -n "${{ secrets.MAIN_APP_APPSTORE_PROVISION_PROFILE_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Sunce\ provision.mobileprovision
 
+      - name: Adjust build profile
+        working-directory: cordova
+        if: github.environment == 'kosta'
+        run: |
+          mv build.ios.json build.ios.json.orig
+          jq '.ios.release.provisioningProfile = "Kosta Dev"' build.ios.json.orig > build.ios.json
+          rm build.ios.json.orig
+
       - name: Build IPA
         run: |
           cd cordova
