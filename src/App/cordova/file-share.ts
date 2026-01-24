@@ -55,24 +55,39 @@ export function initializeFileSharing() {
             reject
           )
       } else {
-        // On iOS, use cordova-plugin-x-socialsharing
+        // On iOS, use cordova-plugin-file to create a file with proper name, then share it
+        const filePlugin = (window as any).cordova?.plugin?.file || (window as any).cordova.file
         const socialSharing = (window as any).plugins.socialsharing
 
-        if (!socialSharing) {
-          reject(new Error("cordova-plugin-x-socialsharing not installed"))
-          return
-        }
+        const fileName = options.subject + ".json"
+        const blob = new Blob([options.content], { type: "application/json" })
 
-        // Encode content as base64 data URL for iOS sharing
-        const dataUrl = `data:application/json;base64,${utf8ToBase64(options.content)}`
-
-        socialSharing.shareWithOptions(
-          {
-            message: options.message,
-            subject: options.subject,
-            files: [dataUrl],
+        // Create temporary file with proper name, then share it
+        ;(window as any).resolveLocalFileSystemURL(
+          filePlugin.cacheDirectory,
+          (dirEntry: any) => {
+            dirEntry.getFile(
+              fileName,
+              { create: true, exclusive: false },
+              (fileEntry: any) => {
+                fileEntry.createWriter((writer: any) => {
+                  writer.onwriteend = () => {
+                    socialSharing.shareWithOptions(
+                      {
+                        subject: options.subject,
+                        files: [fileEntry.nativeURL],
+                      },
+                      resolve,
+                      reject
+                    )
+                  }
+                  writer.onerror = reject
+                  writer.write(blob)
+                }, reject)
+              },
+              reject
+            )
           },
-          resolve,
           reject
         )
       }
