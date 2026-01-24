@@ -35,25 +35,25 @@ export function initializeFileSharing() {
         const fileName = options.subject + ".json"
         const blob = new Blob([options.content], { type: "application/json" })
 
-        // Write file using File API
-        ;(window as any).resolveLocalFileSystemURL(
-          filePlugin.externalRootDirectory + "Download",
-          (dirEntry: any) => {
-            dirEntry.getFile(
-              fileName,
-              { create: true, exclusive: false },
-              (fileEntry: any) => {
-                fileEntry.createWriter((writer: any) => {
-                  writer.onwriteend = () => resolve(undefined)
-                  writer.onerror = reject
-                  writer.write(blob)
-                }, reject)
-              },
-              reject
-            )
-          },
-          reject
-        )
+          // Write file using File API
+          ; (window as any).resolveLocalFileSystemURL(
+            filePlugin.externalRootDirectory + "Download",
+            (dirEntry: any) => {
+              dirEntry.getFile(
+                fileName,
+                { create: true, exclusive: false },
+                (fileEntry: any) => {
+                  fileEntry.createWriter((writer: any) => {
+                    writer.onwriteend = () => resolve(undefined)
+                    writer.onerror = reject
+                    writer.write(blob)
+                  }, reject)
+                },
+                reject
+              )
+            },
+            reject
+          )
       } else {
         // On iOS, use cordova-plugin-x-socialsharing
         const socialSharing = (window as any).plugins.socialsharing
