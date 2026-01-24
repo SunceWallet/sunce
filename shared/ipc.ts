@@ -15,6 +15,8 @@ export const Messages: IPC.MessageType = {
 
   OpenLink: "OpenLink",
 
+  ShareFile: "ShareFile",
+
   DeepLinkURL: "DeepLinkURL",
   IsDefaultProtocolClient: "IsDefaultProtocolClient",
   IsDifferentHandlerInstalled: "IsDifferentHandlerInstalled",

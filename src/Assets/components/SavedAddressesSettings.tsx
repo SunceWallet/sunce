@@ -6,9 +6,21 @@ import { List, ListItem, ListItemText } from "@material-ui/core"
 import MainTitle from "~Generic/components/MainTitle"
 import { NotificationsContext } from "~App/contexts/notifications"
 import { ActionButton, ConfirmDialog } from "~Generic/components/DialogActions"
+import { call as ipcCall } from "~Platform/ipc"
 
 interface SavedAddressesSettingsProps {
   onClose: () => void
+}
+
+// Helper function to encode UTF-8 strings to base64
+const utf8ToBase64 = (str: string): string => {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(str)
+  let binary = ""
+  for (let i = 0; i < data.length; i++) {
+    binary += String.fromCharCode(data[i])
+  }
+  return btoa(binary)
 }
 
 function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
@@ -18,27 +30,41 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = React.useState(false)
 
-  const handleExportToFile = React.useCallback(() => {
-    // Create a JSON representation of the saved addresses
+  const handleExportToFile = React.useCallback(async () => {
     const jsonContent = JSON.stringify(savedAddresses, null, 2)
+    const isMobile = import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios"
 
-    // Create a blob with the JSON content
-    const blob = new Blob([jsonContent], { type: "application/json" })
+    if (isMobile) {
+      try {
+        // Use cordova-plugin-x-socialsharing via IPC on mobile
+        await ipcCall("ShareFile", {
+          message: "My Stellar contacts",
+          subject: "stellar-contacts",
+          file: `data:application/json;base64,${utf8ToBase64(jsonContent)}`
+        })
+      } catch (error) {
+        console.error("Error sharing file:", error.message)
+        showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))
+      }
+    } else {
+      // Use blob download on desktop/web
+      const blob = new Blob([jsonContent], { type: "application/json" })
 
-    // Create a download link
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `stellar-contacts.json`
+      // Create a download link
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      link.download = `stellar-contacts.json`
 
-    // Trigger the download
-    document.body.appendChild(link)
-    link.click()
+      // Trigger the download
+      document.body.appendChild(link)
+      link.click()
 
-    // Clean up
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }, [savedAddresses])
+      // Clean up
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    }
+  }, [savedAddresses, showNotification, t])
 
   const [fileInputKey, setFileInputKey] = React.useState(0) // To reset the file input
   const fileInputRef = React.useRef<HTMLInputElement>(null)
