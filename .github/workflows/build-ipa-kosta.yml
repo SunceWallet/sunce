@@ -1,0 +1,67 @@
+name: Build IPA for Kosta's phone
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    environment: 'Kosta Dev'
+
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1.6.0  # или последняя версия
+        with:
+          xcode-version: '16'
+
+      - uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+  
+      - name: Install project
+        run: |
+          npm install
+          npm run prebuild:electron
+
+      - name: Adjust build profile
+        working-directory: cordova
+        run: |
+          mv build.ios.json build.ios.json.orig
+          jq '.ios.release.provisioningProfile = "Kosta Dev"' build.ios.json.orig > build.ios.json
+          rm build.ios.json.orig
+  
+      - name: Install project platform (iOS)
+        run: |
+          cd cordova
+          npm install
+          npm run install:ios
+
+      - name: Prebuild project (iOS)
+        run: npm run prebuild:ios
+  
+      - name: Install Apple certificate and provisioning profile
+        uses: apple-actions/certificate-and-profile@v1
+        with:
+          p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
+          mobileprovision-file-base64: ${{ secrets.KOSTA_APP_PROVISION_PROFILE_BASE64 }}
+
+      - name: Build IPA
+        run: |
+          cd cordova
+          npm run build:ios
+
+      - name: Upload IPA as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunce-wallet-ipa
+          path: cordova/platforms/ios/build/Release-iphoneos/Sunce Wallet.ipa
+          retention-days: 7
+
+      - name: Clean up keychain and provisioning profiles
+        if: ${{ always() }}
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/*
