@@ -69,7 +69,8 @@ jobs:
         if: github.event.inputs.secret_source == 'kosta'
         run: |
           mv build.ios.json build.ios.json.orig
-          jq '.ios.release.provisioningProfile = "Kosta Dev"' build.ios.json.orig > build.ios.json
+          jq '.ios.release.provisioningProfile = "Kosta Dev Adhoc"' build.ios.json.orig > build.ios.json.1
+          jq '.ios.release.packageType = "ad-hoc"' build.ios.json.1 > build.ios.json
           rm build.ios.json.orig
 
       - name: Build IPA
