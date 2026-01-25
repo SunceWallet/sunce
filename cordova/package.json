@@ -35,7 +35,8 @@
       "cordova-plugin-file": {
         "ANDROIDX_WEBKIT_VERSION": "1.4.0"
       },
-      "cordova-plugin-x-socialsharing": {}
+      "cordova-plugin-x-socialsharing": {},
+      "cordova-plugin-saf-mediastore": {}
     }
   },
   "dependencies": {
@@ -59,6 +60,7 @@
     "cordova-plugin-fingerprint-aio": "^5.0.3",
     "cordova-plugin-network-information": "^3.0.0",
     "cordova-plugin-proguard": "^2.2.0",
+    "cordova-plugin-saf-mediastore": "^1.0.10",
     "cordova-plugin-secure-storage": "github:satoshipay/cordova-plugin-secure-storage",
     "cordova-plugin-x-socialsharing": "^6.0.4",
     "dotenv-cli": "^8.0.0",

@@ -1,7 +1,7 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import DialogBody from "~Layout/components/DialogBody"
-import { SavedAddressesContext } from "~App/contexts/savedAddresses"
+import { SavedAddresses, SavedAddressesContext } from "~App/contexts/savedAddresses"
 import { List, ListItem, ListItemText } from "@material-ui/core"
 import MainTitle from "~Generic/components/MainTitle"
 import { NotificationsContext } from "~App/contexts/notifications"
@@ -25,13 +25,26 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
 
     if (isMobile) {
       try {
-        // Use cordova-plugin-file (Android) or cordova-plugin-x-socialsharing (iOS) via IPC on mobile
-        await ipcCall("ShareFile", {
-          message: "My Stellar contacts",
-          subject: "stellar-contacts",
-          content: jsonContent
-        })
-        showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
+        const platform = import.meta.env.VITE_PLATFORM
+        let result = false
+        if (platform === "android") {
+          // On Android, use SaveFile to save to Downloads folder
+          result = await ipcCall("SaveFile", {
+            subject: "stellar-contacts",
+            content: jsonContent
+          })
+        } else {
+          // On iOS, use ShareFile for social sharing
+          await ipcCall("ShareFile", {
+            message: "My Stellar contacts",
+            subject: "stellar-contacts",
+            content: jsonContent
+          })
+          result = true
+        }
+        if (result) {
+          showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
+        }
       } catch (error) {
         console.error("Error sharing file:", error.message)
         showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))

@@ -13,6 +13,7 @@ import { registerURLHandler } from "./protocol-handler"
 import { registerUpdateHandler } from "./updater"
 import { registerNotificationHandler } from "./notifications"
 import { initializeFileSharing } from "./file-share"
+import { initializeFileSaving } from "./file-save"
 
 const iframe = document.getElementById("walletframe") as HTMLIFrameElement
 
@@ -61,6 +62,7 @@ function onDeviceReady() {
   initializeQRReader()
   initializeClipboard(cordova)
   initializeFileSharing()
+  initializeFileSaving()
   initializeIPhoneNotchFix()
 
   setupLinkListener(contentWindow)
