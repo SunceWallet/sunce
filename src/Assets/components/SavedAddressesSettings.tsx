@@ -18,6 +18,22 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
   const { showNotification } = React.useContext(NotificationsContext)
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = React.useState(false)
+  const isAndroid = import.meta.env.VITE_PLATFORM === "android"
+
+  const handleShare = React.useCallback(async () => {
+    const jsonContent = JSON.stringify(savedAddresses, null, 2)
+    try {
+      await ipcCall("ShareFile", {
+        message: "My Stellar contacts",
+        subject: "stellar-contacts",
+        content: jsonContent
+      })
+      showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
+    } catch (error) {
+      console.error("Error sharing file:", error.message)
+      showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))
+    }
+  }, [savedAddresses, showNotification, t])
 
   const handleExportToFile = React.useCallback(async () => {
     const jsonContent = JSON.stringify(savedAddresses, null, 2)
@@ -158,6 +174,14 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
       }
     >
       <List style={{ margin: "0 -8px" }}>
+        {isAndroid && (
+          <ListItem button onClick={handleShare}>
+            <ListItemText
+              primary={t("account.saved-addresses.share", "Share")}
+              secondary={t("account.saved-addresses.share-description", "Share saved contacts with other apps")}
+            />
+          </ListItem>
+        )}
         <ListItem button onClick={handleExportToFile}>
           <ListItemText
             primary={t("account.saved-addresses.export-to-file", "Export to file")}

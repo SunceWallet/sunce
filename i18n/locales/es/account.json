@@ -147,6 +147,8 @@
     "settings-title": "Configuración de direcciones guardadas",
     "export-to-file": "Exportar a archivo",
     "export-description": "Descargar direcciones guardadas como archivo JSON",
+    "share": "Compartir",
+    "share-description": "Compartir contactos guardados con otras aplicaciones",
     "export-success": "Archivo exportado exitosamente",
     "export-error": "Error al exportar archivo",
     "import-from-file": "Importar desde archivo",

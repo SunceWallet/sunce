@@ -147,6 +147,8 @@
     "settings-title": "Impostazioni degli indirizzi salvati",
     "export-to-file": "Esporta in file",
     "export-description": "Scarica gli indirizzi salvati come file JSON",
+    "share": "Condividi",
+    "share-description": "Condividi i contatti salvati con altre app",
     "export-success": "File esportato con successo",
     "export-error": "Impossibile esportare il file",
     "import-from-file": "Importa da file",

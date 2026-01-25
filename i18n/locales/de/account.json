@@ -147,6 +147,8 @@
     "settings-title": "Einstellungen für gespeicherte Adressen",
     "export-to-file": "In Datei exportieren",
     "export-description": "Gespeicherte Adressen als JSON-Datei herunterladen",
+    "share": "Teilen",
+    "share-description": "Gespeicherte Konten mit anderen Apps teilen",
     "export-success": "Datei erfolgreich exportiert",
     "export-error": "Fehler beim Exportieren der Datei",
     "import-from-file": "Aus Datei importieren",

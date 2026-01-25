@@ -147,6 +147,8 @@
     "settings-title": "Подешавања сачуваних адреса",
     "export-to-file": "Извези у фајл",
     "export-description": "Преузми сачуване адресе као JSON фајл",
+    "share": "Подели",
+    "share-description": "Подели сачуване контакте са другим апликацијама",
     "export-success": "Фајл успешно извезен",
     "export-error": "Грешка при извозу фајла",
     "import-from-file": "Увези из фајла",
