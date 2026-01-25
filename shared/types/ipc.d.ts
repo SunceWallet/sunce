@@ -23,6 +23,9 @@ declare namespace IPC {
 
     OpenLink: "OpenLink"
 
+    ShareFile: "ShareFile"
+    SaveFile: "SaveFile"
+
     DeepLinkURL: "DeepLinkURL"
     IsDefaultProtocolClient: "IsDefaultProtocolClient"
     IsDifferentHandlerInstalled: "IsDifferentHandlerInstalled"
@@ -63,6 +66,9 @@ declare namespace IPC {
     [Messages.ShowNotification]: (notification: LocalNotification) => void
 
     [Messages.OpenLink]: (href: string) => void
+
+    [Messages.ShareFile]: (options: { message: string; subject: string; content: string }) => void
+    [Messages.SaveFile]: (options: { subject: string; content: string }) => Promise<boolean>
 
     [Messages.DeepLinkURL]: () => string
     [Messages.IsDefaultProtocolClient]: () => boolean
