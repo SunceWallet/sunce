@@ -211,8 +211,7 @@ interface NewEntryDraft {
   valueMode: DataEntryValueMode
 }
 
-interface SyncConflictState {
-  conflictNames: string[]
+interface PendingRemoteUpdateState {
   incomingDataAttr: AccountData["data_attr"]
 }
 
@@ -299,73 +298,6 @@ function hasLocalDraftChanges(rows: DataEntryRow[], newEntry: NewEntryDraft, bas
   return false
 }
 
-function collectLocalTouchedNames(rows: DataEntryRow[], newEntry: NewEntryDraft, baseDataAttr: AccountData["data_attr"]) {
-  const names = new Set<string>()
-
-  for (const row of rows) {
-    if (row.kind === "new") {
-      if (row.name) {
-        names.add(row.name)
-      }
-
-      continue
-    }
-
-    if (isExistingRowTouched(row, baseDataAttr)) {
-      names.add(row.name)
-    }
-  }
-
-  if (hasNewEntryDraft(newEntry) && newEntry.name) {
-    names.add(newEntry.name)
-  }
-
-  return names
-}
-
-function collectRemoteChangedNames(baseDataAttr: AccountData["data_attr"], incomingDataAttr: AccountData["data_attr"]) {
-  const names = new Set<string>()
-
-  for (const name of new Set([...Object.keys(baseDataAttr), ...Object.keys(incomingDataAttr)])) {
-    if (baseDataAttr[name] !== incomingDataAttr[name]) {
-      names.add(name)
-    }
-  }
-
-  return names
-}
-
-function detectRemoteConflicts(
-  rows: DataEntryRow[],
-  newEntry: NewEntryDraft,
-  baseDataAttr: AccountData["data_attr"],
-  incomingDataAttr: AccountData["data_attr"]
-) {
-  const localTouchedNames = collectLocalTouchedNames(rows, newEntry, baseDataAttr)
-  const remoteChangedNames = collectRemoteChangedNames(baseDataAttr, incomingDataAttr)
-  return [...localTouchedNames].filter((name) => remoteChangedNames.has(name))
-}
-
-function mergeRowsWithoutConflicts(
-  rows: DataEntryRow[],
-  baseDataAttr: AccountData["data_attr"],
-  incomingDataAttr: AccountData["data_attr"]
-): DataEntryRow[] {
-  const existingRows = rows.filter((row): row is ExistingDataEntryRow => row.kind === "existing")
-  const touchedExistingNames = new Set(existingRows.filter((row) => isExistingRowTouched(row, baseDataAttr)).map((row) => row.name))
-  const incomingExistingRows = buildExistingRows(incomingDataAttr)
-  const incomingExistingNames = new Set(Object.keys(incomingDataAttr))
-
-  const mergedExistingRows = [
-    ...existingRows.filter((row) => touchedExistingNames.has(row.name) && incomingExistingNames.has(row.name)),
-    ...incomingExistingRows.filter((row) => !touchedExistingNames.has(row.name))
-  ].sort((left, right) => left.name.localeCompare(right.name))
-
-  const newRows = rows.filter((row): row is Extract<DataEntryRow, { kind: "new" }> => row.kind === "new")
-
-  return [...mergedExistingRows, ...newRows]
-}
-
 function DataEntriesEditor(props: DataEntriesEditorProps) {
   const classes = useStyles()
   const { t } = useTranslation()
@@ -384,7 +316,8 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
   const [filtersVisible, setFiltersVisible] = React.useState(false)
   const [filterQuery, setFilterQuery] = React.useState("")
   const [filterChangedOnly, setFilterChangedOnly] = React.useState(false)
-  const [syncConflict, setSyncConflict] = React.useState<SyncConflictState | null>(null)
+  const [pendingRemoteUpdate, setPendingRemoteUpdate] = React.useState<PendingRemoteUpdateState | null>(null)
+  const [ignoreIncomingUpdates, setIgnoreIncomingUpdates] = React.useState(false)
   const [leaveConfirmOpen, setLeaveConfirmOpen] = React.useState(false)
   const [txPending, setTxPending] = React.useState(false)
 
@@ -394,7 +327,8 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
   const newEntryRef = React.useRef(newEntry)
   const hasUnsavedChangesRef = React.useRef(false)
   const leaveConfirmOpenRef = React.useRef(false)
-  const syncConflictRef = React.useRef<SyncConflictState | null>(null)
+  const pendingRemoteUpdateRef = React.useRef<PendingRemoteUpdateState | null>(null)
+  const ignoreIncomingUpdatesRef = React.useRef(false)
   const pendingNavigationRef = React.useRef<(() => void) | null>(null)
   const navigationBypassRef = React.useRef(false)
 
@@ -410,6 +344,8 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     setNewEntry(EMPTY_NEW_ENTRY)
     setNewEntryShowNameErrors(false)
     setNewEntryShowValueErrors(false)
+    setPendingRemoteUpdate(null)
+    setIgnoreIncomingUpdates(false)
   }, [])
 
   React.useEffect(() => {
@@ -425,18 +361,26 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
   }, [leaveConfirmOpen])
 
   React.useEffect(() => {
-    syncConflictRef.current = syncConflict
-  }, [syncConflict])
+    pendingRemoteUpdateRef.current = pendingRemoteUpdate
+  }, [pendingRemoteUpdate])
+
+  React.useEffect(() => {
+    ignoreIncomingUpdatesRef.current = ignoreIncomingUpdates
+  }, [ignoreIncomingUpdates])
 
   React.useEffect(() => {
     const incomingDataAttr = cloneDataAttr(accountData.data_attr)
     const incomingDataAttrKey = serializeDataAttr(incomingDataAttr)
 
     if (incomingDataAttrKey === baselineDataAttrKeyRef.current) {
-      if (syncConflictRef.current) {
-        setSyncConflict(null)
+      if (pendingRemoteUpdateRef.current) {
+        setPendingRemoteUpdate(null)
       }
 
+      return
+    }
+
+    if (ignoreIncomingUpdatesRef.current) {
       return
     }
 
@@ -446,28 +390,13 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     const hasDraftChanges = hasLocalDraftChanges(currentRows, currentNewEntry, baselineDataAttr)
 
     if (!hasDraftChanges) {
-      setSyncConflict(null)
       applyIncomingSnapshot(incomingDataAttr)
       return
     }
 
-    const conflictNames = detectRemoteConflicts(currentRows, currentNewEntry, baselineDataAttr, incomingDataAttr)
-
-    if (conflictNames.length > 0) {
-      setSyncConflict({
-        conflictNames,
-        incomingDataAttr
-      })
-      return
-    }
-
-    const mergedRows = mergeRowsWithoutConflicts(currentRows, baselineDataAttr, incomingDataAttr)
-
-    setSyncConflict(null)
-    baselineDataAttrRef.current = incomingDataAttr
-    baselineDataAttrKeyRef.current = incomingDataAttrKey
-    setRows(mergedRows)
-    setRowsForAnalysis(mergedRows)
+    setPendingRemoteUpdate({
+      incomingDataAttr
+    })
   }, [accountData.data_attr, applyIncomingSnapshot])
 
   React.useEffect(() => {
@@ -486,6 +415,12 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
 
   React.useEffect(() => {
     hasUnsavedChangesRef.current = hasUnsavedChanges
+  }, [hasUnsavedChanges])
+
+  React.useEffect(() => {
+    if (!hasUnsavedChanges && ignoreIncomingUpdatesRef.current) {
+      setIgnoreIncomingUpdates(false)
+    }
   }, [hasUnsavedChanges])
 
   const queueLeaveConfirmation = React.useCallback((navigate: () => void) => {
@@ -778,13 +713,20 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     [t]
   )
 
-  const acknowledgeSyncConflict = React.useCallback(() => {
-    if (syncConflict) {
-      applyIncomingSnapshot(syncConflict.incomingDataAttr)
+  const reloadFromRemoteUpdate = React.useCallback(() => {
+    if (pendingRemoteUpdate) {
+      applyIncomingSnapshot(pendingRemoteUpdate.incomingDataAttr)
+      return
     }
 
-    setSyncConflict(null)
-  }, [applyIncomingSnapshot, syncConflict])
+    setPendingRemoteUpdate(null)
+    setIgnoreIncomingUpdates(false)
+  }, [applyIncomingSnapshot, pendingRemoteUpdate])
+
+  const ignoreRemoteUpdates = React.useCallback(() => {
+    setPendingRemoteUpdate(null)
+    setIgnoreIncomingUpdates(true)
+  }, [])
 
   const createAndSendTransaction = React.useCallback(async () => {
     const latestAnalysis = analyzeDataEntryRows(rows, accountData)
@@ -799,6 +741,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     }
 
     try {
+      setIgnoreIncomingUpdates(false)
       setTxPending(true)
 
       const operations = latestAnalysis.operations.map((operation) =>
@@ -839,7 +782,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     }
   }, [accountData, props, rows, showNotification, t])
 
-  const saveDisabled = txPending || analysisPending || analysis.hasErrors || !analysis.hasChanges || !!syncConflict
+  const saveDisabled = txPending || analysisPending || analysis.hasErrors || !analysis.hasChanges || !!pendingRemoteUpdate
 
   const existingRows = rows.filter((row): row is Extract<DataEntryRow, { kind: "existing" }> => row.kind === "existing")
   const newRows = rows.filter((row): row is Extract<DataEntryRow, { kind: "new" }> => row.kind === "new")
@@ -1266,15 +1209,18 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
         </ListItem>
       </List>
       </DialogBody>
-      <Dialog open={!!syncConflict} onClose={acknowledgeSyncConflict}>
-        <DialogTitle>{t("account.data-entries.sync-conflict.title")}</DialogTitle>
+      <Dialog open={!!pendingRemoteUpdate} onClose={ignoreRemoteUpdates}>
+        <DialogTitle>{t("account.data-entries.sync-update.title")}</DialogTitle>
         <DialogContent style={{ paddingBottom: 24 }}>
           <Typography variant="body2">
-            {t("account.data-entries.sync-conflict.text", { count: syncConflict?.conflictNames.length || 0 })}
+            {t("account.data-entries.sync-update.text")}
           </Typography>
           <DialogActionsBox preventMobileActionsBox smallDialog>
-            <ActionButton onClick={acknowledgeSyncConflict} type="primary">
-              {t("account.data-entries.sync-conflict.action.reload")}
+            <ActionButton onClick={ignoreRemoteUpdates}>
+              {t("account.data-entries.sync-update.action.ignore")}
+            </ActionButton>
+            <ActionButton onClick={reloadFromRemoteUpdate} type="primary">
+              {t("account.data-entries.sync-update.action.reload")}
             </ActionButton>
           </DialogActionsBox>
         </DialogContent>

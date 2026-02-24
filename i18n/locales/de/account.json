@@ -263,11 +263,12 @@
       "no-changes": "Keine Änderungen zum Speichern",
       "saved": "Data-Entries-Transaktion gesendet"
     },
-    "sync-conflict": {
-      "title": "Kontodaten wurden im Netzwerk aktualisiert",
-      "text": "On-Chain-Daten haben sich geändert und stehen im Konflikt mit Ihrem Entwurf ({{count}} Einträge). Lokale Änderungen werden zurückgesetzt.",
+    "sync-update": {
+      "title": "Kontodaten wurden aktualisiert",
+      "text": "Die On-Chain-Kontodaten haben sich geändert, während Sie ungespeicherte Änderungen haben. Laden Sie neu und verlieren Sie lokale Änderungen oder ignorieren Sie weitere Remote-Updates in dieser Bearbeitungssitzung.",
       "action": {
-        "reload": "Daten neu laden"
+        "reload": "Daten neu laden",
+        "ignore": "Updates ignorieren"
       }
     },
     "leave-confirm": {

@@ -303,11 +303,12 @@
       "no-changes": "No changes to save",
       "saved": "Data Entries transaction submitted"
     },
-    "sync-conflict": {
-      "title": "Data Entries updated on network",
-      "text": "Account data changed on-chain and conflicts with your draft ({{count}} entries). Local edits will be reset.",
+    "sync-update": {
+      "title": "Account data was updated",
+      "text": "Account data changed on-chain while you have unsaved edits. Reload and lose local changes, or ignore further remote updates for this editing session.",
       "action": {
-        "reload": "Reload data"
+        "reload": "Reload data",
+        "ignore": "Ignore updates"
       }
     },
     "leave-confirm": {

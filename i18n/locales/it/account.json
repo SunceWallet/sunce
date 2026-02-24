@@ -263,11 +263,12 @@
       "no-changes": "Nessuna modifica da salvare",
       "saved": "Transazione Data Entries inviata"
     },
-    "sync-conflict": {
-      "title": "I dati dell'account sono cambiati in rete",
-      "text": "I dati on-chain sono cambiati e sono in conflitto con la tua bozza ({{count}} voci). Le modifiche locali verranno azzerate.",
+    "sync-update": {
+      "title": "I dati dell'account sono stati aggiornati",
+      "text": "I dati on-chain sono cambiati mentre hai modifiche non salvate. Puoi ricaricare e perdere le modifiche locali, oppure ignorare ulteriori aggiornamenti remoti durante questa sessione di modifica.",
       "action": {
-        "reload": "Ricarica dati"
+        "reload": "Ricarica dati",
+        "ignore": "Ignora aggiornamenti"
       }
     },
     "leave-confirm": {

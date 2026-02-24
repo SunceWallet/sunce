@@ -263,11 +263,12 @@
       "no-changes": "Nema izmena za čuvanje",
       "saved": "Data Entries transakcija je poslata"
     },
-    "sync-conflict": {
-      "title": "Podaci naloga su izmenjeni na mreži",
-      "text": "Podaci na blokčejnu su promenjeni i u sukobu su sa vašim nacrtom ({{count}} stavki). Lokalne izmene će biti poništene.",
+    "sync-update": {
+      "title": "Podaci naloga su ažurirani",
+      "text": "Podaci na blokčejnu su promenjeni dok imate nesačuvane izmene. Možete osvežiti i izgubiti lokalne izmene, ili ignorisati dalja udaljena ažuriranja u ovoj sesiji uređivanja.",
       "action": {
-        "reload": "Osveži podatke"
+        "reload": "Osveži podatke",
+        "ignore": "Ignoriši ažuriranja"
       }
     },
     "leave-confirm": {

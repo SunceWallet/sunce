@@ -214,14 +214,13 @@ Implemented strategy:
 - On incoming live update:
   - if incoming `data_attr` is unchanged vs baseline: ignore,
   - if there are no local drafts: fully reload editor from incoming data,
-  - if drafts exist:
-    - detect key-level conflicts between remote changes and locally touched entries,
-    - if no conflict: merge non-conflicting remote changes while preserving local drafts,
-    - if conflict: show blocking info dialog, then reload to incoming data on acknowledge.
+  - if drafts exist: show a decision dialog:
+    - reload now (drop local draft and adopt incoming state),
+    - ignore updates for the current editing session.
 
-Conflict definition used in code:
-- Same key changed both remotely and locally (including add/delete/update collisions).
-- New local key that was added remotely in the meantime is also treated as conflict.
+Simplification note:
+- Earlier conflict-by-key merge logic was intentionally removed to reduce complexity and risk.
+- Current behavior is explicit and predictable: user chooses reload vs ignore when remote changes arrive during local editing.
 
 ## Remaining Considerations
 Potential future improvements:
