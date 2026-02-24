@@ -204,6 +204,82 @@
       }
     }
   },
+  "data-entries": {
+    "title": "Datos de la cuenta",
+    "section": {
+      "new": "Nuevas"
+    },
+    "field": {
+      "name": "Nombre",
+      "value": "Valor",
+      "encoding": "Codificación"
+    },
+    "encoding": {
+      "text": "Texto (UTF-8)",
+      "text-short": "Texto",
+      "base64": "Base64"
+    },
+    "placeholder": {
+      "name": "my_key",
+      "value": "Valor",
+      "search": "Filtrar por nombre o valor"
+    },
+    "summary": "Cambios planificados: {{additions}} nuevas, {{updates}} actualizadas, {{deletions}} eliminadas ({{operations}} operaciones).",
+    "status": {
+      "unchanged": "Sin cambios",
+      "updated": "Valor cambiado",
+      "deleted": "Se eliminará",
+      "new": "Nueva entrada",
+      "invalid": "Requiere atención"
+    },
+    "hint": {
+      "deleted-by-action": "Marcado para eliminar",
+      "empty-deletes": "Un valor vacío significa que esta entrada se eliminará al guardar",
+      "bytes": "{{count}} / 64 bytes"
+    },
+    "action": {
+      "save": "Guardar cambios",
+      "add": "Agregar",
+      "delete": "Eliminar",
+      "restore": "Restaurar",
+      "toggle-filters": "Mostrar u ocultar filtros",
+      "changed-only": "Solo cambiadas"
+    },
+    "validation": {
+      "name-required": "El nombre es obligatorio",
+      "name-length": "El nombre debe tener {{max}} caracteres o menos",
+      "name-ascii": "El nombre solo puede contener caracteres ASCII imprimibles",
+      "value-required": "El valor es obligatorio",
+      "invalid-base64": "Valor base64 no válido",
+      "value-too-large": "El valor es demasiado grande ({{actual}}/{{max}} bytes)",
+      "duplicate-existing": "Este nombre ya existe en los datos de la cuenta",
+      "duplicate-new": "Nombre duplicado entre las nuevas entradas",
+      "subentries-limit": "Está agregando {{additions}} nuevas Data Entries, pero solo {{max}} caben en el límite de subentradas de la cuenta. Reduzca en {{excess}}.",
+      "operations-limit": "Ha planificado {{operations}} operaciones, pero Stellar solo permite {{max}} por transacción. Reduzca en {{excess}}.",
+      "xlm-additions-limit": "No hay suficientes XLM disponibles. Con reservas y comisiones estimadas, puede agregar como máximo {{max}} entradas nuevas.",
+      "insufficient-xlm": "No hay suficientes XLM para cubrir la reserva resultante y la comisión de la transacción"
+    },
+    "notification": {
+      "no-changes": "No hay cambios para guardar",
+      "saved": "Transacción de Data Entries enviada"
+    },
+    "sync-update": {
+      "title": "Los datos de la cuenta se actualizaron",
+      "text": "Los datos on-chain cambiaron mientras tienes ediciones sin guardar. Puedes recargar y perder cambios locales, o ignorar nuevas actualizaciones remotas durante esta sesión de edición.",
+      "action": {
+        "reload": "Recargar datos",
+        "ignore": "Ignorar actualizaciones"
+      }
+    },
+    "leave-confirm": {
+      "title": "¿Descartar cambios no guardados?",
+      "text": "Tienes cambios de Data Entries sin guardar. ¿Salir de esta página y perderlos?",
+      "action": {
+        "stay": "Quedarse",
+        "discard": "Descartar y salir"
+      }
+    }
+  },
   "context-menu": {
     "account-settings": {
       "label": "Ajustes de la cuenta"
@@ -228,6 +304,12 @@
     },
     "saved-addresses": {
       "label": "Direcciónes Favoritos"
+    },
+    "hidden-senders": {
+      "label": "Remitentes ocultos"
+    },
+    "data-entries": {
+      "label": "Datos de la cuenta"
     }
   },
   "purchase-lumens": {

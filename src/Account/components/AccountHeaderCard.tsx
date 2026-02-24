@@ -52,6 +52,7 @@ interface Props {
   onManageAssets?: () => void
   onSavedAddresses?: () => void
   onHiddenSenders?: () => void
+  onDataEntries?: () => void
   onReceiveFunds?: () => void
   onPurchaseLumens?: () => void
   onRename: (newName: string) => void
@@ -88,6 +89,7 @@ function AccountHeaderCard(props: Props) {
             onPurchaseLumens={props.onPurchaseLumens}
             onSavedAddresses={props.onSavedAddresses}
             onHiddenSenders={props.onHiddenSenders}
+            onDataEntries={props.onDataEntries}
             onReceiveFunds={props.onReceiveFunds}
             onTrade={props.onTrade}
             onWithdraw={props.onWithdraw}
@@ -113,8 +115,13 @@ function AccountHeaderCard(props: Props) {
       props.onDeposit,
       props.onManageAssets,
       props.onPurchaseLumens,
+      props.onSavedAddresses,
+      props.onHiddenSenders,
+      props.onDataEntries,
       props.onTrade,
       props.onWithdraw,
+      props.onReceiveFunds,
+      props.onReadQRCode,
       settings,
       showingSettings
     ]

@@ -10,6 +10,7 @@ export const createAccount = (testnet: boolean) => `/account/create/${testnet ? 
 export const createPayment = (accountID: string, preselectedAsset?: string) => `/account/${accountID}/send${preselectedAsset ? `/${preselectedAsset}` : ''}`
 export const deleteAccount = (accountID: string) => `/account/${accountID}/settings/delete`
 export const depositAsset = (accountID: string) => `/account/${accountID}/deposit`
+export const dataEntries = (accountID: string) => `/account/${accountID}/data-entries`
 export const exportSecretKey = (accountID: string) => `/account/${accountID}/settings/export`
 export const importAccount = (testnet: boolean) => `/account/import/${testnet ? "testnet" : "mainnet"}`
 export const joinSharedAccount = (testnet: boolean) => `/account/join/${testnet ? "testnet" : "mainnet"}`
