@@ -204,6 +204,66 @@
       }
     }
   },
+  "data-entries": {
+    "title": "Podaci računa",
+    "section": {
+      "new": "Nove"
+    },
+    "field": {
+      "name": "Ime",
+      "value": "Vrednost",
+      "encoding": "Kodiranje"
+    },
+    "encoding": {
+      "text": "Tekst (UTF-8)",
+      "text-short": "Tekst",
+      "base64": "Base64"
+    },
+    "placeholder": {
+      "name": "my_key",
+      "value": "Vrednost",
+      "search": "Filtriraj po imenu ili vrednosti"
+    },
+    "summary": "Planirane izmene: {{additions}} novih, {{updates}} izmenjeno, {{deletions}} obrisano ({{operations}} operacija).",
+    "status": {
+      "unchanged": "Bez izmena",
+      "updated": "Vrednost je izmenjena",
+      "deleted": "Biće obrisano",
+      "new": "Novi unos",
+      "invalid": "Potrebna pažnja"
+    },
+    "hint": {
+      "deleted-by-action": "Označeno za brisanje",
+      "empty-deletes": "Prazna vrednost znači da će unos biti obrisan pri čuvanju",
+      "bytes": "{{count}} / 64 bajta"
+    },
+    "action": {
+      "save": "Sačuvaj izmene",
+      "add": "Dodaj",
+      "delete": "Obriši",
+      "restore": "Vrati",
+      "toggle-filters": "Prikaži ili sakrij filtere",
+      "changed-only": "Samo izmenjene"
+    },
+    "validation": {
+      "name-required": "Ime je obavezno",
+      "name-length": "Ime mora imati najviše {{max}} karaktera",
+      "name-ascii": "Ime može da sadrži samo štampajuće ASCII karaktere",
+      "value-required": "Vrednost je obavezna",
+      "invalid-base64": "Neispravna base64 vrednost",
+      "value-too-large": "Vrednost je prevelika ({{actual}}/{{max}} bajta)",
+      "duplicate-existing": "Ovo ime već postoji u podacima računa",
+      "duplicate-new": "Duplikat imena među novim unosima",
+      "subentries-limit": "Dodajete {{additions}} novih Data Entries, ali u ograničenje podunosa staje samo {{max}}. Smanjite za {{excess}}.",
+      "operations-limit": "Planirano je {{operations}} operacija, ali Stellar dozvoljava najviše {{max}} po transakciji. Smanjite za {{excess}}.",
+      "xlm-additions-limit": "Nema dovoljno raspoloživih XLM. Uz rezerve i procenjenu naknadu, možete dodati najviše {{max}} novih unosa.",
+      "insufficient-xlm": "Nema dovoljno XLM za pokrivanje rezultujuće rezerve i naknade transakcije"
+    },
+    "notification": {
+      "no-changes": "Nema izmena za čuvanje",
+      "saved": "Data Entries transakcija je poslata"
+    }
+  },
   "context-menu": {
     "account-settings": {
       "label": "Podešavanja računa"
@@ -228,6 +288,12 @@
     },
     "saved-addresses": {
       "label": "Sačuvane adrese"
+    },
+    "hidden-senders": {
+      "label": "Skriveni pošiljaoci"
+    },
+    "data-entries": {
+      "label": "Podaci računa"
     }
   },
   "cosigner": {
