@@ -262,6 +262,21 @@
     "notification": {
       "no-changes": "Nessuna modifica da salvare",
       "saved": "Transazione Data Entries inviata"
+    },
+    "sync-conflict": {
+      "title": "I dati dell'account sono cambiati in rete",
+      "text": "I dati on-chain sono cambiati e sono in conflitto con la tua bozza ({{count}} voci). Le modifiche locali verranno azzerate.",
+      "action": {
+        "reload": "Ricarica dati"
+      }
+    },
+    "leave-confirm": {
+      "title": "Scartare le modifiche non salvate?",
+      "text": "Hai modifiche Data Entries non salvate. Vuoi uscire da questa pagina e perderle?",
+      "action": {
+        "stay": "Resta",
+        "discard": "Scarta ed esci"
+      }
     }
   },
   "context-menu": {

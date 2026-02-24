@@ -262,6 +262,21 @@
     "notification": {
       "no-changes": "Keine Änderungen zum Speichern",
       "saved": "Data-Entries-Transaktion gesendet"
+    },
+    "sync-conflict": {
+      "title": "Kontodaten wurden im Netzwerk aktualisiert",
+      "text": "On-Chain-Daten haben sich geändert und stehen im Konflikt mit Ihrem Entwurf ({{count}} Einträge). Lokale Änderungen werden zurückgesetzt.",
+      "action": {
+        "reload": "Daten neu laden"
+      }
+    },
+    "leave-confirm": {
+      "title": "Ungespeicherte Änderungen verwerfen?",
+      "text": "Sie haben ungespeicherte Data-Entries-Änderungen. Seite verlassen und diese verlieren?",
+      "action": {
+        "stay": "Bleiben",
+        "discard": "Verwerfen und verlassen"
+      }
     }
   },
   "context-menu": {

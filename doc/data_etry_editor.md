@@ -195,6 +195,34 @@ Resulting behavior:
 Current implementation is route-driven: data entries open via dedicated account route (`/account/:id/data-entries`) and participate in URL/history navigation.
 The screen is still rendered as a full-screen view with the same visual model and back behavior expected from account subflows.
 
+### Unsaved changes guard
+Added after route migration:
+- If there are unsaved editor drafts, leaving the screen triggers a confirmation dialog.
+- This applies to:
+  - in-screen back button,
+  - browser/app back navigation through route history,
+  - browser tab close/refresh (`beforeunload` safeguard).
+- User can stay and continue editing, or discard and leave.
+
+## Live Subscription Sync Strategy
+Problem discovered during iteration:
+- Account live updates can arrive while the user edits data entries.
+- Blindly resetting local state on every incoming account object risks losing draft changes.
+
+Implemented strategy:
+- Keep a baseline snapshot of `data_attr` as the editor origin state.
+- On incoming live update:
+  - if incoming `data_attr` is unchanged vs baseline: ignore,
+  - if there are no local drafts: fully reload editor from incoming data,
+  - if drafts exist:
+    - detect key-level conflicts between remote changes and locally touched entries,
+    - if no conflict: merge non-conflicting remote changes while preserving local drafts,
+    - if conflict: show blocking info dialog, then reload to incoming data on acknowledge.
+
+Conflict definition used in code:
+- Same key changed both remotely and locally (including add/delete/update collisions).
+- New local key that was added remotely in the meantime is also treated as conflict.
+
 ## Remaining Considerations
 Potential future improvements:
 - Granular operation preview list (exact add/update/delete lines) above Save.

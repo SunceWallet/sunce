@@ -262,6 +262,21 @@
     "notification": {
       "no-changes": "Nema izmena za čuvanje",
       "saved": "Data Entries transakcija je poslata"
+    },
+    "sync-conflict": {
+      "title": "Podaci naloga su izmenjeni na mreži",
+      "text": "Podaci na blokčejnu su promenjeni i u sukobu su sa vašim nacrtom ({{count}} stavki). Lokalne izmene će biti poništene.",
+      "action": {
+        "reload": "Osveži podatke"
+      }
+    },
+    "leave-confirm": {
+      "title": "Odbaciti nesačuvane izmene?",
+      "text": "Imate nesačuvane izmene DATA ENTRY. Napustiti ovu stranicu i izgubiti ih?",
+      "action": {
+        "stay": "Ostani",
+        "discard": "Odbaci i napusti"
+      }
     }
   },
   "context-menu": {

@@ -262,6 +262,21 @@
     "notification": {
       "no-changes": "No hay cambios para guardar",
       "saved": "Transacción de Data Entries enviada"
+    },
+    "sync-conflict": {
+      "title": "Los datos de la cuenta cambiaron en la red",
+      "text": "Los datos en la cadena cambiaron y entran en conflicto con tu borrador ({{count}} entradas). Los cambios locales se restablecerán.",
+      "action": {
+        "reload": "Recargar datos"
+      }
+    },
+    "leave-confirm": {
+      "title": "¿Descartar cambios no guardados?",
+      "text": "Tienes cambios de Data Entries sin guardar. ¿Salir de esta página y perderlos?",
+      "action": {
+        "stay": "Quedarse",
+        "discard": "Descartar y salir"
+      }
     }
   },
   "context-menu": {

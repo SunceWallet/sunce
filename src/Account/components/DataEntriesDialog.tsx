@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next"
 import { Horizon, Operation } from "@stellar/stellar-sdk"
 import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
+import Dialog from "@material-ui/core/Dialog"
+import DialogContent from "@material-ui/core/DialogContent"
+import DialogTitle from "@material-ui/core/DialogTitle"
 import IconButton from "@material-ui/core/IconButton"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
@@ -16,10 +19,11 @@ import UpdateIcon from "@material-ui/icons/Update"
 import { nanoid } from "nanoid"
 import { Account } from "~App/contexts/accounts"
 import { trackError, NotificationsContext } from "~App/contexts/notifications"
-import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
+import { ActionButton, ConfirmDialog, DialogActionsBox } from "~Generic/components/DialogActions"
 import { SearchField } from "~Generic/components/FormFields"
 import MainTitle from "~Generic/components/MainTitle"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
+import { useRouter } from "~Generic/hooks/userinterface"
 import { AccountData } from "~Generic/lib/account"
 import { createTransaction } from "~Generic/lib/transaction"
 import DialogBody from "~Layout/components/DialogBody"
@@ -33,6 +37,7 @@ import {
   DataEntryRowIssue,
   DataEntryStatus,
   DataEntryValueMode,
+  ExistingDataEntryRow,
   parseValueInput,
   stringifyValue,
   validateDataName
@@ -200,11 +205,22 @@ interface DataEntriesEditorProps {
   sendTransaction: SendTransaction
 }
 
+interface NewEntryDraft {
+  name: string
+  valueInput: string
+  valueMode: DataEntryValueMode
+}
+
+interface SyncConflictState {
+  conflictNames: string[]
+  incomingDataAttr: AccountData["data_attr"]
+}
+
 const EMPTY_NEW_ENTRY = {
   name: "",
   valueInput: "",
   valueMode: "text" as DataEntryValueMode
-}
+} as NewEntryDraft
 const ANALYSIS_DEBOUNCE_MS = 200
 
 function uniqueIssues(issues: DataEntryRowIssue[]) {
@@ -225,37 +241,234 @@ function uniqueIssues(issues: DataEntryRowIssue[]) {
   return unique
 }
 
+function cloneDataAttr(dataAttr: AccountData["data_attr"]): AccountData["data_attr"] {
+  return Object.keys(dataAttr).reduce<AccountData["data_attr"]>((cloned, name) => {
+    cloned[name] = dataAttr[name]
+    return cloned
+  }, {})
+}
+
+function serializeDataAttr(dataAttr: AccountData["data_attr"]) {
+  return JSON.stringify(
+    Object.keys(dataAttr)
+      .sort((left, right) => left.localeCompare(right))
+      .map((name) => [name, dataAttr[name]])
+  )
+}
+
+function hasNewEntryDraft(entry: NewEntryDraft): boolean {
+  return entry.name.trim() !== "" || entry.valueInput !== ""
+}
+
+function isExistingRowTouched(row: ExistingDataEntryRow, baseDataAttr: AccountData["data_attr"]): boolean {
+  const initialValueBase64 = baseDataAttr[row.name]
+
+  if (typeof initialValueBase64 !== "string") {
+    return true
+  }
+
+  if (row.markedForDeletion || row.valueInput === "") {
+    return true
+  }
+
+  const parsed = parseValueInput(row.valueMode, row.valueInput)
+
+  if (!parsed.bytes) {
+    const initialValueForCurrentMode = stringifyValue(Buffer.from(initialValueBase64, "base64"), row.valueMode)
+    return row.valueInput !== initialValueForCurrentMode
+  }
+
+  return parsed.bytes.toString("base64") !== initialValueBase64
+}
+
+function hasLocalDraftChanges(rows: DataEntryRow[], newEntry: NewEntryDraft, baseDataAttr: AccountData["data_attr"]): boolean {
+  if (hasNewEntryDraft(newEntry)) {
+    return true
+  }
+
+  for (const row of rows) {
+    if (row.kind === "new") {
+      return true
+    }
+
+    if (isExistingRowTouched(row, baseDataAttr)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+function collectLocalTouchedNames(rows: DataEntryRow[], newEntry: NewEntryDraft, baseDataAttr: AccountData["data_attr"]) {
+  const names = new Set<string>()
+
+  for (const row of rows) {
+    if (row.kind === "new") {
+      if (row.name) {
+        names.add(row.name)
+      }
+
+      continue
+    }
+
+    if (isExistingRowTouched(row, baseDataAttr)) {
+      names.add(row.name)
+    }
+  }
+
+  if (hasNewEntryDraft(newEntry) && newEntry.name) {
+    names.add(newEntry.name)
+  }
+
+  return names
+}
+
+function collectRemoteChangedNames(baseDataAttr: AccountData["data_attr"], incomingDataAttr: AccountData["data_attr"]) {
+  const names = new Set<string>()
+
+  for (const name of new Set([...Object.keys(baseDataAttr), ...Object.keys(incomingDataAttr)])) {
+    if (baseDataAttr[name] !== incomingDataAttr[name]) {
+      names.add(name)
+    }
+  }
+
+  return names
+}
+
+function detectRemoteConflicts(
+  rows: DataEntryRow[],
+  newEntry: NewEntryDraft,
+  baseDataAttr: AccountData["data_attr"],
+  incomingDataAttr: AccountData["data_attr"]
+) {
+  const localTouchedNames = collectLocalTouchedNames(rows, newEntry, baseDataAttr)
+  const remoteChangedNames = collectRemoteChangedNames(baseDataAttr, incomingDataAttr)
+  return [...localTouchedNames].filter((name) => remoteChangedNames.has(name))
+}
+
+function mergeRowsWithoutConflicts(
+  rows: DataEntryRow[],
+  baseDataAttr: AccountData["data_attr"],
+  incomingDataAttr: AccountData["data_attr"]
+): DataEntryRow[] {
+  const existingRows = rows.filter((row): row is ExistingDataEntryRow => row.kind === "existing")
+  const touchedExistingNames = new Set(existingRows.filter((row) => isExistingRowTouched(row, baseDataAttr)).map((row) => row.name))
+  const incomingExistingRows = buildExistingRows(incomingDataAttr)
+  const incomingExistingNames = new Set(Object.keys(incomingDataAttr))
+
+  const mergedExistingRows = [
+    ...existingRows.filter((row) => touchedExistingNames.has(row.name) && incomingExistingNames.has(row.name)),
+    ...incomingExistingRows.filter((row) => !touchedExistingNames.has(row.name))
+  ].sort((left, right) => left.name.localeCompare(right.name))
+
+  const newRows = rows.filter((row): row is Extract<DataEntryRow, { kind: "new" }> => row.kind === "new")
+
+  return [...mergedExistingRows, ...newRows]
+}
+
 function DataEntriesEditor(props: DataEntriesEditorProps) {
   const classes = useStyles()
   const { t } = useTranslation()
   const { showNotification } = React.useContext(NotificationsContext)
+  const router = useRouter()
+  const { onClose } = props
 
   const liveAccountData = useLiveAccountData(props.account.accountID, props.account.testnet)
   const accountData = liveAccountData
 
   const [rows, setRows] = React.useState<DataEntryRow[]>(() => buildExistingRows(accountData.data_attr))
   const [rowsForAnalysis, setRowsForAnalysis] = React.useState<DataEntryRow[]>(() => buildExistingRows(accountData.data_attr))
-  const [newEntry, setNewEntry] = React.useState(EMPTY_NEW_ENTRY)
+  const [newEntry, setNewEntry] = React.useState<NewEntryDraft>(EMPTY_NEW_ENTRY)
   const [newEntryShowNameErrors, setNewEntryShowNameErrors] = React.useState(false)
   const [newEntryShowValueErrors, setNewEntryShowValueErrors] = React.useState(false)
   const [filtersVisible, setFiltersVisible] = React.useState(false)
   const [filterQuery, setFilterQuery] = React.useState("")
   const [filterChangedOnly, setFilterChangedOnly] = React.useState(false)
+  const [syncConflict, setSyncConflict] = React.useState<SyncConflictState | null>(null)
+  const [leaveConfirmOpen, setLeaveConfirmOpen] = React.useState(false)
   const [txPending, setTxPending] = React.useState(false)
 
-  const lastLoadedDataRef = React.useRef<AccountData["data_attr"]>(accountData.data_attr)
+  const baselineDataAttrRef = React.useRef<AccountData["data_attr"]>(cloneDataAttr(accountData.data_attr))
+  const baselineDataAttrKeyRef = React.useRef(serializeDataAttr(accountData.data_attr))
+  const rowsRef = React.useRef(rows)
+  const newEntryRef = React.useRef(newEntry)
+  const hasUnsavedChangesRef = React.useRef(false)
+  const leaveConfirmOpenRef = React.useRef(false)
+  const syncConflictRef = React.useRef<SyncConflictState | null>(null)
+  const pendingNavigationRef = React.useRef<(() => void) | null>(null)
+  const navigationBypassRef = React.useRef(false)
+
+  const applyIncomingSnapshot = React.useCallback((nextDataAttr: AccountData["data_attr"]) => {
+    const snapshot = cloneDataAttr(nextDataAttr)
+    const nextRows = buildExistingRows(snapshot)
+
+    baselineDataAttrRef.current = snapshot
+    baselineDataAttrKeyRef.current = serializeDataAttr(snapshot)
+
+    setRows(nextRows)
+    setRowsForAnalysis(nextRows)
+    setNewEntry(EMPTY_NEW_ENTRY)
+    setNewEntryShowNameErrors(false)
+    setNewEntryShowValueErrors(false)
+  }, [])
 
   React.useEffect(() => {
-    if (lastLoadedDataRef.current !== accountData.data_attr) {
-      lastLoadedDataRef.current = accountData.data_attr
-      const nextRows = buildExistingRows(accountData.data_attr)
-      setRows(nextRows)
-      setRowsForAnalysis(nextRows)
-      setNewEntry(EMPTY_NEW_ENTRY)
-      setNewEntryShowNameErrors(false)
-      setNewEntryShowValueErrors(false)
+    rowsRef.current = rows
+  }, [rows])
+
+  React.useEffect(() => {
+    newEntryRef.current = newEntry
+  }, [newEntry])
+
+  React.useEffect(() => {
+    leaveConfirmOpenRef.current = leaveConfirmOpen
+  }, [leaveConfirmOpen])
+
+  React.useEffect(() => {
+    syncConflictRef.current = syncConflict
+  }, [syncConflict])
+
+  React.useEffect(() => {
+    const incomingDataAttr = cloneDataAttr(accountData.data_attr)
+    const incomingDataAttrKey = serializeDataAttr(incomingDataAttr)
+
+    if (incomingDataAttrKey === baselineDataAttrKeyRef.current) {
+      if (syncConflictRef.current) {
+        setSyncConflict(null)
+      }
+
+      return
     }
-  }, [accountData])
+
+    const currentRows = rowsRef.current
+    const currentNewEntry = newEntryRef.current
+    const baselineDataAttr = baselineDataAttrRef.current
+    const hasDraftChanges = hasLocalDraftChanges(currentRows, currentNewEntry, baselineDataAttr)
+
+    if (!hasDraftChanges) {
+      setSyncConflict(null)
+      applyIncomingSnapshot(incomingDataAttr)
+      return
+    }
+
+    const conflictNames = detectRemoteConflicts(currentRows, currentNewEntry, baselineDataAttr, incomingDataAttr)
+
+    if (conflictNames.length > 0) {
+      setSyncConflict({
+        conflictNames,
+        incomingDataAttr
+      })
+      return
+    }
+
+    const mergedRows = mergeRowsWithoutConflicts(currentRows, baselineDataAttr, incomingDataAttr)
+
+    setSyncConflict(null)
+    baselineDataAttrRef.current = incomingDataAttr
+    baselineDataAttrKeyRef.current = incomingDataAttrKey
+    setRows(mergedRows)
+    setRowsForAnalysis(mergedRows)
+  }, [accountData.data_attr, applyIncomingSnapshot])
 
   React.useEffect(() => {
     const timerID = setTimeout(() => setRowsForAnalysis(rows), ANALYSIS_DEBOUNCE_MS)
@@ -266,6 +479,93 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
 
   const analysis = React.useMemo(() => analyzeDataEntryRows(rowsForAnalysis, accountData), [rowsForAnalysis, accountData])
   const analysisPending = rows !== rowsForAnalysis
+  const hasUnsavedChanges = React.useMemo(
+    () => hasLocalDraftChanges(rows, newEntry, baselineDataAttrRef.current),
+    [newEntry, rows]
+  )
+
+  React.useEffect(() => {
+    hasUnsavedChangesRef.current = hasUnsavedChanges
+  }, [hasUnsavedChanges])
+
+  const queueLeaveConfirmation = React.useCallback((navigate: () => void) => {
+    pendingNavigationRef.current = navigate
+    setLeaveConfirmOpen(true)
+  }, [])
+
+  const executeNavigationWithBypass = React.useCallback((navigate: () => void) => {
+    navigationBypassRef.current = true
+    navigate()
+    window.setTimeout(() => {
+      navigationBypassRef.current = false
+    }, 0)
+  }, [])
+
+  const confirmLeave = React.useCallback(() => {
+    const pendingNavigation = pendingNavigationRef.current
+    pendingNavigationRef.current = null
+    setLeaveConfirmOpen(false)
+
+    if (pendingNavigation) {
+      executeNavigationWithBypass(pendingNavigation)
+    }
+  }, [executeNavigationWithBypass])
+
+  const cancelLeave = React.useCallback(() => {
+    pendingNavigationRef.current = null
+    setLeaveConfirmOpen(false)
+  }, [])
+
+  React.useEffect(() => {
+    const unblock = router.history.block((nextLocation, action) => {
+      if (navigationBypassRef.current || !hasUnsavedChangesRef.current) {
+        return undefined
+      }
+
+      if (!leaveConfirmOpenRef.current) {
+        queueLeaveConfirmation(() => {
+          const nextPath = `${nextLocation.pathname}${nextLocation.search || ""}${nextLocation.hash || ""}`
+
+          if (action === "REPLACE" || action === "POP") {
+            router.history.replace(nextPath)
+            return
+          }
+
+          router.history.push(nextPath)
+        })
+      }
+
+      return false
+    })
+
+    return unblock
+  }, [queueLeaveConfirmation, router.history])
+
+  React.useEffect(() => {
+    if (!hasUnsavedChanges) {
+      return undefined
+    }
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+    }
+  }, [hasUnsavedChanges])
+
+  const handleBackNavigation = React.useCallback(() => {
+    if (!hasUnsavedChangesRef.current) {
+      onClose()
+      return
+    }
+
+    queueLeaveConfirmation(onClose)
+  }, [onClose, queueLeaveConfirmation])
 
   const activeExistingNames = React.useMemo(() => {
     const names = new Set<string>()
@@ -478,6 +778,14 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     [t]
   )
 
+  const acknowledgeSyncConflict = React.useCallback(() => {
+    if (syncConflict) {
+      applyIncomingSnapshot(syncConflict.incomingDataAttr)
+    }
+
+    setSyncConflict(null)
+  }, [applyIncomingSnapshot, syncConflict])
+
   const createAndSendTransaction = React.useCallback(async () => {
     const latestAnalysis = analyzeDataEntryRows(rows, accountData)
 
@@ -531,7 +839,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     }
   }, [accountData, props, rows, showNotification, t])
 
-  const saveDisabled = txPending || analysisPending || analysis.hasErrors || !analysis.hasChanges
+  const saveDisabled = txPending || analysisPending || analysis.hasErrors || !analysis.hasChanges || !!syncConflict
 
   const existingRows = rows.filter((row): row is Extract<DataEntryRow, { kind: "existing" }> => row.kind === "existing")
   const newRows = rows.filter((row): row is Extract<DataEntryRow, { kind: "new" }> => row.kind === "new")
@@ -610,7 +918,8 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
   const encodingTitle = t<string>("account.data-entries.field.encoding")
 
   return (
-    <DialogBody
+    <>
+      <DialogBody
       actions={
         <DialogActionsBox>
           <div className={classes.actionsContent}>
@@ -640,7 +949,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
                 <FilterListIcon />
               </IconButton>
             }
-            onBack={props.onClose}
+            onBack={handleBackNavigation}
             title={t("account.data-entries.title")}
           />
           {filtersVisible ? (
@@ -956,7 +1265,34 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
           ) : null}
         </ListItem>
       </List>
-    </DialogBody>
+      </DialogBody>
+      <Dialog open={!!syncConflict} onClose={acknowledgeSyncConflict}>
+        <DialogTitle>{t("account.data-entries.sync-conflict.title")}</DialogTitle>
+        <DialogContent style={{ paddingBottom: 24 }}>
+          <Typography variant="body2">
+            {t("account.data-entries.sync-conflict.text", { count: syncConflict?.conflictNames.length || 0 })}
+          </Typography>
+          <DialogActionsBox preventMobileActionsBox smallDialog>
+            <ActionButton onClick={acknowledgeSyncConflict} type="primary">
+              {t("account.data-entries.sync-conflict.action.reload")}
+            </ActionButton>
+          </DialogActionsBox>
+        </DialogContent>
+      </Dialog>
+      <ConfirmDialog
+        cancelButton={<ActionButton onClick={cancelLeave}>{t("account.data-entries.leave-confirm.action.stay")}</ActionButton>}
+        confirmButton={
+          <ActionButton onClick={confirmLeave} type="primary">
+            {t("account.data-entries.leave-confirm.action.discard")}
+          </ActionButton>
+        }
+        onClose={cancelLeave}
+        open={leaveConfirmOpen}
+        title={t("account.data-entries.leave-confirm.title")}
+      >
+        {t("account.data-entries.leave-confirm.text")}
+      </ConfirmDialog>
+    </>
   )
 }
 
