@@ -37,6 +37,7 @@ import QRImportDialog from "~Generic/components/QRImport"
 const modules = {
   AssetDetailsDialog: import("../../Assets/components/AssetDetailsDialog"),
   BalanceDetailsDialog: import("../../Assets/components/BalanceDetailsDialog"),
+  DataEntriesDialog: import("./DataEntriesDialog"),
   LumenPurchaseDialog: import("../../LumenPurchase/components/LumenPurchaseDialog"),
   TradeAssetDialog: import("../../Trading/components/TradingDialog"),
   TransferDialog: import("../../TransferService/components/ConnectedTransferDialog")
@@ -61,6 +62,10 @@ const AssetDetailsDialog = withFallback(
 )
 const BalanceDetailsDialog = withFallback(
   React.lazy(() => modules.BalanceDetailsDialog),
+  <ViewLoading />
+)
+const DataEntriesDialog = withFallback(
+  React.lazy(() => modules.DataEntriesDialog),
   <ViewLoading />
 )
 const LumenPurchaseDialog = withFallback(
@@ -128,7 +133,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     null
   )
 
-  const { openSavedAddresses, openHiddenSenders, openDataEntries } = React.useContext(DialogsContext)
+  const { openSavedAddresses, openHiddenSenders } = React.useContext(DialogsContext)
   const { setURI } = React.useContext(TransactionRequestContext)
 
   const showAccountCreation =
@@ -150,6 +155,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     routes.createPayment(":accountId", ":assetId?")
   )
   const showDeposit = matchesRoute(router.location.pathname, routes.depositAsset("*"))
+  const showDataEntries = matchesRoute(router.location.pathname, routes.dataEntries("*"))
   const showLumenPurchase = matchesRoute(router.location.pathname, routes.purchaseLumens("*"))
   const showReceivePayment = matchesRoute(router.location.pathname, routes.receivePayment("*"))
   const showWithdrawal = matchesRoute(router.location.pathname, routes.withdrawAsset("*"))
@@ -182,7 +188,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       balanceDetails: accountID ? () => router.history.push(routes.balanceDetails(accountID)) : undefined,
       savedAddresses: accountID ? () => openSavedAddresses({}) : undefined,
       hiddenSenders: accountID ? () => openHiddenSenders({}) : undefined,
-      dataEntries: accountID && props.account ? () => openDataEntries({ account: props.account }) : undefined,
+      dataEntries: accountID ? () => router.history.push(routes.dataEntries(accountID)) : undefined,
       createPayment: accountID ? () => router.history.push(routes.createPayment(accountID)) : undefined,
       purchaseLumens: accountID ? () => router.history.push(routes.purchaseLumens(accountID)) : undefined,
       receivePayment: accountID ? () => router.history.push(routes.receivePayment(accountID)) : undefined,
@@ -190,7 +196,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       transactions: accountID ? () => router.history.push(routes.account(accountID)) : undefined,
       withdraw: accountID ? () => router.history.push(routes.withdrawAsset(accountID)) : undefined
     }
-  }, [openSavedAddresses, openHiddenSenders, openDataEntries, router.history, props.account])
+  }, [openSavedAddresses, openHiddenSenders, router.history, props.account])
 
   const closeAssetDetails = React.useCallback(() => {
     // We might need to go back to either "balance details" or "add assets"
@@ -522,6 +528,16 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
           >
             <React.Suspense fallback={<ViewLoading />}>
               <TradeAssetDialog account={props.account} onClose={closeDialog} />
+            </React.Suspense>
+          </Dialog>
+          <Dialog
+            open={showDataEntries}
+            fullScreen
+            onClose={closeDialog}
+            TransitionComponent={FullscreenDialogTransition}
+          >
+            <React.Suspense fallback={<ViewLoading />}>
+              <DataEntriesDialog account={props.account} onClose={closeDialog} />
             </React.Suspense>
           </Dialog>
           <Dialog

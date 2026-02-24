@@ -192,8 +192,8 @@ Resulting behavior:
 - Save path remains correctness-first (never uses stale analysis).
 
 ## Navigation Model Note
-Current implementation remains a full-screen dialog opened from account context menu via `DialogsContext`, not a dedicated route like `/account/:id/trade`.
-This was chosen to match existing utility-dialog patterns (Saved Addresses / Hidden Senders) and reduce routing/back-stack churn for this feature stage.
+Current implementation is route-driven: data entries open via dedicated account route (`/account/:id/data-entries`) and participate in URL/history navigation.
+The screen is still rendered as a full-screen view with the same visual model and back behavior expected from account subflows.
 
 ## Remaining Considerations
 Potential future improvements:
