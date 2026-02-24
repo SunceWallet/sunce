@@ -12,6 +12,7 @@ import ListIcon from "@material-ui/icons/List"
 import MoneyIcon from "@material-ui/icons/AttachMoney"
 import ContactsIcon from "@material-ui/icons/Contacts"
 import SettingsIcon from "@material-ui/icons/Settings"
+import StorageIcon from "@material-ui/icons/Storage"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff"
 import { Account } from "~App/contexts/accounts"
@@ -69,6 +70,7 @@ interface MenuProps {
   onManageAssets?: () => void
   onSavedAddresses?: () => void
   onHiddenSenders?: () => void
+  onDataEntries?: () => void
   onReceiveFunds?: () => void
   onPurchaseLumens?: () => void
   onTrade?: () => void
@@ -98,19 +100,19 @@ function LiveAccountContextMenuItems(
         onClick={closeAndCall(props.onTrade)}
       />
       {/* Temporarily hidden due to underdeveloped functionality and potential Apple moderation complexity */}
-      {/*<AccountContextMenuItem
+      {/* <AccountContextMenuItem
         disabled={!isSigner || !props.onDeposit}
         icon={<CallReceivedIcon />}
         label={t("account.context-menu.deposit.label")}
         onClick={closeAndCall(accountData.balances.length > 1 ? props.onDeposit : props.onPurchaseLumens)}
-      />*/}
-      {/*<AccountContextMenuItem
+      /> */}
+      {/* <AccountContextMenuItem
         disabled={!activated || !props.onWithdraw}
         icon={<CallMadeIcon />}
         label={t("account.context-menu.withdraw.label")}
         onClick={closeAndCall(props.onWithdraw)}
-      />*/}
-      {/*<Divider />*/}
+      /> */}
+      {/* <Divider /> */}
       <AccountContextMenuItem
         disabled={!activated || !props.onManageAssets}
         icon={<MoneyIcon />}
@@ -134,6 +136,12 @@ function LiveAccountContextMenuItems(
         icon={<VisibilityOffIcon />}
         label={t("account.context-menu.hidden-senders.label")}
         onClick={closeAndCall(props.onHiddenSenders)}
+      />
+      <AccountContextMenuItem
+        disabled={!activated || !props.onDataEntries}
+        icon={<StorageIcon />}
+        label={t("account.context-menu.data-entries.label")}
+        onClick={closeAndCall(props.onDataEntries)}
       />
     </>
   )

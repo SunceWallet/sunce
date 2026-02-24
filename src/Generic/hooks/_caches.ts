@@ -112,17 +112,21 @@ export interface OfferHistory {
   offers: Horizon.ServerApi.OfferRecord[]
 }
 
+function asComparableTimestamp(value: unknown): string {
+  return typeof value === "string" ? value : ""
+}
+
 function areTransactionsNewer(prev: TransactionHistory, next: TransactionHistory) {
   const prevMaxTimestamp =
     (prev
       ? max(
-          prev.transactions.map(tx => tx.created_at),
+          prev.transactions.map(tx => asComparableTimestamp((tx as any).created_at)),
           "0"
         )
       : undefined) || ""
   const nextMaxTimestamp =
     max(
-      next.transactions.map(tx => tx.created_at),
+      next.transactions.map(tx => asComparableTimestamp((tx as any).created_at)),
       "0"
     ) || ""
 
@@ -133,13 +137,13 @@ function areOffersNewer(prev: OfferHistory, next: OfferHistory) {
   const prevMaxTimestamp =
     (prev
       ? max(
-          prev.offers.map(tx => tx.last_modified_time),
+          prev.offers.map(tx => asComparableTimestamp((tx as any).last_modified_time)),
           "0"
         )
       : undefined) || ""
   const nextMaxTimestamp =
     max(
-      next.offers.map(tx => tx.last_modified_time),
+      next.offers.map(tx => asComparableTimestamp((tx as any).last_modified_time)),
       "0"
     ) || ""
 

@@ -5,6 +5,7 @@ import ViewLoading from "~Generic/components/ViewLoading"
 import SavedAddressesDialog, { SavedAddressesDialogProps } from "../../Assets/components/SavedAddressesDialog"
 import SavedAddressesSettings from "../../Assets/components/SavedAddressesSettings"
 import HiddenSendersDialog, { HiddenSendersDialogProps } from "../../Account/components/HiddenSendersDialog"
+import DataEntriesDialog, { DataEntriesDialogProps } from "../../Account/components/DataEntriesDialog"
 
 interface Props {
   children: React.ReactNode
@@ -19,6 +20,8 @@ interface ContextType {
   openSavedAddresses: (params: Partial<SavedAddressesDialogProps> | null) => void
   isHiddenSendersOpened: boolean
   openHiddenSenders: (params: Partial<HiddenSendersDialogProps> | null) => void
+  isDataEntriesOpened: boolean
+  openDataEntries: (params: Partial<DataEntriesDialogProps> | null) => void
   isSavedAddressesSettingsOpened: boolean
   openSavedAddressesSettings: (params: Partial<SavedAddressesSettingsDialogProps> | null) => void
 }
@@ -28,6 +31,8 @@ const initialValues: ContextType = {
   openSavedAddresses: () => undefined,
   isHiddenSendersOpened: false,
   openHiddenSenders: () => undefined,
+  isDataEntriesOpened: false,
+  openDataEntries: () => undefined,
   isSavedAddressesSettingsOpened: false,
   openSavedAddressesSettings: () => undefined
 }
@@ -41,6 +46,7 @@ export function DialogsProvider(props: Props) {
   const [hiddenSendersDialog, setHiddenSendersDialog] = React.useState<Partial<HiddenSendersDialogProps> | null>(
     null
   )
+  const [dataEntriesDialog, setDataEntriesDialog] = React.useState<Partial<DataEntriesDialogProps> | null>(null)
   const [savedAddressesSettingsDialog, setSavedAddressesSettingsDialog] = React.useState<Partial<SavedAddressesSettingsDialogProps> | null>(
     null
   )
@@ -55,6 +61,11 @@ export function DialogsProvider(props: Props) {
     setHiddenSendersDialog(null)
   }, [hiddenSendersDialog])
 
+  const closeDataEntriesDialog = React.useCallback(() => {
+    dataEntriesDialog?.onClose?.()
+    setDataEntriesDialog(null)
+  }, [dataEntriesDialog])
+
   const closeSavedAddressesSettingsDialog = React.useCallback(() => {
     savedAddressesSettingsDialog?.onClose?.()
     setSavedAddressesSettingsDialog(null)
@@ -65,7 +76,9 @@ export function DialogsProvider(props: Props) {
     openSavedAddresses: setSavedAddressesDialog,
     isHiddenSendersOpened: !!hiddenSendersDialog,
     openHiddenSenders: setHiddenSendersDialog,
-    isSavedAddressesSettingsOpened: savedAddressesSettingsDialog,
+    isDataEntriesOpened: !!dataEntriesDialog,
+    openDataEntries: setDataEntriesDialog,
+    isSavedAddressesSettingsOpened: !!savedAddressesSettingsDialog,
     openSavedAddressesSettings: setSavedAddressesSettingsDialog
   }
 
@@ -91,6 +104,18 @@ export function DialogsProvider(props: Props) {
         >
           <React.Suspense fallback={<ViewLoading />}>
             <HiddenSendersDialog {...(hiddenSendersDialog || {})} onClose={closeHiddenSendersDialog} />
+          </React.Suspense>
+        </Dialog>
+        <Dialog
+          open={!!dataEntriesDialog}
+          fullScreen
+          onClose={closeDataEntriesDialog}
+          TransitionComponent={FullscreenDialogTransition}
+        >
+          <React.Suspense fallback={<ViewLoading />}>
+            {dataEntriesDialog?.account ? (
+              <DataEntriesDialog {...(dataEntriesDialog as DataEntriesDialogProps)} onClose={closeDataEntriesDialog} />
+            ) : null}
           </React.Suspense>
         </Dialog>
         <Dialog

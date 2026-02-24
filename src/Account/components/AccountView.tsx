@@ -128,7 +128,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     null
   )
 
-  const { openSavedAddresses, openHiddenSenders } = React.useContext(DialogsContext)
+  const { openSavedAddresses, openHiddenSenders, openDataEntries } = React.useContext(DialogsContext)
   const { setURI } = React.useContext(TransactionRequestContext)
 
   const showAccountCreation =
@@ -182,6 +182,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       balanceDetails: accountID ? () => router.history.push(routes.balanceDetails(accountID)) : undefined,
       savedAddresses: accountID ? () => openSavedAddresses({}) : undefined,
       hiddenSenders: accountID ? () => openHiddenSenders({}) : undefined,
+      dataEntries: accountID && props.account ? () => openDataEntries({ account: props.account }) : undefined,
       createPayment: accountID ? () => router.history.push(routes.createPayment(accountID)) : undefined,
       purchaseLumens: accountID ? () => router.history.push(routes.purchaseLumens(accountID)) : undefined,
       receivePayment: accountID ? () => router.history.push(routes.receivePayment(accountID)) : undefined,
@@ -189,7 +190,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       transactions: accountID ? () => router.history.push(routes.account(accountID)) : undefined,
       withdraw: accountID ? () => router.history.push(routes.withdrawAsset(accountID)) : undefined
     }
-  }, [openSavedAddresses, router.history, props.account])
+  }, [openSavedAddresses, openHiddenSenders, openDataEntries, router.history, props.account])
 
   const closeAssetDetails = React.useCallback(() => {
     // We might need to go back to either "balance details" or "add assets"
@@ -362,6 +363,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
         onManageAssets={navigateTo.balanceDetails}
         onSavedAddresses={navigateTo.savedAddresses}
         onHiddenSenders={navigateTo.hiddenSenders}
+        onDataEntries={navigateTo.dataEntries}
         onReceiveFunds={navigateTo.receivePayment}
         onPurchaseLumens={navigateTo.purchaseLumens}
         onRename={performRenaming}

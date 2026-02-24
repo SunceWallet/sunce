@@ -244,6 +244,66 @@
       }
     }
   },
+  "data-entries": {
+    "title": "Данные аккаунта",
+    "section": {
+      "new": "Новые"
+    },
+    "field": {
+      "name": "Имя",
+      "value": "Значение",
+      "encoding": "Кодировка"
+    },
+    "encoding": {
+      "text": "Текст (UTF-8)",
+      "text-short": "Текст",
+      "base64": "Base64"
+    },
+    "placeholder": {
+      "name": "my_key",
+      "value": "Значение",
+      "search": "Фильтр по имени или значению"
+    },
+    "summary": "План изменений: {{additions}} новых, {{updates}} изменено, {{deletions}} удалено ({{operations}} операций).",
+    "status": {
+      "unchanged": "Без изменений",
+      "updated": "Значение изменено",
+      "deleted": "Будет удалено",
+      "new": "Новая запись",
+      "invalid": "Есть ошибки"
+    },
+    "hint": {
+      "deleted-by-action": "Помечено к удалению",
+      "empty-deletes": "Пустое значение означает удаление при сохранении",
+      "bytes": "{{count}} / 64 байт"
+    },
+    "action": {
+      "save": "Сохранить изменения",
+      "add": "Добавить",
+      "delete": "Удалить",
+      "restore": "Восстановить",
+      "toggle-filters": "Показать или скрыть фильтр",
+      "changed-only": "Только измененные"
+    },
+    "validation": {
+      "name-required": "Укажите имя",
+      "name-length": "Имя должно быть не длиннее {{max}} символов",
+      "name-ascii": "Имя может содержать только печатные ASCII-символы",
+      "value-required": "Укажите значение",
+      "invalid-base64": "Некорректное значение base64",
+      "value-too-large": "Значение слишком длинное ({{actual}}/{{max}} байт)",
+      "duplicate-existing": "Такое имя уже существует в данных аккаунта",
+      "duplicate-new": "Дубликат имени среди новых записей",
+      "subentries-limit": "Вы добавляете {{additions}} новых Data Entry, но в лимит подзаписей помещается только {{max}}. Уменьшите на {{excess}}.",
+      "operations-limit": "Запланировано {{operations}} операций, но Stellar позволяет не больше {{max}} в одной транзакции. Уменьшите на {{excess}}.",
+      "xlm-additions-limit": "Недостаточно свободных XLM. С учетом резервов и оценочной комиссии можно добавить не больше {{max}} новых записей.",
+      "insufficient-xlm": "Недостаточно XLM, чтобы покрыть итоговый резерв и комиссию транзакции"
+    },
+    "notification": {
+      "no-changes": "Нет изменений для сохранения",
+      "saved": "Транзакция Data Entries отправлена"
+    }
+  },
   "context-menu": {
     "account-settings": {
       "label": "Настройки аккаунта"
@@ -271,6 +331,9 @@
     },
     "hidden-senders": {
       "label": "Скрытые отправители"
+    },
+    "data-entries": {
+      "label": "Данные аккаунта"
     }
   },
   "cosigner": {

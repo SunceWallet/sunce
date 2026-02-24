@@ -46,11 +46,15 @@ function useDataSubscriptions<DataT, UpdateT>(
   }
 
   React.useEffect(() => {
-    items.map(item => {
-      return item.observe().subscribe({
+    let unmounted = false
+
+    items.forEach(item => {
+      item.observe().subscribe({
         next(update) {
           item.set(reducer(item.get(), update))
-          setRefreshCounter(counter => counter + 1)
+          if (!unmounted) {
+            setRefreshCounter(counter => counter + 1)
+          }
         },
         error(error) {
           // tslint:disable-next-line
@@ -60,6 +64,7 @@ function useDataSubscriptions<DataT, UpdateT>(
     })
 
     return () => {
+      unmounted = true
       // Don't unsubscribe to prevent missing updates (related to #1088)
       // subscriptions.forEach(subscription => unsubscribe(subscription))
     }
