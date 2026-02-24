@@ -1,11 +1,12 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import DialogBody from "~Layout/components/DialogBody"
-import { SavedAddressesContext } from "~App/contexts/savedAddresses"
+import { SavedAddresses, SavedAddressesContext } from "~App/contexts/savedAddresses"
 import { List, ListItem, ListItemText } from "@material-ui/core"
 import MainTitle from "~Generic/components/MainTitle"
 import { NotificationsContext } from "~App/contexts/notifications"
 import { ActionButton, ConfirmDialog } from "~Generic/components/DialogActions"
+import { call as ipcCall } from "~Platform/ipc"
 
 interface SavedAddressesSettingsProps {
   onClose: () => void
@@ -17,28 +18,74 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
   const { showNotification } = React.useContext(NotificationsContext)
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = React.useState(false)
+  const isAndroid = import.meta.env.VITE_PLATFORM === "android"
 
-  const handleExportToFile = React.useCallback(() => {
-    // Create a JSON representation of the saved addresses
+  const handleShare = React.useCallback(async () => {
     const jsonContent = JSON.stringify(savedAddresses, null, 2)
+    try {
+      await ipcCall("ShareFile", {
+        message: "My Stellar contacts",
+        subject: "stellar-contacts",
+        content: jsonContent
+      })
+      showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
+    } catch (error) {
+      console.error("Error sharing file:", error.message)
+      showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))
+    }
+  }, [savedAddresses, showNotification, t])
 
-    // Create a blob with the JSON content
-    const blob = new Blob([jsonContent], { type: "application/json" })
+  const handleExportToFile = React.useCallback(async () => {
+    const jsonContent = JSON.stringify(savedAddresses, null, 2)
+    const isMobile = import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios"
 
-    // Create a download link
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `stellar-contacts.json`
+    if (isMobile) {
+      try {
+        const platform = import.meta.env.VITE_PLATFORM
+        let result = false
+        if (platform === "android") {
+          // On Android, use SaveFile to save to Downloads folder
+          result = await ipcCall("SaveFile", {
+            subject: "stellar-contacts",
+            content: jsonContent
+          })
+        } else {
+          // On iOS, use ShareFile for social sharing
+          await ipcCall("ShareFile", {
+            message: "My Stellar contacts",
+            subject: "stellar-contacts",
+            content: jsonContent
+          })
+          result = true
+        }
+        if (result) {
+          showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
+        }
+      } catch (error) {
+        console.error("Error sharing file:", error.message)
+        showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))
+      }
+    } else {
+      // Use blob download on desktop/web
+      const blob = new Blob([jsonContent], { type: "application/json" })
 
-    // Trigger the download
-    document.body.appendChild(link)
-    link.click()
+      // Create a download link
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      link.download = `stellar-contacts.json`
 
-    // Clean up
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }, [savedAddresses])
+      // Trigger the download
+      document.body.appendChild(link)
+      link.click()
+
+      // Clean up
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+
+      showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
+    }
+  }, [savedAddresses, showNotification, t])
 
   const [fileInputKey, setFileInputKey] = React.useState(0) // To reset the file input
   const fileInputRef = React.useRef<HTMLInputElement>(null)
@@ -127,6 +174,14 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
       }
     >
       <List style={{ margin: "0 -8px" }}>
+        {isAndroid && (
+          <ListItem button onClick={handleShare}>
+            <ListItemText
+              primary={t("account.saved-addresses.share", "Share")}
+              secondary={t("account.saved-addresses.share-description", "Share saved contacts with other apps")}
+            />
+          </ListItem>
+        )}
         <ListItem button onClick={handleExportToFile}>
           <ListItemText
             primary={t("account.saved-addresses.export-to-file", "Export to file")}

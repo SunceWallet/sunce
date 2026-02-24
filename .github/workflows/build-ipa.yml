@@ -2,10 +2,20 @@ name: Build iPhone artifact
 
 on:
   workflow_dispatch:
+    inputs:
+        secret_source:
+          description: 'Which secrets to use?'
+          required: true
+          default: 'default'
+          type: choice
+          options:
+            - default
+            - kosta
 
 jobs:
   build:
     runs-on: macos-14
+    environment: ${{ github.event.inputs.secret_source == 'kosta' && 'Kosta Dev' || '' }}
 
     steps:
       - uses: maxim-lobanov/setup-xcode@v1.6.0  # или последняя версия
@@ -53,6 +63,15 @@ jobs:
 
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo -n "${{ secrets.MAIN_APP_APPSTORE_PROVISION_PROFILE_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Sunce\ provision.mobileprovision
+
+      - name: Adjust build profile
+        working-directory: cordova
+        if: github.event.inputs.secret_source == 'kosta'
+        run: |
+          mv build.ios.json build.ios.json.orig
+          jq '.ios.release.provisioningProfile = "Kosta Dev Adhoc"' build.ios.json.orig > build.ios.json.1
+          jq '.ios.release.packageType = "ad-hoc"' build.ios.json.1 > build.ios.json
+          rm build.ios.json.orig
 
       - name: Build IPA
         run: |

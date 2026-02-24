@@ -12,6 +12,8 @@ import { bioAuthenticate, isBiometricAuthAvailable } from "./bio-auth"
 import { registerURLHandler } from "./protocol-handler"
 import { registerUpdateHandler } from "./updater"
 import { registerNotificationHandler } from "./notifications"
+import { initializeFileSharing } from "./file-share"
+import { initializeFileSaving } from "./file-save"
 
 const iframe = document.getElementById("walletframe") as HTMLIFrameElement
 
@@ -59,6 +61,8 @@ function onDeviceReady() {
   registerNotificationHandler()
   initializeQRReader()
   initializeClipboard(cordova)
+  initializeFileSharing()
+  initializeFileSaving()
   initializeIPhoneNotchFix()
 
   setupLinkListener(contentWindow)
