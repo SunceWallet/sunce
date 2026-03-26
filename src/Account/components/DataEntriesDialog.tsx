@@ -33,6 +33,7 @@ import {
   buildExistingRows,
   convertValueMode,
   DataEntryGeneralIssue,
+  DataEntryOperationDraft,
   DataEntryRow,
   DataEntryRowIssue,
   DataEntryStatus,
@@ -247,6 +248,24 @@ function cloneDataAttr(dataAttr: AccountData["data_attr"]): AccountData["data_at
   }, {})
 }
 
+function applyOperationsToDataAttr(
+  dataAttr: AccountData["data_attr"],
+  operations: DataEntryOperationDraft[]
+): AccountData["data_attr"] {
+  const nextDataAttr = cloneDataAttr(dataAttr)
+
+  for (const operation of operations) {
+    if (operation.value === null) {
+      delete nextDataAttr[operation.name]
+      continue
+    }
+
+    nextDataAttr[operation.name] = operation.value.toString("base64")
+  }
+
+  return nextDataAttr
+}
+
 function serializeDataAttr(dataAttr: AccountData["data_attr"]) {
   return JSON.stringify(
     Object.keys(dataAttr)
@@ -320,6 +339,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
   const [ignoreIncomingUpdates, setIgnoreIncomingUpdates] = React.useState(false)
   const [leaveConfirmOpen, setLeaveConfirmOpen] = React.useState(false)
   const [txPending, setTxPending] = React.useState(false)
+  const [analysisDataAttr, setAnalysisDataAttr] = React.useState<AccountData["data_attr"]>(() => cloneDataAttr(accountData.data_attr))
 
   const baselineDataAttrRef = React.useRef<AccountData["data_attr"]>(cloneDataAttr(accountData.data_attr))
   const baselineDataAttrKeyRef = React.useRef(serializeDataAttr(accountData.data_attr))
@@ -338,6 +358,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
 
     baselineDataAttrRef.current = snapshot
     baselineDataAttrKeyRef.current = serializeDataAttr(snapshot)
+    setAnalysisDataAttr(snapshot)
 
     setRows(nextRows)
     setRowsForAnalysis(nextRows)
@@ -405,8 +426,18 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
   }, [rows])
 
   const flushAnalysis = React.useCallback(() => setRowsForAnalysis(rows), [rows])
+  const accountDataForAnalysis = React.useMemo(
+    () => ({
+      ...accountData,
+      data_attr: analysisDataAttr
+    }),
+    [accountData, analysisDataAttr]
+  )
 
-  const analysis = React.useMemo(() => analyzeDataEntryRows(rowsForAnalysis, accountData), [rowsForAnalysis, accountData])
+  const analysis = React.useMemo(
+    () => analyzeDataEntryRows(rowsForAnalysis, accountDataForAnalysis),
+    [rowsForAnalysis, accountDataForAnalysis]
+  )
   const analysisPending = rows !== rowsForAnalysis
   const hasUnsavedChanges = React.useMemo(
     () => hasLocalDraftChanges(rows, newEntry, baselineDataAttrRef.current),
@@ -729,7 +760,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
   }, [])
 
   const createAndSendTransaction = React.useCallback(async () => {
-    const latestAnalysis = analyzeDataEntryRows(rows, accountData)
+    const latestAnalysis = analyzeDataEntryRows(rows, accountDataForAnalysis)
 
     if (!latestAnalysis.hasChanges) {
       showNotification("info", t("account.data-entries.notification.no-changes"))
@@ -764,12 +795,15 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
       })
 
       await props.sendTransaction(tx)
+      applyIncomingSnapshot(applyOperationsToDataAttr(accountData.data_attr, latestAnalysis.operations))
 
       try {
-        await props.horizon
+        const refreshedAccount = await props.horizon
           .accounts()
           .accountId(props.account.accountID)
           .call()
+
+        applyIncomingSnapshot(refreshedAccount.data || {})
       } catch (error) {
         trackError(error)
       }
@@ -780,7 +814,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     } finally {
       setTxPending(false)
     }
-  }, [accountData, props, rows, showNotification, t])
+  }, [accountData, accountDataForAnalysis, applyIncomingSnapshot, props, rows, showNotification, t])
 
   const saveDisabled = txPending || analysisPending || analysis.hasErrors || !analysis.hasChanges || !!pendingRemoteUpdate
 
