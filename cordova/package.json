@@ -45,7 +45,8 @@
     "cordova-clipboard": "^1.2.1",
     "cordova-plugin-dialogs": "^2.0.1",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
-    "cordova-plugin-safariviewcontroller": "^2.0.0"
+    "cordova-plugin-safariviewcontroller": "^2.0.0",
+    "cordova-plugin-saf-mediastore": "^github:SunceWallet/cordova-plugin-saf-mediastore"
   },
   "devDependencies": {
     "@moodlehq/cordova-plugin-local-notification": "^0.9.0-moodle.12",
@@ -60,7 +61,6 @@
     "cordova-plugin-fingerprint-aio": "^5.0.3",
     "cordova-plugin-network-information": "^3.0.0",
     "cordova-plugin-proguard": "^2.2.0",
-    "cordova-plugin-saf-mediastore": "^1.0.10",
     "cordova-plugin-secure-storage": "github:satoshipay/cordova-plugin-secure-storage",
     "cordova-plugin-x-socialsharing": "^6.0.4",
     "dotenv-cli": "^8.0.0",
