@@ -66,12 +66,18 @@ const useActionButtonStyles = makeStyles((theme) => ({
       display: "none"
     }
   },
+  mobileInlineSpacePlaceholderExpanded: {
+    height: "132px !important"
+  },
   common: {
     flexShrink: 0,
     maxHeight: 88,
     overflow: "hidden",
     transition: `max-height ${theme.transitions.duration.standard}ms ${theme.transitions.easing.easeInOut}`,
     zIndex: 1
+  },
+  commonExpanded: {
+    maxHeight: 132
   },
   hidden: {
     maxHeight: 0,
@@ -154,6 +160,7 @@ export function CloseButton(props: { form?: string; onClick?: (event: React.Synt
 interface MobileDialogActionsBoxProps {
   children: React.ReactNode | React.ReactNode[]
   className?: string
+  expandedHeight?: boolean
   hidden?: boolean
   smallDialog?: boolean
   transparent?: boolean
@@ -169,14 +176,15 @@ const MobileDialogActionsBox = React.memo(
           // Make sure its height matches the height of the actions box
           <div
             className={`${classes.common} ${classes.mobileInlineSpacePlaceholder} ${
-              props.hidden ? classes.hidden : ""
-            }`}
+              props.expandedHeight ? classes.mobileInlineSpacePlaceholderExpanded : ""
+            } ${props.hidden ? classes.hidden : ""}`}
           />
         )}
         <div
           className={[
             "iphone-notch-bottom-spacing",
             classes.common,
+            props.expandedHeight ? classes.commonExpanded : "",
             classes.mobileDialogActionsBox,
             props.className || "",
             props.hidden ? classes.hidden : "",
@@ -195,6 +203,7 @@ interface DialogActionsBoxProps {
   children: React.ReactNode | React.ReactNode[]
   className?: string
   desktopStyle?: React.CSSProperties
+  expandedHeight?: boolean
   hidden?: boolean
   preventMobileActionsBox?: boolean
   smallDialog?: boolean
@@ -219,6 +228,7 @@ export const DialogActionsBox = React.memo(
       return (
         <MobileDialogActionsBox
           className={props.className}
+          expandedHeight={props.expandedHeight}
           hidden={props.hidden}
           ref={ref}
           smallDialog={props.smallDialog}

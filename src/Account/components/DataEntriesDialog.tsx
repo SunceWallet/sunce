@@ -898,7 +898,7 @@ function DataEntriesEditor(props: DataEntriesEditorProps) {
     <>
       <DialogBody
       actions={
-        <DialogActionsBox>
+        <DialogActionsBox expandedHeight>
           <div className={classes.actionsContent}>
             <Typography className={classes.summaryInActions}>{summaryText}</Typography>
             <ActionButton
