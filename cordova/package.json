@@ -60,7 +60,7 @@
     "cordova-plugin-fingerprint-aio": "^5.0.3",
     "cordova-plugin-network-information": "^3.0.0",
     "cordova-plugin-proguard": "^2.2.0",
-    "cordova-plugin-saf-mediastore": "SunceWallet/cordova-plugin-saf-mediastore#7f1a80d8a8f38358fe6062f1dda83ecdabae8da4",
+    "cordova-plugin-saf-mediastore": "git+ssh://git@github.com/SunceWallet/cordova-plugin-saf-mediastore.git",
     "cordova-plugin-secure-storage": "github:satoshipay/cordova-plugin-secure-storage",
     "cordova-plugin-x-socialsharing": "^6.0.4",
     "dotenv-cli": "^8.0.0",
