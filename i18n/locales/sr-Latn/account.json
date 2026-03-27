@@ -205,7 +205,7 @@
     }
   },
   "data-entries": {
-    "title": "Podaci računa",
+    "title": "Korisnička polja",
     "section": {
       "new": "Nove"
     },
@@ -309,7 +309,7 @@
       "label": "Skriveni pošiljaoci"
     },
     "data-entries": {
-      "label": "Podaci računa"
+      "label": "Korisnička polja"
     }
   },
   "cosigner": {

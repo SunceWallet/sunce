@@ -245,7 +245,7 @@
     }
   },
   "data-entries": {
-    "title": "Data Entries",
+    "title": "Custom Fields",
     "section": {
       "new": "New"
     },
@@ -349,7 +349,7 @@
       "label": "Hidden Senders"
     },
     "data-entries": {
-      "label": "Data Entries"
+      "label": "Custom Fields"
     }
   },
   "cosigner": {

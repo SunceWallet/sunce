@@ -205,7 +205,7 @@
     }
   },
   "data-entries": {
-    "title": "Kontodaten",
+    "title": "Benutzerfelder",
     "section": {
       "new": "Neu"
     },
@@ -309,7 +309,7 @@
       "label": "Verborgene Absender"
     },
     "data-entries": {
-      "label": "Kontodaten"
+      "label": "Benutzerfelder"
     }
   },
   "cosigner": {

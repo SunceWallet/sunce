@@ -205,7 +205,7 @@
     }
   },
   "data-entries": {
-    "title": "Datos de la cuenta",
+    "title": "Campos personalizados",
     "section": {
       "new": "Nuevas"
     },
@@ -309,7 +309,7 @@
       "label": "Remitentes ocultos"
     },
     "data-entries": {
-      "label": "Datos de la cuenta"
+      "label": "Campos personalizados"
     }
   },
   "purchase-lumens": {

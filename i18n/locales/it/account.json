@@ -205,7 +205,7 @@
     }
   },
   "data-entries": {
-    "title": "Dati dell'account",
+    "title": "Campi personalizzati",
     "section": {
       "new": "Nuove"
     },
@@ -309,7 +309,7 @@
       "label": "Mittenti nascosti"
     },
     "data-entries": {
-      "label": "Dati dell'account"
+      "label": "Campi personalizzati"
     }
   },
   "purchase-lumens": {
