@@ -65,7 +65,7 @@ export function DialogsProvider(props: Props) {
     openSavedAddresses: setSavedAddressesDialog,
     isHiddenSendersOpened: !!hiddenSendersDialog,
     openHiddenSenders: setHiddenSendersDialog,
-    isSavedAddressesSettingsOpened: savedAddressesSettingsDialog,
+    isSavedAddressesSettingsOpened: !!savedAddressesSettingsDialog,
     openSavedAddressesSettings: setSavedAddressesSettingsDialog
   }
 

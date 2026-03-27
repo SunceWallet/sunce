@@ -244,6 +244,82 @@
       }
     }
   },
+  "data-entries": {
+    "title": "Custom Fields",
+    "section": {
+      "new": "New"
+    },
+    "field": {
+      "name": "Name",
+      "value": "Value",
+      "encoding": "Encoding"
+    },
+    "encoding": {
+      "text": "Text (UTF-8)",
+      "text-short": "Text",
+      "base64": "Base64"
+    },
+    "placeholder": {
+      "name": "my_key",
+      "value": "Value",
+      "search": "Filter by name or value"
+    },
+    "summary": "Planned changes: {{additions}} new, {{updates}} updated, {{deletions}} deleted ({{operations}} operations).",
+    "status": {
+      "unchanged": "No changes",
+      "updated": "Value changed",
+      "deleted": "Will be deleted",
+      "new": "New entry",
+      "invalid": "Needs attention"
+    },
+    "hint": {
+      "deleted-by-action": "Marked for deletion",
+      "empty-deletes": "Empty value means this entry will be deleted",
+      "bytes": "{{count}} / 64 bytes"
+    },
+    "action": {
+      "save": "Save changes",
+      "add": "Add",
+      "delete": "Delete",
+      "restore": "Restore",
+      "toggle-filters": "Toggle filters",
+      "changed-only": "Changed only"
+    },
+    "validation": {
+      "name-required": "Name is required",
+      "name-length": "Name must be {{max}} characters or less",
+      "name-ascii": "Name must contain printable ASCII characters only",
+      "value-required": "Value is required",
+      "invalid-base64": "Invalid base64 value",
+      "value-too-large": "Value is too large ({{actual}}/{{max}} bytes)",
+      "duplicate-existing": "This name already exists in account data",
+      "duplicate-new": "Duplicate name among new entries",
+      "subentries-limit": "You are adding {{additions}} new Data Entries, but only {{max}} fit into account subentries limit. Reduce by {{excess}}.",
+      "operations-limit": "You planned {{operations}} operations, but Stellar allows only {{max}} per transaction. Reduce by {{excess}}.",
+      "xlm-additions-limit": "Not enough spendable XLM. With reserves and estimated fees you can add at most {{max}} new entries.",
+      "insufficient-xlm": "Not enough XLM to cover resulting reserve and transaction fee"
+    },
+    "notification": {
+      "no-changes": "No changes to save",
+      "saved": "Data Entries transaction submitted"
+    },
+    "sync-update": {
+      "title": "Account data was updated",
+      "text": "Account data changed on-chain while you have unsaved edits. Reload and lose local changes, or ignore further remote updates for this editing session.",
+      "action": {
+        "reload": "Reload data",
+        "ignore": "Ignore updates"
+      }
+    },
+    "leave-confirm": {
+      "title": "Discard unsaved changes?",
+      "text": "You have unsaved Data Entries edits. Leave this page and lose them?",
+      "action": {
+        "stay": "Stay",
+        "discard": "Discard and leave"
+      }
+    }
+  },
   "context-menu": {
     "account-settings": {
       "label": "Account Settings"
@@ -271,6 +347,9 @@
     },
     "hidden-senders": {
       "label": "Hidden Senders"
+    },
+    "data-entries": {
+      "label": "Custom Fields"
     }
   },
   "cosigner": {
