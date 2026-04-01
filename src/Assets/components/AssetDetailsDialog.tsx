@@ -13,7 +13,6 @@ import { BASE_RESERVE, parseAssetID } from "~Generic/lib/stellar"
 import { openLink } from "~Platform/links"
 import { breakpoints } from "~App/theme"
 import { StellarTomlCurrency } from "~shared/types/stellar-toml"
-import { SingleBalance } from "~Account/components/AccountBalances"
 import DialogBody from "~Layout/components/DialogBody"
 import { AccountName } from "~Generic/components/Fetchers"
 import { ReadOnlyTextfield } from "~Generic/components/FormFields"
@@ -322,8 +321,22 @@ const useAssetDetailStyles = makeStyles({
       marginLeft: 39
     }
   },
+  balanceRow: {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap"
+  },
+  copyableValue: {
+    cursor: "pointer",
+    userSelect: "text" as const,
+    WebkitUserSelect: "text" as const
+  },
+  balanceCode: {
+    fontWeight: "bold",
+    marginLeft: 12
+  },
   toolbar: {
-    marginLeft: "-4px"
+    marginLeft: 4
   }
 })
 
@@ -338,6 +351,8 @@ function AssetDetailsDialog(props: Props) {
   const asset = React.useMemo(() => parseAssetID(props.assetID), [props.assetID])
   const classes = useAssetDetailStyles()
   const isSmallScreen = useIsMobile()
+  const clipboard = useClipboard()
+  const { t } = useTranslation()
 
   const balance = accountData.balances.find(
     asset.isNative()
@@ -346,6 +361,27 @@ function AssetDetailsDialog(props: Props) {
   )
 
   const metadata = useAssetMetadata(asset, props.account.testnet)
+  const assetCode = asset.getCode()
+  const copyHint = t("account-settings.export-key.info.tap-to-copy")
+
+  const assetTitle = React.useMemo(() => {
+    if (asset.isNative()) {
+      return "Stellar Lumens (XLM)"
+    }
+
+    const assetName = metadata?.name?.trim()
+    return assetName && assetName !== assetCode ? `${assetName} (${assetCode})` : assetCode
+  }, [asset, assetCode, metadata])
+
+  const copyBalanceToClipboard = React.useCallback(() => {
+    if (balance?.balance) {
+      clipboard.copyToClipboard(balance.balance)
+    }
+  }, [balance?.balance, clipboard])
+
+  const copyAssetCodeToClipboard = React.useCallback(() => {
+    clipboard.copyToClipboard(assetCode)
+  }, [assetCode, clipboard])
 
   const dialogActions = React.useMemo(
     () => (asset.isNative() ? null : <AssetDetailsActions account={props.account} asset={asset} />),
@@ -361,31 +397,40 @@ function AssetDetailsDialog(props: Props) {
             nowrap
             onBack={props.onClose}
             style={{ position: "relative", zIndex: 1 }}
-            title={
-              asset.isNative()
-                ? "Stellar Lumens (XLM)"
-                : (<>
-                  {metadata && metadata.name
-                    ? `${metadata.name} (${asset.getCode()})`
-                    : asset.getCode()}
-                </>
-                )
-            }
+            title={assetTitle}
             titleStyle={{
               maxWidth: isSmallScreen ? "calc(100% - 75px)" : "calc(100% - 100px)",
               textShadow: "0 0 5px white, 0 0 5px white, 0 0 5px white"
             }}
           />
-          <Typography className={classes.domain} variant="subtitle1">
-            {balance ? (<>
-              <SingleBalance assetCode={asset.getCode()} balance={balance.balance} />
-              <Box className={classes.toolbar}>
-                <VisibilityIconButton
-                  accountId={props.account.accountID}
-                  asset={asset}
-                />
+          <Typography className={classes.domain} component="div" variant="subtitle1">
+            {balance ? (
+              <Box className={classes.balanceRow}>
+                <Typography
+                  component="span"
+                  onClick={copyBalanceToClipboard}
+                  title={copyHint}
+                  className={classes.copyableValue}
+                  variant="inherit"
+                >
+                  {balance.balance}
+                </Typography>
+                <Typography
+                  component="span"
+                  onClick={copyAssetCodeToClipboard}
+                  title={copyHint}
+                  className={`${classes.copyableValue} ${classes.balanceCode}`}
+                  variant="inherit"
+                >
+                  {assetCode}
+                </Typography>
+                <Box className={classes.toolbar}>
+                  <VisibilityIconButton
+                    accountId={props.account.accountID}
+                    asset={asset}
+                  />
+                </Box>
               </Box>
-            </>
             ) : asset.isNative() ? (
               "stellar.org"
             ) : (
