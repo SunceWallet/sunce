@@ -1,6 +1,8 @@
 import React from "react"
 import { useNetworkCacheReset } from "~Generic/hooks/stellar-subscriptions"
+import { defaultMainnetHorizonURLs, defaultTestnetHorizonURLs } from "~Generic/lib/horizon-servers"
 import { workers } from "~Workers/worker-controller"
+import { SettingsContext } from "./settings"
 import { trackError } from "./notifications"
 
 interface Props {
@@ -14,80 +16,51 @@ interface ContextType {
   testnetHorizonURLs: string[]
 }
 
-const initialHorizonSelection: Promise<[string[], string[]]> = (async () => {
-  const { netWorker } = await workers
-
-  const pubnetHorizonURLs: string[] = Array.from(
-    new Set(
-      await Promise.all([
-        "https://horizon.stellar.org",
-        netWorker.checkHorizonOrFailover("https://horizon.stellarx.com", "https://horizon.stellar.org"),
-        netWorker.checkHorizonOrFailover("https://horizon.stellar.lobstr.co", "https://horizon.stellar.org")
-      ])
-    )
-  )
-
-  const testnetHorizonURLs: string[] = ["https://horizon-testnet.stellar.org"]
-
-  return Promise.all([pubnetHorizonURLs, testnetHorizonURLs])
-})()
-
-initialHorizonSelection.catch(trackError)
-
 const initialValues: ContextType = {
-  isSelectionPending: true,
-  pendingSelection: initialHorizonSelection,
-  pubnetHorizonURLs: ["https://horizon.stellar.org"],
-  testnetHorizonURLs: ["https://stellar-horizon-testnet.satoshipay.io/"]
+  isSelectionPending: false,
+  pendingSelection: Promise.resolve([defaultMainnetHorizonURLs, defaultTestnetHorizonURLs]),
+  pubnetHorizonURLs: defaultMainnetHorizonURLs,
+  testnetHorizonURLs: defaultTestnetHorizonURLs
 }
 
 const StellarContext = React.createContext<ContextType>(initialValues)
 
 export function StellarProvider(props: Props) {
+  const settings = React.useContext(SettingsContext)
   const [contextValue, setContextValue] = React.useState<ContextType>(initialValues)
   const resetNetworkCaches = useNetworkCacheReset()
+  const previousURLs = React.useRef({
+    pubnet: initialValues.pubnetHorizonURLs,
+    testnet: initialValues.testnetHorizonURLs
+  })
 
   React.useEffect(() => {
-    let cancelled = false
+    const pubnetHorizonURLs =
+      settings.mainnetHorizonURLs && settings.mainnetHorizonURLs.length > 0
+        ? settings.mainnetHorizonURLs
+        : defaultMainnetHorizonURLs
+    const testnetHorizonURLs = defaultTestnetHorizonURLs
 
-    const init = async () => {
-      const { netWorker } = await workers
+    setContextValue({
+      isSelectionPending: false,
+      pendingSelection: Promise.resolve([pubnetHorizonURLs, testnetHorizonURLs]),
+      pubnetHorizonURLs,
+      testnetHorizonURLs
+    })
 
-      setContextValue(prevState => ({ ...prevState, pendingSelection: initialHorizonSelection }))
-      const [pubnetHorizonURLs, testnetHorizonURLs] = await initialHorizonSelection
+    const didChange =
+      JSON.stringify(previousURLs.current.pubnet) !== JSON.stringify(pubnetHorizonURLs) ||
+      JSON.stringify(previousURLs.current.testnet) !== JSON.stringify(testnetHorizonURLs)
 
-      if (!cancelled) {
-        setContextValue(prevState => ({
-          isSelectionPending: false,
-          pendingSelection: prevState.pendingSelection,
-          pubnetHorizonURLs:
-            pubnetHorizonURLs !== prevState.pubnetHorizonURLs ? pubnetHorizonURLs : prevState.pubnetHorizonURLs,
-          testnetHorizonURLs:
-            testnetHorizonURLs !== prevState.testnetHorizonURLs ? testnetHorizonURLs : prevState.testnetHorizonURLs
-        }))
+    if (didChange) {
+      previousURLs.current = { pubnet: pubnetHorizonURLs, testnet: testnetHorizonURLs }
 
-        if (
-          pubnetHorizonURLs !== initialValues.pubnetHorizonURLs ||
-          testnetHorizonURLs !== initialValues.testnetHorizonURLs
-        ) {
-          await netWorker.resetAllSubscriptions()
-          resetNetworkCaches()
-        }
-
-        // tslint:disable-next-line no-console
-        console.debug(`Selected horizon servers:`, { pubnetHorizonURLs, testnetHorizonURLs })
-      }
+      workers
+        .then(({ netWorker }) => netWorker.resetAllSubscriptions())
+        .then(resetNetworkCaches)
+        .catch(trackError)
     }
-
-    if (navigator.onLine !== false) {
-      init().catch(trackError)
-    }
-
-    const unsubscribe = () => {
-      cancelled = true
-    }
-    return unsubscribe
-  }, [resetNetworkCaches])
+  }, [resetNetworkCaches, settings.mainnetHorizonURLs])
 
   return <StellarContext.Provider value={contextValue}>{props.children}</StellarContext.Provider>
 }

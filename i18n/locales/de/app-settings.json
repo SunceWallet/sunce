@@ -70,6 +70,12 @@
         "secondary": "Vertrauenswürdige Dienste entfernen"
       }
     },
+    "api-servers": {
+      "text": {
+        "primary": "API-Server",
+        "secondary": "Für fortgeschrittene Benutzer"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Gespeicherte Adressen importieren/exportieren",
@@ -107,6 +113,44 @@
         "text": "Der Dienst wird von Ihrer Vertrauensliste entfernt. Sind Sie sicher?"
       },
       "no-services": "Keine vertrauenswürdigen Dienste"
+    }
+  },
+  "api-servers": {
+    "actions": {
+      "add": "Server hinzufügen",
+      "delete": "Server löschen",
+      "edit": "Server bearbeiten",
+      "reorder": "Zum Sortieren ziehen"
+    },
+    "editor": {
+      "actions": {
+        "add": "Hinzufügen",
+        "cancel": "Abbrechen",
+        "save": "Speichern"
+      },
+      "add-title": "API-Server hinzufügen",
+      "edit-title": "API-Server bearbeiten",
+      "url-label": "Serveradresse",
+      "validation": {
+        "duplicate": "Dieser Server ist bereits in der Liste.",
+        "invalid-url": "Geben Sie eine gültige Serveradresse ein.",
+        "required": "Geben Sie eine Serveradresse ein."
+      }
+    },
+    "empty": "Keine API-Server konfiguriert",
+    "info": {
+      "note": "Der erste Server in der Liste gilt als primärer Server. Die übrigen bleiben als Alternativen verfügbar.",
+      "primary": "Sunce verbindet sich mit Horizon-API-Servern, um den aktuellen Kontostand abzurufen und Transaktionen an die Blockchain zu senden.",
+      "secondary": "Standardmäßig verwendet Sunce den öffentlichen Horizon-Server von Stellar. Er kann gelegentlich langsam sein, daher können Sie hier Alternativen hinzufügen, zum Beispiel einen kostenpflichtigen Node."
+    },
+    "primary": "Primärer Server",
+    "status": {
+      "healthy": "Verfügbar, {{latencyMs}} ms",
+      "idle": "Wartet auf Prüfung",
+      "loading": "Server wird geprüft…",
+      "problem": "Problem: {{message}}",
+      "problem-with-latency": "Problem, {{latencyMs}} ms: {{message}}",
+      "problem-without-message": "Der Server hat die Prüfung nicht bestanden."
     }
   }
 }

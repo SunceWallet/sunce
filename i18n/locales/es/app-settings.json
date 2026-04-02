@@ -61,6 +61,12 @@
         "secondary": "Remover Trusted Services"
       }
     },
+    "api-servers": {
+      "text": {
+        "primary": "Servidores API",
+        "secondary": "Para usuarios avanzados"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Importar/exportar direcciones guardadas",
@@ -98,6 +104,44 @@
         "text": "El servicio será eliminado de tu lista de confianza. Estás seguro?"
       },
       "no-services": "No hay servicios de confianza."
+    }
+  },
+  "api-servers": {
+    "actions": {
+      "add": "Agregar servidor",
+      "delete": "Eliminar servidor",
+      "edit": "Editar servidor",
+      "reorder": "Arrastrar para ordenar"
+    },
+    "editor": {
+      "actions": {
+        "add": "Agregar",
+        "cancel": "Cancelar",
+        "save": "Guardar"
+      },
+      "add-title": "Agregar servidor API",
+      "edit-title": "Editar servidor API",
+      "url-label": "Dirección del servidor",
+      "validation": {
+        "duplicate": "Este servidor ya está en la lista.",
+        "invalid-url": "Introduce una dirección de servidor válida.",
+        "required": "Introduce una dirección de servidor."
+      }
+    },
+    "empty": "No hay servidores API configurados",
+    "info": {
+      "note": "El primer servidor de la lista se considera el principal. Los demás siguen disponibles como alternativas.",
+      "primary": "Sunce se conecta a servidores API Horizon para obtener el estado actual de las cuentas y enviar transacciones a la blockchain.",
+      "secondary": "Por defecto, Sunce usa el servidor público Horizon de Stellar. A veces puede ir lento, así que aquí puedes añadir alternativas, por ejemplo un nodo de pago."
+    },
+    "primary": "Servidor principal",
+    "status": {
+      "healthy": "Disponible, {{latencyMs}} ms",
+      "idle": "Esperando comprobación",
+      "loading": "Comprobando servidor…",
+      "problem": "Problema: {{message}}",
+      "problem-with-latency": "Problema, {{latencyMs}} ms: {{message}}",
+      "problem-without-message": "El servidor no superó la comprobación."
     }
   }
 }

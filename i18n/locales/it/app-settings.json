@@ -61,6 +61,12 @@
         "secondary": "Rimuovi servizi attendibili"
       }
     },
+    "api-servers": {
+      "text": {
+        "primary": "Server API",
+        "secondary": "Per utenti avanzati"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Importazione/esportazione di indirizzi salvati",
@@ -98,6 +104,44 @@
         "text": "Il servizio verrà rimosso dal tuo elenco di fiducia. Sei sicuro?"
       },
       "no-services": "Nessun servizio affidabile"
+    }
+  },
+  "api-servers": {
+    "actions": {
+      "add": "Aggiungi server",
+      "delete": "Elimina server",
+      "edit": "Modifica server",
+      "reorder": "Trascina per riordinare"
+    },
+    "editor": {
+      "actions": {
+        "add": "Aggiungi",
+        "cancel": "Annulla",
+        "save": "Salva"
+      },
+      "add-title": "Aggiungi server API",
+      "edit-title": "Modifica server API",
+      "url-label": "Indirizzo del server",
+      "validation": {
+        "duplicate": "Questo server è già nell'elenco.",
+        "invalid-url": "Inserisci un indirizzo server valido.",
+        "required": "Inserisci un indirizzo server."
+      }
+    },
+    "empty": "Nessun server API configurato",
+    "info": {
+      "note": "Il primo server dell'elenco è considerato quello principale. Gli altri restano disponibili come alternative.",
+      "primary": "Sunce si collega ai server API Horizon per ottenere lo stato attuale degli account e inviare transazioni alla blockchain.",
+      "secondary": "Per impostazione predefinita, Sunce usa il server Horizon pubblico di Stellar. A volte può essere lento, quindi qui puoi aggiungere alternative, ad esempio un nodo a pagamento."
+    },
+    "primary": "Server principale",
+    "status": {
+      "healthy": "Disponibile, {{latencyMs}} ms",
+      "idle": "In attesa del controllo",
+      "loading": "Controllo del server in corso…",
+      "problem": "Problema: {{message}}",
+      "problem-with-latency": "Problema, {{latencyMs}} ms: {{message}}",
+      "problem-without-message": "Il server non ha superato il controllo."
     }
   }
 }
