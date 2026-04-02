@@ -70,6 +70,12 @@
         "secondary": "Ukloni Pouzdane Usluge"
       }
     },
+    "api-servers": {
+      "text": {
+        "primary": "API serveri",
+        "secondary": "Za napredne korisnike"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Uvoz/Izvoz sačuvanih adresa",
@@ -107,6 +113,44 @@
         "text": "Usluga će biti uklonjena sa tvoje liste poverenja. Da li si siguran/na?"
       },
       "no-services": "Nema pouzdanih usluga"
+    }
+  },
+  "api-servers": {
+    "actions": {
+      "add": "Dodaj server",
+      "delete": "Obriši server",
+      "edit": "Izmeni server",
+      "reorder": "Prevuci za sortiranje"
+    },
+    "editor": {
+      "actions": {
+        "add": "Dodaj",
+        "cancel": "Otkaži",
+        "save": "Sačuvaj"
+      },
+      "add-title": "Dodaj API server",
+      "edit-title": "Izmeni API server",
+      "url-label": "Adresa servera",
+      "validation": {
+        "duplicate": "Ovaj server je već na listi.",
+        "invalid-url": "Unesite ispravnu adresu servera.",
+        "required": "Unesite adresu servera."
+      }
+    },
+    "empty": "Nema podešenih API servera",
+    "info": {
+      "note": "Prvi server na listi se smatra glavnim. Ostali ostaju dostupni kao alternative.",
+      "primary": "Sunce se povezuje sa Horizon API serverima da bi dobio trenutno stanje računa i slao transakcije na blokčejn.",
+      "secondary": "Sunce podrazumevano koristi javni Stellar Horizon server. Ponekad može biti spor, pa ovde možete dodati alternative, na primer plaćeni čvor."
+    },
+    "primary": "Glavni server",
+    "status": {
+      "healthy": "Dostupan, {{latencyMs}} ms",
+      "idle": "Čeka proveru",
+      "loading": "Proveravamo server…",
+      "problem": "Problem: {{message}}",
+      "problem-with-latency": "Problem, {{latencyMs}} ms: {{message}}",
+      "problem-without-message": "Server nije prošao proveru."
     }
   }
 }
