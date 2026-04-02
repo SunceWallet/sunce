@@ -19,7 +19,6 @@ import AddIcon from "@material-ui/icons/Add"
 import DeleteIcon from "@material-ui/icons/Delete"
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator"
 import EditIcon from "@material-ui/icons/Edit"
-import PublicIcon from "@material-ui/icons/Public"
 import WarningIcon from "@material-ui/icons/Warning"
 import { SettingsContext } from "~App/contexts/settings"
 import { ActionButton } from "~Generic/components/DialogActions"
@@ -271,9 +270,21 @@ const ApiServerSelectionList = React.memo(function ApiServerSelectionList() {
     setEditor({ index, url: horizonURLs[index] })
   }, [horizonURLs])
 
-  const deleteServer = React.useCallback((index: number) => {
-    saveURLs(horizonURLs.filter((_, currentIndex) => currentIndex !== index))
-  }, [horizonURLs, saveURLs])
+  const deleteServer = React.useCallback(
+    (index: number) => {
+      saveURLs(horizonURLs.filter((_, currentIndex) => currentIndex !== index))
+    },
+    [horizonURLs, saveURLs]
+  )
+
+  const deleteEditedServer = React.useCallback(() => {
+    if (!editor || editor.index === null) {
+      return
+    }
+
+    deleteServer(editor.index)
+    closeEditor()
+  }, [closeEditor, deleteServer, editor])
 
   const saveEditor = React.useCallback(() => {
     if (!editor || editorProbe.type !== "success") {
@@ -352,9 +363,6 @@ const ApiServerSelectionList = React.memo(function ApiServerSelectionList() {
                   <DragIndicatorIcon />
                 </div>
               </ListItemIcon>
-              <ListItemIcon style={{ marginRight: 0 }}>
-                <PublicIcon />
-              </ListItemIcon>
               <ListItemText
                 primary={
                   <>
@@ -382,13 +390,6 @@ const ApiServerSelectionList = React.memo(function ApiServerSelectionList() {
                 <IconButton onClick={() => openEditDialog(index)}>
                   <EditIcon />
                 </IconButton>
-              </Tooltip>
-              <Tooltip title={t("app-settings.api-servers.actions.delete")}>
-                <span>
-                  <IconButton disabled={horizonURLs.length <= 1} onClick={() => deleteServer(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </span>
               </Tooltip>
             </ListItem>
           )
@@ -434,6 +435,14 @@ const ApiServerSelectionList = React.memo(function ApiServerSelectionList() {
           ) : null}
         </DialogContent>
         <DialogActions>
+          {editor?.index !== null ? (
+            <ActionButton
+              disabled={horizonURLs.length <= 1}
+              icon={<DeleteIcon />}
+              onClick={deleteEditedServer}
+              style={{ marginRight: "auto" }}
+            />
+          ) : null}
           <ActionButton onClick={closeEditor}>{t("app-settings.api-servers.editor.actions.cancel")}</ActionButton>
           <ActionButton disabled={editorProbe.type !== "success"} onClick={saveEditor} type="primary">
             {editor?.index === null
