@@ -45,6 +45,8 @@
         "auth-not-required": "Ауторизација није потребна",
         "auth-revocable": "Ауторизација опозива",
         "auth-not-revocable": "Ауторизација неопозива",
+        "auth-clawback-enabled": "Clawback омогућен",
+        "auth-clawback-disabled": "Clawback онемогућен",
         "auth-immutable": "Ове заставице су непроменљиве",
         "auth-mutable": "Издавалац може да мења ове заставице",
         "label": "Заставице рачуна"

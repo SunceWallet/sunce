@@ -45,6 +45,8 @@
         "auth-not-required": "Keine Autorisierung erforderlich",
         "auth-revocable": "Autorisierung widerrufbar",
         "auth-not-revocable": "Autorisierung nicht widerrufbar",
+        "auth-clawback-enabled": "Clawback aktiviert",
+        "auth-clawback-disabled": "Clawback deaktiviert",
         "auth-immutable": "Diese Flags sind unveränderlich",
         "auth-mutable": "Emittent kann diese Flags ändern",
         "label": "Konto-Flags"
