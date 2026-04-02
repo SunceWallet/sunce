@@ -49,12 +49,13 @@ interface SampleWebAuthProps {
 }
 
 function SampleWebAuth(props: SampleWebAuthProps) {
-  const horizon = new Horizon.Server("https://horizon.stellar.org")
   const WebAuth = useWebAuth()
 
   const promise = React.useMemo(
-    () =>
-      (async () => {
+    () => {
+      const horizon = new Horizon.Server("https://horizon.stellar.org")
+
+      return (async () => {
         const account = await horizon.loadAccount(props.accountID)
         const webauthMetadata = await WebAuth.fetchWebAuthData(String(horizon.serverURL), props.issuerID)
 
@@ -65,8 +66,9 @@ function SampleWebAuth(props: SampleWebAuthProps) {
           Networks.PUBLIC
         )
         return transaction
-      })(),
-    [WebAuth, horizon, props.accountID, props.issuerID]
+      })()
+    },
+    [WebAuth, props.accountID, props.issuerID]
   )
 
   return <>{props.children(promise)}</>
