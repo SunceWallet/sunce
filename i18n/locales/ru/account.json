@@ -45,6 +45,8 @@
         "auth-not-required": "Авторизация не требуется",
         "auth-revocable": "Авторизация может быть отозвана",
         "auth-not-revocable": "Авторизация не может быть отозвана",
+        "auth-clawback-enabled": "Clawback включен",
+        "auth-clawback-disabled": "Clawback отключен",
         "auth-immutable": "Эти флаги неизменны",
         "auth-mutable": "Эмитент может изменить эти флаги",
         "label": "Флаги аккаунта"

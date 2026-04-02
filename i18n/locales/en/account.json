@@ -45,6 +45,8 @@
         "auth-not-required": "No authorization required",
         "auth-revocable": "Authorization revocable",
         "auth-not-revocable": "Authorization not revocable",
+        "auth-clawback-enabled": "Clawback enabled",
+        "auth-clawback-disabled": "Clawback disabled",
         "auth-immutable": "These flags are immutable",
         "auth-mutable": "Issuer can change these flags",
         "label": "Account flags"
