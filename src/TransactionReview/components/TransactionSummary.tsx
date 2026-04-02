@@ -14,7 +14,7 @@ import { isPotentiallyDangerousTransaction, isStellarWebAuthTransaction } from "
 import { SingleBalance } from "~Account/components/AccountBalances"
 import { AccountName } from "~Generic/components/Fetchers"
 import { VerticalLayout } from "~Layout/components/Box"
-import { ClickableAddress, CopyableAddress } from "~Generic/components/PublicKey"
+import { CopyableAddress } from "~Generic/components/PublicKey"
 import { SummaryDetailsField, SummaryItem } from "./SummaryItem"
 import OperationListItem from "./Operations"
 import { Signers, TransactionMemo } from "./Transaction"
@@ -142,7 +142,7 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
             <SummaryDetailsField
               fullWidth
               label={t("account.transaction-review.summary.item.tx-hash.label")}
-              value={<ClickableAddress address={transactionHash} testnet={props.testnet} variant="shorter" />}
+              value={<CopyableAddress address={transactionHash} testnet={props.testnet} variant="shorter" />}
             />
           </SummaryItem>
         ) : null}
