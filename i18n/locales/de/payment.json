@@ -25,12 +25,25 @@
     }
   },
   "note": {
-    "multisig-pubkey": "Adresse des Multi-Signatur-Kontos, nicht Ihr lokaler Mitzeichner-Schlüssel.",
     "issuance": "Ausgewähltes Asset wird von Ihrem Konto ausgegeben. Beim Senden werden neue Token erstellt."
   },
   "title": {
     "send": "Guthaben senden",
     "receive": "Guthaben empfangen"
+  },
+  "receive-form": {
+    "advanced-mode": "Erweiterter Modus",
+    "web-link": {
+      "label": "Web-Link:"
+    },
+    "inputs": {
+      "asset": {
+        "label": "Asset"
+      },
+      "description": {
+        "label": "Beschreibung (optional)"
+      }
+    }
   },
   "validation": {
     "memo-required": "Geben Sie ein Memo an, wenn Sie Guthaben an {{destination}} senden",
