@@ -45,6 +45,18 @@ Happy linting! 💖
     "cordova/www/**",
     "electron/lib/**"
   ],
+  "overrides": [
+    {
+      "files": ["scripts/**/*.js", "cordova/hooks/**/*.js", "cordova/scripts/**/*.js"],
+      "env": {
+        "node": true
+      },
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "no-console": "off"
+      }
+    }
+  ],
   "rules": {
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/array-type": [
