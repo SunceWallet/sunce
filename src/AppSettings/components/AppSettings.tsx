@@ -9,8 +9,10 @@ import { matchesRoute } from "~Generic/lib/routes"
 import Carousel from "~Layout/components/Carousel"
 import { isDefaultProtocolClient, setAsDefaultProtocolClient } from "~Platform/protocol-handler"
 import { availableLanguages } from "../../../i18n/index"
+import ManageApiServersDialog from "./ManageApiServersDialog"
 import ManageTrustedServicesDialog from "./ManageTrustedServicesDialog"
 import {
+  ApiServersSetting,
   BiometricLockSetting,
   HideMemoSetting,
   LanguageSetting,
@@ -24,7 +26,12 @@ import {
 
 const SettingsDialogs = React.memo(function SettingsDialogs() {
   const router = useRouter()
+  const showManageApiServers = matchesRoute(router.location.pathname, routes.manageApiServers())
   const showManageTrustedServices = matchesRoute(router.location.pathname, routes.manageTrustedServices())
+
+  if (showManageApiServers) {
+    return <ManageApiServersDialog />
+  }
 
   return showManageTrustedServices ? <ManageTrustedServicesDialog /> : <></>
 })
@@ -46,6 +53,7 @@ function AppSettings() {
   }
 
   const hasTestnetAccount = accounts.some(account => account.testnet)
+  const navigateToApiServers = React.useCallback(() => router.history.push(routes.manageApiServers()), [router.history])
   const navigateToTrustedServices = React.useCallback(() => router.history.push(routes.manageTrustedServices()), [
     router.history
   ])
@@ -91,6 +99,7 @@ function AppSettings() {
         />
         <ProtocolHandlerSetting isDefaultHandler={isDefaultHandler} onClick={setDefaultClient} />
         <TrustedServicesSetting onClick={navigateToTrustedServices} />
+        <ApiServersSetting onClick={navigateToApiServers} />
       </List>
       <SettingsDialogs />
     </Carousel>

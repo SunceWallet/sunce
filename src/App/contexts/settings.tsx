@@ -8,6 +8,7 @@ import {
   saveIgnoredSignatureRequestHashes,
   saveSettings
 } from "~Platform/settings"
+import { defaultMainnetHorizonURLs } from "~Generic/lib/horizon-servers"
 import getUpdater from "~Platform/updater"
 import { trackError } from "./notifications"
 
@@ -25,6 +26,7 @@ interface ContextType {
   ignoredSignatureRequests: string[]
   initialized: boolean
   language: string | undefined
+  mainnetHorizonURLs: string[]
   multiSignature: boolean
   multiSignatureCoordinator: string
   setLanguage: (language: string | undefined) => void
@@ -53,6 +55,7 @@ const initialSettings: SettingsState = {
   biometricLock: false,
   hideMemos: false,
   initialized: false,
+  mainnetHorizonURLs: defaultMainnetHorizonURLs,
   multisignature: false,
   testnet: false,
   showDust: false,
@@ -75,6 +78,7 @@ const SettingsContext = React.createContext<ContextType>({
   ignoredSignatureRequests: initialIgnoredSignatureRequests,
   initialized: false,
   language: undefined,
+  mainnetHorizonURLs: initialSettings.mainnetHorizonURLs,
   multiSignature: initialSettings.multisignature,
   multiSignatureCoordinator,
   setLanguage: () => undefined,
@@ -196,6 +200,7 @@ export function SettingsProvider(props: Props) {
     ignoredSignatureRequests,
     initialized: settings.initialized,
     language: localStorage.getItem("i18nextLng") || undefined,
+    mainnetHorizonURLs: settings.mainnetHorizonURLs,
     multiSignature: settings.multisignature,
     multiSignatureCoordinator,
     setLanguage,

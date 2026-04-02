@@ -70,6 +70,12 @@
         "secondary": "Remove Trusted Services"
       }
     },
+    "api-servers": {
+      "text": {
+        "primary": "API Servers",
+        "secondary": "For advanced users"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Import/Export Saved Addresses",
@@ -107,6 +113,44 @@
         "text": "The service will be removed from your trust list. Are you sure?"
       },
       "no-services": "No trusted services"
+    }
+  },
+  "api-servers": {
+    "actions": {
+      "add": "Add server",
+      "delete": "Delete server",
+      "edit": "Edit server",
+      "reorder": "Drag to reorder"
+    },
+    "editor": {
+      "actions": {
+        "add": "Add",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "add-title": "Add API server",
+      "edit-title": "Edit API server",
+      "url-label": "Server URL",
+      "validation": {
+        "duplicate": "This server is already in the list.",
+        "invalid-url": "Enter a valid server address.",
+        "required": "Enter a server address."
+      }
+    },
+    "empty": "No API servers configured",
+    "info": {
+      "note": "The first server in the list is the primary one. The others remain available as alternatives.",
+      "primary": "Sunce connects to Horizon API servers to retrieve the current account state and to submit transactions to the blockchain.",
+      "secondary": "By default Sunce uses Stellar's public Horizon server. It can be slow at times, so here you can add alternatives, for example a paid node."
+    },
+    "primary": "Primary server",
+    "status": {
+      "healthy": "Available, {{latencyMs}} ms",
+      "idle": "Waiting for check",
+      "loading": "Checking server…",
+      "problem": "Problem: {{message}}",
+      "problem-with-latency": "Problem, {{latencyMs}} ms: {{message}}",
+      "problem-without-message": "The server did not pass the check."
     }
   }
 }
