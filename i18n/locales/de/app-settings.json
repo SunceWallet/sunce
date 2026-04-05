@@ -70,6 +70,12 @@
         "secondary": "Vertrauenswürdige Dienste entfernen"
       }
     },
+    "api-server": {
+      "text": {
+        "primary": "API-Server",
+        "secondary": "Für fortgeschrittene Benutzer"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Gespeicherte Adressen importieren/exportieren",
@@ -107,6 +113,29 @@
         "text": "Der Dienst wird von Ihrer Vertrauensliste entfernt. Sind Sie sicher?"
       },
       "no-services": "Keine vertrauenswürdigen Dienste"
+    }
+  },
+  "api-server": {
+    "actions": {
+      "save": "Speichern"
+    },
+    "enabled": {
+      "label": "Eigenen Server verwenden"
+    },
+    "field": {
+      "label": "Serveradresse"
+    },
+    "info": {
+      "primary": "Sunce verbindet sich mit Horizon-API-Servern, um den aktuellen Kontostand abzurufen und Transaktionen an die Blockchain zu senden."
+    },
+    "only": {
+      "label": "Nur diesen Server verwenden",
+      "note": "Für mehr Privatsphäre können Sie nur den oben angegebenen Server verwenden. Dann nutzt Sunce die eingebauten alternativen Horizon-Server nicht mehr."
+    },
+    "validation": {
+      "checking": "Server wird geprüft…",
+      "invalid-url": "Geben Sie eine gültige Serveradresse ein.",
+      "probe-failed": "Der Server hat die Prüfung nicht bestanden."
     }
   }
 }

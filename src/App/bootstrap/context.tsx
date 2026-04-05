@@ -12,11 +12,11 @@ import { HiddenSendersProvider } from "~App/contexts/hiddenSenders"
 
 export function ContextProviders(props: { children: React.ReactNode }) {
   return (
-    <StellarProvider>
-      <AccountsProvider>
-        <SavedAddressesProvider>
-          <HiddenSendersProvider>
-            <SettingsProvider>
+    <SettingsProvider>
+      <StellarProvider>
+        <AccountsProvider>
+          <SavedAddressesProvider>
+            <HiddenSendersProvider>
               <TransactionRequestProvider>
                 <CachingProviders>
                   <NotificationsProvider>
@@ -26,10 +26,10 @@ export function ContextProviders(props: { children: React.ReactNode }) {
                   </NotificationsProvider>
                 </CachingProviders>
               </TransactionRequestProvider>
-            </SettingsProvider>
-          </HiddenSendersProvider>
-        </SavedAddressesProvider>
-      </AccountsProvider>
-    </StellarProvider>
+            </HiddenSendersProvider>
+          </SavedAddressesProvider>
+        </AccountsProvider>
+      </StellarProvider>
+    </SettingsProvider>
   )
 }

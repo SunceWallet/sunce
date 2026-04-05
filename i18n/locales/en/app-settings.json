@@ -70,6 +70,12 @@
         "secondary": "Remove Trusted Services"
       }
     },
+    "api-server": {
+      "text": {
+        "primary": "API Server",
+        "secondary": "For advanced users"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Import/Export Saved Addresses",
@@ -107,6 +113,29 @@
         "text": "The service will be removed from your trust list. Are you sure?"
       },
       "no-services": "No trusted services"
+    }
+  },
+  "api-server": {
+    "actions": {
+      "save": "Save"
+    },
+    "enabled": {
+      "label": "Use custom server"
+    },
+    "field": {
+      "label": "Server address"
+    },
+    "info": {
+      "primary": "Sunce connects to Horizon API servers to retrieve the current account state and to submit transactions to the blockchain."
+    },
+    "only": {
+      "label": "Use only this server",
+      "note": "For better privacy, you can leave only the server specified above. In that case Sunce will stop using the built-in alternative Horizon servers."
+    },
+    "validation": {
+      "checking": "Checking server…",
+      "invalid-url": "Enter a valid server address.",
+      "probe-failed": "The server did not pass the check."
     }
   }
 }

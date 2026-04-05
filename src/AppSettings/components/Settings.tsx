@@ -13,6 +13,7 @@ import GroupIcon from "@material-ui/icons/Group"
 import ProtocolHandlerIcon from "@material-ui/icons/AddCircleOutline"
 import LanguageIcon from "@material-ui/icons/Language"
 import MessageIcon from "@material-ui/icons/Message"
+import StorageIcon from "@material-ui/icons/Storage"
 import TestnetIcon from "@material-ui/icons/MoneyOff"
 import TrustIcon from "@material-ui/icons/VerifiedUser"
 import { availableLanguages, languageNames } from "../../../i18n"
@@ -246,6 +247,29 @@ export const TrustedServicesSetting = React.memo(function TrustedServicesSetting
       onClick={props.onClick}
       primaryText={t("app-settings.settings.trusted-services.text.primary")}
       secondaryText={t("app-settings.settings.trusted-services.text.secondary")}
+    />
+  )
+})
+
+interface ApiServerSettingProps {
+  onClick: () => void
+}
+
+export const ApiServerSetting = React.memo(function ApiServerSetting(props: ApiServerSettingProps) {
+  const classes = useSettingsStyles(props)
+  const { t } = useTranslation()
+
+  return (
+    <AppSettingsItem
+      actions={
+        <ListItemIcon className={classes.caret}>
+          <ArrowRightIcon className={classes.caret} />
+        </ListItemIcon>
+      }
+      icon={<StorageIcon className={classes.icon} />}
+      onClick={props.onClick}
+      primaryText={t("app-settings.settings.api-server.text.primary")}
+      secondaryText={t("app-settings.settings.api-server.text.secondary")}
     />
   )
 })

@@ -20,6 +20,7 @@ interface ContextType {
   biometricLock: boolean
   biometricAvailability: BiometricAvailability
   confirmToC: () => void
+  customMainnetHorizonURL: string | undefined
   hideMemos: boolean
   ignoreSignatureRequest: (signatureRequestHash: string) => void
   ignoredSignatureRequests: string[]
@@ -27,6 +28,8 @@ interface ContextType {
   language: string | undefined
   multiSignature: boolean
   multiSignatureCoordinator: string
+  onlyCustomMainnetHorizon: boolean
+  useCustomMainnetHorizon: boolean
   setLanguage: (language: string | undefined) => void
   setSetting: (key: keyof Platform.SettingsData, value: any) => void
   showTestnet: boolean
@@ -51,9 +54,12 @@ interface SettingsState extends Platform.SettingsData {
 const initialSettings: SettingsState = {
   agreedToTermsAt: undefined,
   biometricLock: false,
+  customMainnetHorizonURL: undefined,
   hideMemos: false,
   initialized: false,
   multisignature: false,
+  onlyCustomMainnetHorizon: false,
+  useCustomMainnetHorizon: false,
   testnet: false,
   showDust: false,
   showClaimableBalanceTxs: false,
@@ -70,6 +76,7 @@ const SettingsContext = React.createContext<ContextType>({
   biometricLock: initialSettings.biometricLock,
   biometricAvailability: { available: false, enrolled: false },
   confirmToC: () => undefined,
+  customMainnetHorizonURL: initialSettings.customMainnetHorizonURL,
   hideMemos: initialSettings.hideMemos,
   ignoreSignatureRequest: () => undefined,
   ignoredSignatureRequests: initialIgnoredSignatureRequests,
@@ -77,6 +84,8 @@ const SettingsContext = React.createContext<ContextType>({
   language: undefined,
   multiSignature: initialSettings.multisignature,
   multiSignatureCoordinator,
+  onlyCustomMainnetHorizon: initialSettings.onlyCustomMainnetHorizon,
+  useCustomMainnetHorizon: initialSettings.useCustomMainnetHorizon,
   setLanguage: () => undefined,
   setSetting: () => undefined,
   showDust: false,
@@ -131,12 +140,14 @@ export function SettingsProvider(props: Props) {
 
   const updateSettings = (update: Partial<Platform.SettingsData>) => {
     try {
-      const updatedSettings = {
-        ...settings,
-        ...update
-      }
-      setSettings(updatedSettings)
-      saveSettings(updatedSettings)
+      setSettings(currentSettings => {
+        const updatedSettings = {
+          ...currentSettings,
+          ...update
+        }
+        saveSettings(updatedSettings)
+        return updatedSettings
+      })
     } catch (error) {
       trackError(error)
     }
@@ -191,6 +202,7 @@ export function SettingsProvider(props: Props) {
     biometricLock: settings.biometricLock,
     biometricAvailability,
     confirmToC,
+    customMainnetHorizonURL: settings.customMainnetHorizonURL,
     hideMemos: settings.hideMemos,
     ignoreSignatureRequest,
     ignoredSignatureRequests,
@@ -198,6 +210,8 @@ export function SettingsProvider(props: Props) {
     language: localStorage.getItem("i18nextLng") || undefined,
     multiSignature: settings.multisignature,
     multiSignatureCoordinator,
+    onlyCustomMainnetHorizon: settings.onlyCustomMainnetHorizon,
+    useCustomMainnetHorizon: settings.useCustomMainnetHorizon,
     setLanguage,
     setSetting,
     showTestnet: settings.testnet,
