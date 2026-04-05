@@ -1,10 +1,7 @@
 import React from "react"
-import { useTranslation } from "react-i18next"
 import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
-import ExpandIcon from "@material-ui/icons/ExpandMore"
 import { HorizontalLayout } from "~Layout/components/Box"
 import { ReadOnlyTextfield } from "~Generic/components/FormFields"
 
@@ -99,46 +96,3 @@ export function SummaryItem(props: SummaryItemProps) {
     </ListItem>
   )
 }
-
-const useShowMoreItemStyles = makeStyles({
-  root: {
-    border: "none",
-    margin: "-8px 0",
-    padding: "8px 0"
-  },
-  button: {
-    boxShadow: "none !important",
-    display: "flex",
-    margin: 0,
-
-    "&:not(:hover)": {
-      background: "transparent"
-    }
-  }
-})
-
-interface ShowMoreItemProps {
-  onClick: () => void
-  style?: React.CSSProperties
-}
-
-export const ShowMoreItem = React.memo(function ShowMoreItem(props: ShowMoreItemProps) {
-  const classes = useShowMoreItemStyles()
-  const { t } = useTranslation()
-  return (
-    <ListItem
-      button
-      classes={{ root: classes.root, button: classes.button }}
-      component="div"
-      disableGutters
-      onClick={props.onClick}
-      style={props.style}
-    >
-      <ListItemText disableTypography>
-        <Typography style={{ display: "flex", alignItems: "center", justifyContent: "center" }} variant="button">
-          {t("account.transaction-review.action.show-more")} <ExpandIcon />
-        </Typography>
-      </ListItemText>
-    </ListItem>
-  )
-})

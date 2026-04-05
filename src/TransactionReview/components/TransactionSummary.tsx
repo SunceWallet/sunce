@@ -2,14 +2,11 @@ import BigNumber from "big.js"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Operation, Transaction } from "@stellar/stellar-sdk"
-import Collapse from "@material-ui/core/Collapse"
 import Divider from "@material-ui/core/Divider"
 import useMediaQuery from "@material-ui/core/useMediaQuery"
-import { useTheme } from "@material-ui/core/styles"
 import { Account, AccountsContext } from "~App/contexts/accounts"
 import { SigningKeyCacheContext } from "~App/contexts/caches"
 import { useLiveAccountDataSet } from "~Generic/hooks/stellar-subscriptions"
-import { useDeferredState } from "~Generic/hooks/util"
 import { AccountData } from "~Generic/lib/account"
 import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
 import { getAllSources } from "~Generic/lib/stellar"
@@ -17,8 +14,8 @@ import { isPotentiallyDangerousTransaction, isStellarWebAuthTransaction } from "
 import { SingleBalance } from "~Account/components/AccountBalances"
 import { AccountName } from "~Generic/components/Fetchers"
 import { VerticalLayout } from "~Layout/components/Box"
-import { ClickableAddress, CopyableAddress } from "~Generic/components/PublicKey"
-import { ShowMoreItem, SummaryDetailsField, SummaryItem } from "./SummaryItem"
+import { CopyableAddress } from "~Generic/components/PublicKey"
+import { SummaryDetailsField, SummaryItem } from "./SummaryItem"
 import OperationListItem from "./Operations"
 import { Signers, TransactionMemo } from "./Transaction"
 import { AccountCreationWarning, AddingSignerWarning, DangerousTransactionWarning } from "./Warnings"
@@ -67,15 +64,8 @@ interface DefaultTransactionSummaryProps {
 function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
   const { accounts } = React.useContext(AccountsContext)
   const { t } = useTranslation()
-  const theme = useTheme()
-
-  const [showingAllMetadataDeferred, showingAllMetadata, setShowingAllMetadata] = useDeferredState(
-    false,
-    theme.transitions.duration.shortest
-  )
 
   const localAccountPublicKey = props.account ? props.account.publicKey : undefined
-  const showAllMetadata = React.useCallback(() => setShowingAllMetadata(true), [setShowingAllMetadata])
 
   const fee = BigNumber(props.transaction.fee)
     .mul(props.transaction.operations.length)
@@ -137,44 +127,39 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
           transaction={props.transaction}
         />
       ) : null}
-      <Collapse in={!showingAllMetadata}>
-        <ShowMoreItem onClick={showAllMetadata} />
-      </Collapse>
-      <Collapse in={showingAllMetadataDeferred}>
-        <VerticalLayout grow>
-          {props.showSource ? (
-            <SummaryItem>
-              <SummaryDetailsField
-                fullWidth
-                label={t("account.transaction-review.summary.item.account.label")}
-                value={<CopyableAddress address={props.transaction.source} testnet={props.testnet} variant="short" />}
-              />
-            </SummaryItem>
-          ) : null}
-          {props.showHash ? (
-            <SummaryItem>
-              <SummaryDetailsField
-                fullWidth
-                label={t("account.transaction-review.summary.item.tx-hash.label")}
-                value={<ClickableAddress address={transactionHash} testnet={props.testnet} variant="shorter" />}
-              />
-            </SummaryItem>
-          ) : null}
+      <VerticalLayout grow>
+        {props.showSource ? (
           <SummaryItem>
             <SummaryDetailsField
-              label={t("account.transaction-review.summary.item.max-fee.label")}
-              value={<SingleBalance assetCode="XLM" balance={fee.toString()} inline />}
+              fullWidth
+              label={t("account.transaction-review.summary.item.account.label")}
+              value={<CopyableAddress address={props.transaction.source} testnet={props.testnet} variant="short" />}
             />
-            {transaction.created_at ? (
-              <SummaryDetailsField
-                fullWidth
-                label={t("account.transaction-review.summary.item.submission.label")}
-                value={getTime(transaction.created_at)}
-              />
-            ) : null}
           </SummaryItem>
-        </VerticalLayout>
-      </Collapse>
+        ) : null}
+        {props.showHash ? (
+          <SummaryItem>
+            <SummaryDetailsField
+              fullWidth
+              label={t("account.transaction-review.summary.item.tx-hash.label")}
+              value={<CopyableAddress address={transactionHash} testnet={props.testnet} variant="shorter" />}
+            />
+          </SummaryItem>
+        ) : null}
+        <SummaryItem>
+          <SummaryDetailsField
+            label={t("account.transaction-review.summary.item.max-fee.label")}
+            value={<SingleBalance assetCode="XLM" balance={fee.toString()} inline />}
+          />
+          {transaction.created_at ? (
+            <SummaryDetailsField
+              fullWidth
+              label={t("account.transaction-review.summary.item.submission.label")}
+              value={getTime(transaction.created_at)}
+            />
+          ) : null}
+        </SummaryItem>
+      </VerticalLayout>
     </VerticalLayout>
   )
 }
