@@ -41,7 +41,9 @@ interface ContextType {
   trustedServices: TrustedService[]
   updateAvailable: boolean
   accountAssetSettings: Platform.AccountAssetSettingsMap
+  accountReceivePaymentSettings: Platform.AccountReceivePaymentSettingsMap
   setAssetSettings: (accountId: string, assetKey: string, mode: Platform.AssetSettings) => void
+  setReceivePaymentSettings: (accountId: string, settings: Platform.ReceivePaymentSettings) => void
 }
 
 interface SettingsState extends Platform.SettingsData {
@@ -58,7 +60,8 @@ const initialSettings: SettingsState = {
   showDust: false,
   showClaimableBalanceTxs: false,
   trustedServices: [],
-  accountAssetSettings: {}
+  accountAssetSettings: {},
+  accountReceivePaymentSettings: {}
 }
 
 const initialIgnoredSignatureRequests: string[] = []
@@ -91,7 +94,9 @@ const SettingsContext = React.createContext<ContextType>({
   trustedServices: initialSettings.trustedServices,
   updateAvailable: false,
   accountAssetSettings: initialSettings.accountAssetSettings,
-  setAssetSettings: () => undefined
+  accountReceivePaymentSettings: initialSettings.accountReceivePaymentSettings,
+  setAssetSettings: () => undefined,
+  setReceivePaymentSettings: () => undefined
 })
 
 export function SettingsProvider(props: Props) {
@@ -186,6 +191,15 @@ export function SettingsProvider(props: Props) {
     updateSettings({ accountAssetSettings: updateAssetSettings })
   }
 
+  const setReceivePaymentSettings = (accountId: string, receivePaymentSettings: Platform.ReceivePaymentSettings) => {
+    const updatedReceivePaymentSettings = {
+      ...settings.accountReceivePaymentSettings,
+      [accountId]: receivePaymentSettings
+    }
+
+    updateSettings({ accountReceivePaymentSettings: updatedReceivePaymentSettings })
+  }
+
   const contextValue: ContextType = {
     agreedToTermsAt: settings.agreedToTermsAt,
     biometricLock: settings.biometricLock,
@@ -212,7 +226,9 @@ export function SettingsProvider(props: Props) {
     trustedServices: settings.trustedServices,
     updateAvailable,
     accountAssetSettings: settings.accountAssetSettings,
-    setAssetSettings
+    accountReceivePaymentSettings: settings.accountReceivePaymentSettings,
+    setAssetSettings,
+    setReceivePaymentSettings
   }
 
   return <SettingsContext.Provider value={contextValue}>{props.children}</SettingsContext.Provider>

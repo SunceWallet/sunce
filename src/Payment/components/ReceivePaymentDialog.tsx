@@ -10,10 +10,10 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { Account } from "~App/contexts/accounts"
 import { brandColor } from "~App/theme"
-import { trackError } from "~App/contexts/notifications"
 import AssetSelector from "~Generic/components/AssetSelector"
 import { Address } from "~Generic/components/PublicKey"
 import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
+import { useReceivePaymentSettings } from "~Generic/hooks/useReceivePaymentSettings"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { sortBalances } from "~Generic/lib/balances"
 import { useClipboard, useIsMobile } from "~Generic/hooks/userinterface"
@@ -22,7 +22,6 @@ import { balancelineToAsset, getAssetsFromBalances, parseAssetID, stringifyAsset
 import { Box } from "~Layout/components/Box"
 import DialogBody from "~Layout/components/DialogBody"
 import MainTitle from "~Generic/components/MainTitle"
-import getKeyStore from "~Platform/key-store"
 
 interface Props {
   account: Account
@@ -87,6 +86,7 @@ function ReceivePaymentDialog(props: Props) {
   const clipboard = useClipboard()
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
   const { assetSettings } = useAssetSettings(props.account.accountID)
+  const { receivePaymentSettings, setReceivePaymentSettings } = useReceivePaymentSettings(props.account.id)
   const { t } = useTranslation()
 
   const orderedAssets = React.useMemo(
@@ -108,11 +108,7 @@ function ReceivePaymentDialog(props: Props) {
     return assets.length > 0 ? assets : [Asset.native()]
   }, [accountData.balances])
 
-  const [preferencesLoaded, setPreferencesLoaded] = React.useState(false)
-  const [advancedMode, setAdvancedMode] = React.useState(false)
-  const [selectedAssetId, setSelectedAssetId] = React.useState("")
-  const [amount, setAmount] = React.useState("")
-  const [description, setDescription] = React.useState("")
+  const { advancedMode, amount, description, assetId: selectedAssetId = "" } = receivePaymentSettings
 
   const selectedAsset = React.useMemo(() => {
     const matchingAvailableAsset = allAvailableAssets.find(asset => stringifyAsset(asset) === selectedAssetId)
@@ -154,77 +150,29 @@ function ReceivePaymentDialog(props: Props) {
   React.useEffect(() => {
     if (!selectedAssetId) {
       if (accountData.balances.length > 0) {
-        setSelectedAssetId(stringifyAsset(defaultSelectableAsset))
+        setReceivePaymentSettings({
+          ...receivePaymentSettings,
+          assetId: stringifyAsset(defaultSelectableAsset)
+        })
       }
       return
     }
 
     const isSelectedAssetAvailable = allAvailableAssets.some(asset => stringifyAsset(asset) === selectedAssetId)
     if (!isSelectedAssetAvailable && accountData.balances.length > 0) {
-      setSelectedAssetId(stringifyAsset(defaultSelectableAsset))
+      setReceivePaymentSettings({
+        ...receivePaymentSettings,
+        assetId: stringifyAsset(defaultSelectableAsset)
+      })
     }
-  }, [accountData.balances.length, allAvailableAssets, defaultSelectableAsset, selectedAssetId])
-
-  React.useEffect(() => {
-    let cancelled = false
-
-    void (async () => {
-      try {
-        const publicData = await getKeyStore().getPublicKeyData(props.account.id)
-        if (cancelled) return
-
-        const receivePayment = publicData.receivePayment
-        if (receivePayment) {
-          setAdvancedMode(Boolean(receivePayment.advancedMode))
-          setSelectedAssetId(receivePayment.assetId || "")
-          setAmount(receivePayment.amount || "")
-          setDescription(receivePayment.description || "")
-        }
-      } catch (error) {
-        trackError(error)
-      } finally {
-        if (!cancelled) {
-          setPreferencesLoaded(true)
-        }
-      }
-    })()
-
-    return () => {
-      cancelled = true
-    }
-  }, [props.account.id])
-
-  React.useEffect(() => {
-    if (!preferencesLoaded || !selectedAssetId) return
-
-    const timeoutId = window.setTimeout(() => {
-      void (async () => {
-        try {
-          const keyStore = getKeyStore()
-          const publicData = await keyStore.getPublicKeyData(props.account.id)
-          const nextReceivePayment: ReceivePaymentSettings = {
-            advancedMode,
-            amount,
-            assetId: selectedAssetId,
-            description
-          }
-
-          if (JSON.stringify(publicData.receivePayment) === JSON.stringify(nextReceivePayment)) {
-            return
-          }
-
-          await keyStore.savePublicKeyData(props.account.id, {
-            ...publicData,
-            receivePayment: nextReceivePayment
-          })
-        } catch (error) {
-          trackError(error)
-        }
-      })()
-    }, 250)
-
-    return () => window.clearTimeout(timeoutId)
-  }, [advancedMode, amount, description, preferencesLoaded, props.account.id, selectedAssetId])
+  }, [
+    accountData.balances.length,
+    allAvailableAssets,
+    defaultSelectableAsset,
+    receivePaymentSettings,
+    selectedAssetId,
+    setReceivePaymentSettings
+  ])
 
   return (
     <DialogBody top={<MainTitle onBack={props.onClose} title={t("payment.title.receive")} />}>
@@ -257,7 +205,12 @@ function ReceivePaymentDialog(props: Props) {
                   track: classes.advancedModeTrack
                 }}
                 color="secondary"
-                onChange={() => setAdvancedMode(value => !value)}
+                onChange={() =>
+                  setReceivePaymentSettings({
+                    ...receivePaymentSettings,
+                    advancedMode: !advancedMode
+                  })
+                }
               />
             }
             label={t("payment.receive-form.request-payment")}
@@ -270,7 +223,12 @@ function ReceivePaymentDialog(props: Props) {
               assets={accountData.balances}
               label={t("payment.receive-form.inputs.asset.label")}
               margin="normal"
-              onChange={(asset) => setSelectedAssetId(stringifyAsset(asset))}
+              onChange={(asset) =>
+                setReceivePaymentSettings({
+                  ...receivePaymentSettings,
+                  assetId: stringifyAsset(asset)
+                })
+              }
               showXLM
               style={{ width: "100%" }}
               testnet={props.account.testnet}
@@ -285,7 +243,12 @@ function ReceivePaymentDialog(props: Props) {
               }}
               label={t("payment.inputs.price.label")}
               margin="normal"
-              onChange={(event) => setAmount(replaceCommaWithDot(event.target.value))}
+              onChange={(event) =>
+                setReceivePaymentSettings({
+                  ...receivePaymentSettings,
+                  amount: replaceCommaWithDot(event.target.value)
+                })
+              }
               value={amount}
             />
             <TextField
@@ -293,7 +256,12 @@ function ReceivePaymentDialog(props: Props) {
               inputProps={{ maxLength: 28 }}
               label={t("payment.receive-form.inputs.description.label")}
               margin="normal"
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) =>
+                setReceivePaymentSettings({
+                  ...receivePaymentSettings,
+                  description: event.target.value
+                })
+              }
               value={description}
             />
             <Typography
