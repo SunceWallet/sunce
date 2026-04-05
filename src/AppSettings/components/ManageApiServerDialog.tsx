@@ -186,46 +186,43 @@ function ManageApiServerDialog() {
             onChange={event => setUseCustomServer(event.target.checked)}
           />
         </div>
-        <TextField
-          className={classes.field}
-          disabled={!useCustomServer}
-          fullWidth
-          label={t("app-settings.api-server.field.label")}
-          onChange={event => {
-            const value = event.target.value
-            setServerURL(value)
+        {useCustomServer ? (
+          <>
+            <TextField
+              className={classes.field}
+              fullWidth
+              label={t("app-settings.api-server.field.label")}
+              onChange={event => {
+                setServerURL(event.target.value)
+              }}
+              value={serverURL}
+            />
+            {probeState.type === "error" || (probeState.type === "loading" && showCheckingState) ? (
+              <Typography
+                className={classes.status}
+                color={probeState.type === "error" ? "error" : "textSecondary"}
+                variant="body2"
+              >
+                {probeState.type === "loading" ? t("app-settings.api-server.validation.checking") : probeState.message}
+              </Typography>
+            ) : null}
 
-            if (!value.trim()) {
-              setOnlyThisServer(false)
-            }
-          }}
-          value={serverURL}
-        />
-        {probeState.type === "error" || (probeState.type === "loading" && showCheckingState) ? (
-          <Typography
-            className={classes.status}
-            color={probeState.type === "error" ? "error" : "textSecondary"}
-            variant="body2"
-          >
-            {probeState.type === "loading" ? t("app-settings.api-server.validation.checking") : probeState.message}
-          </Typography>
+            <div className={classes.switchRow}>
+              <div className={classes.switchDescription}>
+                <Typography variant="body1">{t("app-settings.api-server.only.label")}</Typography>
+                <Typography className={classes.switchNote} color="textSecondary" variant="body2">
+                  {t("app-settings.api-server.only.note")}
+                </Typography>
+              </div>
+              <Switch
+                className={classes.switchControl}
+                color="primary"
+                checked={onlyThisServer}
+                onChange={event => setOnlyThisServer(event.target.checked)}
+              />
+            </div>
+          </>
         ) : null}
-
-        <div className={classes.switchRow}>
-          <div className={classes.switchDescription}>
-            <Typography variant="body1">{t("app-settings.api-server.only.label")}</Typography>
-            <Typography className={classes.switchNote} color="textSecondary" variant="body2">
-              {t("app-settings.api-server.only.note")}
-            </Typography>
-          </div>
-          <Switch
-            className={classes.switchControl}
-            color="primary"
-            checked={onlyThisServer}
-            disabled={!useCustomServer || !serverURL.trim()}
-            onChange={event => setOnlyThisServer(event.target.checked)}
-          />
-        </div>
       </DialogContent>
     </DialogBody>
   )
