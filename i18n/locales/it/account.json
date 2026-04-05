@@ -45,6 +45,8 @@
         "auth-not-required": "Nessuna autorizzazione richiesta",
         "auth-revocable": "Autorizzazione revocabile",
         "auth-not-revocable": "Autorizzazione non revocabile",
+        "auth-clawback-enabled": "Clawback abilitato",
+        "auth-clawback-disabled": "Clawback disabilitato",
         "auth-immutable": "Queste impostazioni sono immutabili",
         "auth-mutable": "L'emittente può cambiare queste impostazioni",
         "label": "Impostazioni del conto"

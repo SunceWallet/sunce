@@ -45,6 +45,8 @@
         "auth-not-required": "No necesita autorización",
         "auth-revocable": "Autorización revocable",
         "auth-not-revocable": "Autorización no revocable",
+        "auth-clawback-enabled": "Clawback habilitado",
+        "auth-clawback-disabled": "Clawback deshabilitado",
         "auth-immutable": "Estas marcas son inmutables",
         "auth-mutable": "El emisor puede cambiar estas marcas.",
         "label": "Marcas de la cuenta"

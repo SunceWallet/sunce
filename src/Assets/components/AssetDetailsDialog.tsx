@@ -150,6 +150,9 @@ const AssetDetails = React.memo(function AssetDetails({ account, asset, metadata
                 issuingAccountData.flags.auth_revocable
                   ? `• ${t("account.asset-details.general.account-flags.auth-revocable")}`
                   : `• ${t("account.asset-details.general.account-flags.auth-not-revocable")}`,
+                issuingAccountData.flags.auth_clawback_enabled
+                  ? `• ${t("account.asset-details.general.account-flags.auth-clawback-enabled")}`
+                  : `• ${t("account.asset-details.general.account-flags.auth-clawback-disabled")}`,
                 issuingAccountData.flags.auth_immutable
                   ? `• ${t("account.asset-details.general.account-flags.auth-immutable")}`
                   : `• ${t("account.asset-details.general.account-flags.auth-mutable")}`
