@@ -32,7 +32,7 @@
     "receive": "Primi sredstva"
   },
   "receive-form": {
-    "advanced-mode": "Napredni režim",
+    "request-payment": "Zahtev za plaćanje",
     "web-link": {
       "label": "Veb-link:"
     },

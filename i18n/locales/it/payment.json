@@ -32,7 +32,7 @@
     "receive": "Ricevi fondi"
   },
   "receive-form": {
-    "advanced-mode": "Modalità avanzata",
+    "request-payment": "Richiedi pagamento",
     "web-link": {
       "label": "Link web:"
     },

@@ -32,7 +32,7 @@
     "receive": "Receive Funds"
   },
   "receive-form": {
-    "advanced-mode": "Advanced mode",
+    "request-payment": "Request payment",
     "web-link": {
       "label": "Web link:"
     },
