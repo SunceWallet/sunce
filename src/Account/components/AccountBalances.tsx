@@ -2,7 +2,9 @@ import { AllInclusive } from "@material-ui/icons"
 import { Horizon } from "@stellar/stellar-sdk"
 import BigNumber from "big.js"
 import React from "react"
+import { useTranslation } from "react-i18next"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
+import { useClipboard } from "~Generic/hooks/userinterface"
 import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
 import useVisibleBalances from "~Generic/hooks/useVisibleBalances"
 import { BalanceLine } from "~Generic/lib/account"
@@ -16,42 +18,90 @@ interface SingleBalanceProps {
   untrimmed?: boolean
   style?: React.CSSProperties
   showInfinity?: boolean
+  allowCopy?: boolean
 }
 
 export const SingleBalance = React.memo(function SingleBalance(props: SingleBalanceProps) {
-  const balance = BigNumber(props.balance).abs()
+  const clipboard = useClipboard()
+  const { t } = useTranslation()
+  const balance = BigNumber(props.balance)
+  const absoluteBalance = balance.abs()
 
   const formattingOptions: BalanceFormattingOptions = props.untrimmed
-    ? { minimumSignificants: 7 }
-    : balance.eq(0)
+    ? {
+        groupThousands: false,
+        maximumDecimals: 7,
+        maximumSignificants: 100,
+        minimumDecimals: 7
+      }
+    : absoluteBalance.eq(0)
     ? { maximumDecimals: 0, minimumDecimals: 0 }
-    : balance.gt(0) && balance.lt(0.0001)
+    : absoluteBalance.gt(0) && absoluteBalance.lt(0.0001)
     ? { maximumDecimals: 7, minimumDecimals: 7 }
-    : balance.lt(1000)
+    : absoluteBalance.lt(1000)
     ? { maximumDecimals: 4, minimumDecimals: 0 }
     : { maximumDecimals: 0, minimumDecimals: 0 }
 
-  const formattedBalance = formatBalance(balance, formattingOptions)
+  const formattedBalance = formatBalance(absoluteBalance, formattingOptions)
+  const exactBalance = `${balance.lt(0) ? "-" : ""}${formatBalance(absoluteBalance, {
+    groupThousands: false,
+    maximumDecimals: 7,
+    maximumSignificants: 100,
+    minimumDecimals: 7
+  })}`
   const [integerPart, decimalPart = ""] = formattedBalance.split(".")
+
+  const copyHint = t("account-settings.export-key.info.tap-to-copy")
+  const isCopyEnabled = props.allowCopy && !props.showInfinity
+
+  const handleBalanceCopy = React.useCallback(
+    (event: React.MouseEvent<HTMLSpanElement>) => {
+      if (!isCopyEnabled) {
+        return
+      }
+      event.stopPropagation()
+      clipboard.copyToClipboard(exactBalance)
+    },
+    [clipboard, exactBalance, isCopyEnabled]
+  )
+
+  const handleAssetCodeCopy = React.useCallback(
+    (event: React.MouseEvent<HTMLSpanElement>) => {
+      if (!isCopyEnabled || !props.assetCode) {
+        return
+      }
+      event.stopPropagation()
+      clipboard.copyToClipboard(props.assetCode)
+    },
+    [clipboard, isCopyEnabled, props.assetCode]
+  )
+
+  const copyableStyle = isCopyEnabled ? { cursor: "pointer" } : undefined
+
   return (
     <span style={{ whiteSpace: "nowrap", ...props.style }}>
       <span style={{ display: "inline-block", verticalAlign: 'top' }}>
         {balance.gte(0) ? null : <span>-&nbsp;</span>}
-        {!props.showInfinity && <span style={{ fontWeight: 300 }}>
-          {integerPart}
-          <span style={{ opacity: 0.8 }}>{decimalPart ? "." + decimalPart : ""}</span>
-        </span>}
+        {!props.showInfinity && (
+          <span onClick={handleBalanceCopy} style={{ fontWeight: 300, ...copyableStyle }} title={isCopyEnabled ? copyHint : undefined}>
+            {integerPart}
+            <span style={{ opacity: 0.8 }}>{decimalPart ? "." + decimalPart : ""}</span>
+          </span>
+        )}
         {props.showInfinity && <AllInclusive style={{ height: "1.2rem", width: "1.2rem" }} />}
       </span>
       {props.assetCode ? (
         <>
           &nbsp;
           <span
+            onClick={handleAssetCodeCopy}
             style={{
               display: "inline-block",
               fontWeight: props.inline ? undefined : "bold",
-              marginLeft: props.inline ? undefined : "0.4em"
+              marginLeft: props.inline ? undefined : "0.4em",
+              ...copyableStyle
             }}
+            title={isCopyEnabled ? copyHint : undefined}
           >
             {props.assetCode}
           </span>

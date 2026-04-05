@@ -18,6 +18,7 @@ import { AccountName } from "~Generic/components/Fetchers"
 import { ReadOnlyTextfield } from "~Generic/components/FormFields"
 import { Box, VerticalLayout } from "~Layout/components/Box"
 import MainTitle from "~Generic/components/MainTitle"
+import { SingleBalance } from "~Account/components/AccountBalances"
 import AssetDetailsActions from "./AssetDetailsActions"
 import AssetLogo from "./AssetLogo"
 import SpendableBalanceBreakdown from "./SpendableBalanceBreakdown"
@@ -329,15 +330,6 @@ const useAssetDetailStyles = makeStyles({
     alignItems: "center",
     flexWrap: "wrap"
   },
-  copyableValue: {
-    cursor: "pointer",
-    userSelect: "text" as const,
-    WebkitUserSelect: "text" as const
-  },
-  balanceCode: {
-    fontWeight: "bold",
-    marginLeft: 12
-  },
   toolbar: {
     marginLeft: 4
   }
@@ -354,8 +346,6 @@ function AssetDetailsDialog(props: Props) {
   const asset = React.useMemo(() => parseAssetID(props.assetID), [props.assetID])
   const classes = useAssetDetailStyles()
   const isSmallScreen = useIsMobile()
-  const clipboard = useClipboard()
-  const { t } = useTranslation()
 
   const balance = accountData.balances.find(
     asset.isNative()
@@ -365,7 +355,6 @@ function AssetDetailsDialog(props: Props) {
 
   const metadata = useAssetMetadata(asset, props.account.testnet)
   const assetCode = asset.getCode()
-  const copyHint = t("account-settings.export-key.info.tap-to-copy")
 
   const assetTitle = React.useMemo(() => {
     if (asset.isNative()) {
@@ -375,16 +364,6 @@ function AssetDetailsDialog(props: Props) {
     const assetName = metadata?.name?.trim()
     return assetName && assetName !== assetCode ? `${assetName} (${assetCode})` : assetCode
   }, [asset, assetCode, metadata])
-
-  const copyBalanceToClipboard = React.useCallback(() => {
-    if (balance?.balance) {
-      clipboard.copyToClipboard(balance.balance)
-    }
-  }, [balance?.balance, clipboard])
-
-  const copyAssetCodeToClipboard = React.useCallback(() => {
-    clipboard.copyToClipboard(assetCode)
-  }, [assetCode, clipboard])
 
   const dialogActions = React.useMemo(
     () => (asset.isNative() ? null : <AssetDetailsActions account={props.account} asset={asset} />),
@@ -409,24 +388,7 @@ function AssetDetailsDialog(props: Props) {
           <Typography className={classes.domain} component="div" variant="subtitle1">
             {balance ? (
               <Box className={classes.balanceRow}>
-                <Typography
-                  component="span"
-                  onClick={copyBalanceToClipboard}
-                  title={copyHint}
-                  className={classes.copyableValue}
-                  variant="inherit"
-                >
-                  {balance.balance}
-                </Typography>
-                <Typography
-                  component="span"
-                  onClick={copyAssetCodeToClipboard}
-                  title={copyHint}
-                  className={`${classes.copyableValue} ${classes.balanceCode}`}
-                  variant="inherit"
-                >
-                  {assetCode}
-                </Typography>
+                <SingleBalance allowCopy assetCode={assetCode} balance={balance.balance} untrimmed />
                 <Box className={classes.toolbar}>
                   <VisibilityIconButton
                     accountId={props.account.accountID}
