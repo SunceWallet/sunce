@@ -12,16 +12,15 @@ import { Account } from "~App/contexts/accounts"
 import { brandColor } from "~App/theme"
 import AssetSelector from "~Generic/components/AssetSelector"
 import { Address } from "~Generic/components/PublicKey"
-import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
 import { useReceivePaymentSettings } from "~Generic/hooks/useReceivePaymentSettings"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { sortBalances } from "~Generic/lib/balances"
 import { useClipboard, useIsMobile } from "~Generic/hooks/userinterface"
 import { isValidAmount, replaceCommaWithDot } from "~Generic/lib/form"
-import { balancelineToAsset, getAssetsFromBalances, parseAssetID, stringifyAsset } from "~Generic/lib/stellar"
+import { stringifyAsset } from "~Generic/lib/stellar"
 import { Box } from "~Layout/components/Box"
 import DialogBody from "~Layout/components/DialogBody"
 import MainTitle from "~Generic/components/MainTitle"
+import { useReceivePaymentAsset } from "~Payment/hooks/useReceivePaymentAsset"
 
 interface Props {
   account: Account
@@ -85,47 +84,15 @@ function ReceivePaymentDialog(props: Props) {
   const isSmallScreen = useIsMobile()
   const clipboard = useClipboard()
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
-  const { assetSettings } = useAssetSettings(props.account.accountID)
   const { receivePaymentSettings, setReceivePaymentSettings } = useReceivePaymentSettings(props.account.id)
   const { t } = useTranslation()
 
-  const orderedAssets = React.useMemo(
-    () => sortBalances(accountData.balances, assetSettings).map(balance => balancelineToAsset(balance)),
-    [accountData.balances, assetSettings]
-  )
-
-  const defaultSelectableAsset = React.useMemo(() => {
-    const firstVisibleToken = orderedAssets.find(asset => !asset.isNative() && assetSettings[stringifyAsset(asset)]?.visibility !== "hidden")
-    if (firstVisibleToken) {
-      return firstVisibleToken
-    }
-
-    return Asset.native()
-  }, [assetSettings, orderedAssets])
-
-  const allAvailableAssets = React.useMemo(() => {
-    const assets = getAssetsFromBalances(accountData.balances)
-    return assets.length > 0 ? assets : [Asset.native()]
-  }, [accountData.balances])
-
   const { advancedMode, amount, description, assetId: selectedAssetId = "" } = receivePaymentSettings
-
-  const selectedAsset = React.useMemo(() => {
-    const matchingAvailableAsset = allAvailableAssets.find(asset => stringifyAsset(asset) === selectedAssetId)
-    if (matchingAvailableAsset) {
-      return matchingAvailableAsset
-    }
-
-    if (selectedAssetId) {
-      try {
-        return parseAssetID(selectedAssetId)
-      } catch {
-        // ignore invalid persisted values and fall back to the first available asset below
-      }
-    }
-
-    return defaultSelectableAsset
-  }, [allAvailableAssets, defaultSelectableAsset, selectedAssetId])
+  const { resolvedAssetId, selectedAsset } = useReceivePaymentAsset({
+    accountId: props.account.accountID,
+    balances: accountData.balances,
+    selectedAssetId
+  })
 
   const qrValue = React.useMemo(
     () =>
@@ -148,31 +115,15 @@ function ReceivePaymentDialog(props: Props) {
   }, [clipboard, webLink])
 
   React.useEffect(() => {
-    if (!selectedAssetId) {
-      if (accountData.balances.length > 0) {
-        setReceivePaymentSettings({
-          ...receivePaymentSettings,
-          assetId: stringifyAsset(defaultSelectableAsset)
-        })
-      }
+    if (!resolvedAssetId || resolvedAssetId === selectedAssetId) {
       return
     }
 
-    const isSelectedAssetAvailable = allAvailableAssets.some(asset => stringifyAsset(asset) === selectedAssetId)
-    if (!isSelectedAssetAvailable && accountData.balances.length > 0) {
-      setReceivePaymentSettings({
-        ...receivePaymentSettings,
-        assetId: stringifyAsset(defaultSelectableAsset)
-      })
-    }
-  }, [
-    accountData.balances.length,
-    allAvailableAssets,
-    defaultSelectableAsset,
-    receivePaymentSettings,
-    selectedAssetId,
-    setReceivePaymentSettings
-  ])
+    setReceivePaymentSettings({
+      ...receivePaymentSettings,
+      assetId: resolvedAssetId
+    })
+  }, [receivePaymentSettings, resolvedAssetId, selectedAssetId, setReceivePaymentSettings])
 
   return (
     <DialogBody top={<MainTitle onBack={props.onClose} title={t("payment.title.receive")} />}>
