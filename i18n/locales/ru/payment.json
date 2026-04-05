@@ -32,7 +32,7 @@
     "receive": "Получить средства"
   },
   "receive-form": {
-    "advanced-mode": "Расширенный режим",
+    "request-payment": "Запрос платежа",
     "web-link": {
       "label": "Веб-ссылка:"
     },

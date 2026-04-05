@@ -32,7 +32,7 @@
     "receive": "Guthaben empfangen"
   },
   "receive-form": {
-    "advanced-mode": "Erweiterter Modus",
+    "request-payment": "Zahlung anfordern",
     "web-link": {
       "label": "Web-Link:"
     },

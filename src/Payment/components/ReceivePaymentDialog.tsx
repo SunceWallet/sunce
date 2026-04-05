@@ -260,7 +260,7 @@ function ReceivePaymentDialog(props: Props) {
                 onChange={() => setAdvancedMode(value => !value)}
               />
             }
-            label={t("payment.receive-form.advanced-mode")}
+            label={t("payment.receive-form.request-payment")}
             style={{ marginRight: 0 }}
           />
         </Box>
