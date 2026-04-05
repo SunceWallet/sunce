@@ -2,7 +2,6 @@ import { createStore, KeysData } from "key-store"
 import { Networks, Keypair, Transaction } from "@stellar/stellar-sdk"
 import { Messages } from "../../shared/ipc"
 import { WrongPasswordError } from "../../Generic/lib/errors"
-import { defaultMainnetHorizonURLs } from "~Generic/lib/horizon-servers"
 
 type CallHandler = (...args: any) => any
 
@@ -123,15 +122,16 @@ const defaultTestingKeys: KeysData<PublicKeyData> = {
 const defaultSettings: Platform.SettingsData = {
   agreedToTermsAt: "2019-01-17T07:34:05.688Z",
   biometricLock: false,
-  mainnetHorizonURLs: defaultMainnetHorizonURLs,
+  customMainnetHorizonURL: undefined,
   multisignature: true,
+  onlyCustomMainnetHorizon: false,
+  useCustomMainnetHorizon: false,
   testnet: true,
   trustedServices: [],
   hideMemos: false,
   showDust: false,
   showClaimableBalanceTxs: false,
-  accountAssetSettings: {},
-  accountReceivePaymentSettings: {}
+  accountAssetSettings: {}
 }
 
 initKeyStore()

@@ -251,13 +251,14 @@ export const TrustedServicesSetting = React.memo(function TrustedServicesSetting
   )
 })
 
-interface ApiServersSettingProps {
+interface ApiServerSettingProps {
   onClick: () => void
 }
 
-export const ApiServersSetting = React.memo(function ApiServersSetting(props: ApiServersSettingProps) {
+export const ApiServerSetting = React.memo(function ApiServerSetting(props: ApiServerSettingProps) {
   const classes = useSettingsStyles(props)
   const { t } = useTranslation()
+
   return (
     <AppSettingsItem
       actions={
@@ -267,8 +268,8 @@ export const ApiServersSetting = React.memo(function ApiServersSetting(props: Ap
       }
       icon={<StorageIcon className={classes.icon} />}
       onClick={props.onClick}
-      primaryText={t("app-settings.settings.api-servers.text.primary")}
-      secondaryText={t("app-settings.settings.api-servers.text.secondary")}
+      primaryText={t("app-settings.settings.api-server.text.primary")}
+      secondaryText={t("app-settings.settings.api-server.text.secondary")}
     />
   )
 })

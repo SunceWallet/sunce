@@ -7,8 +7,8 @@ import qs from "qs"
 import { Asset, Horizon, Networks, Transaction } from "@stellar/stellar-sdk"
 import pkg from "../../../package.json"
 import { Cancellation, CustomError } from "~Generic/lib/errors"
-import { horizonProbeAccountID, resolveHorizonEndpointURL } from "~Generic/lib/horizon-servers"
 import { observableFromAsyncFactory } from "~Generic/lib/observables"
+import { horizonProbeAccountID, resolveHorizonEndpointURL } from "~Generic/lib/horizon-servers"
 import { parseAssetID } from "~Generic/lib/stellar"
 import { max } from "~Generic/lib/strings"
 import { createReconnectingSSE } from "../lib/event-source"
@@ -71,7 +71,6 @@ interface FeeStats {
 }
 
 export interface HorizonServerProbe {
-  latencyMs: number
   message?: string
   ok: boolean
   status?: number
@@ -884,17 +883,30 @@ export async function fetchOrderbookRecord(horizonURLs: string[], sellingAsset: 
 
 export async function fetchTimebounds(horizonURL: string, timeout: number) {
   const fetchQueue = getFetchQueue(horizonURL)
-  const horizon = new Horizon.Server(horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `fee_stats?${qs.stringify(identification)}`)
 
-  return fetchQueue.add(() => horizon.fetchTimebounds(timeout), {
-    priority: 10
-  })
+  const response = await fetchQueue.add(() => fetch(String(url)), { priority: 10 })
+
+  if (!response.ok) {
+    throw CustomError("RequestFailedError", `Request to ${url} failed with status code ${response.status}`, {
+      target: url.toString(),
+      status: response.status
+    })
+  }
+
+  const dateHeader = response.headers.get("date")
+  const parsedServerTime = dateHeader ? Math.floor(Date.parse(dateHeader) / 1000) : Number.NaN
+  const currentTime = Number.isNaN(parsedServerTime) ? Math.floor(Date.now() / 1000) : parsedServerTime
+
+  return {
+    minTime: 0,
+    maxTime: currentTime + timeout
+  }
 }
 
 export async function probeHorizonServer(horizonURL: string): Promise<HorizonServerProbe> {
   const fetchQueue = getFetchQueue(horizonURL)
   const url = resolveHorizonEndpointURL(horizonURL, `accounts/${horizonProbeAccountID}?${qs.stringify(identification)}`)
-  const startedAt = Date.now()
 
   try {
     const response = await fetchQueue.add(() =>
@@ -905,7 +917,6 @@ export async function probeHorizonServer(horizonURL: string): Promise<HorizonSer
         })
       ])
     )
-    const latencyMs = Date.now() - startedAt
 
     if (!response.ok) {
       let message = `Request failed with status ${response.status}.`
@@ -916,11 +927,10 @@ export async function probeHorizonServer(horizonURL: string): Promise<HorizonSer
           message = text
         }
       } catch (error) {
-        // Ignore response parsing failures while probing a server.
+        // ignore parsing failures while probing
       }
 
       return {
-        latencyMs,
         message,
         ok: false,
         status: response.status
@@ -930,13 +940,11 @@ export async function probeHorizonServer(horizonURL: string): Promise<HorizonSer
     await parseJSONResponse(response)
 
     return {
-      latencyMs,
       ok: true,
       status: response.status
     }
   } catch (error) {
     return {
-      latencyMs: Date.now() - startedAt,
       message: error instanceof Error ? error.message : String(error),
       ok: false
     }

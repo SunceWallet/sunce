@@ -22,11 +22,20 @@ export function normalizeHorizonServerURL(input: string) {
   return url.href
 }
 
-export function deduplicateHorizonServerURLs(urls: string[]) {
-  return Array.from(new Set(urls))
-}
-
 export function resolveHorizonEndpointURL(horizonURL: string, endpoint: string) {
   const baseURL = new URL(normalizeHorizonServerURL(horizonURL))
   return new URL(endpoint.replace(/^\//, ""), baseURL)
+}
+
+export function prependCustomHorizonServer(baseURLs: string[], customURL: string) {
+  return [
+    customURL,
+    ...baseURLs.filter(url => {
+      try {
+        return normalizeHorizonServerURL(url) !== customURL
+      } catch (error) {
+        return url !== customURL
+      }
+    })
+  ]
 }

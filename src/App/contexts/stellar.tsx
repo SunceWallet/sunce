@@ -1,6 +1,11 @@
 import React from "react"
 import { useNetworkCacheReset } from "~Generic/hooks/stellar-subscriptions"
-import { defaultMainnetHorizonURLs, defaultTestnetHorizonURLs } from "~Generic/lib/horizon-servers"
+import {
+  defaultMainnetHorizonURLs,
+  defaultTestnetHorizonURLs,
+  normalizeHorizonServerURL,
+  prependCustomHorizonServer
+} from "~Generic/lib/horizon-servers"
 import { workers } from "~Workers/worker-controller"
 import { SettingsContext } from "./settings"
 import { trackError } from "./notifications"
@@ -16,14 +21,50 @@ interface ContextType {
   testnetHorizonURLs: string[]
 }
 
+const initialHorizonSelection: Promise<[string[], string[]]> = (async () => {
+  const { netWorker } = await workers
+
+  const pubnetHorizonURLs: string[] = Array.from(
+    new Set(
+      await Promise.all([
+        defaultMainnetHorizonURLs[0],
+        netWorker.checkHorizonOrFailover(defaultMainnetHorizonURLs[1], defaultMainnetHorizonURLs[0]),
+        netWorker.checkHorizonOrFailover(defaultMainnetHorizonURLs[2], defaultMainnetHorizonURLs[0])
+      ])
+    )
+  )
+
+  return [pubnetHorizonURLs, defaultTestnetHorizonURLs]
+})()
+
+initialHorizonSelection.catch(trackError)
+
 const initialValues: ContextType = {
-  isSelectionPending: false,
-  pendingSelection: Promise.resolve([defaultMainnetHorizonURLs, defaultTestnetHorizonURLs]),
-  pubnetHorizonURLs: defaultMainnetHorizonURLs,
+  isSelectionPending: true,
+  pendingSelection: initialHorizonSelection,
+  pubnetHorizonURLs: [defaultMainnetHorizonURLs[0]],
   testnetHorizonURLs: defaultTestnetHorizonURLs
 }
 
 const StellarContext = React.createContext<ContextType>(initialValues)
+
+function createMainnetHorizonURLs(
+  baseURLs: string[],
+  customURL: string | undefined,
+  onlyCustomMainnetHorizon: boolean,
+  useCustomMainnetHorizon: boolean
+) {
+  if (!useCustomMainnetHorizon || !customURL) {
+    return baseURLs
+  }
+
+  try {
+    const normalizedCustomURL = normalizeHorizonServerURL(customURL)
+    return onlyCustomMainnetHorizon ? [normalizedCustomURL] : prependCustomHorizonServer(baseURLs, normalizedCustomURL)
+  } catch (error) {
+    return baseURLs
+  }
+}
 
 export function StellarProvider(props: Props) {
   const settings = React.useContext(SettingsContext)
@@ -35,32 +76,53 @@ export function StellarProvider(props: Props) {
   })
 
   React.useEffect(() => {
-    const pubnetHorizonURLs =
-      settings.mainnetHorizonURLs && settings.mainnetHorizonURLs.length > 0
-        ? settings.mainnetHorizonURLs
-        : defaultMainnetHorizonURLs
-    const testnetHorizonURLs = defaultTestnetHorizonURLs
+    let cancelled = false
 
-    setContextValue({
-      isSelectionPending: false,
-      pendingSelection: Promise.resolve([pubnetHorizonURLs, testnetHorizonURLs]),
-      pubnetHorizonURLs,
-      testnetHorizonURLs
-    })
+    const init = async () => {
+      const { netWorker } = await workers
 
-    const didChange =
-      JSON.stringify(previousURLs.current.pubnet) !== JSON.stringify(pubnetHorizonURLs) ||
-      JSON.stringify(previousURLs.current.testnet) !== JSON.stringify(testnetHorizonURLs)
+      setContextValue(prevState => ({ ...prevState, isSelectionPending: true, pendingSelection: initialHorizonSelection }))
+      const [basePubnetHorizonURLs, testnetHorizonURLs] = await initialHorizonSelection
+      const pubnetHorizonURLs = createMainnetHorizonURLs(
+        basePubnetHorizonURLs,
+        settings.customMainnetHorizonURL,
+        settings.onlyCustomMainnetHorizon,
+        settings.useCustomMainnetHorizon
+      )
 
-    if (didChange) {
-      previousURLs.current = { pubnet: pubnetHorizonURLs, testnet: testnetHorizonURLs }
+      if (!cancelled) {
+        setContextValue(prevState => ({
+          isSelectionPending: false,
+          pendingSelection: prevState.pendingSelection,
+          pubnetHorizonURLs,
+          testnetHorizonURLs
+        }))
 
-      workers
-        .then(({ netWorker }) => netWorker.resetAllSubscriptions())
-        .then(resetNetworkCaches)
-        .catch(trackError)
+        const didChange =
+          JSON.stringify(previousURLs.current.pubnet) !== JSON.stringify(pubnetHorizonURLs) ||
+          JSON.stringify(previousURLs.current.testnet) !== JSON.stringify(testnetHorizonURLs)
+
+        if (didChange) {
+          previousURLs.current = { pubnet: pubnetHorizonURLs, testnet: testnetHorizonURLs }
+          await netWorker.resetAllSubscriptions()
+          resetNetworkCaches()
+        }
+      }
     }
-  }, [resetNetworkCaches, settings.mainnetHorizonURLs])
+
+    if (navigator.onLine !== false) {
+      init().catch(trackError)
+    }
+
+    return () => {
+      cancelled = true
+    }
+  }, [
+    resetNetworkCaches,
+    settings.customMainnetHorizonURL,
+    settings.onlyCustomMainnetHorizon,
+    settings.useCustomMainnetHorizon
+  ])
 
   return <StellarContext.Provider value={contextValue}>{props.children}</StellarContext.Provider>
 }

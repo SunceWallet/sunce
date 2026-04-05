@@ -61,7 +61,7 @@
         "secondary": "Rimuovi servizi attendibili"
       }
     },
-    "api-servers": {
+    "api-server": {
       "text": {
         "primary": "Server API",
         "secondary": "Per utenti avanzati"
@@ -106,42 +106,27 @@
       "no-services": "Nessun servizio affidabile"
     }
   },
-  "api-servers": {
+  "api-server": {
     "actions": {
-      "add": "Aggiungi server",
-      "delete": "Elimina server",
-      "edit": "Modifica server",
-      "reorder": "Trascina per riordinare"
+      "save": "Salva"
     },
-    "editor": {
-      "actions": {
-        "add": "Aggiungi",
-        "cancel": "Annulla",
-        "save": "Salva"
-      },
-      "add-title": "Aggiungi server API",
-      "edit-title": "Modifica server API",
-      "url-label": "Indirizzo del server",
-      "validation": {
-        "duplicate": "Questo server è già nell'elenco.",
-        "invalid-url": "Inserisci un indirizzo server valido.",
-        "required": "Inserisci un indirizzo server."
-      }
+    "enabled": {
+      "label": "Usa un server personalizzato"
     },
-    "empty": "Nessun server API configurato",
+    "field": {
+      "label": "Indirizzo del server"
+    },
     "info": {
-      "note": "Il primo server dell'elenco è considerato quello principale. Gli altri restano disponibili come alternative.",
-      "primary": "Sunce si collega ai server API Horizon per ottenere lo stato attuale degli account e inviare transazioni alla blockchain.",
-      "secondary": "Per impostazione predefinita, Sunce usa il server Horizon pubblico di Stellar. A volte può essere lento, quindi qui puoi aggiungere alternative, ad esempio un nodo a pagamento."
+      "primary": "Sunce si collega ai server API Horizon per ottenere lo stato attuale degli account e inviare transazioni alla blockchain."
     },
-    "primary": "Server principale",
-    "status": {
-      "healthy": "Disponibile, {{latencyMs}} ms",
-      "idle": "In attesa del controllo",
-      "loading": "Controllo del server in corso…",
-      "problem": "Problema: {{message}}",
-      "problem-with-latency": "Problema, {{latencyMs}} ms: {{message}}",
-      "problem-without-message": "Il server non ha superato il controllo."
+    "only": {
+      "label": "Usa solo questo server",
+      "note": "Per una maggiore privacy, puoi lasciare solo il server indicato sopra. In quel caso Sunce smetterà di usare i server Horizon alternativi integrati."
+    },
+    "validation": {
+      "checking": "Controllo del server in corso…",
+      "invalid-url": "Inserisci un indirizzo server valido.",
+      "probe-failed": "Il server non ha superato il controllo."
     }
   }
 }
