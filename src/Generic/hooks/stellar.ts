@@ -129,7 +129,19 @@ export function useStellarToml(domain: string | undefined): StellarToml | undefi
     return cached[1]
   }
 
-  return stellarTomlPersistentCache.read(domain) || stellarTomlCache.suspend(domain, fetchStellarTomlData)
+  const persistentCached = stellarTomlPersistentCache.read(domain)
+  if (persistentCached) {
+    return persistentCached
+  }
+
+  // null = failed to fetch last time
+  // undefined = never fetched
+  if (persistentCached === null) { // 
+    fetchStellarTomlData()
+    return
+  }
+
+  return stellarTomlCache.suspend(domain, fetchStellarTomlData)
 }
 
 export function useAccountData(accountID: string, testnet: boolean) {
