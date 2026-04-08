@@ -22,7 +22,6 @@ interface Props {
   assetId?: string
   horizon: Horizon.Server
   onClose: () => void
-  openOrdersCount: number
   preselectedParams?: any
   sendTransaction: (transaction: Transaction, signatureRequest?: MultisigTransactionResponse) => Promise<any>
 }
@@ -87,7 +86,6 @@ function PaymentDialog(props: Props) {
         accountData={props.accountData}
         actionsRef={dialogActionsRef}
         onSubmit={handleSubmit}
-        openOrdersCount={props.openOrdersCount}
         preselectedParams={preselectedParams}
         canChangePreselectedParams={true}
         testnet={props.account.testnet}
@@ -102,7 +100,6 @@ function ConnectedPaymentDialog(
   props: Pick<Props, "account" | "assetId" | "onClose" | "preselectedParams"> & { onSubmissionCompleted?: () => void }
 ) {
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
-  const { offers: openOrders } = useLiveAccountOffers(props.account.accountID, props.account.testnet)
 
   return (
     <TransactionSender account={props.account} onSubmissionCompleted={props.onSubmissionCompleted || props.onClose}>
@@ -111,7 +108,6 @@ function ConnectedPaymentDialog(
           {...props}
           accountData={accountData}
           horizon={horizon}
-          openOrdersCount={openOrders.length}
           sendTransaction={sendTransaction}
           preselectedParams={props.preselectedParams}
         />

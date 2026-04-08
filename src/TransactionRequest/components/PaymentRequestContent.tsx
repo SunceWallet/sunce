@@ -32,7 +32,6 @@ function ConnectedPaymentForm(props: ConnectedPaymentFormProps) {
   const testnet = props.selectedAccount.testnet
 
   const [txCreationPending, setTxCreationPending] = React.useState(false)
-  const { offers: openOrders } = useLiveAccountOffers(props.selectedAccount.publicKey, testnet)
   const trustedAssets = React.useMemo(() => getAssetsFromBalances(props.accountData.balances) || [Asset.native()], [
     props.accountData.balances
   ])
@@ -64,7 +63,6 @@ function ConnectedPaymentForm(props: ConnectedPaymentFormProps) {
       actionsRef={props.actionsRef}
       onCancel={props.onClose}
       onSubmit={handleSubmit}
-      openOrdersCount={openOrders.length}
       preselectedParams={props.preselectedParams}
       testnet={testnet}
       trustedAssets={trustedAssets}

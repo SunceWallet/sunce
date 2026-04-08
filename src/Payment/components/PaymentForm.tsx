@@ -76,7 +76,6 @@ interface PaymentFormProps {
     spendableBalance: BigNumber,
     wellknownAccount?: AccountRecord
   ) => void
-  openOrdersCount: number
   preselectedParams?: PaymentParams
   canChangePreselectedParams?: boolean
   testnet: boolean
@@ -484,7 +483,6 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
 interface Props {
   accountData: AccountData
   actionsRef: RefStateObject
-  openOrdersCount: number
   preselectedParams?: PaymentParams
   canChangePreselectedParams?: boolean
   testnet: boolean
