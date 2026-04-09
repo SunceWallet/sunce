@@ -61,7 +61,7 @@ export async function fetchAllAssets(tickerURL: string): Promise<AssetRecord[]> 
 
 export async function fetchStellarToml(
   domain: string,
-  options: StellarToml.Api.StellarTomlResolveOptions = { timeout: 5000 }
+  options: StellarToml.Api.StellarTomlResolveOptions = {}
 ): Promise<any> {
   try {
     return await StellarToml.Resolver.resolve(domain, options)
