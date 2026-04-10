@@ -2,7 +2,6 @@ import { useCallback, useContext, useMemo } from "react"
 import { SettingsContext } from "~App/contexts/settings"
 
 const defaultReceivePaymentSettings: Platform.ReceivePaymentSettings = {
-  advancedMode: false,
   amount: "",
   description: ""
 }

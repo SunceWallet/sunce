@@ -4,6 +4,11 @@ interface TrustedService {
 }
 
 declare namespace Platform {
+  export interface ReceivePaymentSettings {
+    amount: string
+    assetId?: string
+    description: string
+  }
   export type VisibilityMode = undefined | "favorite" | "hidden"
   export interface AssetSettings {
     visibility: VisibilityMode

@@ -16,11 +16,10 @@ import { useReceivePaymentSettings } from "~Generic/hooks/useReceivePaymentSetti
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useClipboard, useIsMobile } from "~Generic/hooks/userinterface"
 import { isValidAmount, replaceCommaWithDot } from "~Generic/lib/form"
-import { stringifyAsset } from "~Generic/lib/stellar"
+import { parseAssetID, stringifyAsset } from "~Generic/lib/stellar"
 import { Box } from "~Layout/components/Box"
 import DialogBody from "~Layout/components/DialogBody"
 import MainTitle from "~Generic/components/MainTitle"
-import { useReceivePaymentAsset } from "~Payment/hooks/useReceivePaymentAsset"
 
 interface Props {
   account: Account
@@ -84,24 +83,21 @@ function ReceivePaymentDialog(props: Props) {
   const isSmallScreen = useIsMobile()
   const clipboard = useClipboard()
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
+  const [advancedMode, setAdvancedMode] = React.useState<boolean>(false);
   const { receivePaymentSettings, setReceivePaymentSettings } = useReceivePaymentSettings(props.account.id)
   const { t } = useTranslation()
 
-  const { advancedMode, amount, description, assetId: selectedAssetId = "" } = receivePaymentSettings
-  const { resolvedAssetId, selectedAsset } = useReceivePaymentAsset({
-    accountId: props.account.accountID,
-    balances: accountData.balances,
-    selectedAssetId
-  })
+  const { amount, description, assetId: selectedAssetId = "" } = receivePaymentSettings
+  const selectedAsset = React.useMemo<Asset | undefined>(() => selectedAssetId ? parseAssetID(selectedAssetId) : undefined, [selectedAssetId])
 
   const qrValue = React.useMemo(
     () =>
-      advancedMode
+      advancedMode && selectedAsset
         ? buildReceivePaymentUri(props.account.accountID, selectedAsset, amount, description, props.account.testnet)
         : props.account.accountID,
     [advancedMode, amount, description, props.account.accountID, props.account.testnet, selectedAsset]
   )
-  const webLink = React.useMemo(() => (advancedMode ? buildReceivePaymentWebLink(qrValue) : null), [advancedMode, qrValue])
+  const webLink = React.useMemo(() => (advancedMode && selectedAsset ? buildReceivePaymentWebLink(qrValue) : null), [advancedMode, qrValue, selectedAsset])
 
   const copyAddressToClipboard = React.useCallback(() => clipboard.copyToClipboard(props.account.accountID), [
     clipboard,
@@ -113,17 +109,6 @@ function ReceivePaymentDialog(props: Props) {
       clipboard.copyToClipboard(webLink)
     }
   }, [clipboard, webLink])
-
-  React.useEffect(() => {
-    if (!resolvedAssetId || resolvedAssetId === selectedAssetId) {
-      return
-    }
-
-    setReceivePaymentSettings({
-      ...receivePaymentSettings,
-      assetId: resolvedAssetId
-    })
-  }, [receivePaymentSettings, resolvedAssetId, selectedAssetId, setReceivePaymentSettings])
 
   return (
     <DialogBody top={<MainTitle onBack={props.onClose} title={t("payment.title.receive")} />}>
@@ -157,10 +142,7 @@ function ReceivePaymentDialog(props: Props) {
                 }}
                 color="secondary"
                 onChange={() =>
-                  setReceivePaymentSettings({
-                    ...receivePaymentSettings,
-                    advancedMode: !advancedMode
-                  })
+                  setAdvancedMode(advancedMode => !advancedMode)
                 }
               />
             }
@@ -215,7 +197,7 @@ function ReceivePaymentDialog(props: Props) {
               }
               value={description}
             />
-            <Typography
+            {webLink && <Typography
               align="center"
               component="p"
               onClick={copyWebLinkToClipboard}
@@ -237,7 +219,7 @@ function ReceivePaymentDialog(props: Props) {
               >
                 https://pay.sunce.app/...
               </span>
-            </Typography>
+            </Typography>}
           </Box>
         ) : null}
       </Box>
