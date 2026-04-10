@@ -5,7 +5,6 @@ interface TrustedService {
 
 declare namespace Platform {
   export interface ReceivePaymentSettings {
-    advancedMode: boolean
     amount: string
     assetId?: string
     description: string

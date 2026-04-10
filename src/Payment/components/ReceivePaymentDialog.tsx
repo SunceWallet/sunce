@@ -83,10 +83,11 @@ function ReceivePaymentDialog(props: Props) {
   const isSmallScreen = useIsMobile()
   const clipboard = useClipboard()
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
+  const [advancedMode, setAdvancedMode] = React.useState<boolean>(false);
   const { receivePaymentSettings, setReceivePaymentSettings } = useReceivePaymentSettings(props.account.id)
   const { t } = useTranslation()
 
-  const { advancedMode, amount, description, assetId: selectedAssetId = "" } = receivePaymentSettings
+  const { amount, description, assetId: selectedAssetId = "" } = receivePaymentSettings
   const selectedAsset = React.useMemo<Asset | undefined>(() => selectedAssetId ? parseAssetID(selectedAssetId) : undefined, [selectedAssetId])
 
   const qrValue = React.useMemo(
@@ -141,10 +142,7 @@ function ReceivePaymentDialog(props: Props) {
                 }}
                 color="secondary"
                 onChange={() =>
-                  setReceivePaymentSettings({
-                    ...receivePaymentSettings,
-                    advancedMode: !advancedMode
-                  })
+                  setAdvancedMode(advancedMode => !advancedMode)
                 }
               />
             }
