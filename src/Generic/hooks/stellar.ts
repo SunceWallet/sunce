@@ -129,7 +129,22 @@ export function useStellarToml(domain: string | undefined): StellarToml | undefi
     return cached[1]
   }
 
-  return stellarTomlPersistentCache.read(domain) || stellarTomlCache.suspend(domain, fetchStellarTomlData)
+  const persistentCached = stellarTomlPersistentCache.read(domain)
+
+  if (persistentCached) {
+    return persistentCached
+  }
+
+  try {
+    return stellarTomlCache.suspend(domain, fetchStellarTomlData)
+  } catch (thrown) {
+    // if Promise thrown to suspend component – prevent suspension
+    if (thrown && typeof thrown.then === "function") {
+      return
+    }
+    // It's an error – re-throw
+    throw thrown
+  }
 }
 
 export function useAccountData(accountID: string, testnet: boolean) {
