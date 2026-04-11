@@ -15,9 +15,6 @@ const useStyles = makeStyles({
   field: {
     marginTop: 12
   },
-  note: {
-    marginTop: 6
-  },
   switchControl: {
     flexShrink: 0,
     marginLeft: 16
@@ -42,9 +39,9 @@ const useStyles = makeStyles({
 
 type ProbeState =
   | { type: "idle" }
-  | { probedURL: string; type: "loading" }
+  | { type: "loading" }
   | { probedURL: string; type: "success" }
-  | { message: string; probedURL?: string; type: "error" }
+  | { message: string; type: "error" }
 
 function ManageApiServerDialog() {
   const classes = useStyles()
@@ -57,24 +54,14 @@ function ManageApiServerDialog() {
   const [serverURL, setServerURL] = React.useState(customMainnetHorizonURL || "")
   const [onlyThisServer, setOnlyThisServer] = React.useState(Boolean(customMainnetHorizonURL) && onlyCustomMainnetHorizon)
   const [probeState, setProbeState] = React.useState<ProbeState>({ type: "idle" })
-  const [showCheckingState, setShowCheckingState] = React.useState(false)
-  const latestServerURL = React.useRef(serverURL)
-  const latestUseCustomServer = React.useRef(useCustomServer)
+  const latestProbeID = React.useRef(0)
 
-  React.useEffect(() => {
-    latestServerURL.current = serverURL
-  }, [serverURL])
-
-  React.useEffect(() => {
-    latestUseCustomServer.current = useCustomServer
-  }, [useCustomServer])
-
-  const getCurrentNormalizedURL = React.useCallback(() => {
-    if (!latestUseCustomServer.current) {
+  const normalizedURL = React.useMemo(() => {
+    if (!useCustomServer) {
       return undefined
     }
 
-    const trimmedURL = latestServerURL.current.trim()
+    const trimmedURL = serverURL.trim()
     if (!trimmedURL) {
       return undefined
     }
@@ -82,49 +69,36 @@ function ManageApiServerDialog() {
     try {
       return normalizeHorizonServerURL(trimmedURL)
     } catch (error) {
-      return undefined
+      return null
     }
-  }, [])
+  }, [serverURL, useCustomServer])
 
   React.useEffect(() => {
     if (!useCustomServer) {
       setProbeState({ type: "idle" })
-      setShowCheckingState(false)
       return
     }
 
-    const trimmedURL = serverURL.trim()
-
-    if (!trimmedURL) {
+    if (normalizedURL === undefined) {
       setProbeState({ type: "idle" })
-      setShowCheckingState(false)
       return
     }
 
-    let normalizedURL: string
-    try {
-      normalizedURL = normalizeHorizonServerURL(trimmedURL)
-    } catch (error) {
+    if (normalizedURL === null) {
       setProbeState({ type: "error", message: t("app-settings.api-server.validation.invalid-url") })
-      setShowCheckingState(false)
       return
     }
 
-    let isCancelled = false
+    const probeID = latestProbeID.current + 1
+    latestProbeID.current = probeID
+
     const timeoutHandle = window.setTimeout(() => {
-      setProbeState({ type: "loading", probedURL: normalizedURL })
-      const showCheckingTimeoutHandle = window.setTimeout(() => {
-        if (!isCancelled) {
-          setShowCheckingState(true)
-        }
-      }, 500)
+      setProbeState({ type: "loading" })
 
       netWorker
         .probeHorizonServer(normalizedURL)
         .then(probe => {
-          window.clearTimeout(showCheckingTimeoutHandle)
-          setShowCheckingState(false)
-          if (getCurrentNormalizedURL() !== normalizedURL) {
+          if (latestProbeID.current !== probeID) {
             return
           }
           setProbeState(
@@ -132,31 +106,25 @@ function ManageApiServerDialog() {
               ? { type: "success", probedURL: normalizedURL }
               : {
                   type: "error",
-                  probedURL: normalizedURL,
-                  message: probe.message || t("app-settings.api-server.validation.probe-failed")
+                  message: t("app-settings.api-server.validation.probe-failed")
                 }
           )
         })
         .catch(error => {
-          window.clearTimeout(showCheckingTimeoutHandle)
-          setShowCheckingState(false)
-          if (getCurrentNormalizedURL() !== normalizedURL) {
+          if (latestProbeID.current !== probeID) {
             return
           }
           setProbeState({
             type: "error",
-            probedURL: normalizedURL,
             message: error instanceof Error ? error.message : String(error)
           })
         })
     }, 350)
 
     return () => {
-      isCancelled = true
-      setShowCheckingState(false)
       window.clearTimeout(timeoutHandle)
     }
-  }, [getCurrentNormalizedURL, netWorker, serverURL, t, useCustomServer])
+  }, [netWorker, normalizedURL, t, useCustomServer])
 
   React.useEffect(() => {
     if (useCustomMainnetHorizon !== useCustomServer) {
@@ -169,9 +137,7 @@ function ManageApiServerDialog() {
       return
     }
 
-    const trimmedURL = serverURL.trim()
-
-    if (!trimmedURL) {
+    if (normalizedURL === undefined) {
       if (customMainnetHorizonURL !== undefined) {
         setSetting("customMainnetHorizonURL", undefined)
       }
@@ -181,14 +147,11 @@ function ManageApiServerDialog() {
       return
     }
 
-    if (probeState.type !== "success") {
+    if (normalizedURL === null) {
       return
     }
 
-    let normalizedURL: string
-    try {
-      normalizedURL = normalizeHorizonServerURL(trimmedURL)
-    } catch (error) {
+    if (probeState.type !== "success") {
       return
     }
 
@@ -208,7 +171,7 @@ function ManageApiServerDialog() {
     onlyCustomMainnetHorizon,
     onlyThisServer,
     probeState,
-    serverURL,
+    normalizedURL,
     setSetting,
     useCustomServer
   ])
@@ -241,7 +204,7 @@ function ManageApiServerDialog() {
               }}
               value={serverURL}
             />
-            {probeState.type === "error" || (probeState.type === "loading" && showCheckingState) ? (
+            {probeState.type === "error" || probeState.type === "loading" ? (
               <Typography
                 className={classes.status}
                 color={probeState.type === "error" ? "error" : "textSecondary"}

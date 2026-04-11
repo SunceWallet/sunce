@@ -48,6 +48,10 @@ const initialValues: ContextType = {
 
 const StellarContext = React.createContext<ContextType>(initialValues)
 
+function arraysEqual(a: string[], b: string[]) {
+  return a.length === b.length && a.every((value, index) => value === b[index])
+}
+
 function createMainnetHorizonURLs(
   baseURLs: string[],
   customURL: string | undefined,
@@ -81,7 +85,6 @@ export function StellarProvider(props: Props) {
     const init = async () => {
       const { netWorker } = await workers
 
-      setContextValue(prevState => ({ ...prevState, isSelectionPending: true, pendingSelection: initialHorizonSelection }))
       const [basePubnetHorizonURLs, testnetHorizonURLs] = await initialHorizonSelection
       const pubnetHorizonURLs = createMainnetHorizonURLs(
         basePubnetHorizonURLs,
@@ -91,16 +94,16 @@ export function StellarProvider(props: Props) {
       )
 
       if (!cancelled) {
-        setContextValue(prevState => ({
+        setContextValue({
           isSelectionPending: false,
-          pendingSelection: prevState.pendingSelection,
+          pendingSelection: initialHorizonSelection,
           pubnetHorizonURLs,
           testnetHorizonURLs
-        }))
+        })
 
         const didChange =
-          JSON.stringify(previousURLs.current.pubnet) !== JSON.stringify(pubnetHorizonURLs) ||
-          JSON.stringify(previousURLs.current.testnet) !== JSON.stringify(testnetHorizonURLs)
+          !arraysEqual(previousURLs.current.pubnet, pubnetHorizonURLs) ||
+          !arraysEqual(previousURLs.current.testnet, testnetHorizonURLs)
 
         if (didChange) {
           previousURLs.current = { pubnet: pubnetHorizonURLs, testnet: testnetHorizonURLs }
