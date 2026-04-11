@@ -25,12 +25,25 @@
     }
   },
   "note": {
-    "multisig-pubkey": "Indirizzo dell'account multi-firma, non della chiave di co-firma locale.",
     "issuance": "Risorsa selezionato viene emesso dal vostro conto. I nuovi risorsa saranno coniati al momento della spesa"
   },
   "title": {
     "send": "Invia fondi",
     "receive": "Ricevi fondi"
+  },
+  "receive-form": {
+    "request-payment": "Richiedi pagamento",
+    "web-link": {
+      "label": "Link web:"
+    },
+    "inputs": {
+      "asset": {
+        "label": "Asset"
+      },
+      "description": {
+        "label": "Descrizione (facoltativa)"
+      }
+    }
   },
   "validation": {
     "memo-required": "Imposta un promemoria quando invii fondi a {{destination}}",

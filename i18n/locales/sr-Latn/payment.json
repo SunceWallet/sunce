@@ -25,12 +25,25 @@
     }
   },
   "note": {
-    "multisig-pubkey": "Adresa multi-sig računa, a ne tvoj lokalni potpisni ključ.",
     "issuance": "Izabrana aktiva je izdata sa tvog računa. Novi tokeni će biti kreirani prilikom slanja"
   },
   "title": {
     "send": "Pošalji sredstva",
     "receive": "Primi sredstva"
+  },
+  "receive-form": {
+    "request-payment": "Zahtev za plaćanje",
+    "web-link": {
+      "label": "Veb-link:"
+    },
+    "inputs": {
+      "asset": {
+        "label": "Aktiva"
+      },
+      "description": {
+        "label": "Opis (neobavezno)"
+      }
+    }
   },
   "validation": {
     "memo-required": "Postavi memo prilikom slanja sredstava ka {{destination}}",

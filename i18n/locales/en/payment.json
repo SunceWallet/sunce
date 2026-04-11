@@ -25,12 +25,25 @@
     }
   },
   "note": {
-    "multisig-pubkey": "Address of the multi-signature account, not your local co-signature key.",
     "issuance": "Selected asset is issued by your account. New tokens will be minted upon sending"
   },
   "title": {
     "send": "Send funds",
     "receive": "Receive Funds"
+  },
+  "receive-form": {
+    "request-payment": "Request payment",
+    "web-link": {
+      "label": "Web link:"
+    },
+    "inputs": {
+      "asset": {
+        "label": "Asset"
+      },
+      "description": {
+        "label": "Description (optional)"
+      }
+    }
   },
   "validation": {
     "memo-required": "Set a memo when sending funds to {{destination}}",

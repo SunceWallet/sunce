@@ -25,12 +25,25 @@
     }
   },
   "note": {
-    "multisig-pubkey": "Dirección de la cuenta multifirma, no su clave de cofirma local.",
     "issuance": "El activo seleccionado es emitido por su cuenta. Se acuñarán nuevos tokens al gastar"
   },
   "title": {
     "send": "Envía fondos",
     "receive": "Recibe fondos"
+  },
+  "receive-form": {
+    "request-payment": "Solicitar pago",
+    "web-link": {
+      "label": "Enlace web:"
+    },
+    "inputs": {
+      "asset": {
+        "label": "Activo"
+      },
+      "description": {
+        "label": "Descripción (opcional)"
+      }
+    }
   },
   "validation": {
     "memo-required": "Establecer un Memo cuando envía fondos a {{destination}}",

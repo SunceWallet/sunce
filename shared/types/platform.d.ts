@@ -4,6 +4,11 @@ interface TrustedService {
 }
 
 declare namespace Platform {
+  export interface ReceivePaymentSettings {
+    amount: string
+    assetId?: string
+    description: string
+  }
   export type VisibilityMode = undefined | "favorite" | "hidden"
   export interface AssetSettings {
     visibility: VisibilityMode
@@ -11,6 +16,7 @@ declare namespace Platform {
   }
   export type AssetSettingsMap = Record<string, AssetSettings>
   export type AccountAssetSettingsMap = Record<string, AssetSettingsMap>
+  export type AccountReceivePaymentSettingsMap = Record<string, ReceivePaymentSettings>
   export interface SettingsData {
     agreedToTermsAt?: string
     biometricLock: boolean
@@ -21,6 +27,7 @@ declare namespace Platform {
     showDust: boolean
     showClaimableBalanceTxs: boolean
     accountAssetSettings: AccountAssetSettingsMap
+    accountReceivePaymentSettings: AccountReceivePaymentSettingsMap
   }
 }
 

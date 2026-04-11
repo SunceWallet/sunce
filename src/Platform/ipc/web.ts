@@ -128,7 +128,8 @@ const defaultSettings: Platform.SettingsData = {
   hideMemos: false,
   showDust: false,
   showClaimableBalanceTxs: false,
-  accountAssetSettings: {}
+  accountAssetSettings: {},
+  accountReceivePaymentSettings: {}
 }
 
 initKeyStore()
@@ -212,4 +213,3 @@ function subscribeToDeepLinkURLs(callback: (url: string) => void) {
   // no way to unsubscribe
   return () => undefined
 }
-
