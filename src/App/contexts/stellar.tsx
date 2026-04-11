@@ -1,6 +1,13 @@
 import React from "react"
 import { useNetworkCacheReset } from "~Generic/hooks/stellar-subscriptions"
+import {
+  defaultMainnetHorizonURLs,
+  defaultTestnetHorizonURLs,
+  normalizeHorizonServerURL,
+  prependCustomHorizonServer
+} from "~Generic/lib/horizon-servers"
 import { workers } from "~Workers/worker-controller"
+import { SettingsContext } from "./settings"
 import { trackError } from "./notifications"
 
 interface Props {
@@ -20,16 +27,14 @@ const initialHorizonSelection: Promise<[string[], string[]]> = (async () => {
   const pubnetHorizonURLs: string[] = Array.from(
     new Set(
       await Promise.all([
-        "https://horizon.stellar.org",
-        netWorker.checkHorizonOrFailover("https://horizon.stellarx.com", "https://horizon.stellar.org"),
-        netWorker.checkHorizonOrFailover("https://horizon.stellar.lobstr.co", "https://horizon.stellar.org")
+        defaultMainnetHorizonURLs[0],
+        netWorker.checkHorizonOrFailover(defaultMainnetHorizonURLs[1], defaultMainnetHorizonURLs[0]),
+        netWorker.checkHorizonOrFailover(defaultMainnetHorizonURLs[2], defaultMainnetHorizonURLs[0])
       ])
     )
   )
 
-  const testnetHorizonURLs: string[] = ["https://horizon-testnet.stellar.org"]
-
-  return Promise.all([pubnetHorizonURLs, testnetHorizonURLs])
+  return [pubnetHorizonURLs, defaultTestnetHorizonURLs]
 })()
 
 initialHorizonSelection.catch(trackError)
@@ -37,15 +42,42 @@ initialHorizonSelection.catch(trackError)
 const initialValues: ContextType = {
   isSelectionPending: true,
   pendingSelection: initialHorizonSelection,
-  pubnetHorizonURLs: ["https://horizon.stellar.org"],
-  testnetHorizonURLs: ["https://stellar-horizon-testnet.satoshipay.io/"]
+  pubnetHorizonURLs: [defaultMainnetHorizonURLs[0]],
+  testnetHorizonURLs: defaultTestnetHorizonURLs
 }
 
 const StellarContext = React.createContext<ContextType>(initialValues)
 
+function arraysEqual(a: string[], b: string[]) {
+  return a.length === b.length && a.every((value, index) => value === b[index])
+}
+
+function createMainnetHorizonURLs(
+  baseURLs: string[],
+  customURL: string | undefined,
+  onlyCustomMainnetHorizon: boolean,
+  useCustomMainnetHorizon: boolean
+) {
+  if (!useCustomMainnetHorizon || !customURL) {
+    return baseURLs
+  }
+
+  try {
+    const normalizedCustomURL = normalizeHorizonServerURL(customURL)
+    return onlyCustomMainnetHorizon ? [normalizedCustomURL] : prependCustomHorizonServer(baseURLs, normalizedCustomURL)
+  } catch (error) {
+    return baseURLs
+  }
+}
+
 export function StellarProvider(props: Props) {
+  const settings = React.useContext(SettingsContext)
   const [contextValue, setContextValue] = React.useState<ContextType>(initialValues)
   const resetNetworkCaches = useNetworkCacheReset()
+  const previousURLs = React.useRef({
+    pubnet: initialValues.pubnetHorizonURLs,
+    testnet: initialValues.testnetHorizonURLs
+  })
 
   React.useEffect(() => {
     let cancelled = false
@@ -53,29 +85,31 @@ export function StellarProvider(props: Props) {
     const init = async () => {
       const { netWorker } = await workers
 
-      setContextValue(prevState => ({ ...prevState, pendingSelection: initialHorizonSelection }))
-      const [pubnetHorizonURLs, testnetHorizonURLs] = await initialHorizonSelection
+      const [basePubnetHorizonURLs, testnetHorizonURLs] = await initialHorizonSelection
+      const pubnetHorizonURLs = createMainnetHorizonURLs(
+        basePubnetHorizonURLs,
+        settings.customMainnetHorizonURL,
+        settings.onlyCustomMainnetHorizon,
+        settings.useCustomMainnetHorizon
+      )
 
       if (!cancelled) {
-        setContextValue(prevState => ({
+        setContextValue({
           isSelectionPending: false,
-          pendingSelection: prevState.pendingSelection,
-          pubnetHorizonURLs:
-            pubnetHorizonURLs !== prevState.pubnetHorizonURLs ? pubnetHorizonURLs : prevState.pubnetHorizonURLs,
-          testnetHorizonURLs:
-            testnetHorizonURLs !== prevState.testnetHorizonURLs ? testnetHorizonURLs : prevState.testnetHorizonURLs
-        }))
+          pendingSelection: initialHorizonSelection,
+          pubnetHorizonURLs,
+          testnetHorizonURLs
+        })
 
-        if (
-          pubnetHorizonURLs !== initialValues.pubnetHorizonURLs ||
-          testnetHorizonURLs !== initialValues.testnetHorizonURLs
-        ) {
+        const didChange =
+          !arraysEqual(previousURLs.current.pubnet, pubnetHorizonURLs) ||
+          !arraysEqual(previousURLs.current.testnet, testnetHorizonURLs)
+
+        if (didChange) {
+          previousURLs.current = { pubnet: pubnetHorizonURLs, testnet: testnetHorizonURLs }
           await netWorker.resetAllSubscriptions()
           resetNetworkCaches()
         }
-
-        // tslint:disable-next-line no-console
-        console.debug(`Selected horizon servers:`, { pubnetHorizonURLs, testnetHorizonURLs })
       }
     }
 
@@ -83,11 +117,15 @@ export function StellarProvider(props: Props) {
       init().catch(trackError)
     }
 
-    const unsubscribe = () => {
+    return () => {
       cancelled = true
     }
-    return unsubscribe
-  }, [resetNetworkCaches])
+  }, [
+    resetNetworkCaches,
+    settings.customMainnetHorizonURL,
+    settings.onlyCustomMainnetHorizon,
+    settings.useCustomMainnetHorizon
+  ])
 
   return <StellarContext.Provider value={contextValue}>{props.children}</StellarContext.Provider>
 }

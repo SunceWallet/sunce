@@ -61,6 +61,12 @@
         "secondary": "Rimuovi servizi attendibili"
       }
     },
+    "api-server": {
+      "text": {
+        "primary": "Server API",
+        "secondary": "Per utenti avanzati"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Importazione/esportazione di indirizzi salvati",
@@ -98,6 +104,29 @@
         "text": "Il servizio verrà rimosso dal tuo elenco di fiducia. Sei sicuro?"
       },
       "no-services": "Nessun servizio affidabile"
+    }
+  },
+  "api-server": {
+    "actions": {
+      "save": "Salva"
+    },
+    "enabled": {
+      "label": "Usa un server personalizzato"
+    },
+    "field": {
+      "label": "Indirizzo del server"
+    },
+    "info": {
+      "primary": "Sunce si collega ai server API Horizon per ottenere lo stato attuale degli account e inviare transazioni alla blockchain."
+    },
+    "only": {
+      "label": "Usa solo questo server",
+      "note": "Per una maggiore privacy, puoi lasciare solo il server indicato sopra. In quel caso Sunce smetterà di usare i server Horizon alternativi integrati."
+    },
+    "validation": {
+      "checking": "Controllo del server in corso…",
+      "invalid-url": "Inserisci un indirizzo server valido.",
+      "probe-failed": "Il server non ha superato il controllo."
     }
   }
 }

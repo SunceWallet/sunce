@@ -70,6 +70,12 @@
         "secondary": "Ukloni Pouzdane Usluge"
       }
     },
+    "api-server": {
+      "text": {
+        "primary": "API server",
+        "secondary": "Za napredne korisnike"
+      }
+    },
     "saved-addresses-export": {
       "text": {
         "primary": "Uvoz/Izvoz sačuvanih adresa",
@@ -107,6 +113,29 @@
         "text": "Usluga će biti uklonjena sa tvoje liste poverenja. Da li si siguran/na?"
       },
       "no-services": "Nema pouzdanih usluga"
+    }
+  },
+  "api-server": {
+    "actions": {
+      "save": "Sačuvaj"
+    },
+    "enabled": {
+      "label": "Koristi svoj server"
+    },
+    "field": {
+      "label": "Adresa servera"
+    },
+    "info": {
+      "primary": "Sunce se povezuje sa Horizon API serverima da bi dobio trenutno stanje računa i slao transakcije na blokčejn."
+    },
+    "only": {
+      "label": "Koristi samo ovaj server",
+      "note": "Radi veće privatnosti možete ostaviti samo server naveden iznad. Tada Sunce više neće koristiti ugrađene alternativne Horizon servere."
+    },
+    "validation": {
+      "checking": "Proveravamo server…",
+      "invalid-url": "Unesite ispravnu adresu servera.",
+      "probe-failed": "Server nije prošao proveru."
     }
   }
 }

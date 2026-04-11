@@ -8,6 +8,7 @@ import { Asset, Horizon, Networks, Transaction } from "@stellar/stellar-sdk"
 import pkg from "../../../package.json"
 import { Cancellation, CustomError } from "~Generic/lib/errors"
 import { observableFromAsyncFactory } from "~Generic/lib/observables"
+import { horizonProbeAccountID, resolveHorizonEndpointURL } from "~Generic/lib/horizon-servers"
 import { parseAssetID } from "~Generic/lib/stellar"
 import { max } from "~Generic/lib/strings"
 import { createReconnectingSSE } from "../lib/event-source"
@@ -67,6 +68,12 @@ interface FeeStats {
   ledger_capacity_usage: string
   fee_charged: FeeStatsDetails
   max_fee: FeeStatsDetails
+}
+
+export interface HorizonServerProbe {
+  message?: string
+  ok: boolean
+  status?: number
 }
 
 const accountSubscriptionCache = new Map<string, Observable<Horizon.AccountResponse>>()
@@ -152,7 +159,7 @@ export async function checkHorizonOrFailover(primaryHorizonURL: string, secondar
   try {
     // fetch dynamic data to check database access
     const primaryResponse = await Promise.race([
-      fetch(new URL(`/accounts/${testAccountID}`, primaryHorizonURL).href),
+      fetch(resolveHorizonEndpointURL(primaryHorizonURL, `accounts/${testAccountID}`).href),
       delay(2500).then(() => {
         throw Error(`Horizon health check timed out. Trying failover…`)
       })
@@ -168,7 +175,7 @@ export async function checkHorizonOrFailover(primaryHorizonURL: string, secondar
     console.error(error)
   }
 
-  const secondaryResponse = await fetch(new URL(`/accounts/${testAccountID}`, secondaryHorizonURL).href)
+  const secondaryResponse = await fetch(resolveHorizonEndpointURL(secondaryHorizonURL, `accounts/${testAccountID}`).href)
   const serverToUse =
     secondaryResponse.status < 300 || secondaryResponse.status === 404 ? secondaryHorizonURL : primaryHorizonURL
 
@@ -189,7 +196,7 @@ export function resetAllSubscriptions() {
 
 export async function submitTransaction(horizonURL: string, txEnvelopeXdr: string, network: Networks) {
   const fetchQueue = getFetchQueue(horizonURL)
-  const url = new URL(`/transactions?${qs.stringify({ tx: txEnvelopeXdr })}`, horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `transactions?${qs.stringify({ tx: txEnvelopeXdr })}`)
 
   const response = await fetchQueue.add(
     () => {
@@ -223,7 +230,7 @@ async function waitForAccountDataUncached(horizonURL: string, accountID: string,
       throw Cancellation("Stopping to wait for account to become present in network.")
     }
 
-    const url = new URL(`/accounts/${accountID}?${qs.stringify(identification)}`, horizonURL)
+    const url = resolveHorizonEndpointURL(horizonURL, `accounts/${accountID}?${qs.stringify(identification)}`)
     const response = await fetchQueue.add(() => fetch(String(url)))
 
     if (response.status === 200) {
@@ -318,7 +325,7 @@ function subscribeToAccountEffectsUncached(horizonURLs: string[], accountID: str
             ...identification,
             cursor: latestCursor || "now"
           }
-          return String(new URL(`/accounts/${accountID}/effects?${qs.stringify(query)}`, horizonURL))
+          return String(resolveHorizonEndpointURL(horizonURL, `accounts/${accountID}/effects?${qs.stringify(query)}`))
         }
 
         return multicast(
@@ -638,7 +645,7 @@ function subscribeToOrderbookUncached(horizonURLs: string[], sellingAsset: strin
   }
 
   const horizonURL = getRandomURL(horizonURLs)
-  const createURL = () => String(new URL(`/order_book?${qs.stringify({ ...query, cursor: "now" })}`, horizonURL))
+  const createURL = () => String(resolveHorizonEndpointURL(horizonURL, `order_book?${qs.stringify({ ...query, cursor: "now" })}`))
   const fetchUpdate = () => fetchOrderbookRecord(horizonURLs, sellingAsset, buyingAsset)
 
   let latestKnownSnapshot = ""
@@ -709,7 +716,7 @@ export async function fetchAccountData(
 ): Promise<(Horizon.AccountResponse & { home_domain?: string | undefined }) | null> {
   const horizonURL = Array.isArray(horizonURLs) ? getRandomURL(horizonURLs) : horizonURLs
   const fetchQueue = getFetchQueue(horizonURL)
-  const url = new URL(`/accounts/${accountID}?${qs.stringify(identification)}`, horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `accounts/${accountID}?${qs.stringify(identification)}`)
   const response = await fetchQueue.add(() => fetch(String(url)), { priority })
 
   if (response.status === 404) {
@@ -746,7 +753,7 @@ export async function fetchIssuedAssetsData(
   accountID: string
 ): Promise<CollectionPage<AssetRecord>> {
   const fetchQueue = getFetchQueue(horizonURL)
-  const url = new URL(`/assets?${qs.stringify({ asset_issuer: accountID })}`, horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `assets?${qs.stringify({ asset_issuer: accountID })}`)
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 2 })
 
   if (response.status === 404) {
@@ -767,13 +774,13 @@ export async function fetchIssuedAssetsData(
 
 export async function fetchLatestAccountEffect(horizonURL: string, accountID: string) {
   const fetchQueue = getFetchQueue(horizonURL)
-  const url = new URL(
-    `/accounts/${accountID}/effects?${qs.stringify({
+  const url = resolveHorizonEndpointURL(
+    horizonURL,
+    `accounts/${accountID}/effects?${qs.stringify({
       ...identification,
       limit: 1,
       order: "desc"
-    })}`,
-    horizonURL
+    })}`
   )
 
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 2 })
@@ -802,9 +809,9 @@ export async function fetchAccountTransactions(
     limit: options.limit,
     order: options.order
   }
-  const url = new URL(
-    `/accounts/${accountID}/transactions?${qs.stringify({ ...identification, ...pagination })}`,
-    horizonURL
+  const url = resolveHorizonEndpointURL(
+    horizonURL,
+    `accounts/${accountID}/transactions?${qs.stringify({ ...identification, ...pagination })}`
   )
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
 
@@ -837,7 +844,7 @@ export async function fetchAccountOpenOrders(
 ) {
   const horizonURL = getRandomURL(horizonURLs)
   const fetchQueue = getFetchQueue(horizonURL)
-  const url = new URL(`/accounts/${accountID}/offers?${qs.stringify({ ...identification, ...options })}`, horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `accounts/${accountID}/offers?${qs.stringify({ ...identification, ...options })}`)
 
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
 
@@ -846,7 +853,7 @@ export async function fetchAccountOpenOrders(
 
 export async function fetchFeeStats(horizonURL: string): Promise<FeeStats> {
   const fetchQueue = getFetchQueue(horizonURL)
-  const url = new URL("/fee_stats", horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, "fee_stats")
 
   const response = await fetchQueue.add(() => fetch(url.toString()), {
     priority: 10
@@ -868,7 +875,7 @@ export async function fetchOrderbookRecord(horizonURLs: string[], sellingAsset: 
   const horizonURL = getRandomURL(horizonURLs)
   const fetchQueue = getFetchQueue(horizonURL)
   const query = createOrderbookQuery(parseAssetID(sellingAsset), parseAssetID(buyingAsset))
-  const url = new URL(`/order_book?${qs.stringify({ ...identification, ...query })}`, horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `order_book?${qs.stringify({ ...identification, ...query })}`)
 
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
   return parseJSONResponse<Horizon.ServerApi.OrderbookRecord>(response)
@@ -876,9 +883,70 @@ export async function fetchOrderbookRecord(horizonURLs: string[], sellingAsset: 
 
 export async function fetchTimebounds(horizonURL: string, timeout: number) {
   const fetchQueue = getFetchQueue(horizonURL)
-  const horizon = new Horizon.Server(horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `fee_stats?${qs.stringify(identification)}`)
 
-  return fetchQueue.add(() => horizon.fetchTimebounds(timeout), {
-    priority: 10
-  })
+  const response = await fetchQueue.add(() => fetch(String(url)), { priority: 10 })
+
+  if (!response.ok) {
+    throw CustomError("RequestFailedError", `Request to ${url} failed with status code ${response.status}`, {
+      target: url.toString(),
+      status: response.status
+    })
+  }
+
+  const dateHeader = response.headers.get("date")
+  const parsedServerTime = dateHeader ? Math.floor(Date.parse(dateHeader) / 1000) : Number.NaN
+  const currentTime = Number.isNaN(parsedServerTime) ? Math.floor(Date.now() / 1000) : parsedServerTime
+
+  return {
+    minTime: 0,
+    maxTime: currentTime + timeout
+  }
+}
+
+export async function probeHorizonServer(horizonURL: string): Promise<HorizonServerProbe> {
+  const fetchQueue = getFetchQueue(horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `accounts/${horizonProbeAccountID}?${qs.stringify(identification)}`)
+
+  try {
+    const response = await fetchQueue.add(() =>
+      Promise.race([
+        fetch(String(url)),
+        delay(10_000).then(() => {
+          throw Error("Timed out while waiting for Horizon.")
+        })
+      ])
+    )
+
+    if (!response.ok) {
+      let message = `Request failed with status ${response.status}.`
+
+      try {
+        const text = await response.text()
+        if (text) {
+          message = text
+        }
+      } catch (error) {
+        // ignore parsing failures while probing
+      }
+
+      return {
+        message,
+        ok: false,
+        status: response.status
+      }
+    }
+
+    await parseJSONResponse(response)
+
+    return {
+      ok: true,
+      status: response.status
+    }
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : String(error),
+      ok: false
+    }
+  }
 }

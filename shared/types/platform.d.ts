@@ -20,7 +20,10 @@ declare namespace Platform {
   export interface SettingsData {
     agreedToTermsAt?: string
     biometricLock: boolean
+    customMainnetHorizonURL?: string
     hideMemos: boolean
+    onlyCustomMainnetHorizon: boolean
+    useCustomMainnetHorizon: boolean
     multisignature: boolean
     testnet: boolean
     trustedServices: TrustedService[]

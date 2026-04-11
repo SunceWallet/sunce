@@ -122,7 +122,10 @@ const defaultTestingKeys: KeysData<PublicKeyData> = {
 const defaultSettings: Platform.SettingsData = {
   agreedToTermsAt: "2019-01-17T07:34:05.688Z",
   biometricLock: false,
+  customMainnetHorizonURL: undefined,
   multisignature: true,
+  onlyCustomMainnetHorizon: false,
+  useCustomMainnetHorizon: false,
   testnet: true,
   trustedServices: [],
   hideMemos: false,
