@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react'
 import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { nodePolyfills } from '@troggy/vite-plugin-node-polyfills'
+import { VitePWA } from 'vite-plugin-pwa'
+import { pwaOptions } from './pwa-manifest'
 
 
 const __dirname = join(dirname(fileURLToPath(import.meta.url)), "")
@@ -51,6 +53,7 @@ export default defineConfig(({ mode }) => {
       react({
         jsxRuntime: 'classic',
       }),
+      ...(!isCordova ? [VitePWA(pwaOptions)] : []),
       {
         name: 'rename',
         enforce: 'post',
