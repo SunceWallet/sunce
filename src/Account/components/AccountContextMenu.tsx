@@ -16,6 +16,7 @@ import StorageIcon from "@material-ui/icons/Storage"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff"
 import { Account } from "~App/contexts/accounts"
+import { AppModeContext } from "~App/contexts/appMode"
 import { SettingsContextType } from "~App/contexts/settings"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useIsMobile } from "~Generic/hooks/userinterface"
@@ -90,15 +91,18 @@ function LiveAccountContextMenuItems(
   const isSigner = accountData.signers.some(signer => signer.key === props.account.publicKey)
   const activated = isFunded && isSigner
   const { t } = useTranslation()
+  const { noDexMode } = React.useContext(AppModeContext)
 
   return (
     <>
-      <AccountContextMenuItem
-        disabled={!activated || !props.onTrade}
-        icon={<SwapHorizIcon style={{ transform: "scale(1.2)" }} />}
-        label={t("account.context-menu.trade.label")}
-        onClick={closeAndCall(props.onTrade)}
-      />
+      {noDexMode ? null : (
+        <AccountContextMenuItem
+          disabled={!activated || !props.onTrade}
+          icon={<SwapHorizIcon style={{ transform: "scale(1.2)" }} />}
+          label={t("account.context-menu.trade.label")}
+          onClick={closeAndCall(props.onTrade)}
+        />
+      )}
       {/* Temporarily hidden due to underdeveloped functionality and potential Apple moderation complexity */}
       {/* <AccountContextMenuItem
         disabled={!isSigner || !props.onDeposit}
