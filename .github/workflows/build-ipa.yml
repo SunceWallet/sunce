@@ -14,13 +14,13 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-26
     environment: ${{ github.event.inputs.secret_source == 'kosta' && 'Kosta Dev' || '' }}
 
     steps:
       - uses: maxim-lobanov/setup-xcode@v1.6.0  # или последняя версия
         with:
-          xcode-version: '16'
+          xcode-version: '26'
 
       - uses: actions/checkout@v4
 
