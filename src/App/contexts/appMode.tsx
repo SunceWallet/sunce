@@ -1,6 +1,6 @@
 import React from "react"
 import { hash } from "@stellar/stellar-sdk"
-import { StellarContext } from "~App/contexts/stellar"
+import { useHorizonURLs } from "~Generic/hooks/stellar"
 import { workers } from "~Workers/worker-controller"
 import { trackError } from "./notifications"
 import { AccountsContext } from "./accounts"
@@ -8,7 +8,6 @@ import { AccountsContext } from "./accounts"
 const DEX_ENABLED_ASSET_ISSUER_HASH = "ef63b608a128f3b25131b23dcd8fb49ff14ff5ec5604b9519b6938c1ff51cbde"
 
 interface ContextType {
-  isIOS: boolean
   noDexMode: boolean
 }
 
@@ -19,17 +18,17 @@ function sha256Hex(value: string) {
 }
 
 const AppModeContext = React.createContext<ContextType>({
-  isIOS,
   noDexMode: isIOS
 })
 
 export function AppModeProvider(props: { children: React.ReactNode }) {
   const { accounts } = React.useContext(AccountsContext)
-  const stellar = React.useContext(StellarContext)
+  const pubnetHorizonURLs = useHorizonURLs(false, false)
+  const testnetHorizonURLs = useHorizonURLs(true, false)
   const [noDexMode, setNoDexMode] = React.useState(isIOS)
 
   React.useEffect(() => {
-    if (!isIOS || stellar.isSelectionPending) {
+    if (!isIOS || !pubnetHorizonURLs || !testnetHorizonURLs) {
       return
     }
 
@@ -39,7 +38,7 @@ export function AppModeProvider(props: { children: React.ReactNode }) {
       const { netWorker } = await workers
 
       for (const account of accounts) {
-        const horizonURLs = account.testnet ? stellar.testnetHorizonURLs : stellar.pubnetHorizonURLs
+        const horizonURLs = account.testnet ? testnetHorizonURLs : pubnetHorizonURLs
         const accountData = await netWorker.fetchAccountData(horizonURLs, account.accountID)
         const hasDexAsset =
           accountData &&
@@ -65,11 +64,10 @@ export function AppModeProvider(props: { children: React.ReactNode }) {
     return () => {
       cancelled = true
     }
-  }, [accounts, stellar.isSelectionPending, stellar.pubnetHorizonURLs, stellar.testnetHorizonURLs])
+  }, [accounts, pubnetHorizonURLs, testnetHorizonURLs])
 
   const contextValue = React.useMemo(
     () => ({
-      isIOS,
       noDexMode
     }),
     [noDexMode]
