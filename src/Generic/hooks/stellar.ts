@@ -18,6 +18,8 @@ import { mapSuspendables } from "../lib/suspense"
 import { accountDataCache, accountHomeDomainCache, stellarTomlCache } from "./_caches"
 import { useNetWorker } from "./workers"
 
+type HorizonURLsResult<Suspending extends boolean> = Suspending extends false ? string[] | null : string[]
+
 /** @deprecated */
 export function useHorizon(testnet: boolean = false) {
   const horizonURLs = useHorizonURLs(testnet)
@@ -26,15 +28,21 @@ export function useHorizon(testnet: boolean = false) {
   return testnet ? new Horizon.Server(horizonURL) : new Horizon.Server(horizonURL)
 }
 
-export function useHorizonURLs(testnet: boolean = false) {
+export function useHorizonURLs<Suspending extends boolean = true>(
+  testnet: boolean = false,
+  suspending: Suspending = true as Suspending
+): HorizonURLsResult<Suspending> {
   const stellar = React.useContext(StellarContext)
 
   if (stellar.isSelectionPending) {
-    throw stellar.pendingSelection
+    if (suspending) {
+      throw stellar.pendingSelection
+    }
+    return null as HorizonURLsResult<Suspending>
   }
 
   const horizonURLs = testnet ? stellar.testnetHorizonURLs : stellar.pubnetHorizonURLs
-  return horizonURLs
+  return horizonURLs as HorizonURLsResult<Suspending>
 }
 
 export function useFederationLookup() {

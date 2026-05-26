@@ -1,5 +1,6 @@
 import React from "react"
 import { AccountsProvider } from "../contexts/accounts"
+import { AppModeProvider } from "../contexts/appMode"
 import { CachingProviders } from "../contexts/caches"
 import { NotificationsProvider } from "../contexts/notifications"
 import { SettingsProvider } from "../contexts/settings"
@@ -15,19 +16,21 @@ export function ContextProviders(props: { children: React.ReactNode }) {
     <SettingsProvider>
       <StellarProvider>
         <AccountsProvider>
-          <SavedAddressesProvider>
-            <HiddenSendersProvider>
-              <TransactionRequestProvider>
-                <CachingProviders>
-                  <NotificationsProvider>
-                    <DialogsProvider>
-                      <SignatureDelegationProvider>{props.children}</SignatureDelegationProvider>
-                    </DialogsProvider>
-                  </NotificationsProvider>
-                </CachingProviders>
-              </TransactionRequestProvider>
-            </HiddenSendersProvider>
-          </SavedAddressesProvider>
+          <AppModeProvider>
+            <SavedAddressesProvider>
+              <HiddenSendersProvider>
+                <TransactionRequestProvider>
+                  <CachingProviders>
+                    <NotificationsProvider>
+                      <DialogsProvider>
+                        <SignatureDelegationProvider>{props.children}</SignatureDelegationProvider>
+                      </DialogsProvider>
+                    </NotificationsProvider>
+                  </CachingProviders>
+                </TransactionRequestProvider>
+              </HiddenSendersProvider>
+            </SavedAddressesProvider>
+          </AppModeProvider>
         </AccountsProvider>
       </StellarProvider>
     </SettingsProvider>

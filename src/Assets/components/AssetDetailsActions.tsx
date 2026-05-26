@@ -6,6 +6,7 @@ import ClearIcon from "@material-ui/icons/Clear"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
 import SendIcon from "@material-ui/icons/Send"
 import { Account } from "~App/contexts/accounts"
+import { AppModeContext } from "~App/contexts/appMode"
 import { trackError } from "~App/contexts/notifications"
 import * as routes from "~App/routes"
 import { CompactDialogTransition } from "~App/theme"
@@ -34,6 +35,7 @@ function AssetDetailsActions(props: Props) {
   const [txCreationPending, setTxCreationPending] = React.useState(false)
   const router = useRouter()
   const { t } = useTranslation()
+  const { noDexMode } = React.useContext(AppModeContext)
 
   const accountData = useLiveAccountData(account.accountID, account.testnet)
 
@@ -90,9 +92,11 @@ function AssetDetailsActions(props: Props) {
             <ActionButton icon={<ClearIcon />} onClick={removeThisAsset} type="secondary">
               {t("account.add-asset.action.remove")}
             </ActionButton>
-            <ActionButton icon={<SwapHorizIcon />} onClick={tradeThisAsset} type="primary">
-              {t("account.add-asset.action.trade")}
-            </ActionButton>
+            {noDexMode ? null : (
+              <ActionButton icon={<SwapHorizIcon />} onClick={tradeThisAsset} type="primary">
+                {t("account.add-asset.action.trade")}
+              </ActionButton>
+            )}
             <ActionButton icon={<SendIcon />} onClick={sendThisAsset} type="primary">
               {t("account.action.send")}
             </ActionButton>
