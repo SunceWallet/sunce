@@ -99,7 +99,7 @@
     "threads": "^1.7.0"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^7.6.8",
+    "@storybook/addon-actions": "^9.0.8",
     "@storybook/addons": "^7.6.8",
     "@storybook/cli": "^8.6.7",
     "@storybook/react": "^8.6.7",
