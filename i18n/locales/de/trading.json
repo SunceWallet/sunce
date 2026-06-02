@@ -7,25 +7,25 @@
     "buy": {
       "description": "Einen bestimmten Betrag eines Assets an der dezentralen Börse kaufen",
       "label": "Asset kaufen",
-      "label-short": "Buy"
+      "label-short": "Kaufen"
     },
     "buy-order": {
-      "label": "Buy order"
+      "label": "Kauforder"
     },
     "orders": {
-      "label": "Orders"
+      "label": "Aufträge"
     },
     "sell": {
       "description": "Einen bestimmten Betrag eines Assets gegen ein anderes tauschen",
       "label": "Asset verkaufen",
-      "label-short": "Sell"
+      "label-short": "Verkaufen"
     },
     "sell-order": {
-      "label": "Sell order"
+      "label": "Verkaufsorder"
     },
     "swap": {
-      "description": "Convert one asset to another now",
-      "label": "Swap"
+      "description": "Ein Asset sofort in ein anderes tauschen",
+      "label": "Tauschen"
     }
   },
   "advanced": {
@@ -65,55 +65,55 @@
   "issuance": "Asset {{ asset }} wird von Ihrem Konto ausgegeben. Beim Handel werden neue Token erstellt.",
   "swap": {
     "action": {
-      "enter-amount": "Enter amount",
-      "finding-price": "Finding price...",
-      "submit": "Swap"
+      "enter-amount": "Betrag eingeben",
+      "finding-price": "Preis wird gesucht...",
+      "submit": "Tauschen"
     },
     "allowed-price-change": {
-      "helper": "If the price changes more than this before signing, the swap will be cancelled.",
-      "high-warning": "High allowed price change may allow a worse rate.",
-      "label": "Allowed price change",
-      "maximum-paid": "Maximum paid: {{amount}} {{asset}}",
-      "minimum-received": "Minimum received: {{amount}} {{asset}}"
+      "helper": "Wenn sich der Preis vor dem Signieren stärker ändert, wird der Tausch abgebrochen.",
+      "high-warning": "Eine hohe erlaubte Preisänderung kann einen schlechteren Kurs zulassen.",
+      "label": "Erlaubte Preisänderung",
+      "maximum-paid": "Maximal gezahlt: {{amount}} {{asset}}",
+      "minimum-received": "Mindestens erhalten: {{amount}} {{asset}}"
     },
     "empty": {
-      "add-asset-action": "Add asset",
-      "add-asset-message": "Add another asset before you can swap."
+      "add-asset-action": "Asset hinzufügen",
+      "add-asset-message": "Fügen Sie ein weiteres Asset hinzu, bevor Sie tauschen können."
     },
     "inputs": {
       "destination": {
-        "estimated": "Estimated received",
-        "label": "You receive"
+        "estimated": "Geschätzt erhalten",
+        "label": "Sie erhalten"
       },
       "source": {
-        "estimated": "Estimated paid",
-        "label": "You pay"
+        "estimated": "Geschätzt gezahlt",
+        "label": "Sie zahlen"
       }
     },
     "quote": {
-      "failed": "Could not get a price. Try again.",
-      "loading": "Finding price...",
-      "price-changed": "Price changed. Review the new amount before swapping.",
+      "failed": "Preis konnte nicht ermittelt werden. Versuchen Sie es erneut.",
+      "loading": "Preis wird gesucht...",
+      "price-changed": "Der Preis hat sich geändert. Prüfen Sie den neuen Betrag vor dem Tausch.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "route": "Route: through {{route}}",
-      "summary": "You pay {{sourceAmount}} {{sourceAsset}} and receive about {{destinationAmount}} {{destinationAsset}}.",
-      "unavailable": "These assets cannot be swapped right now. Try a smaller amount or choose another asset.",
-      "updating": "Updating price..."
+      "route": "Route: über {{route}}",
+      "summary": "Sie zahlen {{sourceAmount}} {{sourceAsset}} und erhalten etwa {{destinationAmount}} {{destinationAsset}}.",
+      "unavailable": "Diese Assets können derzeit nicht getauscht werden. Versuchen Sie einen kleineren Betrag oder wählen Sie ein anderes Asset.",
+      "updating": "Preis wird aktualisiert..."
     },
     "swap-direction": {
-      "label": "Switch assets"
+      "label": "Assets tauschen"
     },
     "validation": {
-      "destination-asset-missing": "Choose the asset you receive.",
-      "destination-asset-unavailable": "Choose an asset this account can receive.",
-      "invalid-amount": "Enter an amount greater than zero.",
-      "no-quote": "No price is available yet.",
-      "not-enough-balance": "Not enough {{asset}}.",
-      "receiving-capacity-exceeded": "Your {{asset}} wallet limit is too low to receive this amount.",
-      "same-asset": "Choose two different assets.",
-      "source-asset-missing": "Choose the asset you pay.",
-      "stale-quote": "Updating price...",
-      "xlm-max-reserve-helper": "Max leaves XLM for network fees."
+      "destination-asset-missing": "Wählen Sie das Asset, das Sie erhalten.",
+      "destination-asset-unavailable": "Wählen Sie ein Asset, das dieses Konto empfangen kann.",
+      "invalid-amount": "Geben Sie einen Betrag größer als null ein.",
+      "no-quote": "Noch kein Preis verfügbar.",
+      "not-enough-balance": "Nicht genug {{asset}}.",
+      "receiving-capacity-exceeded": "Ihr {{asset}}-Wallet-Limit ist zu niedrig, um diesen Betrag zu empfangen.",
+      "same-asset": "Wählen Sie zwei verschiedene Assets.",
+      "source-asset-missing": "Wählen Sie das Asset, das Sie zahlen.",
+      "stale-quote": "Preis wird aktualisiert...",
+      "xlm-max-reserve-helper": "Max lässt XLM für Netzwerkgebühren übrig."
     }
   },
   "title": "Handel",

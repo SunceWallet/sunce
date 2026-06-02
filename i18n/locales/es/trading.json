@@ -7,25 +7,25 @@
     "buy": {
       "description": "Adquirir alguna cantidad de un activo en el intercambio distribuido",
       "label": "Adquirir activo",
-      "label-short": "Buy"
+      "label-short": "Comprar"
     },
     "buy-order": {
-      "label": "Buy order"
+      "label": "Orden de compra"
     },
     "orders": {
-      "label": "Orders"
+      "label": "Órdenes"
     },
     "sell": {
       "description": "Negociar algún monto de un activo a cambio de otro",
       "label": "Vender activo",
-      "label-short": "Sell"
+      "label-short": "Vender"
     },
     "sell-order": {
-      "label": "Sell order"
+      "label": "Orden de venta"
     },
     "swap": {
-      "description": "Convert one asset to another now",
-      "label": "Swap"
+      "description": "Convertir un activo en otro ahora",
+      "label": "Intercambiar"
     }
   },
   "advanced": {
@@ -65,55 +65,55 @@
   "issuance": "Activo {{ asset }} es emitido por su cuenta. Se acuñarán nuevos tokens al comerciar",
   "swap": {
     "action": {
-      "enter-amount": "Enter amount",
-      "finding-price": "Finding price...",
-      "submit": "Swap"
+      "enter-amount": "Introduce un monto",
+      "finding-price": "Buscando precio...",
+      "submit": "Intercambiar"
     },
     "allowed-price-change": {
-      "helper": "If the price changes more than this before signing, the swap will be cancelled.",
-      "high-warning": "High allowed price change may allow a worse rate.",
-      "label": "Allowed price change",
-      "maximum-paid": "Maximum paid: {{amount}} {{asset}}",
-      "minimum-received": "Minimum received: {{amount}} {{asset}}"
+      "helper": "Si el precio cambia más que esto antes de firmar, el intercambio se cancelará.",
+      "high-warning": "Un cambio de precio permitido alto puede permitir una tasa peor.",
+      "label": "Cambio de precio permitido",
+      "maximum-paid": "Máximo pagado: {{amount}} {{asset}}",
+      "minimum-received": "Mínimo recibido: {{amount}} {{asset}}"
     },
     "empty": {
-      "add-asset-action": "Add asset",
-      "add-asset-message": "Add another asset before you can swap."
+      "add-asset-action": "Añadir activo",
+      "add-asset-message": "Añade otro activo antes de poder intercambiar."
     },
     "inputs": {
       "destination": {
-        "estimated": "Estimated received",
-        "label": "You receive"
+        "estimated": "Recibido estimado",
+        "label": "Recibes"
       },
       "source": {
-        "estimated": "Estimated paid",
-        "label": "You pay"
+        "estimated": "Pagado estimado",
+        "label": "Pagas"
       }
     },
     "quote": {
-      "failed": "Could not get a price. Try again.",
-      "loading": "Finding price...",
-      "price-changed": "Price changed. Review the new amount before swapping.",
+      "failed": "No se pudo obtener un precio. Inténtalo de nuevo.",
+      "loading": "Buscando precio...",
+      "price-changed": "El precio cambió. Revisa el nuevo monto antes de intercambiar.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "route": "Route: through {{route}}",
-      "summary": "You pay {{sourceAmount}} {{sourceAsset}} and receive about {{destinationAmount}} {{destinationAsset}}.",
-      "unavailable": "These assets cannot be swapped right now. Try a smaller amount or choose another asset.",
-      "updating": "Updating price..."
+      "route": "Ruta: a través de {{route}}",
+      "summary": "Pagas {{sourceAmount}} {{sourceAsset}} y recibes aproximadamente {{destinationAmount}} {{destinationAsset}}.",
+      "unavailable": "Estos activos no se pueden intercambiar ahora. Prueba con un monto menor o elige otro activo.",
+      "updating": "Actualizando precio..."
     },
     "swap-direction": {
-      "label": "Switch assets"
+      "label": "Cambiar activos"
     },
     "validation": {
-      "destination-asset-missing": "Choose the asset you receive.",
-      "destination-asset-unavailable": "Choose an asset this account can receive.",
-      "invalid-amount": "Enter an amount greater than zero.",
-      "no-quote": "No price is available yet.",
-      "not-enough-balance": "Not enough {{asset}}.",
-      "receiving-capacity-exceeded": "Your {{asset}} wallet limit is too low to receive this amount.",
-      "same-asset": "Choose two different assets.",
-      "source-asset-missing": "Choose the asset you pay.",
-      "stale-quote": "Updating price...",
-      "xlm-max-reserve-helper": "Max leaves XLM for network fees."
+      "destination-asset-missing": "Elige el activo que recibes.",
+      "destination-asset-unavailable": "Elige un activo que esta cuenta pueda recibir.",
+      "invalid-amount": "Introduce un monto mayor que cero.",
+      "no-quote": "Aún no hay precio disponible.",
+      "not-enough-balance": "No hay suficiente {{asset}}.",
+      "receiving-capacity-exceeded": "El límite de tu billetera {{asset}} es demasiado bajo para recibir este monto.",
+      "same-asset": "Elige dos activos diferentes.",
+      "source-asset-missing": "Elige el activo que pagas.",
+      "stale-quote": "Actualizando precio...",
+      "xlm-max-reserve-helper": "Max deja XLM para las comisiones de red."
     }
   },
   "title": "Negociar",

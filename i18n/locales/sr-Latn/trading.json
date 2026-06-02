@@ -7,25 +7,25 @@
     "buy": {
       "description": "Kupi određenu količinu aktive na decentralizovanoj berzi",
       "label": "Kupi aktivu",
-      "label-short": "Buy"
+      "label-short": "Kupi"
     },
     "buy-order": {
-      "label": "Buy order"
+      "label": "Nalog za kupovinu"
     },
     "orders": {
-      "label": "Orders"
+      "label": "Nalozi"
     },
     "sell": {
       "description": "Zameni određenu količinu aktive za drugu",
       "label": "Prodaj aktivu",
-      "label-short": "Sell"
+      "label-short": "Prodaj"
     },
     "sell-order": {
-      "label": "Sell order"
+      "label": "Nalog za prodaju"
     },
     "swap": {
-      "description": "Convert one asset to another now",
-      "label": "Swap"
+      "description": "Odmah zameni jednu aktivu za drugu",
+      "label": "Zameni"
     }
   },
   "advanced": {
@@ -65,55 +65,55 @@
   "issuance": "Aktiva {{ asset }} je izdata sa tvog računa. Novi tokeni će biti kreirani tokom trgovine",
   "swap": {
     "action": {
-      "enter-amount": "Enter amount",
-      "finding-price": "Finding price...",
-      "submit": "Swap"
+      "enter-amount": "Unesi količinu",
+      "finding-price": "Traženje cene...",
+      "submit": "Zameni"
     },
     "allowed-price-change": {
-      "helper": "If the price changes more than this before signing, the swap will be cancelled.",
-      "high-warning": "High allowed price change may allow a worse rate.",
-      "label": "Allowed price change",
-      "maximum-paid": "Maximum paid: {{amount}} {{asset}}",
-      "minimum-received": "Minimum received: {{amount}} {{asset}}"
+      "helper": "Ako se cena promeni više od ovoga pre potpisivanja, zamena će biti otkazana.",
+      "high-warning": "Visoka dozvoljena promena cene može omogućiti lošiji kurs.",
+      "label": "Dozvoljena promena cene",
+      "maximum-paid": "Maksimalno plaćeno: {{amount}} {{asset}}",
+      "minimum-received": "Minimalno primljeno: {{amount}} {{asset}}"
     },
     "empty": {
-      "add-asset-action": "Add asset",
-      "add-asset-message": "Add another asset before you can swap."
+      "add-asset-action": "Dodaj aktivu",
+      "add-asset-message": "Dodaj još jednu aktivu pre nego što možeš da menjaš."
     },
     "inputs": {
       "destination": {
-        "estimated": "Estimated received",
-        "label": "You receive"
+        "estimated": "Procenjeni prijem",
+        "label": "Primaš"
       },
       "source": {
-        "estimated": "Estimated paid",
-        "label": "You pay"
+        "estimated": "Procenjeno plaćanje",
+        "label": "Plaćaš"
       }
     },
     "quote": {
-      "failed": "Could not get a price. Try again.",
-      "loading": "Finding price...",
-      "price-changed": "Price changed. Review the new amount before swapping.",
+      "failed": "Nije moguće dobiti cenu. Pokušaj ponovo.",
+      "loading": "Traženje cene...",
+      "price-changed": "Cena se promenila. Pregledaj novu količinu pre zamene.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "route": "Route: through {{route}}",
-      "summary": "You pay {{sourceAmount}} {{sourceAsset}} and receive about {{destinationAmount}} {{destinationAsset}}.",
-      "unavailable": "These assets cannot be swapped right now. Try a smaller amount or choose another asset.",
-      "updating": "Updating price..."
+      "route": "Ruta: preko {{route}}",
+      "summary": "Plaćaš {{sourceAmount}} {{sourceAsset}} i primaš oko {{destinationAmount}} {{destinationAsset}}.",
+      "unavailable": "Ove aktive trenutno ne mogu da se zamene. Pokušaj manju količinu ili izaberi drugu aktivu.",
+      "updating": "Ažuriranje cene..."
     },
     "swap-direction": {
-      "label": "Switch assets"
+      "label": "Zameni aktive mesta"
     },
     "validation": {
-      "destination-asset-missing": "Choose the asset you receive.",
-      "destination-asset-unavailable": "Choose an asset this account can receive.",
-      "invalid-amount": "Enter an amount greater than zero.",
-      "no-quote": "No price is available yet.",
-      "not-enough-balance": "Not enough {{asset}}.",
-      "receiving-capacity-exceeded": "Your {{asset}} wallet limit is too low to receive this amount.",
-      "same-asset": "Choose two different assets.",
-      "source-asset-missing": "Choose the asset you pay.",
-      "stale-quote": "Updating price...",
-      "xlm-max-reserve-helper": "Max leaves XLM for network fees."
+      "destination-asset-missing": "Izaberi aktivu koju primaš.",
+      "destination-asset-unavailable": "Izaberi aktivu koju ovaj račun može da primi.",
+      "invalid-amount": "Unesi količinu veću od nule.",
+      "no-quote": "Cena još nije dostupna.",
+      "not-enough-balance": "Nema dovoljno {{asset}}.",
+      "receiving-capacity-exceeded": "Limit tvog {{asset}} novčanika je prenizak za prijem ove količine.",
+      "same-asset": "Izaberi dve različite aktive.",
+      "source-asset-missing": "Izaberi aktivu kojom plaćaš.",
+      "stale-quote": "Ažuriranje cene...",
+      "xlm-max-reserve-helper": "Maks ostavlja XLM za mrežne naknade."
     }
   },
   "title": "Trgovina",
