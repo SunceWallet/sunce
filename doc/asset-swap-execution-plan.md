@@ -5,8 +5,8 @@
 - Asset Swap is part of the existing Trade flow.
 - Swap is the default option under Trade.
 - Buy and Sell remain separate flows for order placement.
-- Slippage tolerance is user-selectable with simple presets: 0.5%, 1%, 2%, and 5%.
-- Default slippage tolerance is 1%.
+- Price tolerance is user-selectable with simple presets: 0.5%, 1%, 2%, and 5%.
+- Default price tolerance is 1%.
 - The UI stays simple and reuses existing wallet components where possible.
 - When Trade is opened from an asset details screen, preselect that asset as `You pay`.
 
@@ -24,21 +24,31 @@
 6. If the user edits the derived field, it becomes primary and the other field becomes derived.
 7. Add a source/destination swap button between the two controls.
 8. When the source/destination swap button is clicked, swap both amount+asset pairs and invert the quoted direction. Example: `10 XLM` for derived `0.12 EURMTL` becomes `0.12 EURMTL` for derived `10 XLM`.
-9. Show quote states inline:
+9. Show price/quote states inline:
    - Finding best path.
    - No conversion path found.
    - Quote failed.
-   - Quote updating.
-   - Quote expired.
+   - Updating price.
+   - Price changed.
 10. After quote loads, show a plain-language summary such as `You pay 10 XLM and receive about 0.12 EURMTL.`
 11. Show the effective rate, for example `1 XLM ≈ 0.012 EURMTL`.
-12. Show the path only when useful. For direct paths, omit it. For multi-hop paths, show compact text such as `via USDC`.
-13. Show a compact slippage control below the quote details or near the submit action.
-14. Slippage control options are `0.5%`, `1%`, `2%`, and `5%`, with `1%` selected by default.
-15. Show slippage consequence in plain language:
+12. Show the path only when useful. For direct paths, omit it. For short multi-hop paths, show compact text such as `via USDC`. For longer paths, hide the full route behind a `Details` affordance.
+13. Show a compact price tolerance control below the quote details or near the submit action.
+14. Price tolerance control options are `0.5%`, `1%`, `2%`, and `5%`, with `1%` selected by default.
+15. Show price tolerance consequence in plain language:
    - If `You pay` is primary: `Minimum received: ...`.
    - If `You receive` is primary: `Maximum paid: ...`.
 16. Submit action label: `Swap`.
+
+## UI Copy Principles
+
+- Use `You pay` and `You receive` in visible UI; do not use `source` and `destination` in user-facing labels.
+- Use `Price tolerance` in visible UI; avoid `slippage` unless it appears in optional explanatory text.
+- Use `Updating price...` instead of `Quote expired` while refreshing a stale quote.
+- Use `Price changed. Review the new amount before swapping.` when a refreshed quote materially changes.
+- Use `Minimum received` and `Maximum paid` to explain price tolerance consequences.
+- Avoid raw Horizon, path-payment, strict-send, and strict-receive terminology in user-facing surfaces.
+- Make the main form feel like a simple conversion calculator; progressively reveal details only when they help the user decide.
 
 ## Reused Architecture
 
@@ -88,9 +98,9 @@ Responsibilities:
 - Trigger quote lookup when primary amount/assets change.
 - Show derived amount with `≈`.
 - Show available `You pay` balance below the selected pay asset.
-- Show the effective rate, route summary, and slippage-adjusted transaction bound.
+- Show the effective rate, optional route summary, and price-tolerance-adjusted transaction bound.
 - Validate balances and selected assets.
-- Track selected slippage tolerance.
+- Track selected price tolerance.
 - Track quote freshness.
 - Build and submit a path-payment transaction.
 
@@ -103,8 +113,8 @@ Responsibilities:
 - Select best quote.
 - Convert Horizon path records to SDK `Asset[]` paths.
 - Protect UI from stale Horizon responses.
-- Apply selected slippage tolerance.
-- Round slippage-adjusted bounds safely to Stellar's 7 decimal places.
+- Apply selected price tolerance.
+- Round price-tolerance-adjusted bounds safely to Stellar's 7 decimal places.
 - Re-check quote freshness before submission.
 
 ## Trade Mode Selection
@@ -113,17 +123,17 @@ The Trade screen should not force a first decision between Swap, Buy, and Sell b
 
 Recommended UI:
 
-- Show `Swap | Buy | Sell` as a compact segmented control near the top of `TradingDialog`, below the title/balances area.
+- Show `Swap | Buy order | Sell order` as a compact segmented control near the top of `TradingDialog`, below the title/balances area.
 - Default selected segment is `Swap`.
 - The Swap form is visible immediately when opening Trade.
 - Buy and Sell remain separate forms for order placement.
 - When users change mode, update the route so deep links and back navigation stay predictable.
 - Use labels that describe intent:
   - `Swap`: simple asset conversion now.
-  - `Buy`: place a buy order.
-  - `Sell`: place a sell order.
+  - `Buy order`: place a buy order.
+  - `Sell order`: place a sell order.
 
-This replaces the current two-card action choice for users who just want to swap, while preserving the advanced Buy/Sell flows.
+This replaces the current two-card action choice for users who just want to swap, while preserving the advanced Buy/Sell order-placement flows.
 
 ## Swap Direction Button
 
@@ -142,16 +152,16 @@ Behavior:
 - The new `You pay` side becomes primary.
 - The new `You receive` side becomes derived.
 - Trigger a quote refresh for the new direction.
-- Preserve selected slippage.
+- Preserve selected price tolerance.
 - Example: `10 XLM` for derived `0.12 EURMTL` becomes `0.12 EURMTL` for derived `10 XLM`.
 
-## Slippage Control
+## Price Tolerance Control
 
 Add a simple preset control to `SwapForm`.
 
 Recommended UI:
 
-- Label: `Slippage tolerance`.
+- Label: `Price tolerance`.
 - Render options as small segmented buttons or chips: `0.5%`, `1%`, `2%`, `5%`.
 - Keep `1%` selected by default.
 - Keep the control visually secondary so it does not compete with the amount fields.
@@ -161,14 +171,14 @@ Recommended UI:
 
 Behavior:
 
-- Changing slippage does not need to re-query Horizon because the best path and quoted amounts stay the same.
-- Changing slippage updates the transaction bounds used at submit time.
-- If the source amount is primary, slippage lowers the minimum accepted destination amount.
-- If the destination amount is primary, slippage raises the maximum accepted source amount.
-- Show a short helper text such as `Protects your swap if the market moves before submission.`
-- Always show the calculated bound next to the slippage control:
-  - `Minimum received` for strict-send swaps.
-  - `Maximum paid` for strict-receive swaps.
+- Changing price tolerance does not need to re-query Horizon because the best path and quoted amounts stay the same.
+- Changing price tolerance updates the transaction bounds used at submit time.
+- If the `You pay` amount is primary, price tolerance lowers the minimum accepted `You receive` amount.
+- If the `You receive` amount is primary, price tolerance raises the maximum accepted `You pay` amount.
+- Show a short helper text such as `Protects your swap if the market moves before signing.`
+- Always show the calculated bound next to the price tolerance control:
+  - `Minimum received` when the user enters `You pay`.
+  - `Maximum paid` when the user enters `You receive`.
 
 ## Horizon Quote Logic
 
@@ -181,7 +191,7 @@ horizon.strictSendPaths(sourceAsset, sourceAmount, [destinationAsset]).call()
 - Select the record with the highest `destination_amount`.
 - Derived destination amount is `destination_amount`.
 - Transaction uses strict-send.
-- Submit with `destMin = quotedDestination * (1 - selectedSlippage)`.
+- Submit with `destMin = quotedDestination * (1 - selectedPriceTolerance)`.
 - Round `destMin` down to 7 decimal places.
 
 For destination amount primary:
@@ -193,7 +203,7 @@ horizon.strictReceivePaths([sourceAsset], destinationAsset, destinationAmount).c
 - Select the record with the lowest `source_amount`.
 - Derived source amount is `source_amount`.
 - Transaction uses strict-receive.
-- Submit with `sendMax = quotedSource * (1 + selectedSlippage)`.
+- Submit with `sendMax = quotedSource * (1 + selectedPriceTolerance)`.
 - Round `sendMax` up to 7 decimal places.
 
 Implementation notes:
@@ -206,7 +216,7 @@ Implementation notes:
 - Treat quotes as stale after a short interval, such as 30 seconds.
 - Disable `Swap` while a quote is missing, loading, failed, or stale.
 - Re-query Horizon immediately before creating the transaction if the quote is stale.
-- If the refreshed quote changes materially, update the UI and ask the user to submit again instead of silently submitting a changed swap.
+- If the refreshed quote changes materially, show `Price changed. Review the new amount before swapping.` and ask the user to submit again instead of silently submitting a changed swap.
 
 ## Transaction Helper
 
@@ -221,7 +231,7 @@ createPathPaymentOperation({
   destinationAmount,
   destination,
   path,
-  slippage
+  priceTolerance
 })
 ```
 
@@ -284,6 +294,7 @@ MVP asset scope:
 - Include XLM via `showXLM`.
 - Do not add trustline creation to the swap transaction in the first implementation.
 - If the account cannot select two swappable assets, show an empty state with an `Add asset` action that routes to asset management.
+- When Trade is opened from an asset details screen, preselect that asset as `You pay` and leave `You receive` empty unless there is an explicit future product decision for a default destination asset.
 
 ## Quote Display
 
@@ -293,8 +304,8 @@ Show after a quote is available:
 
 - Plain-language summary: `You pay 10 XLM and receive about 0.12 EURMTL.`
 - Rate: `1 XLM ≈ 0.012 EURMTL`.
-- Slippage bound: `Minimum received: 0.1188 EURMTL` or `Maximum paid: 10.1 XLM`.
-- Route only if multi-hop: `via USDC` or `via USDC, EURC`.
+- Price tolerance bound: `Minimum received: 0.1188 EURMTL` or `Maximum paid: 10.1 XLM`.
+- Route only if useful: omit direct routes, show short multi-hop routes as `via USDC`, and hide longer paths behind `Details`.
 
 Show while quoting:
 
@@ -302,11 +313,12 @@ Show while quoting:
 
 Show no path:
 
-- `No path found. Try another amount or asset.`
+- `No path found. Try a smaller amount or choose another asset.`
 
-Show stale quote:
+Show stale quote or stale quote refresh:
 
-- `Quote expired. Refreshing...`
+- `Updating price...`
+- If changed materially: `Price changed. Review the new amount before swapping.`
 
 Avoid showing raw Horizon details in the main form.
 
@@ -316,6 +328,13 @@ Update `src/TransactionReview/components/Operations.tsx`:
 
 - Render `pathPaymentStrictSend` and `pathPaymentStrictReceive` as swap/path-payment operations instead of generic JSON.
 - Show source amount, source asset, destination amount, destination asset, path, and destination account.
+- Mirror the swap form language in transaction review:
+  - `Swap`.
+  - `You pay: 10 XLM`.
+  - `You receive: about 0.12 EURMTL`.
+  - `Minimum received: 0.1188 EURMTL` or `Maximum paid: 10.1 XLM`.
+  - `Price tolerance: 1%`.
+- Keep raw operation details out of the main review summary.
 
 Update `src/Generic/lib/paymentSummary.ts`:
 
@@ -335,15 +354,15 @@ Add keys to each `i18n/locales/*/trading.json` file:
 - `swap.quote.no-path`
 - `swap.quote.failed`
 - `swap.quote.updating`
-- `swap.quote.expired`
+- `swap.quote.price-changed`
 - `swap.quote.summary`
 - `swap.quote.rate`
 - `swap.quote.via`
-- `swap.slippage.label`
-- `swap.slippage.helper`
-- `swap.slippage.minimum-received`
-- `swap.slippage.maximum-paid`
-- `swap.slippage.high-warning`
+- `swap.price-tolerance.label`
+- `swap.price-tolerance.helper`
+- `swap.price-tolerance.minimum-received`
+- `swap.price-tolerance.maximum-paid`
+- `swap.price-tolerance.high-warning`
 - `swap.swap-direction.label`
 - `swap.validation.source-asset-missing`
 - `swap.validation.destination-asset-missing`
@@ -359,25 +378,25 @@ Use English as the source wording and mirror keys in all locale files.
 ## Implementation Steps
 
 1. Add route/action plumbing for Swap in `routes.ts` and `TradingDialog.tsx`.
-2. Replace the Trade landing choice with a compact `Swap | Buy | Sell` mode selector, defaulting to Swap.
+2. Replace the Trade landing choice with a compact `Swap | Buy order | Sell order` mode selector, defaulting to Swap.
 3. Keep Buy and Sell as separate flows.
 4. Pass preselected asset route params to `SwapForm` as the initial `You pay` asset.
 5. Add `SwapForm` UI using `PriceInput` and `AssetSelector`.
 6. Add the source/destination swap button and behavior.
 7. Add quote hook/lib for strict-send and strict-receive Horizon paths.
-8. Add quote display for summary, effective rate, optional path, quote status, and stale quote handling.
-9. Add slippage preset control with 0.5%, 1%, 2%, and 5% options, defaulting to 1%.
-10. Add path-payment transaction helper with selected slippage handling and safe 7-decimal rounding.
+8. Add quote display for summary, effective rate, progressively disclosed path, quote status, and stale quote handling.
+9. Add price tolerance preset control with 0.5%, 1%, 2%, and 5% options, defaulting to 1%.
+10. Add path-payment transaction helper with selected price tolerance handling and safe 7-decimal rounding.
 11. Connect form submission through existing `TransactionSender` and `createTransaction` flow.
 12. Add validation for spendable balance, destination trustline capacity, quote freshness, and no-path states.
 13. Add transaction review and history support for strict path payments.
 14. Add translation keys to all locales.
-15. Add targeted tests for quote selection, slippage rounding, direction swapping, preselected pay asset, stale quote protection, receiving capacity validation, and path-payment transaction summaries.
+15. Add targeted tests for quote selection, tolerance rounding, direction swapping, preselected pay asset, stale quote protection, receiving capacity validation, and path-payment transaction summaries.
 16. Run `npm test`.
 
 ## Non-Goals For First Implementation
 
-- No custom free-form slippage input beyond the four preset options.
+- No custom free-form price tolerance input beyond the four preset options.
 - No trustline creation during swap.
 - No manual path selection.
 - No advanced quote details unless needed for debugging.
