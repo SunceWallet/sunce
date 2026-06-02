@@ -93,7 +93,6 @@
       "loading": "Ricerca prezzo...",
       "price-changed": "Il prezzo è cambiato. Controlla il nuovo importo prima di scambiare.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "route": "Rotta: tramite {{route}}",
       "summary-strict-receive": "Paghi circa {{sourceAmount}} {{sourceAsset}} (non più di {{maxSend}} {{sourceAsset}}) e ricevi {{destinationAmount}} {{destinationAsset}}.",
       "summary-strict-send": "Paghi {{sourceAmount}} {{sourceAsset}} e ricevi circa {{destinationAmount}} {{destinationAsset}} (non meno di {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Queste risorse non possono essere scambiate ora. Prova un importo più piccolo o scegli un'altra risorsa.",

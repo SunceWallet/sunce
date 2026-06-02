@@ -93,7 +93,6 @@
       "loading": "Поиск цены...",
       "price-changed": "Цена изменилась. Проверьте новую сумму перед обменом.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "route": "Маршрут: через {{route}}",
       "summary-strict-receive": "Вы платите около {{sourceAmount}} {{sourceAsset}} (не больше {{maxSend}} {{sourceAsset}}) и получаете {{destinationAmount}} {{destinationAsset}}.",
       "summary-strict-send": "Вы платите {{sourceAmount}} {{sourceAsset}} и получите около {{destinationAmount}} {{destinationAsset}} (не меньше {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Эти активы сейчас нельзя обменять. Попробуйте меньшую сумму или выберите другой актив.",

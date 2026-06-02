@@ -67,12 +67,6 @@ function formatRate(quote: SwapQuote) {
   return formatBalance(BigNumber(quote.destinationAmount).div(quote.sourceAmount).toString(), { groupThousands: false })
 }
 
-function getRouteLabel(quote: SwapQuote) {
-  if (quote.path.length === 0) return undefined
-  if (quote.path.length <= 2) return quote.path.map(assetCode).join(", ")
-  return `${quote.path.length} assets`
-}
-
 function getReceivingCapacity(accountData: AccountData, asset: Asset) {
   if (asset.isNative()) return undefined
   const balanceLine = findMatchingBalanceLine(accountData.balances, asset)
@@ -266,7 +260,6 @@ function SwapForm(props: Props) {
   }, [allowedPriceChange, destinationAsset, horizon, primaryAmount, primarySide, props, quote, sourceAsset, formError])
 
   const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
-  const routeLabel = quote ? getRouteLabel(quote) : undefined
   const quoteSummary =
     quote && allowedPriceBound
       ? keepAmountAssetTogether(
@@ -413,11 +406,6 @@ function SwapForm(props: Props) {
             style={{ visibility: quoteHelper ? undefined : "hidden" }}
           >
             {quoteHelper || t("trading.swap.quote.loading")}
-          </Typography>
-          <Typography variant="body2" style={{ visibility: routeLabel ? undefined : "hidden" }}>
-            {routeLabel
-              ? t("trading.swap.quote.route", { route: routeLabel })
-              : t("trading.swap.quote.route", { route: "-" })}
           </Typography>
         </Box>
 
