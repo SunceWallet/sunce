@@ -291,7 +291,10 @@ function SwapForm(props: Props) {
           [
             [formatBalance(quote.sourceAmount), assetCode(quote.sourceAsset)],
             [formatBalance(quote.destinationAmount), assetCode(quote.destinationAsset)],
-            [formatBalance(allowedPriceBound), quote.mode === "strict-send" ? assetCode(quote.destinationAsset) : assetCode(quote.sourceAsset)]
+            [
+              formatBalance(allowedPriceBound),
+              quote.mode === "strict-send" ? assetCode(quote.destinationAsset) : assetCode(quote.sourceAsset)
+            ]
           ]
         )
       : undefined
@@ -377,7 +380,7 @@ function SwapForm(props: Props) {
           }
         />
         <HorizontalLayout justifyContent="center" margin="4px 0">
-          <Button size="small" aria-label={t("trading.swap.swap-direction.label")} onClick={switchAssets} variant="outlined">
+          <Button size="small" aria-label={t("trading.swap.swap-direction.label")} onClick={switchAssets}>
             <SwapVertIcon />
           </Button>
         </HorizontalLayout>
@@ -415,7 +418,9 @@ function SwapForm(props: Props) {
             {quoteHelper || t("trading.swap.quote.loading")}
           </Typography>
           <Typography variant="body2" style={{ visibility: routeLabel ? undefined : "hidden" }}>
-            {routeLabel ? t("trading.swap.quote.route", { route: routeLabel }) : t("trading.swap.quote.route", { route: "-" })}
+            {routeLabel
+              ? t("trading.swap.quote.route", { route: routeLabel })
+              : t("trading.swap.quote.route", { route: "-" })}
           </Typography>
         </Box>
 
@@ -473,12 +478,23 @@ function SwapForm(props: Props) {
                       minReceived: "-"
                     })}
                 </Typography>
-                <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
+                <ActionButton
+                  disabled={submitDisabled}
+                  loading={pending}
+                  icon={<SyncIcon />}
+                  onClick={submitForm}
+                  type="primary"
+                >
                   {t("trading.swap.action.submit")}
                 </ActionButton>
               </VerticalLayout>
             ) : (
-              <HorizontalLayout alignItems="center" justifyContent="space-between" style={{ maxWidth: 500 }} width="100%">
+              <HorizontalLayout
+                alignItems="center"
+                justifyContent="space-between"
+                style={{ maxWidth: 500 }}
+                width="100%"
+              >
                 <VerticalLayout grow={1} padding="0 24px 0 0">
                   <Typography variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
                     {quoteSummary ||
@@ -491,7 +507,13 @@ function SwapForm(props: Props) {
                       })}
                   </Typography>
                 </VerticalLayout>
-                <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
+                <ActionButton
+                  disabled={submitDisabled}
+                  loading={pending}
+                  icon={<SyncIcon />}
+                  onClick={submitForm}
+                  type="primary"
+                >
                   {t("trading.swap.action.submit")}
                 </ActionButton>
               </HorizontalLayout>
