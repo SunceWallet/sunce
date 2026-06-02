@@ -3,9 +3,10 @@ import BigNumber from "big.js"
 import { useTranslation } from "react-i18next"
 import { Asset, Transaction } from "@stellar/stellar-sdk"
 import Button from "@material-ui/core/Button"
-import ButtonGroup from "@material-ui/core/ButtonGroup"
 import ButtonBase from "@material-ui/core/ButtonBase"
 import InputAdornment from "@material-ui/core/InputAdornment"
+import Menu from "@material-ui/core/Menu"
+import MenuItem from "@material-ui/core/MenuItem"
 import Typography from "@material-ui/core/Typography"
 import SwapVertIcon from "@material-ui/icons/SwapVert"
 import SyncIcon from "@material-ui/icons/Sync"
@@ -89,6 +90,7 @@ function SwapForm(props: Props) {
   const [destinationAmount, setDestinationAmount] = React.useState("")
   const [primarySide, setPrimarySide] = React.useState<SwapSide>("source")
   const [allowedPriceChange, setAllowedPriceChange] = React.useState(0.01)
+  const [allowedPriceChangeMenuAnchor, setAllowedPriceChangeMenuAnchor] = React.useState<HTMLElement | null>(null)
   const [pending, setPending] = React.useState(false)
   const [priceChanged, setPriceChanged] = React.useState(false)
 
@@ -141,7 +143,8 @@ function SwapForm(props: Props) {
 
   const assetError = sameAssetSelected ? t<string>("trading.swap.validation.same-asset") : undefined
   const invalidAmountError = primaryAmountInvalid ? t<string>("trading.swap.validation.invalid-amount") : undefined
-  const sourceAmountForBalanceCheck = primarySide === "source" && primaryAmountIsValid ? sourceAmount : quote?.sourceAmount
+  const sourceAmountForBalanceCheck =
+    primarySide === "source" && primaryAmountIsValid ? sourceAmount : quote?.sourceAmount
   const sourceAmountExceedsBalance = Boolean(
     sourceAsset && sourceAmountForBalanceCheck && FormBigNumber(sourceAmountForBalanceCheck).gt(spendableSourceBalance)
   )
@@ -149,8 +152,8 @@ function SwapForm(props: Props) {
     primarySide === "source" && invalidAmountError
       ? invalidAmountError
       : sourceAmountExceedsBalance
-      ? t<string>("trading.swap.validation.not-enough-balance", { asset: assetCode(sourceAsset) })
-      : undefined
+        ? t<string>("trading.swap.validation.not-enough-balance", { asset: assetCode(sourceAsset) })
+        : undefined
   const destinationAmountError = primarySide === "destination" ? invalidAmountError : undefined
   const swapConstraintError = React.useMemo(() => {
     const receivingCapacity = destinationAsset ? getReceivingCapacity(props.accountData, destinationAsset) : undefined
@@ -256,17 +259,7 @@ function SwapForm(props: Props) {
     } finally {
       setPending(false)
     }
-  }, [
-    allowedPriceChange,
-    destinationAsset,
-    horizon,
-    primaryAmount,
-    primarySide,
-    props,
-    quote,
-    sourceAsset,
-    formError
-  ])
+  }, [allowedPriceChange, destinationAsset, horizon, primaryAmount, primarySide, props, quote, sourceAsset, formError])
 
   const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
   const routeLabel = quote ? getRouteLabel(quote) : undefined
@@ -288,6 +281,9 @@ function SwapForm(props: Props) {
       })}
     </ButtonBase>
   )
+  const allowedPriceChangeLabel = `${(allowedPriceChange * 100).toLocaleString(undefined, {
+    maximumFractionDigits: 1
+  })}%`
 
   return (
     <VerticalLayout
@@ -305,7 +301,9 @@ function SwapForm(props: Props) {
           helperText={sourceAmountHelperText}
           label={
             sourceAmountError ||
-            (primarySide === "source" ? t("trading.swap.inputs.source.label") : t("trading.swap.inputs.source.estimated"))
+            (primarySide === "source"
+              ? t("trading.swap.inputs.source.label")
+              : t("trading.swap.inputs.source.estimated"))
           }
           margin="normal"
           onChange={(event) => {
@@ -323,12 +321,7 @@ function SwapForm(props: Props) {
           }
         />
         <HorizontalLayout justifyContent="center" margin="4px 0">
-          <Button
-            size="small"
-            aria-label={t("trading.swap.swap-direction.label")}
-            onClick={switchAssets}
-            variant="outlined"
-          >
+          <Button size="small" aria-label={t("trading.swap.swap-direction.label")} onClick={switchAssets} variant="outlined">
             <SwapVertIcon />
           </Button>
         </HorizontalLayout>
@@ -406,22 +399,36 @@ function SwapForm(props: Props) {
         </Box>
 
         <Box margin="24px 0 0">
-          <Typography variant="body2">{t("trading.swap.allowed-price-change.label")}</Typography>
-          <ButtonGroup size="small" style={{ marginTop: 8 }}>
+          <Typography variant="body2">
+            {t("trading.swap.allowed-price-change.label")}:{" "}
+            <ButtonBase
+              onClick={(event) => setAllowedPriceChangeMenuAnchor(event.currentTarget)}
+              style={{ color: "inherit", fontSize: "inherit", fontWeight: 600, textDecoration: "underline" }}
+            >
+              {allowedPriceChangeLabel}
+            </ButtonBase>
+          </Typography>
+          <Menu
+            anchorEl={allowedPriceChangeMenuAnchor}
+            open={Boolean(allowedPriceChangeMenuAnchor)}
+            onClose={() => setAllowedPriceChangeMenuAnchor(null)}
+          >
             {allowedPriceChangeOptions.map((option) => (
-              <Button
-                color={option === allowedPriceChange ? "primary" : undefined}
+              <MenuItem
                 key={option}
-                onClick={() => setAllowedPriceChange(option)}
-                variant={option === allowedPriceChange ? "contained" : "outlined"}
+                selected={option === allowedPriceChange}
+                onClick={() => {
+                  setAllowedPriceChange(option)
+                  setAllowedPriceChangeMenuAnchor(null)
+                }}
               >
                 {(option * 100).toLocaleString(undefined, { maximumFractionDigits: 1 })}%
-              </Button>
+              </MenuItem>
             ))}
-          </ButtonGroup>
-          <Typography variant="body2" style={{ marginTop: 8 }}>
-            {t("trading.swap.allowed-price-change.helper")}
-          </Typography>
+            <MenuItem disabled style={{ whiteSpace: "normal", maxWidth: isMobile ? undefined : 280 }}>
+              {t("trading.swap.allowed-price-change.helper")}
+            </MenuItem>
+          </Menu>
           {allowedPriceBound && quote ? (
             <Typography variant="body2" style={{ marginTop: 8 }}>
               {quote.mode === "strict-send"
@@ -443,7 +450,13 @@ function SwapForm(props: Props) {
         </Box>
         <Portal target={props.dialogActionsRef.element}>
           <DialogActionsBox desktopStyle={{ marginTop: 32 }}>
-            <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
+            <ActionButton
+              disabled={submitDisabled}
+              loading={pending}
+              icon={<SyncIcon />}
+              onClick={submitForm}
+              type="primary"
+            >
               {t("trading.swap.action.submit")}
             </ActionButton>
           </DialogActionsBox>
