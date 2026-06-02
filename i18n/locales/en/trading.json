@@ -80,11 +80,11 @@
     },
     "inputs": {
       "destination": {
-        "estimated": "Estimated received",
+        "estimated": "You receive about",
         "label": "You receive"
       },
       "source": {
-        "estimated": "Estimated paid",
+        "estimated": "You pay about",
         "label": "You pay"
       }
     },
@@ -109,7 +109,6 @@
       "no-quote": "No price is available yet.",
       "not-enough-balance": "Not enough {{asset}}.",
       "receiving-capacity-exceeded": "Your {{asset}} wallet limit is too low to receive this amount.",
-      "same-asset": "Choose two different assets.",
       "source-asset-missing": "Choose the asset you pay.",
       "stale-quote": "Updating price...",
       "xlm-max-reserve-helper": "Max leaves XLM for network fees."

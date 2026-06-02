@@ -80,11 +80,11 @@
     },
     "inputs": {
       "destination": {
-        "estimated": "Ожидаемое получение",
+        "estimated": "Вы получаете около",
         "label": "Вы получаете"
       },
       "source": {
-        "estimated": "Ожидаемая оплата",
+        "estimated": "Вы платите около",
         "label": "Вы платите"
       }
     },
@@ -109,7 +109,6 @@
       "no-quote": "Цена пока недоступна.",
       "not-enough-balance": "Недостаточно {{asset}}.",
       "receiving-capacity-exceeded": "Лимит вашего кошелька {{asset}} слишком мал, чтобы получить эту сумму.",
-      "same-asset": "Выберите два разных актива.",
       "source-asset-missing": "Выберите актив, которым платите.",
       "stale-quote": "Обновление цены...",
       "xlm-max-reserve-helper": "Макс оставляет XLM для сетевых комиссий."

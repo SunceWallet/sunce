@@ -148,7 +148,6 @@ function SwapForm(props: Props) {
     }
   }, [primarySide, quote])
 
-  const assetError = sameAssetSelected ? t<string>("trading.swap.validation.same-asset") : undefined
   const invalidAmountError = primaryAmountInvalid ? t<string>("trading.swap.validation.invalid-amount") : undefined
   const sourceAmountForBalanceCheck =
     primarySide === "source" && primaryAmountIsValid ? sourceAmount : quote?.sourceAmount
@@ -169,7 +168,7 @@ function SwapForm(props: Props) {
     }
     return undefined
   }, [destinationAsset, props.accountData, quote, t])
-  const formError = Boolean(assetError || sourceAmountError || destinationAmountError || swapConstraintError)
+  const formError = Boolean(sameAssetSelected || sourceAmountError || destinationAmountError || swapConstraintError)
 
   const submitDisabled = Boolean(
     !formComplete || formError || status !== "success" || !quote || isSwapQuoteStale(quote) || pending || priceChanged
@@ -181,7 +180,6 @@ function SwapForm(props: Props) {
       assets={assets}
       disableUnderline
       showXLM
-      inputError={assetError}
       testnet={props.account.testnet}
       value={sourceAsset}
       onChange={(asset) => {
@@ -196,7 +194,6 @@ function SwapForm(props: Props) {
       assets={assets}
       disableUnderline
       showXLM
-      inputError={assetError}
       testnet={props.account.testnet}
       value={destinationAsset}
       onChange={(asset) => {

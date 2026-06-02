@@ -80,11 +80,11 @@
     },
     "inputs": {
       "destination": {
-        "estimated": "Geschätzt erhalten",
+        "estimated": "Sie erhalten etwa",
         "label": "Sie erhalten"
       },
       "source": {
-        "estimated": "Geschätzt gezahlt",
+        "estimated": "Sie zahlen etwa",
         "label": "Sie zahlen"
       }
     },
@@ -109,7 +109,6 @@
       "no-quote": "Noch kein Preis verfügbar.",
       "not-enough-balance": "Nicht genug {{asset}}.",
       "receiving-capacity-exceeded": "Ihr {{asset}}-Wallet-Limit ist zu niedrig, um diesen Betrag zu empfangen.",
-      "same-asset": "Wählen Sie zwei verschiedene Assets.",
       "source-asset-missing": "Wählen Sie das Asset, das Sie zahlen.",
       "stale-quote": "Preis wird aktualisiert...",
       "xlm-max-reserve-helper": "Max lässt XLM für Netzwerkgebühren übrig."

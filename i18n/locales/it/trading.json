@@ -80,11 +80,11 @@
     },
     "inputs": {
       "destination": {
-        "estimated": "Ricezione stimata",
+        "estimated": "Ricevi circa",
         "label": "Ricevi"
       },
       "source": {
-        "estimated": "Pagamento stimato",
+        "estimated": "Paghi circa",
         "label": "Paghi"
       }
     },
@@ -109,7 +109,6 @@
       "no-quote": "Nessun prezzo ancora disponibile.",
       "not-enough-balance": "{{asset}} insufficiente.",
       "receiving-capacity-exceeded": "Il limite del tuo portafoglio {{asset}} è troppo basso per ricevere questo importo.",
-      "same-asset": "Scegli due risorse diverse.",
       "source-asset-missing": "Scegli la risorsa che paghi.",
       "stale-quote": "Aggiornamento prezzo...",
       "xlm-max-reserve-helper": "Max lascia XLM per le commissioni di rete."

@@ -80,11 +80,11 @@
     },
     "inputs": {
       "destination": {
-        "estimated": "Процењени пријем",
+        "estimated": "Примаш око",
         "label": "Примаш"
       },
       "source": {
-        "estimated": "Процењено плаћање",
+        "estimated": "Плаћаш око",
         "label": "Плаћаш"
       }
     },
@@ -109,7 +109,6 @@
       "no-quote": "Цена још није доступна.",
       "not-enough-balance": "Нема довољно {{asset}}.",
       "receiving-capacity-exceeded": "Лимит твог {{asset}} новчаника је пренизак за пријем ове количине.",
-      "same-asset": "Изабери две различите активе.",
       "source-asset-missing": "Изабери активу којом плаћаш.",
       "stale-quote": "Ажурирање цене...",
       "xlm-max-reserve-helper": "Макс оставља XLM за мрежне накнаде."

@@ -80,11 +80,11 @@
     },
     "inputs": {
       "destination": {
-        "estimated": "Recibido estimado",
+        "estimated": "Recibes aproximadamente",
         "label": "Recibes"
       },
       "source": {
-        "estimated": "Pagado estimado",
+        "estimated": "Pagas aproximadamente",
         "label": "Pagas"
       }
     },
@@ -109,7 +109,6 @@
       "no-quote": "Aún no hay precio disponible.",
       "not-enough-balance": "No hay suficiente {{asset}}.",
       "receiving-capacity-exceeded": "El límite de tu billetera {{asset}} es demasiado bajo para recibir este monto.",
-      "same-asset": "Elige dos activos diferentes.",
       "source-asset-missing": "Elige el activo que pagas.",
       "stale-quote": "Actualizando precio...",
       "xlm-max-reserve-helper": "Max deja XLM para las comisiones de red."
