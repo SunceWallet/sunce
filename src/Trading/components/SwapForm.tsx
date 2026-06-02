@@ -109,6 +109,10 @@ function SwapForm(props: Props) {
 
   const primaryAmount = primarySide === "source" ? sourceAmount : destinationAmount
   const primaryAmountIsValid = amountIsPositive(primaryAmount)
+  const primaryAmountWasEntered = primaryAmount.length > 0
+  const primaryAmountInvalid = primaryAmountWasEntered && !primaryAmountIsValid
+  const sameAssetSelected = Boolean(sourceAsset && destinationAsset && sourceAsset.equals(destinationAsset))
+  const formComplete = Boolean(sourceAsset && destinationAsset && primaryAmountIsValid)
   const { quote, status } = useSwapQuote({
     amount: normalizeAmount(primaryAmount),
     amountIsValid: primaryAmountIsValid,
@@ -135,32 +139,31 @@ function SwapForm(props: Props) {
     }
   }, [primarySide, quote])
 
-  const validationMessage = React.useMemo(() => {
-    if (!sourceAsset) return t<string>("trading.swap.validation.source-asset-missing")
-    if (!destinationAsset) return t<string>("trading.swap.validation.destination-asset-missing")
-    if (sourceAsset.equals(destinationAsset)) return t<string>("trading.swap.validation.same-asset")
-    if (!primaryAmountIsValid) return t<string>("trading.swap.validation.invalid-amount")
-    if (quote && FormBigNumber(quote.sourceAmount).gt(spendableSourceBalance)) {
-      return t<string>("trading.swap.validation.not-enough-balance", { asset: assetCode(sourceAsset) })
-    }
+  const assetError = sameAssetSelected ? t<string>("trading.swap.validation.same-asset") : undefined
+  const invalidAmountError = primaryAmountInvalid ? t<string>("trading.swap.validation.invalid-amount") : undefined
+  const sourceAmountForBalanceCheck = primarySide === "source" && primaryAmountIsValid ? sourceAmount : quote?.sourceAmount
+  const sourceAmountExceedsBalance = Boolean(
+    sourceAsset && sourceAmountForBalanceCheck && FormBigNumber(sourceAmountForBalanceCheck).gt(spendableSourceBalance)
+  )
+  const sourceAmountError =
+    primarySide === "source" && invalidAmountError
+      ? invalidAmountError
+      : sourceAmountExceedsBalance
+      ? t<string>("trading.swap.validation.not-enough-balance", { asset: assetCode(sourceAsset) })
+      : undefined
+  const destinationAmountError = primarySide === "destination" ? invalidAmountError : undefined
+  const swapConstraintError = React.useMemo(() => {
     const receivingCapacity = destinationAsset ? getReceivingCapacity(props.accountData, destinationAsset) : undefined
     if (quote && receivingCapacity && BigNumber(quote.destinationAmount).gt(receivingCapacity)) {
       return t<string>("trading.swap.validation.receiving-capacity-exceeded", { asset: assetCode(destinationAsset) })
     }
-    if (!quote && status === "success") return t<string>("trading.swap.validation.no-quote")
-    if (quote && status !== "loading" && isSwapQuoteStale(quote)) {
-      return t<string>("trading.swap.validation.stale-quote")
-    }
     return undefined
-  }, [destinationAsset, primaryAmountIsValid, props.accountData, quote, sourceAsset, spendableSourceBalance, status, t])
+  }, [destinationAsset, props.accountData, quote, t])
+  const formError = Boolean(assetError || sourceAmountError || destinationAmountError || swapConstraintError)
 
-  const submitLabel = React.useMemo(() => {
-    if (!primaryAmountIsValid) return t("trading.swap.action.enter-amount")
-    if (status === "loading") return t("trading.swap.action.finding-price")
-    return t("trading.swap.action.submit")
-  }, [primaryAmountIsValid, status, t])
-
-  const submitDisabled = Boolean(validationMessage || status !== "success" || !quote || pending || priceChanged)
+  const submitDisabled = Boolean(
+    !formComplete || formError || status !== "success" || !quote || isSwapQuoteStale(quote) || pending || priceChanged
+  )
   const assets = props.accountData.balances
 
   const sourceSelector = (
@@ -168,6 +171,7 @@ function SwapForm(props: Props) {
       assets={assets}
       disableUnderline
       showXLM
+      inputError={assetError}
       testnet={props.account.testnet}
       value={sourceAsset}
       onChange={(asset) => {
@@ -182,6 +186,7 @@ function SwapForm(props: Props) {
       assets={assets}
       disableUnderline
       showXLM
+      inputError={assetError}
       testnet={props.account.testnet}
       value={destinationAsset}
       onChange={(asset) => {
@@ -208,7 +213,7 @@ function SwapForm(props: Props) {
   }, [destinationAmount, destinationAsset, sourceAmount, sourceAsset])
 
   const submitForm = React.useCallback(async () => {
-    if (!quote || !sourceAsset || !destinationAsset || validationMessage) return
+    if (!quote || !sourceAsset || !destinationAsset || formError) return
 
     try {
       setPending(true)
@@ -260,7 +265,7 @@ function SwapForm(props: Props) {
     props,
     quote,
     sourceAsset,
-    validationMessage
+    formError
   ])
 
   const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
@@ -296,10 +301,11 @@ function SwapForm(props: Props) {
       <VerticalLayout alignSelf={isMobile ? "stretch" : "center"} maxWidth={500} padding="0 2px" width="100%">
         <PriceInput
           assetCode={sourceSelector}
-          error={Boolean(validationMessage && (!sourceAsset || !primaryAmountIsValid))}
+          error={Boolean(sourceAmountError)}
           helperText={sourceAmountHelperText}
           label={
-            primarySide === "source" ? t("trading.swap.inputs.source.label") : t("trading.swap.inputs.source.estimated")
+            sourceAmountError ||
+            (primarySide === "source" ? t("trading.swap.inputs.source.label") : t("trading.swap.inputs.source.estimated"))
           }
           margin="normal"
           onChange={(event) => {
@@ -328,11 +334,12 @@ function SwapForm(props: Props) {
         </HorizontalLayout>
         <PriceInput
           assetCode={destinationSelector}
-          error={Boolean(validationMessage && !destinationAsset)}
+          error={Boolean(destinationAmountError)}
           label={
-            primarySide === "destination"
+            destinationAmountError ||
+            (primarySide === "destination"
               ? t("trading.swap.inputs.destination.label")
-              : t("trading.swap.inputs.destination.estimated")
+              : t("trading.swap.inputs.destination.estimated"))
           }
           margin="normal"
           onChange={(event) => {
@@ -395,7 +402,7 @@ function SwapForm(props: Props) {
               </Box>
             </Box>
           ) : null}
-          {validationMessage ? <Typography color="error">{validationMessage}</Typography> : null}
+          {swapConstraintError ? <Typography color="error">{swapConstraintError}</Typography> : null}
         </Box>
 
         <Box margin="24px 0 0">
@@ -436,14 +443,8 @@ function SwapForm(props: Props) {
         </Box>
         <Portal target={props.dialogActionsRef.element}>
           <DialogActionsBox desktopStyle={{ marginTop: 32 }}>
-            <ActionButton
-              disabled={submitDisabled}
-              loading={pending}
-              icon={<SyncIcon />}
-              onClick={submitForm}
-              type="primary"
-            >
-              {submitLabel}
+            <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
+              {t("trading.swap.action.submit")}
             </ActionButton>
           </DialogActionsBox>
         </Portal>
