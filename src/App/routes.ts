@@ -28,7 +28,9 @@ export const withdrawAsset = (accountID: string) => `/account/${accountID}/withd
 export const showTransaction = (accountID: string, transactionHash: string) =>
   `/account/${accountID}/tx/${transactionHash}`
 
-export const tradeAsset = (accountID: string, method?: "buy" | "sell", preselectedAsset?: string) => {
+export type TradeMethod = "buy" | "sell" | "swap"
+
+export const tradeAsset = (accountID: string, method?: TradeMethod, preselectedAsset?: string) => {
   return [`/account/${accountID}/trade`, method || "", preselectedAsset || ""].filter(fragment => !!fragment).join("/")
 }
 

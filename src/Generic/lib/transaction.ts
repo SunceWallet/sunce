@@ -153,6 +153,18 @@ interface PaymentOperationBlueprint {
   horizon: Server
 }
 
+interface PathPaymentOperationBlueprint {
+  destination: string
+  destinationAmount: string
+  destinationAsset: Asset
+  mode: "strict-send" | "strict-receive"
+  path: Asset[]
+  sendMax?: string
+  sourceAmount: string
+  sourceAsset: Asset
+  destMin?: string
+}
+
 export async function createPaymentOperation(options: PaymentOperationBlueprint) {
   const { amount, asset, destination, horizon } = options
   const destinationAccountExists = await accountExists(horizon, destination)
@@ -170,6 +182,28 @@ export async function createPaymentOperation(options: PaymentOperationBlueprint)
     : Operation.createAccount({ destination: getBaseAccountId(destination), startingBalance: amount, withMuxing: true }) // CreateAccount operation cannot set destination to muxed account
 
   return operation as xdr.Operation<Operation.CreateAccount | Operation.Payment>
+}
+
+export function createPathPaymentOperation(options: PathPaymentOperationBlueprint) {
+  return (options.mode === "strict-send"
+    ? Operation.pathPaymentStrictSend(({
+        sendAsset: options.sourceAsset,
+        sendAmount: options.sourceAmount,
+        destination: options.destination,
+        destAsset: options.destinationAsset,
+        destMin: options.destMin || options.destinationAmount,
+        path: options.path,
+        withMuxing: true
+      } as any))
+    : Operation.pathPaymentStrictReceive(({
+        sendAsset: options.sourceAsset,
+        sendMax: options.sendMax || options.sourceAmount,
+        destination: options.destination,
+        destAsset: options.destinationAsset,
+        destAmount: options.destinationAmount,
+        path: options.path,
+        withMuxing: true
+      } as any))) as xdr.Operation<Operation.PathPaymentStrictSend | Operation.PathPaymentStrictReceive>
 }
 
 export async function signTransaction(transaction: Transaction, walletAccount: Account, password: string | null) {

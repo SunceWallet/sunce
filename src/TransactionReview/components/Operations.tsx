@@ -48,6 +48,8 @@ export function useOperationTitle() {
   return function getOperationTitle(operation: Operation) {
     if (operation.type === "payment") {
       return t("operations.payment.title")
+    } else if (operation.type === "pathPaymentStrictSend" || operation.type === "pathPaymentStrictReceive") {
+      return t("operations.swap.title", "Swap")
     } else if (operation.type === "createAccount") {
       return t("operations.create-account.title")
     } else if (operation.type === "manageBuyOffer") {
@@ -173,6 +175,62 @@ function PaymentOperation(props: OperationProps<Operation.Payment>) {
               {canBeAdded(source) && <AddAddressButton address={source} />}
             </>
           }
+        />
+      ) : null}
+    </SummaryItem>
+  )
+}
+
+function PathPaymentOperation(props: OperationProps<Operation.PathPaymentStrictSend | Operation.PathPaymentStrictReceive>) {
+  const { destination, path, source } = props.operation
+  const { t } = useTranslation()
+  const receiveAmount =
+    props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.destAmount
+  const payAmount = props.operation.type === "pathPaymentStrictSend" ? props.operation.sendAmount : props.operation.sendMax
+  const boundLabel =
+    props.operation.type === "pathPaymentStrictSend"
+      ? t("operations.swap.summary.minimum-received", "Minimum received")
+      : t("operations.swap.summary.maximum-paid", "Maximum paid")
+
+  return (
+    <SummaryItem heading={props.hideHeading ? undefined : t("operations.swap.title", "Swap")}>
+      <SummaryDetailsField
+        label={t("operations.swap.summary.you-pay", "You pay")}
+        value={<SingleBalance assetCode={props.operation.sendAsset.code} balance={String(payAmount)} untrimmed />}
+      />
+      <SummaryDetailsField
+        label={t("operations.swap.summary.you-receive", "You receive")}
+        value={<SingleBalance assetCode={props.operation.destAsset.code} balance={String(receiveAmount)} untrimmed />}
+      />
+      <SummaryDetailsField
+        label={boundLabel}
+        value={
+          <SingleBalance
+            assetCode={
+              props.operation.type === "pathPaymentStrictSend"
+                ? props.operation.destAsset.code
+                : props.operation.sendAsset.code
+            }
+            balance={String(props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.sendMax)}
+            untrimmed
+          />
+        }
+      />
+      {path.length > 0 ? (
+        <SummaryDetailsField
+          fullWidth
+          label={t("operations.swap.summary.route", "Route")}
+          value={path.map(stringifyAssetToReadableString).join(" -> ")}
+        />
+      ) : null}
+      <SummaryDetailsField
+        label={t("operations.swap.summary.destination", "Destination")}
+        value={<CopyableAddress address={destination} testnet={props.testnet} variant="short" />}
+      />
+      {source ? (
+        <SummaryDetailsField
+          label={t("operations.swap.summary.source", "Source")}
+          value={<CopyableAddress address={source} testnet={props.testnet} variant="short" />}
         />
       ) : null}
     </SummaryItem>
@@ -610,6 +668,15 @@ function OperationListItem(props: Props) {
   } else if (props.operation.type === "payment") {
     return (
       <PaymentOperation
+        hideHeading={hideHeading}
+        operation={props.operation}
+        style={props.style}
+        testnet={props.testnet}
+      />
+    )
+  } else if (props.operation.type === "pathPaymentStrictSend" || props.operation.type === "pathPaymentStrictReceive") {
+    return (
+      <PathPaymentOperation
         hideHeading={hideHeading}
         operation={props.operation}
         style={props.style}

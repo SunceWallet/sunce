@@ -8,9 +8,19 @@
       "description": "Купи одређену количину активе на децентрализованој берзи",
       "label": "Купи активу"
     },
+    "buy-order": {
+      "label": "Buy order"
+    },
     "sell": {
       "description": "Замени одређену количину активе за другу",
       "label": "Продај активу"
+    },
+    "sell-order": {
+      "label": "Sell order"
+    },
+    "swap": {
+      "description": "Convert one asset to another now",
+      "label": "Swap"
     }
   },
   "advanced": {
@@ -48,6 +58,59 @@
   },
   "no-assets-info": "Овај рачун још увек не користи ниједну активу осим Стеллар Лумени.",
   "issuance": "Актива {{ asset }} је издата са твог рачуна. Нови токени ће бити креирани током трговине",
+  "swap": {
+    "action": {
+      "enter-amount": "Enter amount",
+      "finding-price": "Finding price...",
+      "submit": "Swap"
+    },
+    "allowed-price-change": {
+      "helper": "If the price changes more than this before signing, the swap will be cancelled.",
+      "high-warning": "High allowed price change may allow a worse rate.",
+      "label": "Allowed price change",
+      "maximum-paid": "Maximum paid: {{amount}} {{asset}}",
+      "minimum-received": "Minimum received: {{amount}} {{asset}}"
+    },
+    "empty": {
+      "add-asset-action": "Add asset",
+      "add-asset-message": "Add another asset before you can swap."
+    },
+    "inputs": {
+      "destination": {
+        "estimated": "Estimated received",
+        "label": "You receive"
+      },
+      "source": {
+        "estimated": "Estimated paid",
+        "label": "You pay"
+      }
+    },
+    "quote": {
+      "failed": "Could not get a price. Try again.",
+      "loading": "Finding price...",
+      "price-changed": "Price changed. Review the new amount before swapping.",
+      "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
+      "route": "Route: through {{route}}",
+      "summary": "You pay {{sourceAmount}} {{sourceAsset}} and receive about {{destinationAmount}} {{destinationAsset}}.",
+      "unavailable": "These assets cannot be swapped right now. Try a smaller amount or choose another asset.",
+      "updating": "Updating price..."
+    },
+    "swap-direction": {
+      "label": "Switch assets"
+    },
+    "validation": {
+      "destination-asset-missing": "Choose the asset you receive.",
+      "destination-asset-unavailable": "Choose an asset this account can receive.",
+      "invalid-amount": "Enter an amount greater than zero.",
+      "no-quote": "No price is available yet.",
+      "not-enough-balance": "Not enough {{asset}}.",
+      "receiving-capacity-exceeded": "Your {{asset}} wallet limit is too low to receive this amount.",
+      "same-asset": "Choose two different assets.",
+      "source-asset-missing": "Choose the asset you pay.",
+      "stale-quote": "Updating price...",
+      "xlm-max-reserve-helper": "Max leaves XLM for network fees."
+    }
+  },
   "title": "Трговина",
   "trading-price": {
     "default-label": "Цена (лимит)",

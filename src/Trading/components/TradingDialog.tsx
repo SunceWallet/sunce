@@ -2,6 +2,8 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
 import Box from "@material-ui/core/Box"
+import Button from "@material-ui/core/Button"
+import ButtonGroup from "@material-ui/core/ButtonGroup"
 import Typography from "@material-ui/core/Typography"
 import { Account } from "~App/contexts/accounts"
 import * as routes from "~App/routes"
@@ -17,11 +19,13 @@ import { useDialogActions, useRouter } from "~Generic/hooks/userinterface"
 import { matchesRoute } from "~Generic/lib/routes"
 import { parseAssetID, stringifyAsset } from "~Generic/lib/stellar"
 import { getLastArgumentFromURL } from "~Generic/lib/url"
-import Carousel from "~Layout/components/Carousel"
 import DialogBody from "~Layout/components/DialogBody"
+import { HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
 import TransactionSender from "~Transaction/components/TransactionSender"
-import MainActionSelection from "./MainActionSelection"
+import SwapForm from "./SwapForm"
 import TradingForm from "./TradingForm"
+
+type TradeMode = routes.TradeMethod
 
 interface TradingDialogProps {
   account: Account
@@ -33,11 +37,17 @@ interface TradingDialogProps {
 function getAssetFromPath(pathname: string) {
   if (matchesRoute(pathname, routes.tradeAsset("*", undefined, "*"))) {
     const lastArgument = getLastArgumentFromURL(pathname)
-    if (lastArgument !== "buy" && lastArgument !== "sell") {
+    if (lastArgument !== "buy" && lastArgument !== "sell" && lastArgument !== "swap") {
       return parseAssetID(lastArgument)
     }
   }
   return undefined
+}
+
+function getTradeMode(pathname: string): TradeMode {
+  if (matchesRoute(pathname, routes.tradeAsset("*", "buy"))) return "buy"
+  if (matchesRoute(pathname, routes.tradeAsset("*", "sell"))) return "sell"
+  return "swap"
 }
 
 function TradingDialog(props: TradingDialogProps) {
@@ -58,61 +68,77 @@ function TradingDialog(props: TradingDialogProps) {
     [accountData.balances]
   )
 
-  const primaryAction: "buy" | "sell" | undefined = matchesRoute(
-    router.location.pathname,
-    routes.tradeAsset("*", "buy")
-  )
-    ? "buy"
-    : matchesRoute(router.location.pathname, routes.tradeAsset("*", "sell"))
-    ? "sell"
-    : undefined
+  const tradeMode = getTradeMode(router.location.pathname)
 
-  const clearPrimaryAction = React.useCallback(() => {
+  const navigateToSwap = React.useCallback(() => {
     router.history.push(
-      routes.tradeAsset(props.account.id, undefined, preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
+      routes.tradeAsset(props.account.id, "swap", preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
     )
   }, [preselectedAsset, props.account, router.history])
 
-  const selectPrimaryAction = React.useCallback(
-    (mainAction: "buy" | "sell") => {
+  const selectTradeMode = React.useCallback(
+    (mode: TradeMode) => {
       router.history.push(
-        routes.tradeAsset(props.account.id, mainAction, preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
+        routes.tradeAsset(props.account.id, mode, preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
       )
     },
     [preselectedAsset, props.account, router.history]
   )
 
+  const ModeSelector = React.useMemo(
+    () => (
+      <HorizontalLayout justifyContent="center" margin="16px 0 0">
+        <ButtonGroup size="small">
+          <Button color={tradeMode === "swap" ? "primary" : undefined} onClick={() => selectTradeMode("swap")}>
+            {t("trading.action-selection.swap.label")}
+          </Button>
+          <Button color={tradeMode === "buy" ? "primary" : undefined} onClick={() => selectTradeMode("buy")}>
+            {t("trading.action-selection.buy-order.label")}
+          </Button>
+          <Button color={tradeMode === "sell" ? "primary" : undefined} onClick={() => selectTradeMode("sell")}>
+            {t("trading.action-selection.sell-order.label")}
+          </Button>
+        </ButtonGroup>
+      </HorizontalLayout>
+    ),
+    [selectTradeMode, t, tradeMode]
+  )
+
   const MainContent = React.useMemo(
     () => (
-      <Carousel current={primaryAction ? 1 : 0}>
-        <div>
-          <MainActionSelection
-            onSelectBuy={() => selectPrimaryAction("buy")}
-            onSelectSell={() => selectPrimaryAction("sell")}
-            account={props.account}
-          />
-        </div>
+      <VerticalLayout>
+        {ModeSelector}
         <React.Suspense fallback={<ViewLoading />}>
-          <TradingForm
-            account={props.account}
-            accountData={accountData}
-            dialogActionsRef={primaryAction ? dialogActionsRef : null}
-            initialPrimaryAsset={preselectedAsset}
-            primaryAction={primaryAction || "buy"}
-            sendTransaction={props.sendTransaction}
-            trustlines={trustlines}
-          />
+          {tradeMode === "swap" ? (
+            <SwapForm
+              account={props.account}
+              accountData={accountData}
+              dialogActionsRef={dialogActionsRef}
+              initialSourceAsset={preselectedAsset}
+              sendTransaction={props.sendTransaction}
+            />
+          ) : (
+            <TradingForm
+              account={props.account}
+              accountData={accountData}
+              dialogActionsRef={dialogActionsRef}
+              initialPrimaryAsset={preselectedAsset}
+              primaryAction={tradeMode}
+              sendTransaction={props.sendTransaction}
+              trustlines={trustlines}
+            />
+          )}
         </React.Suspense>
-      </Carousel>
+      </VerticalLayout>
     ),
     [
+      ModeSelector,
       accountData,
       dialogActionsRef,
       preselectedAsset,
-      primaryAction,
       props.account,
       props.sendTransaction,
-      selectPrimaryAction,
+      tradeMode,
       trustlines
     ]
   )
@@ -148,12 +174,12 @@ function TradingDialog(props: TradingDialogProps) {
                 {props.account.testnet ? <TestnetBadge style={{ marginLeft: 8 }} /> : null}
               </span>
             }
-            onBack={primaryAction ? clearPrimaryAction : props.onClose}
+            onBack={tradeMode === "buy" || tradeMode === "sell" ? navigateToSwap : props.onClose}
           />
           <ScrollableBalances account={props.account} compact />
         </>
       }
-      actions={primaryAction ? dialogActionsRef : null}
+      actions={dialogActionsRef}
     >
       <InlineErrorBoundary>{trustlines.length > 0 ? MainContent : LinkToManageAssets}</InlineErrorBoundary>
     </DialogBody>
