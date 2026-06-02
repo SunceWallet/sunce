@@ -6,14 +6,19 @@
   "action-selection": {
     "buy": {
       "description": "Kupi određenu količinu aktive na decentralizovanoj berzi",
-      "label": "Kupi aktivu"
+      "label": "Kupi aktivu",
+      "label-short": "Buy"
     },
     "buy-order": {
       "label": "Buy order"
     },
+    "orders": {
+      "label": "Orders"
+    },
     "sell": {
       "description": "Zameni određenu količinu aktive za drugu",
-      "label": "Prodaj aktivu"
+      "label": "Prodaj aktivu",
+      "label-short": "Sell"
     },
     "sell-order": {
       "label": "Sell order"

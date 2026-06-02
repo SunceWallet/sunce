@@ -6,14 +6,19 @@
   "action-selection": {
     "buy": {
       "description": "Buy some amount of an asset on the distributed exchange",
-      "label": "Buy asset"
+      "label": "Buy asset",
+      "label-short": "Buy"
     },
     "buy-order": {
       "label": "Buy order"
     },
+    "orders": {
+      "label": "Orders"
+    },
     "sell": {
       "description": "Trade some amount of an asset for another one",
-      "label": "Sell asset"
+      "label": "Sell asset",
+      "label-short": "Sell"
     },
     "sell-order": {
       "label": "Sell order"

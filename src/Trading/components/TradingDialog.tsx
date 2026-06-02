@@ -22,6 +22,7 @@ import { getLastArgumentFromURL } from "~Generic/lib/url"
 import DialogBody from "~Layout/components/DialogBody"
 import { HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
 import TransactionSender from "~Transaction/components/TransactionSender"
+import OfferList from "~Account/components/OfferList"
 import SwapForm from "./SwapForm"
 import TradingForm from "./TradingForm"
 
@@ -37,7 +38,7 @@ interface TradingDialogProps {
 function getAssetFromPath(pathname: string) {
   if (matchesRoute(pathname, routes.tradeAsset("*", undefined, "*"))) {
     const lastArgument = getLastArgumentFromURL(pathname)
-    if (lastArgument !== "buy" && lastArgument !== "sell" && lastArgument !== "swap") {
+    if (lastArgument !== "buy" && lastArgument !== "sell" && lastArgument !== "swap" && lastArgument !== "orders") {
       return parseAssetID(lastArgument)
     }
   }
@@ -47,6 +48,7 @@ function getAssetFromPath(pathname: string) {
 function getTradeMode(pathname: string): TradeMode {
   if (matchesRoute(pathname, routes.tradeAsset("*", "buy"))) return "buy"
   if (matchesRoute(pathname, routes.tradeAsset("*", "sell"))) return "sell"
+  if (matchesRoute(pathname, routes.tradeAsset("*", "orders"))) return "orders"
   return "swap"
 }
 
@@ -93,10 +95,13 @@ function TradingDialog(props: TradingDialogProps) {
             {t("trading.action-selection.swap.label")}
           </Button>
           <Button color={tradeMode === "buy" ? "primary" : undefined} onClick={() => selectTradeMode("buy")}>
-            {t("trading.action-selection.buy-order.label")}
+            {t("trading.action-selection.buy.label-short")}
           </Button>
           <Button color={tradeMode === "sell" ? "primary" : undefined} onClick={() => selectTradeMode("sell")}>
-            {t("trading.action-selection.sell-order.label")}
+            {t("trading.action-selection.sell.label-short")}
+          </Button>
+          <Button color={tradeMode === "orders" ? "primary" : undefined} onClick={() => selectTradeMode("orders")}>
+            {t("trading.action-selection.orders.label")}
           </Button>
         </ButtonGroup>
       </HorizontalLayout>
@@ -109,7 +114,11 @@ function TradingDialog(props: TradingDialogProps) {
       <VerticalLayout>
         {ModeSelector}
         <React.Suspense fallback={<ViewLoading />}>
-          {tradeMode === "swap" ? (
+          {tradeMode === "orders" ? (
+            <Box margin="24px 0 0">
+              <OfferList account={props.account} title={t("account.transactions.offer-list.title")} />
+            </Box>
+          ) : tradeMode === "swap" ? (
             <SwapForm
               account={props.account}
               accountData={accountData}
@@ -138,6 +147,7 @@ function TradingDialog(props: TradingDialogProps) {
       preselectedAsset,
       props.account,
       props.sendTransaction,
+      t,
       tradeMode,
       trustlines
     ]
@@ -174,7 +184,7 @@ function TradingDialog(props: TradingDialogProps) {
                 {props.account.testnet ? <TestnetBadge style={{ marginLeft: 8 }} /> : null}
               </span>
             }
-            onBack={tradeMode === "buy" || tradeMode === "sell" ? navigateToSwap : props.onClose}
+            onBack={tradeMode === "buy" || tradeMode === "sell" || tradeMode === "orders" ? navigateToSwap : props.onClose}
           />
           <ScrollableBalances account={props.account} compact />
         </>

@@ -6,14 +6,19 @@
   "action-selection": {
     "buy": {
       "description": "Acquista una certa quantità di un bene sullo scambio distribuito",
-      "label": "Acquista risorsa"
+      "label": "Acquista risorsa",
+      "label-short": "Buy"
     },
     "buy-order": {
       "label": "Buy order"
     },
+    "orders": {
+      "label": "Orders"
+    },
     "sell": {
       "description": "Scambia una certa quantità di una risorsa con un altra",
-      "label": "Vendi risorsa"
+      "label": "Vendi risorsa",
+      "label-short": "Sell"
     },
     "sell-order": {
       "label": "Sell order"

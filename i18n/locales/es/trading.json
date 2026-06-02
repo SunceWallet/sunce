@@ -6,14 +6,19 @@
   "action-selection": {
     "buy": {
       "description": "Adquirir alguna cantidad de un activo en el intercambio distribuido",
-      "label": "Adquirir activo"
+      "label": "Adquirir activo",
+      "label-short": "Buy"
     },
     "buy-order": {
       "label": "Buy order"
     },
+    "orders": {
+      "label": "Orders"
+    },
     "sell": {
       "description": "Negociar algún monto de un activo a cambio de otro",
-      "label": "Vender activo"
+      "label": "Vender activo",
+      "label-short": "Sell"
     },
     "sell-order": {
       "label": "Sell order"

@@ -38,7 +38,7 @@ function OfferOverview(props: Props) {
   const { t } = useTranslation()
 
   const openTrading = () => {
-    router.history.push(routes.tradeAsset(props.account.id))
+    router.history.push(routes.tradeAsset(props.account.id, "orders"))
   }
 
   if (!offerHistory.offers.length) {
