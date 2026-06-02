@@ -72,9 +72,7 @@
     "allowed-price-change": {
       "helper": "Se il prezzo cambia più di così prima della firma, lo scambio verrà annullato.",
       "high-warning": "Un cambio di prezzo consentito elevato può permettere un tasso peggiore.",
-      "label": "Cambio prezzo consentito",
-      "maximum-paid": "Massimo pagato: {{amount}} {{asset}}",
-      "minimum-received": "Minimo ricevuto: {{amount}} {{asset}}"
+      "label": "Cambio prezzo consentito"
     },
     "empty": {
       "add-asset-action": "Aggiungi risorsa",
@@ -96,7 +94,8 @@
       "price-changed": "Il prezzo è cambiato. Controlla il nuovo importo prima di scambiare.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
       "route": "Rotta: tramite {{route}}",
-      "summary": "Paghi {{sourceAmount}} {{sourceAsset}} e ricevi circa {{destinationAmount}} {{destinationAsset}}.",
+      "summary-strict-receive": "Paghi circa {{sourceAmount}} {{sourceAsset}} (non più di {{maxSend}} {{sourceAsset}}) e ricevi {{destinationAmount}} {{destinationAsset}}.",
+      "summary-strict-send": "Paghi {{sourceAmount}} {{sourceAsset}} e ricevi circa {{destinationAmount}} {{destinationAsset}} (non meno di {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Queste risorse non possono essere scambiate ora. Prova un importo più piccolo o scegli un'altra risorsa.",
       "updating": "Aggiornamento prezzo..."
     },

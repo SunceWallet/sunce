@@ -270,37 +270,30 @@ function SwapForm(props: Props) {
 
   const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
   const routeLabel = quote ? getRouteLabel(quote) : undefined
-  const quoteSummary = quote
-    ? keepAmountAssetTogether(
-        t<string>("trading.swap.quote.summary", {
-          sourceAmount: formatBalance(quote.sourceAmount),
-          sourceAsset: assetCode(quote.sourceAsset),
-          destinationAmount: formatBalance(quote.destinationAmount),
-          destinationAsset: assetCode(quote.destinationAsset)
-        }),
-        [
-          [formatBalance(quote.sourceAmount), assetCode(quote.sourceAsset)],
-          [formatBalance(quote.destinationAmount), assetCode(quote.destinationAsset)]
-        ]
-      )
-    : undefined
-  const quoteBound =
-    allowedPriceBound && quote
-      ? quote.mode === "strict-send"
-        ? keepAmountAssetTogether(
-            t<string>("trading.swap.allowed-price-change.minimum-received", {
-              amount: formatBalance(allowedPriceBound),
-              asset: assetCode(quote.destinationAsset)
-            }),
-            [[formatBalance(allowedPriceBound), assetCode(quote.destinationAsset)]]
-          )
-        : keepAmountAssetTogether(
-            t<string>("trading.swap.allowed-price-change.maximum-paid", {
-              amount: formatBalance(allowedPriceBound),
-              asset: assetCode(quote.sourceAsset)
-            }),
-            [[formatBalance(allowedPriceBound), assetCode(quote.sourceAsset)]]
-          )
+  const quoteSummary =
+    quote && allowedPriceBound
+      ? keepAmountAssetTogether(
+          quote.mode === "strict-send"
+            ? t<string>("trading.swap.quote.summary-strict-send", {
+                sourceAmount: formatBalance(quote.sourceAmount),
+                sourceAsset: assetCode(quote.sourceAsset),
+                destinationAmount: formatBalance(quote.destinationAmount),
+                destinationAsset: assetCode(quote.destinationAsset),
+                minReceived: formatBalance(allowedPriceBound)
+              })
+            : t<string>("trading.swap.quote.summary-strict-receive", {
+                sourceAmount: formatBalance(quote.sourceAmount),
+                sourceAsset: assetCode(quote.sourceAsset),
+                maxSend: formatBalance(allowedPriceBound),
+                destinationAmount: formatBalance(quote.destinationAmount),
+                destinationAsset: assetCode(quote.destinationAsset)
+              }),
+          [
+            [formatBalance(quote.sourceAmount), assetCode(quote.sourceAsset)],
+            [formatBalance(quote.destinationAmount), assetCode(quote.destinationAsset)],
+            [formatBalance(allowedPriceBound), quote.mode === "strict-send" ? assetCode(quote.destinationAsset) : assetCode(quote.sourceAsset)]
+          ]
+        )
       : undefined
   const quoteHelper = swapConstraintError
     ? swapConstraintError
@@ -472,15 +465,13 @@ function SwapForm(props: Props) {
               <VerticalLayout alignItems="center" width="100%">
                 <Typography align="center" variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
                   {quoteSummary ||
-                    t("trading.swap.quote.summary", {
+                    t("trading.swap.quote.summary-strict-send", {
                       sourceAmount: "-",
                       sourceAsset: "-",
                       destinationAmount: "-",
-                      destinationAsset: "-"
+                      destinationAsset: "-",
+                      minReceived: "-"
                     })}
-                </Typography>
-                <Typography align="center" variant="body2" style={{ visibility: quoteBound ? undefined : "hidden" }}>
-                  {quoteBound || t("trading.swap.allowed-price-change.minimum-received", { amount: "-", asset: "-" })}
                 </Typography>
                 <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
                   {t("trading.swap.action.submit")}
@@ -491,15 +482,13 @@ function SwapForm(props: Props) {
                 <VerticalLayout grow={1} padding="0 24px 0 0">
                   <Typography variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
                     {quoteSummary ||
-                      t("trading.swap.quote.summary", {
+                      t("trading.swap.quote.summary-strict-send", {
                         sourceAmount: "-",
                         sourceAsset: "-",
                         destinationAmount: "-",
-                        destinationAsset: "-"
+                        destinationAsset: "-",
+                        minReceived: "-"
                       })}
-                  </Typography>
-                  <Typography variant="body2" style={{ visibility: quoteBound ? undefined : "hidden" }}>
-                    {quoteBound || t("trading.swap.allowed-price-change.minimum-received", { amount: "-", asset: "-" })}
                   </Typography>
                 </VerticalLayout>
                 <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">

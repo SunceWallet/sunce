@@ -72,9 +72,7 @@
     "allowed-price-change": {
       "helper": "Ако се цена промени више од овога пре потписивања, замена ће бити отказана.",
       "high-warning": "Висока дозвољена промена цене може омогућити лошији курс.",
-      "label": "Дозвољена промена цене",
-      "maximum-paid": "Максимално плаћено: {{amount}} {{asset}}",
-      "minimum-received": "Минимално примљено: {{amount}} {{asset}}"
+      "label": "Дозвољена промена цене"
     },
     "empty": {
       "add-asset-action": "Додај активу",
@@ -96,7 +94,8 @@
       "price-changed": "Цена се променила. Прегледај нову количину пре замене.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
       "route": "Рута: преко {{route}}",
-      "summary": "Плаћаш {{sourceAmount}} {{sourceAsset}} и примаш око {{destinationAmount}} {{destinationAsset}}.",
+      "summary-strict-receive": "Плаћаш око {{sourceAmount}} {{sourceAsset}} (не више од {{maxSend}} {{sourceAsset}}) и примаш {{destinationAmount}} {{destinationAsset}}.",
+      "summary-strict-send": "Плаћаш {{sourceAmount}} {{sourceAsset}} и примаш око {{destinationAmount}} {{destinationAsset}} (не мање од {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Ове активе тренутно не могу да се замене. Покушај мању количину или изабери другу активу.",
       "updating": "Ажурирање цене..."
     },

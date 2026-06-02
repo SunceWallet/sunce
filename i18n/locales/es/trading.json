@@ -72,9 +72,7 @@
     "allowed-price-change": {
       "helper": "Si el precio cambia más que esto antes de firmar, el intercambio se cancelará.",
       "high-warning": "Un cambio de precio permitido alto puede permitir una tasa peor.",
-      "label": "Cambio de precio permitido",
-      "maximum-paid": "Máximo pagado: {{amount}} {{asset}}",
-      "minimum-received": "Mínimo recibido: {{amount}} {{asset}}"
+      "label": "Cambio de precio permitido"
     },
     "empty": {
       "add-asset-action": "Añadir activo",
@@ -96,7 +94,8 @@
       "price-changed": "El precio cambió. Revisa el nuevo monto antes de intercambiar.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
       "route": "Ruta: a través de {{route}}",
-      "summary": "Pagas {{sourceAmount}} {{sourceAsset}} y recibes aproximadamente {{destinationAmount}} {{destinationAsset}}.",
+      "summary-strict-receive": "Pagas aproximadamente {{sourceAmount}} {{sourceAsset}} (no más de {{maxSend}} {{sourceAsset}}) y recibes {{destinationAmount}} {{destinationAsset}}.",
+      "summary-strict-send": "Pagas {{sourceAmount}} {{sourceAsset}} y recibes aproximadamente {{destinationAmount}} {{destinationAsset}} (no menos de {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Estos activos no se pueden intercambiar ahora. Prueba con un monto menor o elige otro activo.",
       "updating": "Actualizando precio..."
     },
