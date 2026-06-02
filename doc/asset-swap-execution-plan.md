@@ -4,6 +4,7 @@
 
 - Asset Swap is part of the existing Trade flow.
 - Swap is the default option under Trade.
+- Slippage tolerance is user-selectable with simple presets: 0.5%, 1%, 2%, and 5%.
 - Default slippage tolerance is 1%.
 - The UI stays simple and reuses existing wallet components where possible.
 
@@ -23,7 +24,9 @@
    - Finding best path.
    - No conversion path found.
    - Quote failed.
-8. Submit action label: `Swap`.
+8. Show a compact slippage control below the quote details or near the submit action.
+9. Slippage control options are `0.5%`, `1%`, `2%`, and `5%`, with `1%` selected by default.
+10. Submit action label: `Swap`.
 
 ## Reused Architecture
 
@@ -66,6 +69,7 @@ Responsibilities:
 - Trigger quote lookup when primary amount/assets change.
 - Show derived amount with `≈`.
 - Validate balances and selected assets.
+- Track selected slippage tolerance.
 - Build and submit a path-payment transaction.
 
 Add `src/Trading/hooks/swap.ts` or `src/Trading/lib/swap.ts`.
@@ -77,7 +81,28 @@ Responsibilities:
 - Select best quote.
 - Convert Horizon path records to SDK `Asset[]` paths.
 - Protect UI from stale Horizon responses.
-- Apply 1% slippage.
+- Apply selected slippage tolerance.
+
+## Slippage Control
+
+Add a simple preset control to `SwapForm`.
+
+Recommended UI:
+
+- Label: `Slippage tolerance`.
+- Render options as small segmented buttons or chips: `0.5%`, `1%`, `2%`, `5%`.
+- Keep `1%` selected by default.
+- Keep the control visually secondary so it does not compete with the amount fields.
+- Place it below the quote/status area, above the primary `Swap` action.
+- Do not hide it under an advanced section for the first implementation; users should be able to understand why the final received/sent amount may differ from the quote.
+
+Behavior:
+
+- Changing slippage does not need to re-query Horizon because the best path and quoted amounts stay the same.
+- Changing slippage updates the transaction bounds used at submit time.
+- If the source amount is primary, slippage lowers the minimum accepted destination amount.
+- If the destination amount is primary, slippage raises the maximum accepted source amount.
+- Show a short helper text such as `Protects your swap if the market moves before submission.`
 
 ## Horizon Quote Logic
 
@@ -90,7 +115,7 @@ horizon.strictSendPaths(sourceAsset, sourceAmount, [destinationAsset]).call()
 - Select the record with the highest `destination_amount`.
 - Derived destination amount is `destination_amount`.
 - Transaction uses strict-send.
-- Submit with `destMin = quotedDestination * 0.99`.
+- Submit with `destMin = quotedDestination * (1 - selectedSlippage)`.
 
 For destination amount primary:
 
@@ -101,7 +126,7 @@ horizon.strictReceivePaths([sourceAsset], destinationAsset, destinationAmount).c
 - Select the record with the lowest `source_amount`.
 - Derived source amount is `source_amount`.
 - Transaction uses strict-receive.
-- Submit with `sendMax = quotedSource * 1.01`.
+- Submit with `sendMax = quotedSource * (1 + selectedSlippage)`.
 
 Implementation notes:
 
@@ -122,7 +147,8 @@ createPathPaymentOperation({
   destinationAsset,
   destinationAmount,
   destination,
-  path
+  path,
+  slippage
 })
 ```
 
@@ -200,6 +226,8 @@ Add keys to each `i18n/locales/*/trading.json` file:
 - `swap.quote.loading`
 - `swap.quote.no-path`
 - `swap.quote.failed`
+- `swap.slippage.label`
+- `swap.slippage.helper`
 - `swap.validation.source-asset-missing`
 - `swap.validation.destination-asset-missing`
 - `swap.validation.same-asset`
@@ -214,16 +242,17 @@ Use English as the source wording and mirror keys in all locale files.
 1. Add route/action plumbing for Swap in `routes.ts`, `TradingDialog.tsx`, and `MainActionSelection.tsx`.
 2. Add `SwapForm` UI using `PriceInput` and `AssetSelector`.
 3. Add quote hook/lib for strict-send and strict-receive Horizon paths.
-4. Add path-payment transaction helper with 1% slippage handling.
-5. Connect form submission through existing `TransactionSender` and `createTransaction` flow.
-6. Add validation and spendable balance checks.
-7. Add transaction review and history support for strict path payments.
-8. Add translation keys to all locales.
-9. Run `npm test`.
+4. Add slippage preset control with 0.5%, 1%, 2%, and 5% options, defaulting to 1%.
+5. Add path-payment transaction helper with selected slippage handling.
+6. Connect form submission through existing `TransactionSender` and `createTransaction` flow.
+7. Add validation and spendable balance checks.
+8. Add transaction review and history support for strict path payments.
+9. Add translation keys to all locales.
+10. Run `npm test`.
 
 ## Non-Goals For First Implementation
 
-- No custom slippage UI.
+- No custom free-form slippage input beyond the four preset options.
 - No trustline creation during swap.
 - No manual path selection.
 - No advanced quote details unless needed for debugging.
