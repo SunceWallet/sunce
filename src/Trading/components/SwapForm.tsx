@@ -80,6 +80,13 @@ function getReceivingCapacity(accountData: AccountData, asset: Asset) {
   return BigNumber(balanceLine.limit).minus(balanceLine.balance).minus(balanceLine.buying_liabilities)
 }
 
+function keepAmountAssetTogether(text: string, pairs: [string, string][]) {
+  return pairs.reduce(
+    (nextText, [amount, asset]) => nextText.split(`${amount} ${asset}`).join(`${amount}\u00a0${asset}`),
+    text
+  )
+}
+
 function SwapForm(props: Props) {
   const { t } = useTranslation()
   const isMobile = useIsMobile()
@@ -264,24 +271,36 @@ function SwapForm(props: Props) {
   const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
   const routeLabel = quote ? getRouteLabel(quote) : undefined
   const quoteSummary = quote
-    ? t("trading.swap.quote.summary", {
-        sourceAmount: formatBalance(quote.sourceAmount),
-        sourceAsset: assetCode(quote.sourceAsset),
-        destinationAmount: formatBalance(quote.destinationAmount),
-        destinationAsset: assetCode(quote.destinationAsset)
-      })
+    ? keepAmountAssetTogether(
+        t<string>("trading.swap.quote.summary", {
+          sourceAmount: formatBalance(quote.sourceAmount),
+          sourceAsset: assetCode(quote.sourceAsset),
+          destinationAmount: formatBalance(quote.destinationAmount),
+          destinationAsset: assetCode(quote.destinationAsset)
+        }),
+        [
+          [formatBalance(quote.sourceAmount), assetCode(quote.sourceAsset)],
+          [formatBalance(quote.destinationAmount), assetCode(quote.destinationAsset)]
+        ]
+      )
     : undefined
   const quoteBound =
     allowedPriceBound && quote
       ? quote.mode === "strict-send"
-        ? t("trading.swap.allowed-price-change.minimum-received", {
-            amount: formatBalance(allowedPriceBound),
-            asset: assetCode(quote.destinationAsset)
-          })
-        : t("trading.swap.allowed-price-change.maximum-paid", {
-            amount: formatBalance(allowedPriceBound),
-            asset: assetCode(quote.sourceAsset)
-          })
+        ? keepAmountAssetTogether(
+            t<string>("trading.swap.allowed-price-change.minimum-received", {
+              amount: formatBalance(allowedPriceBound),
+              asset: assetCode(quote.destinationAsset)
+            }),
+            [[formatBalance(allowedPriceBound), assetCode(quote.destinationAsset)]]
+          )
+        : keepAmountAssetTogether(
+            t<string>("trading.swap.allowed-price-change.maximum-paid", {
+              amount: formatBalance(allowedPriceBound),
+              asset: assetCode(quote.sourceAsset)
+            }),
+            [[formatBalance(allowedPriceBound), assetCode(quote.sourceAsset)]]
+          )
       : undefined
   const quoteHelper = swapConstraintError
     ? swapConstraintError
@@ -296,11 +315,17 @@ function SwapForm(props: Props) {
             : status === "failed"
               ? t("trading.swap.quote.failed")
               : quote
-                ? t("trading.swap.quote.rate", {
-                    sourceAsset: assetCode(quote.sourceAsset),
-                    rate: formatRate(quote),
-                    destinationAsset: assetCode(quote.destinationAsset)
-                  })
+                ? keepAmountAssetTogether(
+                    t<string>("trading.swap.quote.rate", {
+                      sourceAsset: assetCode(quote.sourceAsset),
+                      rate: formatRate(quote),
+                      destinationAsset: assetCode(quote.destinationAsset)
+                    }),
+                    [
+                      ["1", assetCode(quote.sourceAsset)],
+                      [formatRate(quote), assetCode(quote.destinationAsset)]
+                    ]
+                  )
                 : undefined
   const sourceAmountHelperText = (
     <ButtonBase
