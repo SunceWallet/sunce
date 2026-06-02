@@ -28,11 +28,10 @@ import { InlineErrorBoundary } from "~Generic/components/ErrorBoundaries"
 import { PublicKey } from "~Generic/components/PublicKey"
 import { formatBalance } from "~Generic/lib/balances"
 import { matchesRoute } from "~Generic/lib/routes"
-import { stringifyAssetToReadableString } from "~Generic/lib/stellar"
+import { stringifyAsset, stringifyAssetToReadableString } from "~Generic/lib/stellar"
 import MemoMessage from "~Transaction/components/MemoMessage"
 import TransactionReviewDialog from "~TransactionReview/components/TransactionReviewDialog"
 import { useOperationTitle } from "~TransactionReview/components/Operations"
-import { SingleBalance } from "./AccountBalances"
 
 const dedupe = <T extends any>(array: T[]): T[] => Array.from(new Set(array))
 const doNothing = () => undefined
@@ -359,6 +358,36 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
   }
 })
 
+function TransactionListBalanceChange(props: {
+  assetCode: string
+  balanceChange: BigNumber
+  style?: React.CSSProperties
+}) {
+  const balance = props.balanceChange
+  const absoluteBalance = balance.abs()
+  const formattingOptions = absoluteBalance.eq(0)
+    ? { maximumDecimals: 0, minimumDecimals: 0 }
+    : absoluteBalance.gt(0) && absoluteBalance.lt(0.0001)
+    ? { maximumDecimals: 7, minimumDecimals: 7 }
+    : absoluteBalance.lt(1000)
+    ? { maximumDecimals: 4, minimumDecimals: 0 }
+    : { maximumDecimals: 0, minimumDecimals: 0 }
+  const [integerPart, decimalPart = ""] = formatBalance(absoluteBalance, formattingOptions).split(".")
+
+  return (
+    <>
+      <span style={{ fontWeight: 300, textAlign: "right", whiteSpace: "nowrap", ...props.style }}>
+        {balance.lt(0) ? <span>-&nbsp;</span> : null}
+        {integerPart}
+        <span style={{ opacity: 0.8 }}>{decimalPart ? "." + decimalPart : ""}</span>
+      </span>
+      <span style={{ fontWeight: "bold", textAlign: "left", whiteSpace: "nowrap", ...props.style }}>
+        {props.assetCode}
+      </span>
+    </>
+  )
+}
+
 function TransactionListItemBalance(props: {
   accountPublicKey: string
   paymentSummary: PaymentSummary
@@ -372,22 +401,47 @@ function TransactionListItemBalance(props: {
     (op): op is Operation.CreateAccount => op.type === "createAccount"
   )
   const paymentOps = props.transaction.operations.filter((op): op is Operation.Payment => op.type === "payment")
+  const hasPathPayment = props.transaction.operations.some(
+    op => op.type === "pathPaymentStrictSend" || op.type === "pathPaymentStrictReceive"
+  )
 
   // Handle special edge case: Sending money from an account to itself
-  const balanceChange = paymentSummary.every(payment =>
-    payment.publicKeys.every(pubkey => pubkey === props.accountPublicKey)
-  )
-    ? sum(...creationOps.map(op => op.startingBalance), ...paymentOps.map(op => op.amount))
-    : paymentSummary[0].balanceChange
+  const isSelfPayment =
+    paymentSummary.length > 0 &&
+    !hasPathPayment &&
+    paymentSummary.every(payment => payment.publicKeys.every(pubkey => pubkey === props.accountPublicKey))
+
+  const balanceChanges = isSelfPayment
+    ? [
+        {
+          asset: paymentSummary[0].asset,
+          balanceChange: sum(...creationOps.map(op => op.startingBalance), ...paymentOps.map(op => op.amount))
+        }
+      ]
+    : paymentSummary
 
   return (
     <ListItemText primaryTypographyProps={{ align: "right" }} style={{ flexShrink: 0, ...props.style }}>
       {paymentSummary.length === 0 ? null : (
-        <SingleBalance
-          assetCode={paymentSummary[0].asset.getCode()}
-          balance={balanceChange.toString()}
-          style={isSmallScreen ? { fontSize: "1rem" } : { fontSize: "1.4rem" }}
-        />
+        <span
+          style={{
+            alignItems: "baseline",
+            columnGap: "0.4em",
+            display: "grid",
+            gridTemplateColumns: "auto auto",
+            justifyContent: "end"
+          }}
+        >
+          {balanceChanges.map(balanceChange => (
+            <React.Fragment key={stringifyAsset(balanceChange.asset)}>
+              <TransactionListBalanceChange
+                assetCode={balanceChange.asset.getCode()}
+                balanceChange={balanceChange.balanceChange}
+                style={isSmallScreen ? { fontSize: "1rem" } : { fontSize: "1.4rem" }}
+              />
+            </React.Fragment>
+          ))}
+        </span>
       )}
     </ListItemText>
   )
