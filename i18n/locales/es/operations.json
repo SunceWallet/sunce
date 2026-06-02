@@ -110,5 +110,8 @@
     "set-master-key-weight": {
       "title": "Establecer el peso de la llave master"
     }
+  },
+  "swap": {
+    "title": "Intercambio"
   }
 }

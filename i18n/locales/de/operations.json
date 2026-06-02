@@ -110,5 +110,8 @@
     "set-master-key-weight": {
       "title": "Hauptschlüsselgewicht festlegen"
     }
+  },
+  "swap": {
+    "title": "Tausch"
   }
 }

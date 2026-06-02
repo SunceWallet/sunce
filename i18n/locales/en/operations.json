@@ -110,5 +110,8 @@
     "set-master-key-weight": {
       "title": "Set master key weight"
     }
+  },
+  "swap": {
+    "title": "Swap"
   }
 }
