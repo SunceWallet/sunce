@@ -263,7 +263,45 @@ function SwapForm(props: Props) {
 
   const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
   const routeLabel = quote ? getRouteLabel(quote) : undefined
-  const isRefreshingQuote = status === "loading" && Boolean(quote)
+  const quoteSummary = quote
+    ? t("trading.swap.quote.summary", {
+        sourceAmount: formatBalance(quote.sourceAmount),
+        sourceAsset: assetCode(quote.sourceAsset),
+        destinationAmount: formatBalance(quote.destinationAmount),
+        destinationAsset: assetCode(quote.destinationAsset)
+      })
+    : undefined
+  const quoteBound =
+    allowedPriceBound && quote
+      ? quote.mode === "strict-send"
+        ? t("trading.swap.allowed-price-change.minimum-received", {
+            amount: formatBalance(allowedPriceBound),
+            asset: assetCode(quote.destinationAsset)
+          })
+        : t("trading.swap.allowed-price-change.maximum-paid", {
+            amount: formatBalance(allowedPriceBound),
+            asset: assetCode(quote.sourceAsset)
+          })
+      : undefined
+  const quoteHelper = swapConstraintError
+    ? swapConstraintError
+    : priceChanged
+      ? t("trading.swap.quote.price-changed")
+      : status === "loading" && !quote
+        ? t("trading.swap.quote.loading")
+        : status === "loading" && quote
+          ? t("trading.swap.quote.updating")
+          : status === "unavailable"
+            ? t("trading.swap.quote.unavailable")
+            : status === "failed"
+              ? t("trading.swap.quote.failed")
+              : quote
+                ? t("trading.swap.quote.rate", {
+                    sourceAsset: assetCode(quote.sourceAsset),
+                    rate: formatRate(quote),
+                    destinationAsset: assetCode(quote.destinationAsset)
+                  })
+                : undefined
   const sourceAmountHelperText = (
     <ButtonBase
       disabled={!sourceAsset}
@@ -351,51 +389,16 @@ function SwapForm(props: Props) {
         />
 
         <Box margin="16px 0 0">
-          {status === "loading" && !quote ? <Typography>{t("trading.swap.quote.loading")}</Typography> : null}
-          {status === "unavailable" ? <Typography>{t("trading.swap.quote.unavailable")}</Typography> : null}
-          {status === "failed" ? <Typography>{t("trading.swap.quote.failed")}</Typography> : null}
-          {priceChanged ? <Typography>{t("trading.swap.quote.price-changed")}</Typography> : null}
-          {quote ? (
-            <Box style={{ position: "relative" }}>
-              {isRefreshingQuote ? (
-                <Typography
-                  variant="caption"
-                  style={{
-                    background: "rgba(255, 255, 255, 0.9)",
-                    borderRadius: 12,
-                    padding: "2px 8px",
-                    position: "absolute",
-                    right: 0,
-                    top: -2,
-                    zIndex: 1
-                  }}
-                >
-                  {t("trading.swap.quote.updating")}
-                </Typography>
-              ) : null}
-              <Box style={{ opacity: isRefreshingQuote ? 0.6 : 1 }}>
-                <Typography>
-                  {t("trading.swap.quote.summary", {
-                    sourceAmount: formatBalance(quote.sourceAmount),
-                    sourceAsset: assetCode(quote.sourceAsset),
-                    destinationAmount: formatBalance(quote.destinationAmount),
-                    destinationAsset: assetCode(quote.destinationAsset)
-                  })}
-                </Typography>
-                <Typography variant="body2">
-                  {t("trading.swap.quote.rate", {
-                    sourceAsset: assetCode(quote.sourceAsset),
-                    rate: formatRate(quote),
-                    destinationAsset: assetCode(quote.destinationAsset)
-                  })}
-                </Typography>
-                {routeLabel ? (
-                  <Typography variant="body2">{t("trading.swap.quote.route", { route: routeLabel })}</Typography>
-                ) : null}
-              </Box>
-            </Box>
-          ) : null}
-          {swapConstraintError ? <Typography color="error">{swapConstraintError}</Typography> : null}
+          <Typography
+            color={swapConstraintError ? "error" : undefined}
+            variant="body2"
+            style={{ visibility: quoteHelper ? undefined : "hidden" }}
+          >
+            {quoteHelper || t("trading.swap.quote.loading")}
+          </Typography>
+          <Typography variant="body2" style={{ visibility: routeLabel ? undefined : "hidden" }}>
+            {routeLabel ? t("trading.swap.quote.route", { route: routeLabel }) : t("trading.swap.quote.route", { route: "-" })}
+          </Typography>
         </Box>
 
         <Box margin="24px 0 0">
@@ -426,22 +429,9 @@ function SwapForm(props: Props) {
               </MenuItem>
             ))}
             <MenuItem disabled style={{ whiteSpace: "normal", maxWidth: isMobile ? undefined : 280 }}>
-              {t("trading.swap.allowed-price-change.helper")}
+              {t<string>("trading.swap.allowed-price-change.helper")}
             </MenuItem>
           </Menu>
-          {allowedPriceBound && quote ? (
-            <Typography variant="body2" style={{ marginTop: 8 }}>
-              {quote.mode === "strict-send"
-                ? t("trading.swap.allowed-price-change.minimum-received", {
-                    amount: formatBalance(allowedPriceBound),
-                    asset: assetCode(quote.destinationAsset)
-                  })
-                : t("trading.swap.allowed-price-change.maximum-paid", {
-                    amount: formatBalance(allowedPriceBound),
-                    asset: assetCode(quote.sourceAsset)
-                  })}
-            </Typography>
-          ) : null}
           {allowedPriceChange === 0.05 ? (
             <Box margin="8px 0 0" padding="8px 12px" style={{ background: warningColor }}>
               {t("trading.swap.allowed-price-change.high-warning")}
@@ -449,16 +439,49 @@ function SwapForm(props: Props) {
           ) : null}
         </Box>
         <Portal target={props.dialogActionsRef.element}>
-          <DialogActionsBox desktopStyle={{ marginTop: 32 }}>
-            <ActionButton
-              disabled={submitDisabled}
-              loading={pending}
-              icon={<SyncIcon />}
-              onClick={submitForm}
-              type="primary"
-            >
-              {t("trading.swap.action.submit")}
-            </ActionButton>
+          <DialogActionsBox
+            expandedHeight
+            desktopStyle={{ alignItems: "center", justifyContent: "center", marginTop: 0 }}
+          >
+            {isMobile ? (
+              <VerticalLayout alignItems="center" width="100%">
+                <Typography align="center" variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
+                  {quoteSummary ||
+                    t("trading.swap.quote.summary", {
+                      sourceAmount: "-",
+                      sourceAsset: "-",
+                      destinationAmount: "-",
+                      destinationAsset: "-"
+                    })}
+                </Typography>
+                <Typography align="center" variant="body2" style={{ visibility: quoteBound ? undefined : "hidden" }}>
+                  {quoteBound || t("trading.swap.allowed-price-change.minimum-received", { amount: "-", asset: "-" })}
+                </Typography>
+                <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
+                  {t("trading.swap.action.submit")}
+                </ActionButton>
+              </VerticalLayout>
+            ) : (
+              <HorizontalLayout alignItems="center" justifyContent="space-between" style={{ maxWidth: 500 }} width="100%">
+                <VerticalLayout grow={1} padding="0 24px 0 0">
+                  <Typography variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
+                    {quoteSummary ||
+                      t("trading.swap.quote.summary", {
+                        sourceAmount: "-",
+                        sourceAsset: "-",
+                        destinationAmount: "-",
+                        destinationAsset: "-"
+                      })}
+                  </Typography>
+                  <Typography variant="body2" style={{ visibility: quoteBound ? undefined : "hidden" }}>
+                    {quoteBound || t("trading.swap.allowed-price-change.minimum-received", { amount: "-", asset: "-" })}
+                  </Typography>
+                </VerticalLayout>
+                <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
+                  {t("trading.swap.action.submit")}
+                </ActionButton>
+              </HorizontalLayout>
+            )}
           </DialogActionsBox>
         </Portal>
       </VerticalLayout>
