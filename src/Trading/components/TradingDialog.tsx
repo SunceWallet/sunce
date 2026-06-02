@@ -2,8 +2,8 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
 import Box from "@material-ui/core/Box"
-import Button from "@material-ui/core/Button"
-import ButtonGroup from "@material-ui/core/ButtonGroup"
+import Tab from "@material-ui/core/Tab"
+import Tabs from "@material-ui/core/Tabs"
 import Typography from "@material-ui/core/Typography"
 import { Account } from "~App/contexts/accounts"
 import * as routes from "~App/routes"
@@ -15,7 +15,7 @@ import ScrollableBalances from "~Generic/components/ScrollableBalances"
 import TestnetBadge from "~Generic/components/TestnetBadge"
 import ViewLoading from "~Generic/components/ViewLoading"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { useDialogActions, useRouter } from "~Generic/hooks/userinterface"
+import { useDialogActions, useIsMobile, useRouter } from "~Generic/hooks/userinterface"
 import { matchesRoute } from "~Generic/lib/routes"
 import { parseAssetID, stringifyAsset } from "~Generic/lib/stellar"
 import { getLastArgumentFromURL } from "~Generic/lib/url"
@@ -56,6 +56,7 @@ function TradingDialog(props: TradingDialogProps) {
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
   const dialogActionsRef = useDialogActions()
   const router = useRouter()
+  const isMobile = useIsMobile()
   const [preselectedAsset, setPreselectedAsset] = React.useState<Asset | undefined>()
   const { t } = useTranslation()
 
@@ -90,23 +91,25 @@ function TradingDialog(props: TradingDialogProps) {
   const ModeSelector = React.useMemo(
     () => (
       <HorizontalLayout justifyContent="center" margin="16px 0 0">
-        <ButtonGroup size="small">
-          <Button color={tradeMode === "swap" ? "primary" : undefined} onClick={() => selectTradeMode("swap")}>
-            {t("trading.action-selection.swap.label")}
-          </Button>
-          <Button color={tradeMode === "buy" ? "primary" : undefined} onClick={() => selectTradeMode("buy")}>
-            {t("trading.action-selection.buy.label-short")}
-          </Button>
-          <Button color={tradeMode === "sell" ? "primary" : undefined} onClick={() => selectTradeMode("sell")}>
-            {t("trading.action-selection.sell.label-short")}
-          </Button>
-          <Button color={tradeMode === "orders" ? "primary" : undefined} onClick={() => selectTradeMode("orders")}>
-            {t("trading.action-selection.orders.label")}
-          </Button>
-        </ButtonGroup>
+        <Box maxWidth={isMobile ? 500 : 640} width="100%">
+          <Tabs
+            aria-label={t<string>("trading.title")}
+            centered={!isMobile}
+            indicatorColor="primary"
+            onChange={(_, mode: TradeMode) => selectTradeMode(mode)}
+            textColor="inherit"
+            value={tradeMode}
+            variant={isMobile ? "fullWidth" : "standard"}
+          >
+            <Tab label={t("trading.action-selection.swap.label")} value="swap" />
+            <Tab label={t("trading.action-selection.buy.label-short")} value="buy" />
+            <Tab label={t("trading.action-selection.sell.label-short")} value="sell" />
+            <Tab label={t("trading.action-selection.orders.label")} value="orders" />
+          </Tabs>
+        </Box>
       </HorizontalLayout>
     ),
-    [selectTradeMode, t, tradeMode]
+    [isMobile, selectTradeMode, t, tradeMode]
   )
 
   const MainContent = React.useMemo(
