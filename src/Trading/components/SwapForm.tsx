@@ -492,7 +492,7 @@ function SwapForm(props: Props) {
                 style={{ maxWidth: 500 }}
                 width="100%"
               >
-                <VerticalLayout grow={1} padding="0 24px 0 0">
+                <VerticalLayout grow={1} padding="0 24px 0 0" style={{ minWidth: 0 }}>
                   <Typography variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
                     {quoteSummary ||
                       t("trading.swap.quote.summary-strict-send", {
@@ -509,6 +509,7 @@ function SwapForm(props: Props) {
                   loading={pending}
                   icon={<SyncIcon />}
                   onClick={submitForm}
+                  style={{ flexShrink: 0 }}
                   type="primary"
                 >
                   {t("trading.swap.action.submit")}
