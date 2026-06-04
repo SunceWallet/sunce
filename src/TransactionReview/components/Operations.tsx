@@ -9,7 +9,7 @@ import { useAccountHomeDomainSafe } from "~Generic/hooks/stellar"
 import { useIsSmallMobile } from "~Generic/hooks/userinterface"
 import { AccountData } from "~Generic/lib/account"
 import { formatBalance } from "~Generic/lib/balances"
-import { offerAssetToAsset, stringifyAssetToReadableString, trustlineLimitEqualsUnlimited } from "~Generic/lib/stellar"
+import { horizonAssetToAsset, stringifyAssetToReadableString, trustlineLimitEqualsUnlimited } from "~Generic/lib/stellar"
 import { CopyableAddress } from "~Generic/components/PublicKey"
 import { SummaryItem, SummaryDetailsField } from "./SummaryItem"
 import { Account, AccountsContext } from "~App/contexts/accounts"
@@ -49,7 +49,7 @@ export function useOperationTitle() {
     if (operation.type === "payment") {
       return t("operations.payment.title")
     } else if (operation.type === "pathPaymentStrictSend" || operation.type === "pathPaymentStrictReceive") {
-      return t("operations.swap.title", "Swap")
+      return t("operations.swap.title")
     } else if (operation.type === "createAccount") {
       return t("operations.create-account.title")
     } else if (operation.type === "manageBuyOffer") {
@@ -189,17 +189,17 @@ function PathPaymentOperation(props: OperationProps<Operation.PathPaymentStrictS
   const payAmount = props.operation.type === "pathPaymentStrictSend" ? props.operation.sendAmount : props.operation.sendMax
   const boundLabel =
     props.operation.type === "pathPaymentStrictSend"
-      ? t("operations.swap.summary.minimum-received", "Minimum received")
-      : t("operations.swap.summary.maximum-paid", "Maximum paid")
+      ? t("operations.swap.summary.minimum-received")
+      : t("operations.swap.summary.maximum-paid")
 
   return (
-    <SummaryItem heading={props.hideHeading ? undefined : t("operations.swap.title", "Swap")}>
+    <SummaryItem heading={props.hideHeading ? undefined : t("operations.swap.title")}>
       <SummaryDetailsField
-        label={t("operations.swap.summary.you-pay", "You pay")}
+        label={t("operations.swap.summary.you-pay")}
         value={<SingleBalance assetCode={props.operation.sendAsset.code} balance={String(payAmount)} untrimmed />}
       />
       <SummaryDetailsField
-        label={t("operations.swap.summary.you-receive", "You receive")}
+        label={t("operations.swap.summary.you-receive")}
         value={<SingleBalance assetCode={props.operation.destAsset.code} balance={String(receiveAmount)} untrimmed />}
       />
       <SummaryDetailsField
@@ -219,17 +219,17 @@ function PathPaymentOperation(props: OperationProps<Operation.PathPaymentStrictS
       {path.length > 0 ? (
         <SummaryDetailsField
           fullWidth
-          label={t("operations.swap.summary.route", "Route")}
+          label={t("operations.swap.summary.route")}
           value={path.map(stringifyAssetToReadableString).join(" -> ")}
         />
       ) : null}
       <SummaryDetailsField
-        label={t("operations.swap.summary.destination", "Destination")}
+        label={t("operations.swap.summary.destination")}
         value={<CopyableAddress address={destination} testnet={props.testnet} variant="short" />}
       />
       {source ? (
         <SummaryDetailsField
-          label={t("operations.swap.summary.source", "Source")}
+          label={t("operations.swap.summary.source")}
           value={<CopyableAddress address={source} testnet={props.testnet} variant="short" />}
         />
       ) : null}
@@ -432,27 +432,27 @@ function ManageOfferOperation(props: ManageOfferOperationProps) {
             label={t("operations.manage-offer.summary.buy")}
             value={
               <SingleBalance
-                assetCode={offerAssetToAsset(offer.buying).getCode()}
+                assetCode={horizonAssetToAsset(offer.buying).getCode()}
                 balance={String(BigNumber(offer.amount).mul(offer.price))}
               />
             }
           />
           <SummaryDetailsField
             label={t("operations.manage-offer.summary.sell")}
-            value={<SingleBalance assetCode={offerAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
+            value={<SingleBalance assetCode={horizonAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
           />
         </SummaryItem>
       ) : (
         <SummaryItem heading={props.hideHeading ? undefined : heading}>
           <SummaryDetailsField
             label={t("operations.manage-offer.summary.sell")}
-            value={<SingleBalance assetCode={offerAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
+            value={<SingleBalance assetCode={horizonAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
           />
           <SummaryDetailsField
             label={t("operations.manage-offer.summary.buy")}
             value={
               <SingleBalance
-                assetCode={offerAssetToAsset(offer.buying).getCode()}
+                assetCode={horizonAssetToAsset(offer.buying).getCode()}
                 balance={String(BigNumber(offer.amount).mul(offer.price))}
               />
             }

@@ -2,7 +2,7 @@ import React from "react"
 import BigNumber from "big.js"
 import debounce from "lodash.debounce"
 import { Asset } from "@stellar/stellar-sdk"
-import { ceilStellarAmount, floorStellarAmount, stringifyAsset } from "~Generic/lib/stellar"
+import { ceilStellarAmount, floorStellarAmount, horizonAssetToAsset, stringifyAsset } from "~Generic/lib/stellar"
 import { NetWorker } from "~Workers/worker-controller"
 
 export type SwapSide = "source" | "destination"
@@ -24,11 +24,7 @@ type HorizonPathRecord = {
   source_amount?: string
 }
 
-type HorizonAssetRecord = {
-  asset_code?: string
-  asset_issuer?: string
-  asset_type: string
-}
+type HorizonAssetRecord = Parameters<typeof horizonAssetToAsset>[0]
 
 export const quoteFreshnessMs = 30_000
 
@@ -40,10 +36,6 @@ export function getAllowedPriceChangeBound(quote: SwapQuote, allowedPriceChange:
   return quote.mode === "strict-send"
     ? floorStellarAmount(BigNumber(quote.destinationAmount).mul(1 - allowedPriceChange))
     : ceilStellarAmount(BigNumber(quote.sourceAmount).mul(1 + allowedPriceChange))
-}
-
-export function horizonAssetToAsset(asset: HorizonAssetRecord) {
-  return asset.asset_type === "native" ? Asset.native() : new Asset(asset.asset_code || "", asset.asset_issuer || "")
 }
 
 export function selectBestStrictSendPath(records: HorizonPathRecord[]) {
