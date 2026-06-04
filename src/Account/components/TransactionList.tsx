@@ -388,6 +388,34 @@ function TransactionListBalanceChange(props: {
   )
 }
 
+type BalanceChange = Pick<PaymentSummary[number], "asset" | "balanceChange">
+
+function TransactionListBalanceChangeGrid(props: { balanceChanges: BalanceChange[] }) {
+  const isSmallScreen = useIsMobile()
+
+  return (
+    <span
+      style={{
+        alignItems: "baseline",
+        columnGap: "0.4em",
+        display: "grid",
+        gridTemplateColumns: "auto auto",
+        justifyContent: "end"
+      }}
+    >
+      {props.balanceChanges.map(balanceChange => (
+        <React.Fragment key={stringifyAsset(balanceChange.asset)}>
+          <TransactionListBalanceChange
+            assetCode={balanceChange.asset.getCode()}
+            balanceChange={balanceChange.balanceChange}
+            style={isSmallScreen ? { fontSize: "1rem" } : { fontSize: "1.4rem" }}
+          />
+        </React.Fragment>
+      ))}
+    </span>
+  )
+}
+
 function TransactionListItemBalance(props: {
   accountPublicKey: string
   paymentSummary: PaymentSummary
@@ -395,7 +423,6 @@ function TransactionListItemBalance(props: {
   transaction: Transaction
 }) {
   const { paymentSummary } = props
-  const isSmallScreen = useIsMobile()
 
   const creationOps = props.transaction.operations.filter(
     (op): op is Operation.CreateAccount => op.type === "createAccount"
@@ -422,27 +449,7 @@ function TransactionListItemBalance(props: {
 
   return (
     <ListItemText primaryTypographyProps={{ align: "right" }} style={{ flexShrink: 0, ...props.style }}>
-      {paymentSummary.length === 0 ? null : (
-        <span
-          style={{
-            alignItems: "baseline",
-            columnGap: "0.4em",
-            display: "grid",
-            gridTemplateColumns: "auto auto",
-            justifyContent: "end"
-          }}
-        >
-          {balanceChanges.map(balanceChange => (
-            <React.Fragment key={stringifyAsset(balanceChange.asset)}>
-              <TransactionListBalanceChange
-                assetCode={balanceChange.asset.getCode()}
-                balanceChange={balanceChange.balanceChange}
-                style={isSmallScreen ? { fontSize: "1rem" } : { fontSize: "1.4rem" }}
-              />
-            </React.Fragment>
-          ))}
-        </span>
-      )}
+      {paymentSummary.length === 0 ? null : <TransactionListBalanceChangeGrid balanceChanges={balanceChanges} />}
     </ListItemText>
   )
 }
