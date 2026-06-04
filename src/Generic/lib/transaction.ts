@@ -101,17 +101,20 @@ function selectTransactionTimeout(accountData: Pick<ServerApi.AccountRecord, "si
 
 interface TxBlueprint {
   accountData: Pick<ServerApi.AccountRecord, "id" | "signers">
-  horizon: Server
+  horizon?: Server
+  horizonURL?: string
   memo?: Memo | null
   minTransactionFee?: number
   walletAccount: Account
 }
 
 export async function createTransaction(operations: xdr.Operation<any>[], options: TxBlueprint) {
-  const { horizon, walletAccount } = options
+  const { walletAccount } = options
   const { netWorker } = await workers
 
-  const horizonURL = horizon.serverURL.toString()
+  const horizonURL = options.horizonURL || options.horizon?.serverURL.toString()
+  if (!horizonURL) fail("Missing horizon URL for transaction creation")
+
   const timeout = selectTransactionTimeout(options.accountData)
 
   const [accountMetadata, timebounds] = await Promise.all([

@@ -30,7 +30,6 @@ type TradeMode = routes.TradeMethod
 
 interface TradingDialogProps {
   account: Account
-  horizon: Horizon.Server
   onClose: () => void
   sendTransaction: (transaction: Transaction) => void
 }
@@ -206,7 +205,7 @@ function TradingDialogContainer(props: Pick<TradingDialogProps, "account" | "onC
 
   return (
     <TransactionSender account={props.account} onSubmissionCompleted={navigateToAccount}>
-      {txContext => <TradingDialog {...props} {...txContext} />}
+      {({ sendTransaction }) => <TradingDialog {...props} sendTransaction={sendTransaction} />}
     </TransactionSender>
   )
 }

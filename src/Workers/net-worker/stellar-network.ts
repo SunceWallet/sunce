@@ -619,6 +619,49 @@ function createOrderbookQuery(selling: Asset, buying: Asset) {
   return query
 }
 
+function sourceAssetQuery(asset: Asset) {
+  return asset.isNative()
+    ? { source_asset_type: "native" }
+    : {
+        source_asset_code: asset.getCode(),
+        source_asset_issuer: asset.getIssuer(),
+        source_asset_type: asset.getAssetType()
+      }
+}
+
+function destinationAssetQuery(asset: Asset) {
+  return asset.isNative()
+    ? { destination_asset_type: "native" }
+    : {
+        destination_asset_code: asset.getCode(),
+        destination_asset_issuer: asset.getIssuer(),
+        destination_asset_type: asset.getAssetType()
+      }
+}
+
+function stringifyPathAsset(asset: Asset) {
+  return asset.isNative() ? "native" : `${asset.getCode()}:${asset.getIssuer()}`
+}
+
+export interface PathRecord {
+  destination_amount?: string
+  path?: {
+    asset_code?: string
+    asset_issuer?: string
+    asset_type: string
+  }[]
+  source_amount?: string
+}
+
+async function fetchPathRecords(horizonURLs: string[], endpoint: "paths/strict-send" | "paths/strict-receive", query: any) {
+  const horizonURL = getRandomURL(horizonURLs)
+  const fetchQueue = getFetchQueue(horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `${endpoint}?${qs.stringify(query)}`)
+  const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
+  const page = await parseJSONResponse<CollectionPage<PathRecord>>(response)
+  return page._embedded.records
+}
+
 function createEmptyOrderbookRecord(base: Asset, counter: Asset): Horizon.ServerApi.OrderbookRecord {
   return {
     _links: {
@@ -879,6 +922,40 @@ export async function fetchOrderbookRecord(horizonURLs: string[], sellingAsset: 
 
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
   return parseJSONResponse<Horizon.ServerApi.OrderbookRecord>(response)
+}
+
+export async function fetchStrictSendPaths(
+  horizonURLs: string[],
+  sourceAssetID: string,
+  sourceAmount: string,
+  destinationAssetID: string
+) {
+  const sourceAsset = parseAssetID(sourceAssetID)
+  const destinationAsset = parseAssetID(destinationAssetID)
+  const query = {
+    ...identification,
+    ...sourceAssetQuery(sourceAsset),
+    destination_assets: stringifyPathAsset(destinationAsset),
+    source_amount: sourceAmount
+  }
+  return fetchPathRecords(horizonURLs, "paths/strict-send", query)
+}
+
+export async function fetchStrictReceivePaths(
+  horizonURLs: string[],
+  sourceAssetID: string,
+  destinationAssetID: string,
+  destinationAmount: string
+) {
+  const sourceAsset = parseAssetID(sourceAssetID)
+  const destinationAsset = parseAssetID(destinationAssetID)
+  const query = {
+    ...identification,
+    ...destinationAssetQuery(destinationAsset),
+    destination_amount: destinationAmount,
+    source_assets: stringifyPathAsset(sourceAsset)
+  }
+  return fetchPathRecords(horizonURLs, "paths/strict-receive", query)
 }
 
 export async function fetchTimebounds(horizonURL: string, timeout: number) {

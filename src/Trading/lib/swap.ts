@@ -1,7 +1,9 @@
 import React from "react"
 import BigNumber from "big.js"
 import debounce from "lodash.debounce"
-import { Asset, Horizon } from "@stellar/stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
+import { stringifyAsset } from "~Generic/lib/stellar"
+import { NetWorker } from "~Workers/worker-controller"
 
 export type SwapSide = "source" | "destination"
 export type SwapMode = "strict-send" | "strict-receive"
@@ -77,16 +79,22 @@ function getSwapMode(primarySide: SwapSide): SwapMode {
 export async function fetchSwapQuote(options: {
   amount: string
   destinationAsset: Asset
-  horizon: Horizon.Server
+  horizonURLs: string[]
+  netWorker: NetWorker
   primarySide: SwapSide
   sourceAsset: Asset
 }) {
-  const { amount, destinationAsset, horizon, primarySide, sourceAsset } = options
+  const { amount, destinationAsset, horizonURLs, netWorker, primarySide, sourceAsset } = options
   const mode = getSwapMode(primarySide)
 
   if (mode === "strict-send") {
-    const response = await horizon.strictSendPaths(sourceAsset, amount, [destinationAsset]).call()
-    const record = selectBestStrictSendPath((response.records || []) as HorizonPathRecord[])
+    const records = await netWorker.fetchStrictSendPaths(
+      horizonURLs,
+      stringifyAsset(sourceAsset),
+      amount,
+      stringifyAsset(destinationAsset)
+    )
+    const record = selectBestStrictSendPath((records || []) as HorizonPathRecord[])
     if (!record || !record.destination_amount) return undefined
 
     return {
@@ -99,8 +107,13 @@ export async function fetchSwapQuote(options: {
       createdAt: Date.now()
     }
   } else {
-    const response = await horizon.strictReceivePaths([sourceAsset], destinationAsset, amount).call()
-    const record = selectBestStrictReceivePath((response.records || []) as HorizonPathRecord[])
+    const records = await netWorker.fetchStrictReceivePaths(
+      horizonURLs,
+      stringifyAsset(sourceAsset),
+      stringifyAsset(destinationAsset),
+      amount
+    )
+    const record = selectBestStrictReceivePath((records || []) as HorizonPathRecord[])
     if (!record || !record.source_amount) return undefined
 
     return {
@@ -126,11 +139,12 @@ export function useSwapQuote(options: {
   amount: string
   amountIsValid: boolean
   destinationAsset?: Asset
-  horizon: Horizon.Server
+  horizonURLs: string[]
+  netWorker: NetWorker
   primarySide: SwapSide
   sourceAsset?: Asset
 }) {
-  const { amount, amountIsValid, destinationAsset, horizon, primarySide, sourceAsset } = options
+  const { amount, amountIsValid, destinationAsset, horizonURLs, netWorker, primarySide, sourceAsset } = options
   const [quote, setQuote] = React.useState<SwapQuote | undefined>()
   const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "unavailable" | "failed">("idle")
   const requestIdRef = React.useRef(0)
@@ -182,13 +196,14 @@ export function useSwapQuote(options: {
     requestQuote(requestId, {
       amount,
       destinationAsset,
-      horizon,
+      horizonURLs,
+      netWorker,
       primarySide,
       sourceAsset
     })
 
     return () => requestQuote.cancel()
-  }, [amount, amountIsValid, destinationAsset, horizon, primarySide, sourceAsset, requestQuote])
+  }, [amount, amountIsValid, destinationAsset, horizonURLs, netWorker, primarySide, sourceAsset, requestQuote])
 
   React.useEffect(() => {
     if (!currentQuote || !sourceAsset || !destinationAsset || sourceAsset.equals(destinationAsset) || !amountIsValid) return
@@ -199,14 +214,15 @@ export function useSwapQuote(options: {
       requestQuote(requestIdRef.current, {
         amount,
         destinationAsset,
-        horizon,
+        horizonURLs,
+        netWorker,
         primarySide,
         sourceAsset
       })
     }, Math.max(currentQuote.createdAt + quoteFreshnessMs - Date.now(), 0))
 
     return () => window.clearTimeout(refreshTimeout)
-  }, [amount, amountIsValid, currentQuote, destinationAsset, horizon, primarySide, requestQuote, sourceAsset])
+  }, [amount, amountIsValid, currentQuote, destinationAsset, horizonURLs, netWorker, primarySide, requestQuote, sourceAsset])
 
   return { quote: currentQuote, status }
 }

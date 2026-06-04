@@ -17,8 +17,9 @@ import AssetSelector from "~Generic/components/AssetSelector"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
 import { PriceInput } from "~Generic/components/FormFields"
 import Portal from "~Generic/components/Portal"
-import { useHorizon } from "~Generic/hooks/stellar"
+import { useHorizonURLs } from "~Generic/hooks/stellar"
 import { RefStateObject, useIsMobile } from "~Generic/hooks/userinterface"
+import { useNetWorker } from "~Generic/hooks/workers"
 import { AccountData } from "~Generic/lib/account"
 import { formatBalance } from "~Generic/lib/balances"
 import { FormBigNumber, isValidAmount, replaceCommaWithDot } from "~Generic/lib/form"
@@ -84,7 +85,8 @@ function keepAmountAssetTogether(text: string, pairs: [string, string][]) {
 function SwapForm(props: Props) {
   const { t } = useTranslation()
   const isMobile = useIsMobile()
-  const horizon = useHorizon(props.account.testnet)
+  const horizonURLs = useHorizonURLs(props.account.testnet)
+  const netWorker = useNetWorker()
   const [sourceAsset, setSourceAsset] = React.useState<Asset | undefined>(props.initialSourceAsset)
   const [destinationAsset, setDestinationAsset] = React.useState<Asset | undefined>()
   const [sourceAmount, setSourceAmount] = React.useState("")
@@ -120,7 +122,8 @@ function SwapForm(props: Props) {
     amount: normalizeAmount(primaryAmount),
     amountIsValid: primaryAmountIsValid,
     destinationAsset,
-    horizon,
+    horizonURLs,
+    netWorker,
     primarySide,
     sourceAsset
   })
@@ -222,7 +225,8 @@ function SwapForm(props: Props) {
         ? await fetchSwapQuote({
             amount: normalizeAmount(primaryAmount),
             destinationAsset,
-            horizon,
+            horizonURLs,
+            netWorker,
             primarySide,
             sourceAsset
           })
@@ -248,7 +252,7 @@ function SwapForm(props: Props) {
       })
       const tx = await createTransaction([operation], {
         accountData: props.accountData,
-        horizon,
+        horizonURL: horizonURLs[0],
         walletAccount: props.account
       })
       props.sendTransaction(tx)
@@ -257,7 +261,7 @@ function SwapForm(props: Props) {
     } finally {
       setPending(false)
     }
-  }, [allowedPriceChange, destinationAsset, horizon, primaryAmount, primarySide, props, quote, sourceAsset, formError])
+  }, [allowedPriceChange, destinationAsset, formError, horizonURLs, netWorker, primaryAmount, primarySide, props, quote, sourceAsset])
 
   const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
   const quoteSummary =
