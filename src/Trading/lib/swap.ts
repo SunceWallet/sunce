@@ -2,7 +2,7 @@ import React from "react"
 import BigNumber from "big.js"
 import debounce from "lodash.debounce"
 import { Asset } from "@stellar/stellar-sdk"
-import { stringifyAsset } from "~Generic/lib/stellar"
+import { ceilStellarAmount, floorStellarAmount, stringifyAsset } from "~Generic/lib/stellar"
 import { NetWorker } from "~Workers/worker-controller"
 
 export type SwapSide = "source" | "destination"
@@ -34,14 +34,6 @@ export const quoteFreshnessMs = 30_000
 
 export function isSwapQuoteStale(quote: Pick<SwapQuote, "createdAt">, now = Date.now()) {
   return now - quote.createdAt > quoteFreshnessMs
-}
-
-export function floorStellarAmount(amount: BigNumber) {
-  return amount.round(7, 0).toFixed(7)
-}
-
-export function ceilStellarAmount(amount: BigNumber) {
-  return amount.round(7, 3).toFixed(7)
 }
 
 export function getAllowedPriceChangeBound(quote: SwapQuote, allowedPriceChange: number) {

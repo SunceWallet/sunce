@@ -50,6 +50,14 @@ export function balancelineToAsset(balanceline: BalanceLine): Asset {
     : new Asset(balanceline.asset_code, balanceline.asset_issuer)
 }
 
+export function floorStellarAmount(amount: BigNumber) {
+  return amount.round(7, 0).toFixed(7)
+}
+
+export function ceilStellarAmount(amount: BigNumber) {
+  return amount.round(7, 3).toFixed(7)
+}
+
 /** Reversal of stringifyAsset() */
 export function parseAssetID(assetID: string) {
   if (assetID === "XLM") {
