@@ -817,6 +817,27 @@ export async function fetchLatestAccountEffect(horizonURL: string, accountID: st
   return parseJSONResponse<Horizon.ServerApi.EffectRecord>(response)
 }
 
+export async function fetchTransactionEffects(horizonURLs: string[], transactionHash: string) {
+  const horizonURL = getRandomURL(horizonURLs)
+  const fetchQueue = getFetchQueue(horizonURL)
+  const url = resolveHorizonEndpointURL(
+    horizonURL,
+    `transactions/${transactionHash}/effects?${qs.stringify({
+      ...identification,
+      limit: 200,
+      order: "asc"
+    })}`
+  )
+  const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
+
+  if (response.status === 404) {
+    return []
+  }
+
+  const page = await parseJSONResponse<CollectionPage<Horizon.ServerApi.EffectRecord>>(response)
+  return page._embedded.records
+}
+
 export interface FetchTransactionsOptions extends PaginationOptions {
   emptyOn404?: boolean
   emptyOn410?: boolean

@@ -1,11 +1,61 @@
 import BigNumber from "big.js"
-import { Asset, Operation, Transaction } from "@stellar/stellar-sdk"
+import { Asset, Horizon, Operation, Transaction } from "@stellar/stellar-sdk"
 
 export type PaymentSummary = {
   asset: Asset
   balanceChange: BigNumber
   publicKeys: string[]
 }[]
+
+type BalanceEffect = Horizon.ServerApi.EffectRecord & {
+  account?: string
+  amount?: string
+  asset_code?: string
+  asset_issuer?: string
+  asset_type?: string
+}
+
+function addBalanceChange(
+  balanceChanges: PaymentSummary,
+  asset: Asset,
+  amount: BigNumber,
+  publicKeys: string[] = []
+) {
+  const summaryItem = balanceChanges.find(assetBalanceChange => assetBalanceChange.asset.equals(asset))
+
+  if (summaryItem) {
+    summaryItem.balanceChange = summaryItem.balanceChange.add(amount)
+    summaryItem.publicKeys = summaryItem.publicKeys.concat(publicKeys)
+  } else {
+    balanceChanges.push({ asset, balanceChange: amount, publicKeys })
+  }
+}
+
+function assetFromBalanceEffect(effect: BalanceEffect) {
+  return effect.asset_type === "native" || !effect.asset_code
+    ? Asset.native()
+    : new Asset(effect.asset_code, effect.asset_issuer || "")
+}
+
+export function getPaymentSummaryFromEffects(
+  accountPublicKey: string,
+  effects: Horizon.ServerApi.EffectRecord[],
+  operationSummary: PaymentSummary = []
+) {
+  const balanceChanges: PaymentSummary = []
+
+  for (const effect of effects as BalanceEffect[]) {
+    if (effect.account !== accountPublicKey || !effect.amount) continue
+    if (effect.type !== "account_credited" && effect.type !== "account_debited") continue
+
+    const asset = assetFromBalanceEffect(effect)
+    const amount = BigNumber(effect.amount).mul(effect.type === "account_debited" ? -1 : 1)
+    const operationSummaryItem = operationSummary.find(item => item.asset.equals(asset))
+    addBalanceChange(balanceChanges, asset, amount, operationSummaryItem?.publicKeys || [])
+  }
+
+  return balanceChanges
+}
 
 export function getPaymentSummary(accountPublicKey: string, transaction: Transaction) {
   const balanceChanges: PaymentSummary = []
@@ -27,32 +77,25 @@ export function getPaymentSummary(accountPublicKey: string, transaction: Transac
     if (operation.type === "pathPaymentStrictSend" || operation.type === "pathPaymentStrictReceive") {
       const sourceAccount = operation.source || transaction.source
       const isSelfSwap = operation.destination === sourceAccount
-      const pathRemotePublicKey = isSelfSwap ? null : operation.destination
-      const changes = [
-        {
-          asset: operation.sendAsset,
-          amount: BigNumber(operation.type === "pathPaymentStrictSend" ? operation.sendAmount : operation.sendMax).mul(-1)
-        },
-        {
-          asset: operation.destAsset,
-          amount: BigNumber(operation.type === "pathPaymentStrictSend" ? operation.destMin : operation.destAmount)
-        }
-      ]
+      const sourcePublicKeys = isSelfSwap ? [] : [operation.destination]
+      const destinationPublicKeys = isSelfSwap ? [] : [sourceAccount]
 
-      for (const change of changes) {
-        const pathSummaryItem = balanceChanges.find(assetBalanceChange => assetBalanceChange.asset.equals(change.asset))
-        if (pathSummaryItem) {
-          pathSummaryItem.balanceChange = pathSummaryItem.balanceChange.add(change.amount)
-          pathSummaryItem.publicKeys = pathRemotePublicKey
-            ? pathSummaryItem.publicKeys.concat(pathRemotePublicKey)
-            : pathSummaryItem.publicKeys
-        } else {
-          balanceChanges.push({
-            asset: change.asset,
-            balanceChange: change.amount,
-            publicKeys: pathRemotePublicKey ? [pathRemotePublicKey] : []
-          })
-        }
+      if (sourceAccount === accountPublicKey) {
+        addBalanceChange(
+          balanceChanges,
+          operation.sendAsset,
+          BigNumber(operation.type === "pathPaymentStrictSend" ? operation.sendAmount : operation.sendMax).mul(-1),
+          sourcePublicKeys
+        )
+      }
+
+      if (operation.destination === accountPublicKey) {
+        addBalanceChange(
+          balanceChanges,
+          operation.destAsset,
+          BigNumber(operation.type === "pathPaymentStrictSend" ? operation.destMin : operation.destAmount),
+          destinationPublicKeys
+        )
       }
       continue
     }

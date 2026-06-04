@@ -452,6 +452,7 @@ interface TransactionListItemProps {
   alwaysShowSource?: boolean
   className?: string
   createdAt: string
+  exactPaymentSummary?: PaymentSummary
   icon?: React.ReactElement<any>
   onOpenTransaction?: (transactionHash: string) => void
   style?: React.CSSProperties
@@ -464,7 +465,7 @@ export const TransactionListItem = React.memo(function TransactionListItem(props
 
   const { transaction, onOpenTransaction } = props
 
-  const paymentSummary = getPaymentSummary(props.accountPublicKey, transaction)
+  const paymentSummary = props.exactPaymentSummary || getPaymentSummary(props.accountPublicKey, transaction)
   const onOpen = onOpenTransaction ? () => onOpenTransaction(transaction.hash().toString("hex")) : undefined
 
   return (
@@ -599,6 +600,7 @@ function TransactionList(props: TransactionListProps) {
                 accountPublicKey={props.account.publicKey}
                 className={classes.listItem}
                 createdAt={transaction.created_at}
+                exactPaymentSummary={transaction.exactPaymentSummary}
                 onOpenTransaction={openTransaction}
                 transaction={transaction.decodedTx}
               />
