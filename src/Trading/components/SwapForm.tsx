@@ -96,10 +96,10 @@ function SwapForm(props: Props) {
   const [priceChanged, setPriceChanged] = React.useState(false)
 
   React.useEffect(() => {
-    if (!sourceAsset && props.initialSourceAsset) {
+    if (!sourceAsset && !destinationAsset && props.initialSourceAsset) {
       setSourceAsset(props.initialSourceAsset)
     }
-  }, [props.initialSourceAsset, sourceAsset])
+  }, [destinationAsset, props.initialSourceAsset, sourceAsset])
 
   const sourceBalanceLine = React.useMemo(
     () => findMatchingBalanceLine(props.accountData.balances, sourceAsset),
