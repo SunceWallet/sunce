@@ -112,6 +112,15 @@
     }
   },
   "swap": {
+    "summary": {
+      "destination": "Примаоц",
+      "maximum-paid": "Максимум плаћено",
+      "minimum-received": "Минимум примљено",
+      "route": "Рута",
+      "source": "Пошиљалац",
+      "you-pay": "Плаћате",
+      "you-receive": "Примате"
+    },
     "title": "Размена"
   }
 }

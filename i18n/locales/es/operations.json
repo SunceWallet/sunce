@@ -112,6 +112,15 @@
     }
   },
   "swap": {
+    "summary": {
+      "destination": "Destino",
+      "maximum-paid": "Máximo pagado",
+      "minimum-received": "Mínimo recibido",
+      "route": "Ruta",
+      "source": "Origen",
+      "you-pay": "Usted paga",
+      "you-receive": "Usted recibe"
+    },
     "title": "Intercambio"
   }
 }

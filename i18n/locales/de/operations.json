@@ -112,6 +112,15 @@
     }
   },
   "swap": {
+    "summary": {
+      "destination": "Ziel",
+      "maximum-paid": "Maximal gezahlt",
+      "minimum-received": "Minimal erhalten",
+      "route": "Route",
+      "source": "Quelle",
+      "you-pay": "Sie zahlen",
+      "you-receive": "Sie erhalten"
+    },
     "title": "Tausch"
   }
 }

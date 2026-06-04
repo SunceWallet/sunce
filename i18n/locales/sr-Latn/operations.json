@@ -112,6 +112,15 @@
     }
   },
   "swap": {
+    "summary": {
+      "destination": "Primaoc",
+      "maximum-paid": "Maximum plaćeno",
+      "minimum-received": "Minimum primljeno",
+      "route": "Ruta",
+      "source": "Pošiljalac",
+      "you-pay": "Plaćate",
+      "you-receive": "Primate"
+    },
     "title": "Razmena"
   }
 }

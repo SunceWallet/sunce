@@ -112,6 +112,15 @@
     }
   },
   "swap": {
+    "summary": {
+      "destination": "Получатель",
+      "maximum-paid": "Максимум к оплате",
+      "minimum-received": "Минимум к получению",
+      "route": "Маршрут",
+      "source": "Источник",
+      "you-pay": "Вы платите",
+      "you-receive": "Вы получаете"
+    },
     "title": "Обмен"
   }
 }
