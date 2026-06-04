@@ -209,9 +209,9 @@ function SwapForm(props: Props) {
     setDestinationAsset(sourceAsset)
     setSourceAmount(destinationAmount)
     setDestinationAmount(sourceAmount)
-    setPrimarySide("source")
+    setPrimarySide(primarySide === "source" ? "destination" : "source")
     setPriceChanged(false)
-  }, [destinationAmount, destinationAsset, sourceAmount, sourceAsset])
+  }, [destinationAmount, destinationAsset, primarySide, sourceAmount, sourceAsset])
 
   const submitForm = React.useCallback(async () => {
     if (!quote || !sourceAsset || !destinationAsset || formError) return

@@ -70,6 +70,10 @@ function pathFromRecord(record: HorizonPathRecord) {
   return (record.path || []).map(horizonAssetToAsset)
 }
 
+function getSwapMode(primarySide: SwapSide): SwapMode {
+  return primarySide === "source" ? "strict-send" : "strict-receive"
+}
+
 export async function fetchSwapQuote(options: {
   amount: string
   destinationAsset: Asset
@@ -78,14 +82,15 @@ export async function fetchSwapQuote(options: {
   sourceAsset: Asset
 }) {
   const { amount, destinationAsset, horizon, primarySide, sourceAsset } = options
+  const mode = getSwapMode(primarySide)
 
-  if (primarySide === "source") {
+  if (mode === "strict-send") {
     const response = await horizon.strictSendPaths(sourceAsset, amount, [destinationAsset]).call()
     const record = selectBestStrictSendPath((response.records || []) as HorizonPathRecord[])
     if (!record || !record.destination_amount) return undefined
 
     return {
-      mode: "strict-send" as SwapMode,
+      mode,
       sourceAsset,
       sourceAmount: amount,
       destinationAsset,
@@ -99,7 +104,7 @@ export async function fetchSwapQuote(options: {
     if (!record || !record.source_amount) return undefined
 
     return {
-      mode: "strict-receive" as SwapMode,
+      mode,
       sourceAsset,
       sourceAmount: record.source_amount,
       destinationAsset,
@@ -129,6 +134,15 @@ export function useSwapQuote(options: {
   const [quote, setQuote] = React.useState<SwapQuote | undefined>()
   const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "unavailable" | "failed">("idle")
   const requestIdRef = React.useRef(0)
+  const currentQuote =
+    quote &&
+    sourceAsset &&
+    destinationAsset &&
+    quote.sourceAsset.equals(sourceAsset) &&
+    quote.destinationAsset.equals(destinationAsset) &&
+    quote.mode === getSwapMode(primarySide)
+      ? quote
+      : undefined
 
   const requestQuote = React.useMemo(
     () =>
@@ -177,7 +191,7 @@ export function useSwapQuote(options: {
   }, [amount, amountIsValid, destinationAsset, horizon, primarySide, sourceAsset, requestQuote])
 
   React.useEffect(() => {
-    if (!quote || !sourceAsset || !destinationAsset || sourceAsset.equals(destinationAsset) || !amountIsValid) return
+    if (!currentQuote || !sourceAsset || !destinationAsset || sourceAsset.equals(destinationAsset) || !amountIsValid) return
 
     const refreshTimeout = window.setTimeout(() => {
       requestIdRef.current += 1
@@ -189,10 +203,10 @@ export function useSwapQuote(options: {
         primarySide,
         sourceAsset
       })
-    }, Math.max(quote.createdAt + quoteFreshnessMs - Date.now(), 0))
+    }, Math.max(currentQuote.createdAt + quoteFreshnessMs - Date.now(), 0))
 
     return () => window.clearTimeout(refreshTimeout)
-  }, [amount, amountIsValid, destinationAsset, horizon, primarySide, quote, requestQuote, sourceAsset])
+  }, [amount, amountIsValid, currentQuote, destinationAsset, horizon, primarySide, requestQuote, sourceAsset])
 
-  return { quote, status }
+  return { quote: currentQuote, status }
 }
