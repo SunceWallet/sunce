@@ -601,45 +601,27 @@ export const subscribeToOpenOrders = cachify(
   createAccountCacheKey
 )
 
+function assetQuery(prefix: "buying" | "selling" | "source" | "destination", asset: Asset) {
+  const assetType = `${prefix}_asset_type`
+
+  return asset.isNative()
+    ? { [assetType]: "native" }
+    : {
+        [`${prefix}_asset_code`]: asset.getCode(),
+        [`${prefix}_asset_issuer`]: asset.getIssuer(),
+        [assetType]: asset.getAssetType()
+      }
+}
+
 function createOrderbookQuery(selling: Asset, buying: Asset) {
-  const query: any = { limit: 100 }
-
-  query.buying_asset_type = buying.getAssetType()
-  query.selling_asset_type = selling.getAssetType()
-
-  if (!buying.isNative()) {
-    query.buying_asset_code = buying.getCode()
-    query.buying_asset_issuer = buying.getIssuer()
+  return {
+    ...assetQuery("buying", buying),
+    ...assetQuery("selling", selling),
+    limit: 100
   }
-  if (!selling.isNative()) {
-    query.selling_asset_code = selling.getCode()
-    query.selling_asset_issuer = selling.getIssuer()
-  }
-
-  return query
 }
 
-function sourceAssetQuery(asset: Asset) {
-  return asset.isNative()
-    ? { source_asset_type: "native" }
-    : {
-        source_asset_code: asset.getCode(),
-        source_asset_issuer: asset.getIssuer(),
-        source_asset_type: asset.getAssetType()
-      }
-}
-
-function destinationAssetQuery(asset: Asset) {
-  return asset.isNative()
-    ? { destination_asset_type: "native" }
-    : {
-        destination_asset_code: asset.getCode(),
-        destination_asset_issuer: asset.getIssuer(),
-        destination_asset_type: asset.getAssetType()
-      }
-}
-
-function stringifyPathAsset(asset: Asset) {
+function stringifyHorizonPathAsset(asset: Asset) {
   return asset.isNative() ? "native" : `${asset.getCode()}:${asset.getIssuer()}`
 }
 
@@ -934,8 +916,8 @@ export async function fetchStrictSendPaths(
   const destinationAsset = parseAssetID(destinationAssetID)
   const query = {
     ...identification,
-    ...sourceAssetQuery(sourceAsset),
-    destination_assets: stringifyPathAsset(destinationAsset),
+    ...assetQuery("source", sourceAsset),
+    destination_assets: stringifyHorizonPathAsset(destinationAsset),
     source_amount: sourceAmount
   }
   return fetchPathRecords(horizonURLs, "paths/strict-send", query)
@@ -951,9 +933,9 @@ export async function fetchStrictReceivePaths(
   const destinationAsset = parseAssetID(destinationAssetID)
   const query = {
     ...identification,
-    ...destinationAssetQuery(destinationAsset),
+    ...assetQuery("destination", destinationAsset),
     destination_amount: destinationAmount,
-    source_assets: stringifyPathAsset(sourceAsset)
+    source_assets: stringifyHorizonPathAsset(sourceAsset)
   }
   return fetchPathRecords(horizonURLs, "paths/strict-receive", query)
 }
