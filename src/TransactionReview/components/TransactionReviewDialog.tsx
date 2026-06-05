@@ -15,6 +15,7 @@ import { Box } from "~Layout/components/Box"
 import MainTitle from "~Generic/components/MainTitle"
 import { useOperationTitle } from "./Operations"
 import ReviewForm from "./ReviewForm"
+import { PaymentSummary } from "~Generic/lib/paymentSummary"
 
 function isPaymentOperation(operation: Operation) {
   return ["createAccount", "payment"].indexOf(operation.type) > -1
@@ -57,7 +58,10 @@ interface TransactionReviewDialogBodyProps {
   showSubmissionProgress: boolean
   signatureRequest?: MultisigTransactionResponse
   submissionProgress?: React.ReactNode
+  submittedAt?: string
   transaction: Transaction | null
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   onClose: () => void
   onSubmitTransaction: (tx: Transaction, formValues: { password: string | null }) => void
 }
@@ -91,12 +95,15 @@ export function TransactionReviewDialogBody(props: TransactionReviewDialogBodyPr
             actionsRef={dialogActionsRef}
             disabled={props.disabled}
             onClose={props.onClose}
-            onConfirm={formValues => props.onSubmitTransaction(props.transaction as Transaction, formValues)}
+            onConfirm={(formValues) => props.onSubmitTransaction(props.transaction as Transaction, formValues)}
             passwordError={props.passwordError}
             showHash={props.showHash}
             showSource={props.showSource}
             signatureRequest={props.signatureRequest}
+            submittedAt={props.submittedAt}
             transaction={props.transaction}
+            paymentSummary={props.paymentSummary}
+            paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
           />
         </Box>
       ) : null}
@@ -115,7 +122,10 @@ interface Props {
   showSubmissionProgress: boolean
   signatureRequest?: MultisigTransactionResponse
   submissionProgress?: React.ReactNode
+  submittedAt?: string
   transaction: Transaction | null
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   onClose: () => void
   onSubmitTransaction: (tx: Transaction, formValues: { password: string | null }) => void
 }

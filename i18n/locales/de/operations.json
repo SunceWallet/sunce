@@ -110,5 +110,21 @@
     "set-master-key-weight": {
       "title": "Hauptschlüsselgewicht festlegen"
     }
+  },
+  "swap": {
+    "summary": {
+      "destination": "Ziel",
+      "maximum-paid": "Maximal gezahlt",
+      "minimum-received": "Minimal erhalten",
+      "route": "Route",
+      "source": "Quelle",
+      "you-pay": "Sie zahlen",
+      "you-pay-about": "Sie zahlen etwa",
+      "you-paid": "Sie haben gezahlt",
+      "you-receive": "Sie erhalten",
+      "you-receive-about": "Sie erhalten etwa",
+      "you-received": "Sie haben erhalten"
+    },
+    "title": "Tausch"
   }
 }

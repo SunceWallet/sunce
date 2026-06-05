@@ -6,11 +6,26 @@
   "action-selection": {
     "buy": {
       "description": "Acquista una certa quantità di un bene sullo scambio distribuito",
-      "label": "Acquista risorsa"
+      "label": "Acquista risorsa",
+      "label-short": "Compra"
+    },
+    "buy-order": {
+      "label": "Ordine di acquisto"
+    },
+    "orders": {
+      "label": "Ordini"
     },
     "sell": {
       "description": "Scambia una certa quantità di una risorsa con un altra",
-      "label": "Vendi risorsa"
+      "label": "Vendi risorsa",
+      "label-short": "Vendi"
+    },
+    "sell-order": {
+      "label": "Ordine di vendita"
+    },
+    "swap": {
+      "description": "Converti subito una risorsa in un'altra",
+      "label": "Scambia"
     }
   },
   "advanced": {
@@ -48,6 +63,57 @@
   },
   "no-assets-info": "Questo account non utilizza ancora risorse diverse da Stellar Lumens.",
   "issuance": "Risorsa {{ asset }} è emesso dal vostro conto. Nuovi risorse saranno coniati al momento dello scambio.",
+  "swap": {
+    "action": {
+      "enter-amount": "Inserisci importo",
+      "finding-price": "Ricerca prezzo...",
+      "submit": "Scambia"
+    },
+    "allowed-price-change": {
+      "helper": "Se il prezzo cambia più di così prima della firma, lo scambio verrà annullato.",
+      "high-warning": "Un cambio di prezzo consentito elevato può permettere un tasso peggiore.",
+      "label": "Cambio prezzo consentito"
+    },
+    "empty": {
+      "add-asset-action": "Aggiungi risorsa",
+      "add-asset-message": "Aggiungi un'altra risorsa prima di poter scambiare."
+    },
+    "inputs": {
+      "destination": {
+        "estimated": "Ricevi circa",
+        "label": "Ricevi",
+        "min-received-helper": "Non meno di {{minReceived}} {{destinationAsset}}"
+      },
+      "source": {
+        "estimated": "Paghi circa",
+        "label": "Paghi",
+        "max-send-helper": "Non più di {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Totale: {{amount}}"
+      }
+    },
+    "quote": {
+      "failed": "Impossibile ottenere un prezzo. Riprova.",
+      "loading": "Ricerca prezzo...",
+      "price-changed": "Il prezzo è cambiato. Controlla il nuovo importo prima di scambiare.",
+      "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
+      "unavailable": "Queste risorse non possono essere scambiate ora. Prova un importo più piccolo o scegli un'altra risorsa.",
+      "updating": "Aggiornamento prezzo..."
+    },
+    "swap-direction": {
+      "label": "Inverti risorse"
+    },
+    "validation": {
+      "destination-asset-missing": "Scegli la risorsa che ricevi.",
+      "destination-asset-unavailable": "Scegli una risorsa che questo conto può ricevere.",
+      "invalid-amount": "Inserisci un importo maggiore di zero.",
+      "no-quote": "Nessun prezzo ancora disponibile.",
+      "not-enough-balance": "{{asset}} insufficiente.",
+      "receiving-capacity-exceeded": "Il limite del tuo portafoglio {{asset}} è troppo basso per ricevere questo importo.",
+      "source-asset-missing": "Scegli la risorsa che paghi.",
+      "stale-quote": "Aggiornamento prezzo...",
+      "xlm-max-reserve-helper": "Max lascia XLM per le commissioni di rete."
+    }
+  },
   "title": "Negozia",
   "trading-price": {
     "default-label": "Prezzo (limite)",

@@ -110,5 +110,21 @@
     "set-master-key-weight": {
       "title": "Установить вес основного ключа"
     }
+  },
+  "swap": {
+    "summary": {
+      "destination": "Получатель",
+      "maximum-paid": "Максимум к оплате",
+      "minimum-received": "Минимум к получению",
+      "route": "Маршрут",
+      "source": "Источник",
+      "you-pay": "Вы платите",
+      "you-pay-about": "Вы платите примерно",
+      "you-paid": "Вы заплатили",
+      "you-receive": "Вы получаете",
+      "you-receive-about": "Вы получаете примерно",
+      "you-received": "Вы получили"
+    },
+    "title": "Обмен"
   }
 }

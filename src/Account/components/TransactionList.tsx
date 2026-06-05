@@ -28,11 +28,10 @@ import { InlineErrorBoundary } from "~Generic/components/ErrorBoundaries"
 import { PublicKey } from "~Generic/components/PublicKey"
 import { formatBalance } from "~Generic/lib/balances"
 import { matchesRoute } from "~Generic/lib/routes"
-import { stringifyAssetToReadableString } from "~Generic/lib/stellar"
+import { stringifyAsset, stringifyAssetToReadableString } from "~Generic/lib/stellar"
 import MemoMessage from "~Transaction/components/MemoMessage"
 import TransactionReviewDialog from "~TransactionReview/components/TransactionReviewDialog"
 import { useOperationTitle } from "~TransactionReview/components/Operations"
-import { SingleBalance } from "./AccountBalances"
 
 const dedupe = <T extends any>(array: T[]): T[] => Array.from(new Set(array))
 const doNothing = () => undefined
@@ -140,13 +139,13 @@ function TransactionIcon(props: { paymentSummary: PaymentSummary; transaction: T
     return <SwapHorizIcon />
   } else if (props.transaction.operations.length === 1 && props.transaction.operations[0].type === "changeTrust") {
     return BigNumber(props.transaction.operations[0].limit).eq(0) ? <RemoveIcon /> : <AddIcon />
-  } else if (props.transaction.operations.every(operation => operation.type === "accountMerge")) {
+  } else if (props.transaction.operations.every((operation) => operation.type === "accountMerge")) {
     return <CallReceivedIcon />
   } else if (props.paymentSummary.length === 0) {
     return <SettingsIcon />
-  } else if (props.paymentSummary.every(summaryItem => summaryItem.balanceChange.gt(0))) {
+  } else if (props.paymentSummary.every((summaryItem) => summaryItem.balanceChange.gt(0))) {
     return <CallReceivedIcon />
-  } else if (props.paymentSummary.every(summaryItem => summaryItem.balanceChange.lt(0))) {
+  } else if (props.paymentSummary.every((summaryItem) => summaryItem.balanceChange.lt(0))) {
     return <CallMadeIcon />
   } else {
     return <SwapHorizIcon />
@@ -193,7 +192,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
     [props.createdAt, props.showMemo, props.transaction, t]
   )
 
-  if (remotePublicKeys.length > 0 && props.paymentSummary.every(summaryItem => summaryItem.balanceChange.gt(0))) {
+  if (remotePublicKeys.length > 0 && props.paymentSummary.every((summaryItem) => summaryItem.balanceChange.gt(0))) {
     return (
       <ListItemText
         primary={
@@ -209,7 +208,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
     )
   } else if (
     remotePublicKeys.length > 0 &&
-    props.paymentSummary.every(summaryItem => summaryItem.balanceChange.lt(0))
+    props.paymentSummary.every((summaryItem) => summaryItem.balanceChange.lt(0))
   ) {
     return (
       <ListItemText
@@ -359,6 +358,67 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
   }
 })
 
+function TransactionListBalanceChange(props: {
+  assetCode: string
+  balanceChange: BigNumber
+  style?: React.CSSProperties
+}) {
+  const balance = props.balanceChange
+  const absoluteBalance = balance.abs()
+  const formattingOptions = absoluteBalance.eq(0)
+    ? { maximumDecimals: 0, minimumDecimals: 0 }
+    : absoluteBalance.gt(0) && absoluteBalance.lt(0.0001)
+      ? { maximumDecimals: 7, minimumDecimals: 7 }
+      : absoluteBalance.lt(1000)
+        ? { maximumDecimals: 4, minimumDecimals: 0 }
+        : { maximumDecimals: 0, minimumDecimals: 0 }
+  const [integerPart, decimalPart = ""] = formatBalance(absoluteBalance, formattingOptions).split(".")
+
+  return (
+    <>
+      <span style={{ fontWeight: 300, textAlign: "right", whiteSpace: "nowrap", ...props.style }}>
+        {balance.lt(0) ? <span>-&nbsp;</span> : null}
+        {integerPart}
+        <span style={{ opacity: 0.8 }}>{decimalPart ? "." + decimalPart : ""}</span>
+      </span>
+      <span style={{ fontWeight: "bold", textAlign: "left", whiteSpace: "nowrap", ...props.style }}>
+        {props.assetCode}
+      </span>
+    </>
+  )
+}
+
+type BalanceChange = Pick<PaymentSummary[number], "asset" | "balanceChange">
+
+function TransactionListBalanceChangeGrid(props: { balanceChanges: BalanceChange[] }) {
+  const isSmallScreen = useIsMobile()
+  const orderedBalanceChanges = props.balanceChanges
+    .filter((balanceChange) => balanceChange.balanceChange.lt(0))
+    .concat(props.balanceChanges.filter((balanceChange) => !balanceChange.balanceChange.lt(0)))
+
+  return (
+    <span
+      style={{
+        alignItems: "baseline",
+        columnGap: "0.4em",
+        display: "grid",
+        gridTemplateColumns: "auto auto",
+        justifyContent: "end"
+      }}
+    >
+      {orderedBalanceChanges.map((balanceChange) => (
+        <React.Fragment key={stringifyAsset(balanceChange.asset)}>
+          <TransactionListBalanceChange
+            assetCode={balanceChange.asset.getCode()}
+            balanceChange={balanceChange.balanceChange}
+            style={isSmallScreen ? { fontSize: "1rem" } : { fontSize: "1.4rem" }}
+          />
+        </React.Fragment>
+      ))}
+    </span>
+  )
+}
+
 function TransactionListItemBalance(props: {
   accountPublicKey: string
   paymentSummary: PaymentSummary
@@ -366,29 +426,33 @@ function TransactionListItemBalance(props: {
   transaction: Transaction
 }) {
   const { paymentSummary } = props
-  const isSmallScreen = useIsMobile()
 
   const creationOps = props.transaction.operations.filter(
     (op): op is Operation.CreateAccount => op.type === "createAccount"
   )
   const paymentOps = props.transaction.operations.filter((op): op is Operation.Payment => op.type === "payment")
+  const hasPathPayment = props.transaction.operations.some(
+    (op) => op.type === "pathPaymentStrictSend" || op.type === "pathPaymentStrictReceive"
+  )
 
   // Handle special edge case: Sending money from an account to itself
-  const balanceChange = paymentSummary.every(payment =>
-    payment.publicKeys.every(pubkey => pubkey === props.accountPublicKey)
-  )
-    ? sum(...creationOps.map(op => op.startingBalance), ...paymentOps.map(op => op.amount))
-    : paymentSummary[0].balanceChange
+  const isSelfPayment =
+    paymentSummary.length > 0 &&
+    !hasPathPayment &&
+    paymentSummary.every((payment) => payment.publicKeys.every((pubkey) => pubkey === props.accountPublicKey))
+
+  const balanceChanges = isSelfPayment
+    ? [
+        {
+          asset: paymentSummary[0].asset,
+          balanceChange: sum(...creationOps.map((op) => op.startingBalance), ...paymentOps.map((op) => op.amount))
+        }
+      ]
+    : paymentSummary
 
   return (
     <ListItemText primaryTypographyProps={{ align: "right" }} style={{ flexShrink: 0, ...props.style }}>
-      {paymentSummary.length === 0 ? null : (
-        <SingleBalance
-          assetCode={paymentSummary[0].asset.getCode()}
-          balance={balanceChange.toString()}
-          style={isSmallScreen ? { fontSize: "1rem" } : { fontSize: "1.4rem" }}
-        />
-      )}
+      {paymentSummary.length === 0 ? null : <TransactionListBalanceChangeGrid balanceChanges={balanceChanges} />}
     </ListItemText>
   )
 }
@@ -398,6 +462,7 @@ interface TransactionListItemProps {
   alwaysShowSource?: boolean
   className?: string
   createdAt: string
+  exactPaymentSummary?: PaymentSummary
   icon?: React.ReactElement<any>
   onOpenTransaction?: (transactionHash: string) => void
   style?: React.CSSProperties
@@ -410,7 +475,7 @@ export const TransactionListItem = React.memo(function TransactionListItem(props
 
   const { transaction, onOpenTransaction } = props
 
-  const paymentSummary = getPaymentSummary(props.accountPublicKey, transaction)
+  const paymentSummary = props.exactPaymentSummary || getPaymentSummary(props.accountPublicKey, transaction)
   const onOpen = onOpenTransaction ? () => onOpenTransaction(transaction.hash().toString("hex")) : undefined
 
   return (
@@ -503,13 +568,11 @@ function TransactionList(props: TransactionListProps) {
       return null
     }
 
-    const txResponse = props.transactions.find(recentTx => recentTx.hash === openedTxHash)
+    const txResponse = props.transactions.find((recentTx) => recentTx.hash === openedTxHash)
 
     // TODO: use decoded transaction from cache once we have it
-    const tx = txResponse ? txResponse.decodedTx : null
 
-    // tslint:disable-next-line prefer-object-spread
-    return tx && txResponse ? Object.assign(tx, { created_at: txResponse.created_at }) : tx
+    return txResponse || null
   }, [openedTxHash, props.transactions])
 
   const openTransaction = React.useCallback(
@@ -533,7 +596,7 @@ function TransactionList(props: TransactionListProps) {
   const transactionListItems = React.useMemo(
     () => (
       <>
-        {props.transactions.map(transaction => (
+        {props.transactions.map((transaction) => (
           <EntryAnimation
             key={transaction.hash}
             // Animate only if it's a new tx, not if we just haven't rendered it before
@@ -545,6 +608,7 @@ function TransactionList(props: TransactionListProps) {
                 accountPublicKey={props.account.publicKey}
                 className={classes.listItem}
                 createdAt={transaction.created_at}
+                exactPaymentSummary={transaction.exactPaymentSummary}
                 onOpenTransaction={openTransaction}
                 transaction={transaction.decodedTx}
               />
@@ -573,9 +637,11 @@ function TransactionList(props: TransactionListProps) {
         open={openedTransaction !== null}
         account={props.account}
         disabled={true}
+        paymentSummary={openedTransaction?.exactPaymentSummary}
         showSource
         showSubmissionProgress={false}
-        transaction={openedTransaction}
+        submittedAt={openedTransaction?.created_at}
+        transaction={openedTransaction?.decodedTx || null}
         onClose={closeTransaction}
         onSubmitTransaction={doNothing}
       />

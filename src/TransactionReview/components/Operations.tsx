@@ -9,13 +9,18 @@ import { useAccountHomeDomainSafe } from "~Generic/hooks/stellar"
 import { useIsSmallMobile } from "~Generic/hooks/userinterface"
 import { AccountData } from "~Generic/lib/account"
 import { formatBalance } from "~Generic/lib/balances"
-import { offerAssetToAsset, stringifyAssetToReadableString, trustlineLimitEqualsUnlimited } from "~Generic/lib/stellar"
+import {
+  horizonAssetToAsset,
+  stringifyAssetToReadableString,
+  trustlineLimitEqualsUnlimited
+} from "~Generic/lib/stellar"
 import { CopyableAddress } from "~Generic/components/PublicKey"
 import { SummaryItem, SummaryDetailsField } from "./SummaryItem"
 import { Account, AccountsContext } from "~App/contexts/accounts"
 import PersonAdd from "@material-ui/icons/PersonAdd"
 import { DialogsContext } from "~App/contexts/dialogs"
 import { SavedAddressesContext } from "~App/contexts/savedAddresses"
+import { PaymentSummary } from "~Generic/lib/paymentSummary"
 
 const isUTF8 = (buffer: Buffer) => !buffer.toString("utf8").match(/[\x00-\x1F]/)
 
@@ -28,17 +33,17 @@ function someThresholdSet(operation: Operation.SetOptions) {
 }
 
 function prettifyCamelcase(identifier: string) {
-  const prettified = identifier.replace(/[A-Z]/g, letter => ` ${letter.toLowerCase()}`)
+  const prettified = identifier.replace(/[A-Z]/g, (letter) => ` ${letter.toLowerCase()}`)
   return prettified.charAt(0).toUpperCase() + prettified.substr(1)
 }
 
 function prettifyOperationObject(operation: Operation) {
   const operationPropNames = Object.keys(operation)
-    .filter(key => key !== "type")
-    .filter(propName => Boolean((operation as any)[propName]))
+    .filter((key) => key !== "type")
+    .filter((propName) => Boolean((operation as any)[propName]))
 
   const operationDetailLines = operationPropNames.map(
-    propName => `${prettifyCamelcase(propName)}: ${JSON.stringify((operation as any)[propName], null, 2)}`
+    (propName) => `${prettifyCamelcase(propName)}: ${JSON.stringify((operation as any)[propName], null, 2)}`
   )
   return operationDetailLines.join("\n")
 }
@@ -48,6 +53,8 @@ export function useOperationTitle() {
   return function getOperationTitle(operation: Operation) {
     if (operation.type === "payment") {
       return t("operations.payment.title")
+    } else if (operation.type === "pathPaymentStrictSend" || operation.type === "pathPaymentStrictReceive") {
+      return t("operations.swap.title")
     } else if (operation.type === "createAccount") {
       return t("operations.create-account.title")
     } else if (operation.type === "manageBuyOffer") {
@@ -57,8 +64,8 @@ export function useOperationTitle() {
       return offerId === "0"
         ? t("operations.manage-buy-offer.title.create")
         : amount.eq(0)
-        ? t("operations.manage-buy-offer.title.delete")
-        : t("operations.manage-buy-offer.title.update")
+          ? t("operations.manage-buy-offer.title.delete")
+          : t("operations.manage-buy-offer.title.update")
     } else if (operation.type === "manageSellOffer") {
       const amount = BigNumber(operation.amount)
       const offerId = operation.offerId
@@ -66,8 +73,8 @@ export function useOperationTitle() {
       return offerId === "0"
         ? t("operations.manage-sell-offer.title.create")
         : amount.eq(0)
-        ? t("operations.manage-sell-offer.title.delete")
-        : t("operations.manage-sell-offer.title.update")
+          ? t("operations.manage-sell-offer.title.delete")
+          : t("operations.manage-sell-offer.title.update")
     } else if (operation.type === "accountMerge") {
       return t("operations.account-merge.title")
     } else if (operation.type === "changeTrust") {
@@ -84,14 +91,14 @@ export function useOperationTitle() {
       operation.type === "setOptions" &&
       operation.signer &&
       operation.signer.weight !== undefined &&
-      operation.signer.weight > 0
+      Number(operation.signer.weight) > 0
     ) {
       return t("operations.set-options.add-signer.title")
     } else if (
       operation.type === "setOptions" &&
       operation.signer &&
       operation.signer.weight !== undefined &&
-      operation.signer.weight === 0
+      Number(operation.signer.weight) === 0
     ) {
       return t("operations.set-options.remove-signer.title")
     } else if (operation.type === "setOptions" && someThresholdSet(operation)) {
@@ -119,10 +126,12 @@ interface OperationProps<Op extends Operation> {
   hideHeading?: boolean
   style?: React.CSSProperties
   testnet: boolean
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
 }
 
 const isLocalAccount = (address: string, testnet: boolean, accounts: Account[]): boolean =>
-  !!accounts.find(account => account.publicKey === address && account.testnet === testnet)
+  !!accounts.find((account) => account.publicKey === address && account.testnet === testnet)
 
 type AddAddressButtonProps = {
   address: string
@@ -173,6 +182,89 @@ function PaymentOperation(props: OperationProps<Operation.Payment>) {
               {canBeAdded(source) && <AddAddressButton address={source} />}
             </>
           }
+        />
+      ) : null}
+    </SummaryItem>
+  )
+}
+
+function PathPaymentOperation(
+  props: OperationProps<Operation.PathPaymentStrictSend | Operation.PathPaymentStrictReceive>
+) {
+  const { destination, path, source } = props.operation
+  const { t } = useTranslation()
+  const summarySendAmount = props.paymentSummary?.find((b) => b.asset.equals(props.operation.sendAsset))
+  const summaryReceiveAmount = props.paymentSummary?.find((b) => b.asset.equals(props.operation.destAsset))
+  const exactSummaryAvailable = Boolean(props.paymentSummary?.length && !props.paymentSummaryIsEstimated)
+  const estimatedSummaryAvailable = Boolean(props.paymentSummary?.length && props.paymentSummaryIsEstimated)
+  const receiveAmount =
+    props.operation.type === "pathPaymentStrictSend"
+      ? summaryReceiveAmount?.balanceChange.abs().toString() || props.operation.destMin
+      : props.operation.destAmount
+  const payAmount =
+    props.operation.type === "pathPaymentStrictSend"
+      ? props.operation.sendAmount
+      : summarySendAmount?.balanceChange.abs().toString() || props.operation.sendMax
+  const payLabel =
+    props.operation.type === "pathPaymentStrictReceive" && estimatedSummaryAvailable
+      ? t("operations.swap.summary.you-pay-about")
+      : exactSummaryAvailable
+        ? t("operations.swap.summary.you-paid")
+        : t("operations.swap.summary.you-pay")
+  const receiveLabel =
+    props.operation.type === "pathPaymentStrictSend" && estimatedSummaryAvailable
+      ? t("operations.swap.summary.you-receive-about")
+      : exactSummaryAvailable
+        ? t("operations.swap.summary.you-received")
+        : t("operations.swap.summary.you-receive")
+  const boundLabel =
+    props.operation.type === "pathPaymentStrictSend"
+      ? t("operations.swap.summary.minimum-received")
+      : t("operations.swap.summary.maximum-paid")
+
+  return (
+    <SummaryItem heading={props.hideHeading ? undefined : t("operations.swap.title")}>
+      <SummaryDetailsField
+        label={payLabel}
+        value={<SingleBalance assetCode={props.operation.sendAsset.code} balance={String(payAmount)} untrimmed />}
+      />
+      <SummaryDetailsField
+        label={receiveLabel}
+        value={<SingleBalance assetCode={props.operation.destAsset.code} balance={String(receiveAmount)} untrimmed />}
+      />
+      {exactSummaryAvailable ? null : (
+        <SummaryDetailsField
+          label={boundLabel}
+          value={
+            <SingleBalance
+              assetCode={
+                props.operation.type === "pathPaymentStrictSend"
+                  ? props.operation.destAsset.code
+                  : props.operation.sendAsset.code
+              }
+              balance={String(
+                props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.sendMax
+              )}
+              untrimmed
+            />
+          }
+        />
+      )}
+      {path.length > 0 ? (
+        <SummaryDetailsField
+          fullWidth
+          label={t("operations.swap.summary.route")}
+          value={path.map(stringifyAssetToReadableString).join(" -> ")}
+        />
+      ) : null}
+      <SummaryDetailsField
+        label={t("operations.swap.summary.destination")}
+        value={<CopyableAddress address={destination} testnet={props.testnet} variant="short" />}
+      />
+      {source ? (
+        <SummaryDetailsField
+          label={t("operations.swap.summary.source")}
+          value={<CopyableAddress address={source} testnet={props.testnet} variant="short" />}
         />
       ) : null}
     </SummaryItem>
@@ -357,15 +449,15 @@ function ManageOfferOperation(props: ManageOfferOperationProps) {
     )
   } else {
     // Offer edit
-    const offer = offers.find(someOffer => String(someOffer.id) === String(offerId))
+    const offer = offers.find((someOffer) => String(someOffer.id) === String(offerId))
     const heading =
       props.operation.type === "manageBuyOffer"
         ? buyAmount.eq(0)
           ? t("operations.manage-buy-offer.title.delete")
           : t("operations.manage-buy-offer.title.update")
         : buyAmount.eq(0)
-        ? t("operations.manage-sell-offer.title.delete")
-        : t("operations.manage-sell-offer.title.update")
+          ? t("operations.manage-sell-offer.title.delete")
+          : t("operations.manage-sell-offer.title.update")
 
     return offer ? (
       props.operation.type === "manageBuyOffer" ? (
@@ -374,27 +466,27 @@ function ManageOfferOperation(props: ManageOfferOperationProps) {
             label={t("operations.manage-offer.summary.buy")}
             value={
               <SingleBalance
-                assetCode={offerAssetToAsset(offer.buying).getCode()}
+                assetCode={horizonAssetToAsset(offer.buying).getCode()}
                 balance={String(BigNumber(offer.amount).mul(offer.price))}
               />
             }
           />
           <SummaryDetailsField
             label={t("operations.manage-offer.summary.sell")}
-            value={<SingleBalance assetCode={offerAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
+            value={<SingleBalance assetCode={horizonAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
           />
         </SummaryItem>
       ) : (
         <SummaryItem heading={props.hideHeading ? undefined : heading}>
           <SummaryDetailsField
             label={t("operations.manage-offer.summary.sell")}
-            value={<SingleBalance assetCode={offerAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
+            value={<SingleBalance assetCode={horizonAssetToAsset(offer.selling).getCode()} balance={offer.amount} />}
           />
           <SummaryDetailsField
             label={t("operations.manage-offer.summary.buy")}
             value={
               <SingleBalance
-                assetCode={offerAssetToAsset(offer.buying).getCode()}
+                assetCode={horizonAssetToAsset(offer.buying).getCode()}
                 balance={String(BigNumber(offer.amount).mul(offer.price))}
               />
             }
@@ -580,6 +672,8 @@ function GenericOperation(props: { operation: Operation; style?: React.CSSProper
 
 interface Props {
   accountData: AccountData
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   operation: Operation
   style?: React.CSSProperties
   testnet: boolean
@@ -612,6 +706,17 @@ function OperationListItem(props: Props) {
       <PaymentOperation
         hideHeading={hideHeading}
         operation={props.operation}
+        style={props.style}
+        testnet={props.testnet}
+      />
+    )
+  } else if (props.operation.type === "pathPaymentStrictSend" || props.operation.type === "pathPaymentStrictReceive") {
+    return (
+      <PathPaymentOperation
+        hideHeading={hideHeading}
+        operation={props.operation}
+        paymentSummary={props.paymentSummary}
+        paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
         style={props.style}
         testnet={props.testnet}
       />

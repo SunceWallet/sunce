@@ -1,7 +1,9 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
+import { Asset, Horizon } from "@stellar/stellar-sdk"
 import Box from "@material-ui/core/Box"
+import Tab from "@material-ui/core/Tab"
+import Tabs from "@material-ui/core/Tabs"
 import Typography from "@material-ui/core/Typography"
 import { Account } from "~App/contexts/accounts"
 import * as routes from "~App/routes"
@@ -13,37 +15,47 @@ import ScrollableBalances from "~Generic/components/ScrollableBalances"
 import TestnetBadge from "~Generic/components/TestnetBadge"
 import ViewLoading from "~Generic/components/ViewLoading"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
-import { useDialogActions, useRouter } from "~Generic/hooks/userinterface"
+import { useDialogActions, useIsMobile, useRouter } from "~Generic/hooks/userinterface"
 import { matchesRoute } from "~Generic/lib/routes"
 import { parseAssetID, stringifyAsset } from "~Generic/lib/stellar"
 import { getLastArgumentFromURL } from "~Generic/lib/url"
-import Carousel from "~Layout/components/Carousel"
 import DialogBody from "~Layout/components/DialogBody"
-import TransactionSender from "~Transaction/components/TransactionSender"
-import MainActionSelection from "./MainActionSelection"
+import { HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
+import TransactionSender, { SendTransaction } from "~Transaction/components/TransactionSender"
+import OfferList from "~Account/components/OfferList"
+import SwapForm from "./SwapForm"
 import TradingForm from "./TradingForm"
+
+type TradeMode = routes.TradeMethod
 
 interface TradingDialogProps {
   account: Account
-  horizon: Horizon.Server
   onClose: () => void
-  sendTransaction: (transaction: Transaction) => void
+  sendTransaction: SendTransaction
 }
 
 function getAssetFromPath(pathname: string) {
   if (matchesRoute(pathname, routes.tradeAsset("*", undefined, "*"))) {
     const lastArgument = getLastArgumentFromURL(pathname)
-    if (lastArgument !== "buy" && lastArgument !== "sell") {
+    if (lastArgument !== "buy" && lastArgument !== "sell" && lastArgument !== "swap" && lastArgument !== "orders") {
       return parseAssetID(lastArgument)
     }
   }
   return undefined
 }
 
+function getTradeMode(pathname: string): TradeMode {
+  if (matchesRoute(pathname, routes.tradeAsset("*", "buy"))) return "buy"
+  if (matchesRoute(pathname, routes.tradeAsset("*", "sell"))) return "sell"
+  if (matchesRoute(pathname, routes.tradeAsset("*", "orders"))) return "orders"
+  return "swap"
+}
+
 function TradingDialog(props: TradingDialogProps) {
   const accountData = useLiveAccountData(props.account.accountID, props.account.testnet)
   const dialogActionsRef = useDialogActions()
   const router = useRouter()
+  const isMobile = useIsMobile()
   const [preselectedAsset, setPreselectedAsset] = React.useState<Asset | undefined>()
   const { t } = useTranslation()
 
@@ -58,61 +70,87 @@ function TradingDialog(props: TradingDialogProps) {
     [accountData.balances]
   )
 
-  const primaryAction: "buy" | "sell" | undefined = matchesRoute(
-    router.location.pathname,
-    routes.tradeAsset("*", "buy")
-  )
-    ? "buy"
-    : matchesRoute(router.location.pathname, routes.tradeAsset("*", "sell"))
-    ? "sell"
-    : undefined
+  const tradeMode = getTradeMode(router.location.pathname)
 
-  const clearPrimaryAction = React.useCallback(() => {
+  const navigateToSwap = React.useCallback(() => {
     router.history.push(
-      routes.tradeAsset(props.account.id, undefined, preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
+      routes.tradeAsset(props.account.id, "swap", preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
     )
   }, [preselectedAsset, props.account, router.history])
 
-  const selectPrimaryAction = React.useCallback(
-    (mainAction: "buy" | "sell") => {
+  const selectTradeMode = React.useCallback(
+    (mode: TradeMode) => {
       router.history.push(
-        routes.tradeAsset(props.account.id, mainAction, preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
+        routes.tradeAsset(props.account.id, mode, preselectedAsset ? stringifyAsset(preselectedAsset) : undefined)
       )
     },
     [preselectedAsset, props.account, router.history]
   )
 
+  const ModeSelector = React.useMemo(
+    () => (
+      <HorizontalLayout justifyContent="center" margin="16px 0 0">
+        <Box maxWidth={isMobile ? 500 : 640} width="100%">
+          <Tabs
+            aria-label={t<string>("trading.title")}
+            centered={!isMobile}
+            indicatorColor="primary"
+            onChange={(_, mode: TradeMode) => selectTradeMode(mode)}
+            textColor="inherit"
+            value={tradeMode}
+            variant={isMobile ? "fullWidth" : "standard"}
+          >
+            <Tab label={t("trading.action-selection.swap.label")} value="swap" />
+            <Tab label={t("trading.action-selection.buy.label-short")} value="buy" />
+            <Tab label={t("trading.action-selection.sell.label-short")} value="sell" />
+            <Tab label={t("trading.action-selection.orders.label")} value="orders" />
+          </Tabs>
+        </Box>
+      </HorizontalLayout>
+    ),
+    [isMobile, selectTradeMode, t, tradeMode]
+  )
+
   const MainContent = React.useMemo(
     () => (
-      <Carousel current={primaryAction ? 1 : 0}>
-        <div>
-          <MainActionSelection
-            onSelectBuy={() => selectPrimaryAction("buy")}
-            onSelectSell={() => selectPrimaryAction("sell")}
-            account={props.account}
-          />
-        </div>
+      <VerticalLayout>
+        {ModeSelector}
         <React.Suspense fallback={<ViewLoading />}>
-          <TradingForm
-            account={props.account}
-            accountData={accountData}
-            dialogActionsRef={primaryAction ? dialogActionsRef : null}
-            initialPrimaryAsset={preselectedAsset}
-            primaryAction={primaryAction || "buy"}
-            sendTransaction={props.sendTransaction}
-            trustlines={trustlines}
-          />
+          {tradeMode === "orders" ? (
+            <Box margin="24px 0 0">
+              <OfferList account={props.account} title={t("account.transactions.offer-list.title")} />
+            </Box>
+          ) : tradeMode === "swap" ? (
+            <SwapForm
+              account={props.account}
+              accountData={accountData}
+              dialogActionsRef={dialogActionsRef}
+              initialSourceAsset={preselectedAsset}
+              sendTransaction={props.sendTransaction}
+            />
+          ) : (
+            <TradingForm
+              account={props.account}
+              accountData={accountData}
+              dialogActionsRef={dialogActionsRef}
+              initialPrimaryAsset={preselectedAsset}
+              primaryAction={tradeMode}
+              sendTransaction={props.sendTransaction}
+              trustlines={trustlines}
+            />
+          )}
         </React.Suspense>
-      </Carousel>
+      </VerticalLayout>
     ),
     [
+      ModeSelector,
       accountData,
       dialogActionsRef,
       preselectedAsset,
-      primaryAction,
       props.account,
       props.sendTransaction,
-      selectPrimaryAction,
+      t,
+      tradeMode,
       trustlines
     ]
   )
@@ -148,12 +186,13 @@ function TradingDialog(props: TradingDialogProps) {
                 {props.account.testnet ? <TestnetBadge style={{ marginLeft: 8 }} /> : null}
               </span>
             }
-            onBack={primaryAction ? clearPrimaryAction : props.onClose}
+            onBack={tradeMode === "buy" || tradeMode === "sell" || tradeMode === "orders" ? navigateToSwap : props.onClose}
           />
           <ScrollableBalances account={props.account} compact />
         </>
       }
-      actions={primaryAction ? dialogActionsRef : null}
+      actions={dialogActionsRef}
+      actionsPosition={tradeMode === "orders" ? undefined : "bottom"}
     >
       <InlineErrorBoundary>{trustlines.length > 0 ? MainContent : LinkToManageAssets}</InlineErrorBoundary>
     </DialogBody>
@@ -166,7 +205,7 @@ function TradingDialogContainer(props: Pick<TradingDialogProps, "account" | "onC
 
   return (
     <TransactionSender account={props.account} onSubmissionCompleted={navigateToAccount}>
-      {txContext => <TradingDialog {...props} {...txContext} />}
+      {({ sendTransaction }) => <TradingDialog {...props} sendTransaction={sendTransaction} />}
     </TransactionSender>
   )
 }

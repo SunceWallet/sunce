@@ -17,14 +17,13 @@ import { openLink } from "~Platform/links"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
 import { VerticalLayout } from "~Layout/components/Box"
 import Portal from "~Generic/components/Portal"
-import Typography from "@material-ui/core/Typography"
 import { Box } from "~Layout/components/Box"
 import DismissalConfirmationDialog from "./DismissalConfirmationDialog"
 import TransactionSummary from "./TransactionSummary"
 import PasswordField from "~Generic/components/PasswordField"
 import Link from "@material-ui/core/Link"
 import makeStyles from "@material-ui/core/styles/makeStyles"
-
+import { PaymentSummary } from "~Generic/lib/paymentSummary"
 
 const useLinkStyles = makeStyles(() => ({
   linkBox: {
@@ -34,12 +33,12 @@ const useLinkStyles = makeStyles(() => ({
     flexDirection: "column",
     flexWrap: "wrap",
     gap: "8px",
-    alignItems: "end",
+    alignItems: "end"
   },
   link: {
     display: "flex",
     gap: "4px",
-    fontSize: "1.2rem",
+    fontSize: "1.2rem"
   }
 }))
 
@@ -58,7 +57,10 @@ interface Props {
   showHash?: boolean
   showSource?: boolean
   signatureRequest?: MultisigTransactionResponse
+  submittedAt?: string
   transaction: Transaction
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   onClose?: () => void
   onConfirm?: (formValues: FormValues) => any
 }
@@ -93,7 +95,7 @@ function TxConfirmationForm(props: Props) {
   }, [onClose, props.signatureRequest, settings])
 
   const setFormValue = <Key extends keyof FormValues>(key: keyof FormValues, value: FormValues[Key]) => {
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       [key]: value
     }))
@@ -101,7 +103,8 @@ function TxConfirmationForm(props: Props) {
 
   const openInStellarExpert = React.useCallback(() => {
     openLink(
-      `https://stellar.expert/explorer/${props.account.testnet ? "testnet" : "public"
+      `https://stellar.expert/explorer/${
+        props.account.testnet ? "testnet" : "public"
       }/tx/${props.transaction.hash().toString("hex")}`
     )
   }, [props.account.testnet, props.transaction])
@@ -114,7 +117,10 @@ function TxConfirmationForm(props: Props) {
     }
   }, [props.transaction, addHiddenSender, onClose])
 
-  const handleTextFieldChange = React.useCallback(event => setFormValue("password", event.target.value), [])
+  const handleTextFieldChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => setFormValue("password", event.target.value),
+    []
+  )
 
   const handleFormSubmission = React.useCallback(
     async (event: React.SyntheticEvent) => {
@@ -150,7 +156,7 @@ function TxConfirmationForm(props: Props) {
   const ConfirmIcon = React.useMemo(() => <CheckIcon />, [])
 
   const isOrderCancellation = props.transaction.operations.every(
-    op =>
+    (op) =>
       (op.type === "manageBuyOffer" && BigNumber(op.buyAmount).eq(0)) ||
       (op.type === "manageSellOffer" && BigNumber(op.amount).eq(0))
   )
@@ -172,8 +178,11 @@ function TxConfirmationForm(props: Props) {
           showHash={props.showHash === undefined ? props.disabled : props.showHash}
           showSource={props.showSource}
           signatureRequest={props.signatureRequest}
+          submittedAt={props.submittedAt}
           testnet={props.account.testnet}
           transaction={props.transaction}
+          paymentSummary={props.paymentSummary}
+          paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
         />
         {props.account.requiresPassword && !props.disabled ? (
           <PasswordField
@@ -213,26 +222,18 @@ function TxConfirmationForm(props: Props) {
             </ActionButton>
           )}
           {props.disabled && !props.signatureRequest ? (
-          <Box className={classes.linkBox}>
-            <Link
-              component="button"
-              className={classes.link}
-              onClick={handleHideSender}
-            >
-              <VisibilityOffIcon />
-              {t("account.transaction-review.action.hide-sender")}
-            </Link>
+            <Box className={classes.linkBox}>
+              <Link component="button" className={classes.link} onClick={handleHideSender}>
+                <VisibilityOffIcon />
+                {t("account.transaction-review.action.hide-sender")}
+              </Link>
 
-            <Link
-              component="button"
-              className={classes.link}
-              onClick={openInStellarExpert}
-            >
-              <OpenInNewIcon />
-              {t("account.transaction-review.action.inspect")}
-            </Link>
-          </Box>
-        ) : null}
+              <Link component="button" className={classes.link} onClick={openInStellarExpert}>
+                <OpenInNewIcon />
+                {t("account.transaction-review.action.inspect")}
+              </Link>
+            </Box>
+          ) : null}
         </DialogActionsBox>
       </Portal>
       <DismissalConfirmationDialog
