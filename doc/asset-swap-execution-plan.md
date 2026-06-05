@@ -27,24 +27,27 @@
 6. The active amount should look clearly editable; the derived amount should look estimated until the user focuses or edits it.
 7. If the user edits the derived field, it becomes primary and the other field becomes derived.
 8. Add a switch-assets button between the two controls.
-9. When the switch-assets button is clicked, swap both amount+asset pairs and invert the quoted direction. Example: `10 XLM` for derived `0.12 EURMTL` becomes `0.12 EURMTL` for derived `10 XLM`.
+9. When the switch-assets button is clicked, swap both amount+asset pairs and invert the quoted direction. The originally primary amount remains primary after it moves to the other side. Example: exact `You pay 10 XLM` with derived `You receive about 0.12 EURMTL` becomes derived `You pay about 0.12 EURMTL` with exact `You receive 10 XLM`.
 10. Show price/quote states inline:
-   - Finding price.
-   - These assets cannot be swapped right now.
-   - Could not get a price.
-   - Updating price.
-   - Price changed.
-11. After quote loads, show a direction-aware plain-language summary near the submit action:
-   - Strict-send: `You pay 10 XLM and receive about 0.12 EURMTL (no less than 0.1188 EURMTL).`
-   - Strict-receive: `You pay about 10 XLM (no more than 10.1 XLM) and receive 0.12 EURMTL.`
-12. Show the effective rate inline in the body, for example `1 XLM ≈ 0.012 EURMTL`.
-13. Hide route details in the main swap form for now. Route/path information is advanced detail and can stay in transaction review.
-14. Show the allowed price change control as compact secondary copy: `Allowed price change: 1%`, where the percentage opens the preset menu.
-15. Allowed price change control options are `0.5%`, `1%`, `2%`, and `5%`, with `1%` selected by default.
-16. Fold the allowed-price-change consequence into the footer summary instead of rendering separate `Minimum received` or `Maximum paid` rows in the main form.
-17. Submit action label: `Swap`.
-18. Keep the submit button label as `Swap`. Disabled, loading, and error context is shown through the surrounding form state instead of changing the button label.
-19. The final signing/review flow must show a stable summary before the irreversible action, but the form submit label remains `Swap`.
+    - Finding price.
+    - These assets cannot be swapped right now.
+    - Could not get a price.
+    - Updating price.
+    - Price changed.
+11. Show the effective rate inline in the body, for example `1 XLM ≈ 0.012 EURMTL`.
+12. Show the allowed-price-change-adjusted transaction bound as helper text on the amount field it constrains:
+    - Strict-send quote: `No less than {{minReceived}} {{destinationAsset}}` under `You receive`.
+    - Strict-receive quote: `No more than {{maxSend}} {{sourceAsset}}` under `You pay`.
+13. When the derived `You pay` amount exceeds the spendable source balance, show the normal source balance helper instead of `No more than ...`.
+14. Show the source balance helper as right-aligned `Total: {{amount}} {{asset}}`. It remains clickable and sets `You pay` to the spendable max.
+15. Hide route details in the main swap form for now. Route/path information is advanced detail and can stay in transaction review.
+16. Show the allowed price change control as compact secondary copy: `Allowed price change: 1%`, where the percentage opens the preset menu.
+17. Allowed price change control options are `0.5%`, `1%`, `2%`, and `5%`, with `1%` selected by default.
+18. Do not show a plain-language swap summary near the submit action. The amount fields, inline rate, allowed price change control, and transaction review provide the needed confirmation.
+19. Submit action label: `Swap`.
+20. Keep the submit button label as `Swap`. Disabled, loading, and error context is shown through the surrounding form state instead of changing the button label.
+21. The final signing/review flow must show a stable summary before the irreversible action, but the form submit label remains `Swap`.
+22. Swap, Buy, and Sell submit actions use the same bottom dialog actions area. On desktop they follow the app's default right-aligned dialog action convention.
 
 ## UI Copy Principles
 
@@ -52,7 +55,7 @@
 - Use `Allowed price change` in visible UI; avoid `slippage` unless it appears in optional explanatory text.
 - Use `Updating price...` instead of `Quote expired` while refreshing a stale quote.
 - Use `Price changed. Review the new amount before swapping.` when a refreshed quote materially changes.
-- Use `no less than ...` and `no more than ...` in the main swap summary to explain allowed price change consequences. `Minimum received` and `Maximum paid` are suitable in transaction review.
+- Use `No less than ...` and `No more than ...` only as concise amount-field helper text in the main form. Use `Minimum received` and `Maximum paid` in transaction review to explain allowed price change consequences in the final signing context.
 - Avoid raw Horizon, path-payment, strict-send, and strict-receive terminology in user-facing surfaces.
 - Make the main form feel like a simple conversion calculator; progressively reveal details only when they help the user decide.
 - Prefer user-language statuses such as `Finding price...` over implementation-language route/path statuses.
@@ -67,7 +70,7 @@
 - Reuse `PriceInput` for amount input with embedded asset selectors.
 - Reuse balance helpers from `~Generic/lib/stellar` for spendable balance validation.
 - Reuse dialog action components: `DialogActionsBox`, `ActionButton`, and `Portal`.
-- Reuse existing `Max` behavior from the payment form for the `You pay` amount.
+- Reuse the existing max-spend behavior from the payment form for the `You pay` amount, but render the swap helper as `Total: {{amount}}` instead of `Max. {{amount}}`.
 
 ## Routing
 
@@ -108,7 +111,7 @@ Responsibilities:
 - Trigger quote lookup when primary amount/assets change.
 - Show derived amount with `≈`.
 - Show available `You pay` balance below the selected pay asset.
-- Show the effective rate and the allowed-price-change-adjusted transaction bound.
+- Show the effective rate. The allowed-price-change-adjusted transaction bound is applied at submit time, shown as concise amount-field helper text in the form, and shown again in transaction review.
 - Validate balances and selected assets.
 - Track selected allowed price change.
 - Track quote freshness.
@@ -163,11 +166,11 @@ Recommended UI:
 Behavior:
 
 - Exchange `You pay` amount+asset with `You receive` amount+asset.
-- The new `You pay` side becomes primary.
-- The new `You receive` side becomes derived.
+- Keep the originally primary amount primary after it moves to the opposite side.
+- The other side becomes derived.
 - Trigger a quote refresh for the new direction.
 - Preserve selected allowed price change.
-- Example: `10 XLM` for derived `0.12 EURMTL` becomes `0.12 EURMTL` for derived `10 XLM`.
+- Example: exact `You pay 10 XLM` with derived `You receive about 0.12 EURMTL` becomes derived `You pay about 0.12 EURMTL` with exact `You receive 10 XLM`.
 
 ## Allowed Price Change Control
 
@@ -179,8 +182,7 @@ Recommended UI:
 - Render the current preset as a compact inline value. Clicking the value opens menu options: `0.5%`, `1%`, `2%`, `5%`.
 - Keep `1%` selected by default.
 - Keep the control visually secondary so it does not compete with the amount fields.
-- Put the calculated bound into the sticky footer summary next to the primary `Swap` action.
-- Users should always see the consequence in the submit summary, but do not need a separate bound row in the body.
+- Show the calculated bound in the main form as helper text on the constrained amount input. Do not add a separate bound row or summary block.
 - If `5%` is selected, show a mild warning: `High allowed price change may allow a worse rate.`
 
 Behavior:
@@ -190,9 +192,9 @@ Behavior:
 - If the `You pay` amount is primary, allowed price change lowers the minimum accepted `You receive` amount.
 - If the `You receive` amount is primary, allowed price change raises the maximum accepted `You pay` amount.
 - Show a short helper text in the preset menu, such as `If the price changes more than this before signing, the swap will be cancelled.`
-- Summarize the calculated bound in the footer:
-  - `no less than ...` when the user enters `You pay`.
-  - `no more than ...` when the user enters `You receive`.
+- Show the calculated bound in transaction review:
+  - `Minimum received` when the user enters `You pay`.
+  - `Maximum paid` when the user enters `You receive`.
 
 ## Horizon Quote Logic
 
@@ -314,7 +316,7 @@ MVP asset scope:
 - Do not add trustline creation to the swap transaction in the first implementation.
 - If the account has no non-XLM trustlines, `TradingDialog` shows the existing no-assets message and an `Add asset` action that routes to asset management.
 - The first implementation uses current account balances/trustlines for both selectors, so unavailable destination assets are not shown as selectable choices.
-- When `Max` is used for XLM, leave enough spendable XLM for network fees and reserves, and explain this with helper text such as `Max leaves XLM for network fees.`
+- When `Total` is clicked for XLM, use the spendable balance so enough XLM remains for network fees and reserves.
 - When Trade is opened from an asset details screen, preselect that asset as `You pay` and leave `You receive` empty unless there is an explicit future product decision for a default destination asset.
 
 ## Quote Display
@@ -324,9 +326,15 @@ Keep quote information understandable and minimal.
 Show after a quote is available:
 
 - Body rate: `1 XLM ≈ 0.012 EURMTL`.
-- Sticky footer summary for strict-send: `You pay 10 XLM and receive about 0.12 EURMTL (no less than 0.1188 EURMTL).`
-- Sticky footer summary for strict-receive: `You pay about 10 XLM (no more than 10.1 XLM) and receive 0.12 EURMTL.`
+- Amount-field bound helper:
+  - `No less than 0.1188 EURMTL` under `You receive` for strict-send quotes.
+  - `No more than 10.1 XLM` under `You pay` for strict-receive quotes when the derived source amount is within the spendable balance.
 - No route line in the main form. Keep route details out of the main swap UI for now.
+
+Show source spendable balance helper:
+
+- `Total: 10 XLM`, right-aligned below `You pay`.
+- If a strict-receive quote would exceed the spendable source balance, show `Total: ...` instead of `No more than ...` so the user can quickly switch to the spendable max.
 
 Show while quoting:
 
@@ -355,8 +363,8 @@ Update `src/TransactionReview/components/Operations.tsx`:
 - Show source amount, source asset, destination amount, destination asset, route, and destination account.
 - Mirror the swap form language where possible in transaction review:
   - `Swap`.
-  - `You pay: 10 XLM`.
-  - `You receive: 0.1188 EURMTL` for strict-send review, because the signed operation contains `destMin`.
+  - `You pay: 10 XLM` or `You pay about: 10 XLM` depending on which side was derived.
+  - `You receive: 0.12 EURMTL` or `You receive about: 0.12 EURMTL` depending on which side was derived.
   - `Minimum received: 0.1188 EURMTL` or `Maximum paid: 10.1 XLM`.
 - Treat transaction review as the final stable summary before the irreversible signing/submission action.
 - Keep raw operation details out of the main review summary.
@@ -375,15 +383,16 @@ Current swap UI keys in each `i18n/locales/*/trading.json` file:
 - `swap.action.submit`
 - `swap.inputs.source.label`
 - `swap.inputs.source.estimated`
+- `swap.inputs.source.max-send-helper`
+- `swap.inputs.source.total-helper`
 - `swap.inputs.destination.label`
 - `swap.inputs.destination.estimated`
+- `swap.inputs.destination.min-received-helper`
 - `swap.quote.loading`
 - `swap.quote.unavailable`
 - `swap.quote.failed`
 - `swap.quote.updating`
 - `swap.quote.price-changed`
-- `swap.quote.summary-strict-send`
-- `swap.quote.summary-strict-receive`
 - `swap.quote.rate`
 - `swap.allowed-price-change.label`
 - `swap.allowed-price-change.helper`
@@ -406,7 +415,7 @@ Do not keep obsolete main-form keys for route display, separate minimum/maximum 
 5. Add `SwapForm` UI using `PriceInput` and `AssetSelector`.
 6. Add the switch-assets button and behavior.
 7. Add quote hook/lib for strict-send and strict-receive Horizon paths.
-8. Add quote display for effective rate, footer summary, quote status, and stale quote handling. Keep route details out of the main form.
+8. Add quote display for effective rate, quote status, stale quote handling, and amount-field bound helpers. Keep route details out of the main form.
 9. Add compact allowed price change preset control with 0.5%, 1%, 2%, and 5% options, defaulting to 1%.
 10. Add path-payment transaction helper with selected allowed price change handling and safe 7-decimal rounding.
 11. Connect form submission through existing `TransactionSender` and `createTransaction` flow.
