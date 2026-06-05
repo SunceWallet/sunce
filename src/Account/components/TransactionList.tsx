@@ -154,7 +154,7 @@ function TransactionIcon(props: { paymentSummary: PaymentSummary; transaction: T
 }
 
 interface TitleTextProps {
-  accountPublicKey: string
+  accountID: string
   alwaysShowSource?: boolean
   createdAt: string
   paymentSummary: PaymentSummary
@@ -220,7 +220,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
             {props.alwaysShowSource ? (
               <span>
                 &nbsp;{t("account.transactions.transaction-list.item.from")}&nbsp;
-                <PublicKey publicKey={props.accountPublicKey} testnet={testnet} variant="short" />{" "}
+                <PublicKey publicKey={props.accountID} testnet={testnet} variant="short" />{" "}
               </span>
             ) : null}
           </span>
@@ -245,7 +245,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
             {props.alwaysShowSource ? (
               <>
                 {" "}
-                (<PublicKey publicKey={props.accountPublicKey} testnet={testnet} variant="short" />)
+                (<PublicKey publicKey={props.accountID} testnet={testnet} variant="short" />)
               </>
             ) : null}
           </span>
@@ -268,7 +268,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
             {props.alwaysShowSource ? (
               <>
                 {" "}
-                (<PublicKey publicKey={props.accountPublicKey} testnet={testnet} variant="short" />)
+                (<PublicKey publicKey={props.accountID} testnet={testnet} variant="short" />)
               </>
             ) : null}
           </span>
@@ -295,7 +295,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
               {props.alwaysShowSource ? (
                 <>
                   {" "}
-                  (<PublicKey publicKey={props.accountPublicKey} testnet={testnet} variant="short" />)
+                  (<PublicKey publicKey={props.accountID} testnet={testnet} variant="short" />)
                 </>
               ) : null}
             </span>
@@ -315,7 +315,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
               {props.alwaysShowSource ? (
                 <>
                   {" "}
-                  (<PublicKey publicKey={props.accountPublicKey} testnet={testnet} variant="short" />)
+                  (<PublicKey publicKey={props.accountID} testnet={testnet} variant="short" />)
                 </>
               ) : null}
             </span>
@@ -335,7 +335,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
               {props.alwaysShowSource ? (
                 <>
                   {" "}
-                  (<PublicKey publicKey={props.accountPublicKey} testnet={testnet} variant="short" />)
+                  (<PublicKey publicKey={props.accountID} testnet={testnet} variant="short" />)
                 </>
               ) : null}
             </span>
@@ -360,7 +360,7 @@ const TransactionItemText = React.memo(function TransactionItemText(props: Title
 })
 
 function TransactionListItemBalance(props: {
-  accountPublicKey: string
+  accountID: string
   paymentSummary: PaymentSummary
   style?: React.CSSProperties
   transaction: Transaction
@@ -375,7 +375,7 @@ function TransactionListItemBalance(props: {
 
   // Handle special edge case: Sending money from an account to itself
   const balanceChange = paymentSummary.every(payment =>
-    payment.publicKeys.every(pubkey => pubkey === props.accountPublicKey)
+    payment.publicKeys.every(pubkey => pubkey === props.accountID)
   )
     ? sum(...creationOps.map(op => op.startingBalance), ...paymentOps.map(op => op.amount))
     : paymentSummary[0].balanceChange
@@ -394,7 +394,7 @@ function TransactionListItemBalance(props: {
 }
 
 interface TransactionListItemProps {
-  accountPublicKey: string
+  accountID: string
   alwaysShowSource?: boolean
   className?: string
   createdAt: string
@@ -410,7 +410,7 @@ export const TransactionListItem = React.memo(function TransactionListItem(props
 
   const { transaction, onOpenTransaction } = props
 
-  const paymentSummary = getPaymentSummary(props.accountPublicKey, transaction)
+  const paymentSummary = getPaymentSummary(props.accountID, transaction)
   const onOpen = onOpenTransaction ? () => onOpenTransaction(transaction.hash().toString("hex")) : undefined
 
   return (
@@ -419,7 +419,7 @@ export const TransactionListItem = React.memo(function TransactionListItem(props
         {props.icon || <TransactionIcon paymentSummary={paymentSummary} transaction={transaction} />}
       </ListItemIcon>
       <TransactionItemText
-        accountPublicKey={props.accountPublicKey}
+        accountID={props.accountID}
         alwaysShowSource={props.alwaysShowSource}
         createdAt={props.createdAt}
         paymentSummary={paymentSummary}
@@ -434,7 +434,7 @@ export const TransactionListItem = React.memo(function TransactionListItem(props
         transaction={transaction}
       />
       <TransactionListItemBalance
-        accountPublicKey={props.accountPublicKey}
+        accountID={props.accountID}
         paymentSummary={paymentSummary}
         style={{ paddingRight: 0 }}
         transaction={transaction}
@@ -542,7 +542,7 @@ function TransactionList(props: TransactionListProps) {
             <InlineErrorBoundary height={72}>
               <TransactionListItem
                 key={transaction.hash}
-                accountPublicKey={props.account.publicKey}
+                accountID={props.account.accountID}
                 className={classes.listItem}
                 createdAt={transaction.created_at}
                 onOpenTransaction={openTransaction}
@@ -553,7 +553,7 @@ function TransactionList(props: TransactionListProps) {
         ))}
       </>
     ),
-    [props.transactions, props.account.publicKey, classes.listItem, openTransaction]
+    [props.transactions, props.account.accountID, classes.listItem, openTransaction]
   )
 
   if (props.transactions.length === 0 && !props.olderTransactionsAvailable) {
