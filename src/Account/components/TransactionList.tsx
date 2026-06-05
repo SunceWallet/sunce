@@ -392,6 +392,9 @@ type BalanceChange = Pick<PaymentSummary[number], "asset" | "balanceChange">
 
 function TransactionListBalanceChangeGrid(props: { balanceChanges: BalanceChange[] }) {
   const isSmallScreen = useIsMobile()
+  const orderedBalanceChanges = props.balanceChanges
+    .filter((balanceChange) => balanceChange.balanceChange.lt(0))
+    .concat(props.balanceChanges.filter((balanceChange) => !balanceChange.balanceChange.lt(0)))
 
   return (
     <span
@@ -403,7 +406,7 @@ function TransactionListBalanceChangeGrid(props: { balanceChanges: BalanceChange
         justifyContent: "end"
       }}
     >
-      {props.balanceChanges.map((balanceChange) => (
+      {orderedBalanceChanges.map((balanceChange) => (
         <React.Fragment key={stringifyAsset(balanceChange.asset)}>
           <TransactionListBalanceChange
             assetCode={balanceChange.asset.getCode()}
