@@ -93,8 +93,6 @@
       "loading": "Preis wird gesucht...",
       "price-changed": "Der Preis hat sich geändert. Prüfen Sie den neuen Betrag vor dem Tausch.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "summary-strict-receive": "Sie zahlen etwa {{sourceAmount}} {{sourceAsset}} (höchstens {{maxSend}} {{sourceAsset}}) und erhalten {{destinationAmount}} {{destinationAsset}}.",
-      "summary-strict-send": "Sie zahlen {{sourceAmount}} {{sourceAsset}} und erhalten etwa {{destinationAmount}} {{destinationAsset}} (mindestens {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Diese Assets können derzeit nicht getauscht werden. Versuchen Sie einen kleineren Betrag oder wählen Sie ein anderes Asset.",
       "updating": "Preis wird aktualisiert..."
     },

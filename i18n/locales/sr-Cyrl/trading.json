@@ -93,8 +93,6 @@
       "loading": "Тражење цене...",
       "price-changed": "Цена се променила. Прегледај нову количину пре замене.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "summary-strict-receive": "Плаћаш око {{sourceAmount}} {{sourceAsset}} (не више од {{maxSend}} {{sourceAsset}}) и примаш {{destinationAmount}} {{destinationAsset}}.",
-      "summary-strict-send": "Плаћаш {{sourceAmount}} {{sourceAsset}} и примаш око {{destinationAmount}} {{destinationAsset}} (не мање од {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Ове активе тренутно не могу да се замене. Покушај мању количину или изабери другу активу.",
       "updating": "Ажурирање цене..."
     },

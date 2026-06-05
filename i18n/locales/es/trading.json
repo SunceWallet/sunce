@@ -93,8 +93,6 @@
       "loading": "Buscando precio...",
       "price-changed": "El precio cambió. Revisa el nuevo monto antes de intercambiar.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "summary-strict-receive": "Pagas aproximadamente {{sourceAmount}} {{sourceAsset}} (no más de {{maxSend}} {{sourceAsset}}) y recibes {{destinationAmount}} {{destinationAsset}}.",
-      "summary-strict-send": "Pagas {{sourceAmount}} {{sourceAsset}} y recibes aproximadamente {{destinationAmount}} {{destinationAsset}} (no menos de {{minReceived}} {{destinationAsset}}).",
       "unavailable": "Estos activos no se pueden intercambiar ahora. Prueba con un monto menor o elige otro activo.",
       "updating": "Actualizando precio..."
     },

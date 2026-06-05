@@ -192,7 +192,7 @@ function TradingDialog(props: TradingDialogProps) {
         </>
       }
       actions={dialogActionsRef}
-      actionsPosition={tradeMode === "swap" ? "bottom" : undefined}
+      actionsPosition={tradeMode === "orders" ? undefined : "bottom"}
     >
       <InlineErrorBoundary>{trustlines.length > 0 ? MainContent : LinkToManageAssets}</InlineErrorBoundary>
     </DialogBody>

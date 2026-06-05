@@ -93,8 +93,6 @@
       "loading": "Finding price...",
       "price-changed": "Price changed. Review the new amount before swapping.",
       "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
-      "summary-strict-receive": "You pay about {{sourceAmount}} {{sourceAsset}} (no more than {{maxSend}} {{sourceAsset}}) and receive {{destinationAmount}} {{destinationAsset}}.",
-      "summary-strict-send": "You pay {{sourceAmount}} {{sourceAsset}} and receive about {{destinationAmount}} {{destinationAsset}} (no less than {{minReceived}} {{destinationAsset}}).",
       "unavailable": "These assets cannot be swapped right now. Try a smaller amount or choose another asset.",
       "updating": "Updating price..."
     },

@@ -277,35 +277,6 @@ function SwapForm(props: Props) {
     }
   }, [allowedPriceChange, destinationAsset, formError, horizonURLs, netWorker, primaryAmount, primarySide, props, quote, sourceAsset])
 
-  const allowedPriceBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
-  const quoteSummary =
-    quote && allowedPriceBound
-      ? keepAmountAssetTogether(
-          quote.mode === "strict-send"
-            ? t<string>("trading.swap.quote.summary-strict-send", {
-                sourceAmount: formatBalance(quote.sourceAmount),
-                sourceAsset: assetCode(quote.sourceAsset),
-                destinationAmount: formatBalance(quote.destinationAmount),
-                destinationAsset: assetCode(quote.destinationAsset),
-                minReceived: formatBalance(allowedPriceBound)
-              })
-            : t<string>("trading.swap.quote.summary-strict-receive", {
-                sourceAmount: formatBalance(quote.sourceAmount),
-                sourceAsset: assetCode(quote.sourceAsset),
-                maxSend: formatBalance(allowedPriceBound),
-                destinationAmount: formatBalance(quote.destinationAmount),
-                destinationAsset: assetCode(quote.destinationAsset)
-              }),
-          [
-            [formatBalance(quote.sourceAmount), assetCode(quote.sourceAsset)],
-            [formatBalance(quote.destinationAmount), assetCode(quote.destinationAsset)],
-            [
-              formatBalance(allowedPriceBound),
-              quote.mode === "strict-send" ? assetCode(quote.destinationAsset) : assetCode(quote.sourceAsset)
-            ]
-          ]
-        )
-      : undefined
   const quoteHelper = swapConstraintError
     ? swapConstraintError
     : priceChanged
@@ -465,63 +436,10 @@ function SwapForm(props: Props) {
           ) : null}
         </Box>
         <Portal target={props.dialogActionsRef.element}>
-          <DialogActionsBox
-            expandedHeight
-            desktopStyle={{ alignItems: "center", justifyContent: "center", marginTop: 0 }}
-          >
-            {isMobile ? (
-              <VerticalLayout alignItems="center" width="100%">
-                <Typography align="center" variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
-                  {quoteSummary ||
-                    t("trading.swap.quote.summary-strict-send", {
-                      sourceAmount: "-",
-                      sourceAsset: "-",
-                      destinationAmount: "-",
-                      destinationAsset: "-",
-                      minReceived: "-"
-                    })}
-                </Typography>
-                <ActionButton
-                  disabled={submitDisabled}
-                  loading={pending}
-                  icon={<SyncIcon />}
-                  onClick={submitForm}
-                  type="primary"
-                >
-                  {t("trading.swap.action.submit")}
-                </ActionButton>
-              </VerticalLayout>
-            ) : (
-              <HorizontalLayout
-                alignItems="center"
-                justifyContent="space-between"
-                style={{ maxWidth: 500 }}
-                width="100%"
-              >
-                <VerticalLayout grow={1} padding="0 24px 0 0" style={{ minWidth: 0 }}>
-                  <Typography variant="body2" style={{ visibility: quoteSummary ? undefined : "hidden" }}>
-                    {quoteSummary ||
-                      t("trading.swap.quote.summary-strict-send", {
-                        sourceAmount: "-",
-                        sourceAsset: "-",
-                        destinationAmount: "-",
-                        destinationAsset: "-",
-                        minReceived: "-"
-                      })}
-                  </Typography>
-                </VerticalLayout>
-                <ActionButton
-                  disabled={submitDisabled}
-                  loading={pending}
-                  icon={<SyncIcon />}
-                  onClick={submitForm}
-                  style={{ flexShrink: 0 }}
-                  type="primary"
-                >
-                  {t("trading.swap.action.submit")}
-                </ActionButton>
-              </HorizontalLayout>
-            )}
+          <DialogActionsBox desktopStyle={{ marginTop: 0 }}>
+            <ActionButton disabled={submitDisabled} loading={pending} icon={<SyncIcon />} onClick={submitForm} type="primary">
+              {t("trading.swap.action.submit")}
+            </ActionButton>
           </DialogActionsBox>
         </Portal>
       </VerticalLayout>
