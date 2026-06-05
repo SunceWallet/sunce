@@ -81,11 +81,13 @@
     "inputs": {
       "destination": {
         "estimated": "Ricevi circa",
-        "label": "Ricevi"
+        "label": "Ricevi",
+        "min-received-helper": "Non meno di {{minReceived}} {{destinationAsset}}"
       },
       "source": {
         "estimated": "Paghi circa",
-        "label": "Paghi"
+        "label": "Paghi",
+        "max-send-helper": "Non più di {{maxSend}} {{sourceAsset}}"
       }
     },
     "quote": {

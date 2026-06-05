@@ -81,11 +81,13 @@
     "inputs": {
       "destination": {
         "estimated": "You receive about",
-        "label": "You receive"
+        "label": "You receive",
+        "min-received-helper": "No less than {{minReceived}} {{destinationAsset}}"
       },
       "source": {
         "estimated": "You pay about",
-        "label": "You pay"
+        "label": "You pay",
+        "max-send-helper": "No more than {{maxSend}} {{sourceAsset}}"
       }
     },
     "quote": {

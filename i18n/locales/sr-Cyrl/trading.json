@@ -81,11 +81,13 @@
     "inputs": {
       "destination": {
         "estimated": "Примаш око",
-        "label": "Примаш"
+        "label": "Примаш",
+        "min-received-helper": "Не мање од {{minReceived}} {{destinationAsset}}"
       },
       "source": {
         "estimated": "Плаћаш око",
-        "label": "Плаћаш"
+        "label": "Плаћаш",
+        "max-send-helper": "Не више од {{maxSend}} {{sourceAsset}}"
       }
     },
     "quote": {

@@ -302,6 +302,28 @@ function SwapForm(props: Props) {
                     ]
                   )
                 : undefined
+  const allowedPriceChangeBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
+  const allowedPriceChangeBoundAmount = allowedPriceChangeBound ? formatBalance(allowedPriceChangeBound) : ""
+  const sourceMaxSendHelperText =
+    quote && quote.mode === "strict-receive" && allowedPriceChangeBound
+      ? keepAmountAssetTogether(
+          t<string>("trading.swap.inputs.source.max-send-helper", {
+            maxSend: allowedPriceChangeBoundAmount,
+            sourceAsset: assetCode(quote.sourceAsset)
+          }),
+          [[allowedPriceChangeBoundAmount, assetCode(quote.sourceAsset)]]
+        )
+      : undefined
+  const destinationMinReceivedHelperText =
+    quote && quote.mode === "strict-send" && allowedPriceChangeBound
+      ? keepAmountAssetTogether(
+          t<string>("trading.swap.inputs.destination.min-received-helper", {
+            destinationAsset: assetCode(quote.destinationAsset),
+            minReceived: allowedPriceChangeBoundAmount
+          }),
+          [[allowedPriceChangeBoundAmount, assetCode(quote.destinationAsset)]]
+        )
+      : undefined
   const sourceAmountHelperText = (
     <ButtonBase
       disabled={!sourceAsset}
@@ -336,7 +358,7 @@ function SwapForm(props: Props) {
         <PriceInput
           assetCode={sourceSelector}
           error={Boolean(sourceAmountError)}
-          helperText={sourceAmountHelperText}
+          helperText={sourceMaxSendHelperText || sourceAmountHelperText}
           label={
             sourceAmountError ||
             (primarySide === "source"
@@ -366,6 +388,7 @@ function SwapForm(props: Props) {
         <PriceInput
           assetCode={destinationSelector}
           error={Boolean(destinationAmountError)}
+          helperText={destinationMinReceivedHelperText}
           label={
             destinationAmountError ||
             (primarySide === "destination"

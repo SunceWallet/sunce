@@ -81,11 +81,13 @@
     "inputs": {
       "destination": {
         "estimated": "Вы получаете около",
-        "label": "Вы получаете"
+        "label": "Вы получаете",
+        "min-received-helper": "Не менее {{minReceived}} {{destinationAsset}}"
       },
       "source": {
         "estimated": "Вы платите около",
-        "label": "Вы платите"
+        "label": "Вы платите",
+        "max-send-helper": "Не более {{maxSend}} {{sourceAsset}}"
       }
     },
     "quote": {

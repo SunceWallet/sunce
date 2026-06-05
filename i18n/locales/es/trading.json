@@ -81,11 +81,13 @@
     "inputs": {
       "destination": {
         "estimated": "Recibes aproximadamente",
-        "label": "Recibes"
+        "label": "Recibes",
+        "min-received-helper": "No menos de {{minReceived}} {{destinationAsset}}"
       },
       "source": {
         "estimated": "Pagas aproximadamente",
-        "label": "Pagas"
+        "label": "Pagas",
+        "max-send-helper": "No más de {{maxSend}} {{sourceAsset}}"
       }
     },
     "quote": {
