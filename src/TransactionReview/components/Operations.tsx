@@ -9,13 +9,18 @@ import { useAccountHomeDomainSafe } from "~Generic/hooks/stellar"
 import { useIsSmallMobile } from "~Generic/hooks/userinterface"
 import { AccountData } from "~Generic/lib/account"
 import { formatBalance } from "~Generic/lib/balances"
-import { horizonAssetToAsset, stringifyAssetToReadableString, trustlineLimitEqualsUnlimited } from "~Generic/lib/stellar"
+import {
+  horizonAssetToAsset,
+  stringifyAssetToReadableString,
+  trustlineLimitEqualsUnlimited
+} from "~Generic/lib/stellar"
 import { CopyableAddress } from "~Generic/components/PublicKey"
 import { SummaryItem, SummaryDetailsField } from "./SummaryItem"
 import { Account, AccountsContext } from "~App/contexts/accounts"
 import PersonAdd from "@material-ui/icons/PersonAdd"
 import { DialogsContext } from "~App/contexts/dialogs"
 import { SavedAddressesContext } from "~App/contexts/savedAddresses"
+import { PaymentSummary } from "~Generic/lib/paymentSummary"
 
 const isUTF8 = (buffer: Buffer) => !buffer.toString("utf8").match(/[\x00-\x1F]/)
 
@@ -28,17 +33,17 @@ function someThresholdSet(operation: Operation.SetOptions) {
 }
 
 function prettifyCamelcase(identifier: string) {
-  const prettified = identifier.replace(/[A-Z]/g, letter => ` ${letter.toLowerCase()}`)
+  const prettified = identifier.replace(/[A-Z]/g, (letter) => ` ${letter.toLowerCase()}`)
   return prettified.charAt(0).toUpperCase() + prettified.substr(1)
 }
 
 function prettifyOperationObject(operation: Operation) {
   const operationPropNames = Object.keys(operation)
-    .filter(key => key !== "type")
-    .filter(propName => Boolean((operation as any)[propName]))
+    .filter((key) => key !== "type")
+    .filter((propName) => Boolean((operation as any)[propName]))
 
   const operationDetailLines = operationPropNames.map(
-    propName => `${prettifyCamelcase(propName)}: ${JSON.stringify((operation as any)[propName], null, 2)}`
+    (propName) => `${prettifyCamelcase(propName)}: ${JSON.stringify((operation as any)[propName], null, 2)}`
   )
   return operationDetailLines.join("\n")
 }
@@ -59,8 +64,8 @@ export function useOperationTitle() {
       return offerId === "0"
         ? t("operations.manage-buy-offer.title.create")
         : amount.eq(0)
-        ? t("operations.manage-buy-offer.title.delete")
-        : t("operations.manage-buy-offer.title.update")
+          ? t("operations.manage-buy-offer.title.delete")
+          : t("operations.manage-buy-offer.title.update")
     } else if (operation.type === "manageSellOffer") {
       const amount = BigNumber(operation.amount)
       const offerId = operation.offerId
@@ -68,8 +73,8 @@ export function useOperationTitle() {
       return offerId === "0"
         ? t("operations.manage-sell-offer.title.create")
         : amount.eq(0)
-        ? t("operations.manage-sell-offer.title.delete")
-        : t("operations.manage-sell-offer.title.update")
+          ? t("operations.manage-sell-offer.title.delete")
+          : t("operations.manage-sell-offer.title.update")
     } else if (operation.type === "accountMerge") {
       return t("operations.account-merge.title")
     } else if (operation.type === "changeTrust") {
@@ -86,14 +91,14 @@ export function useOperationTitle() {
       operation.type === "setOptions" &&
       operation.signer &&
       operation.signer.weight !== undefined &&
-      operation.signer.weight > 0
+      Number(operation.signer.weight) > 0
     ) {
       return t("operations.set-options.add-signer.title")
     } else if (
       operation.type === "setOptions" &&
       operation.signer &&
       operation.signer.weight !== undefined &&
-      operation.signer.weight === 0
+      Number(operation.signer.weight) === 0
     ) {
       return t("operations.set-options.remove-signer.title")
     } else if (operation.type === "setOptions" && someThresholdSet(operation)) {
@@ -121,10 +126,11 @@ interface OperationProps<Op extends Operation> {
   hideHeading?: boolean
   style?: React.CSSProperties
   testnet: boolean
+  exactPaymentSummary?: PaymentSummary
 }
 
 const isLocalAccount = (address: string, testnet: boolean, accounts: Account[]): boolean =>
-  !!accounts.find(account => account.publicKey === address && account.testnet === testnet)
+  !!accounts.find((account) => account.publicKey === address && account.testnet === testnet)
 
 type AddAddressButtonProps = {
   address: string
@@ -181,12 +187,21 @@ function PaymentOperation(props: OperationProps<Operation.Payment>) {
   )
 }
 
-function PathPaymentOperation(props: OperationProps<Operation.PathPaymentStrictSend | Operation.PathPaymentStrictReceive>) {
+function PathPaymentOperation(
+  props: OperationProps<Operation.PathPaymentStrictSend | Operation.PathPaymentStrictReceive>
+) {
   const { destination, path, source } = props.operation
   const { t } = useTranslation()
   const receiveAmount =
-    props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.destAmount
-  const payAmount = props.operation.type === "pathPaymentStrictSend" ? props.operation.sendAmount : props.operation.sendMax
+    props.operation.type === "pathPaymentStrictSend"
+      ? props.exactPaymentSummary?.find((b) => b.asset.equals(props.operation.destAsset))?.balanceChange.abs().toString() ||
+        props.operation.destMin
+      : props.operation.destAmount
+  const payAmount =
+    props.operation.type === "pathPaymentStrictSend"
+      ? props.operation.sendAmount
+      : props.exactPaymentSummary?.find((b) => b.asset.equals(props.operation.sendAsset))?.balanceChange.abs().toString() ||
+        props.operation.sendMax
   const boundLabel =
     props.operation.type === "pathPaymentStrictSend"
       ? t("operations.swap.summary.minimum-received")
@@ -211,7 +226,9 @@ function PathPaymentOperation(props: OperationProps<Operation.PathPaymentStrictS
                 ? props.operation.destAsset.code
                 : props.operation.sendAsset.code
             }
-            balance={String(props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.sendMax)}
+            balance={String(
+              props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.sendMax
+            )}
             untrimmed
           />
         }
@@ -415,15 +432,15 @@ function ManageOfferOperation(props: ManageOfferOperationProps) {
     )
   } else {
     // Offer edit
-    const offer = offers.find(someOffer => String(someOffer.id) === String(offerId))
+    const offer = offers.find((someOffer) => String(someOffer.id) === String(offerId))
     const heading =
       props.operation.type === "manageBuyOffer"
         ? buyAmount.eq(0)
           ? t("operations.manage-buy-offer.title.delete")
           : t("operations.manage-buy-offer.title.update")
         : buyAmount.eq(0)
-        ? t("operations.manage-sell-offer.title.delete")
-        : t("operations.manage-sell-offer.title.update")
+          ? t("operations.manage-sell-offer.title.delete")
+          : t("operations.manage-sell-offer.title.update")
 
     return offer ? (
       props.operation.type === "manageBuyOffer" ? (
@@ -638,6 +655,7 @@ function GenericOperation(props: { operation: Operation; style?: React.CSSProper
 
 interface Props {
   accountData: AccountData
+  exactPaymentSummary?: PaymentSummary
   operation: Operation
   style?: React.CSSProperties
   testnet: boolean
@@ -679,6 +697,7 @@ function OperationListItem(props: Props) {
       <PathPaymentOperation
         hideHeading={hideHeading}
         operation={props.operation}
+        exactPaymentSummary={props.exactPaymentSummary}
         style={props.style}
         testnet={props.testnet}
       />

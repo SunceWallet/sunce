@@ -492,7 +492,7 @@ function subscribeToAccountTransactionsUncached(horizonURLs: string[], accountID
 
   return multicast(
     subscribeToAccountEffects(horizonURLs, accountID).pipe(
-      flatMap(async function*(): AsyncIterableIterator<Horizon.TransactionResponse> {
+      flatMap(async function*(): AsyncIterableIterator<Horizon.HorizonApi.TransactionResponse> {
         for (let i = 0; i < 3; i++) {
           const [page, order] = await fetchLatestTxs()
           const newTxs = order === "asc" ? page._embedded.records : page._embedded.records.reverse()

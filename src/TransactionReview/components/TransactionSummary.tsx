@@ -19,10 +19,7 @@ import { SummaryDetailsField, SummaryItem } from "./SummaryItem"
 import OperationListItem from "./Operations"
 import { Signers, TransactionMemo } from "./Transaction"
 import { AccountCreationWarning, AddingSignerWarning, DangerousTransactionWarning } from "./Warnings"
-
-type TransactionWithUndocumentedProps = Transaction & {
-  created_at: string
-}
+import { PaymentSummary } from "~Generic/lib/paymentSummary"
 
 function getTime(time: string | number) {
   const date = new Date(time)
@@ -57,8 +54,10 @@ interface DefaultTransactionSummaryProps {
   showSigners?: boolean
   showSource?: boolean
   signatureRequest?: MultisigTransactionResponse
+  submittedAt?: string
   testnet: boolean
   transaction: Transaction
+  exactPaymentSummary?: PaymentSummary
 }
 
 function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
@@ -67,9 +66,7 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
 
   const localAccountPublicKey = props.account ? props.account.publicKey : undefined
 
-  const fee = BigNumber(props.transaction.fee)
-    .mul(props.transaction.operations.length)
-    .div(1e7)
+  const fee = BigNumber(props.transaction.fee).mul(props.transaction.operations.length).div(1e7)
 
   const isDangerousSignatureRequest = React.useMemo(() => {
     const trustedKeys = accounts.reduce<string[]>(
@@ -82,9 +79,9 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
     return props.signatureRequest && isPotentiallyDangerousTransaction(props.transaction, trustedKeys)
   }, [accounts, props.signatureRequest, props.transaction])
 
-  const isAccountCreation = props.transaction.operations.some(op => op.type === "createAccount")
+  const isAccountCreation = props.transaction.operations.some((op) => op.type === "createAccount")
   const isAddingSigner = props.transaction.operations.some(
-    op => op.type === "setOptions" && (op.signer?.weight || 0) > 0
+    (op) => op.type === "setOptions" && Number(op.signer?.weight || 0) > 0
   )
 
   const isWideScreen = useMediaQuery("(min-width:900px)")
@@ -92,7 +89,7 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
     ? { maxWidth: props.fullWidth ? "unset" : 700, minWidth: 400 }
     : { minWidth: "66vw" }
 
-  const transaction = props.transaction as TransactionWithUndocumentedProps
+  const transaction = props.transaction
   const transactionHash = React.useMemo(() => {
     return transaction.hash().toString("hex")
   }, [transaction])
@@ -106,6 +103,7 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
         <OperationListItem
           key={index}
           accountData={props.accountData}
+          exactPaymentSummary={props.exactPaymentSummary}
           operation={
             props.showSource
               ? makeOperationSourceExplicit(operation, props.transaction, localAccountPublicKey)
@@ -133,7 +131,9 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
             <SummaryDetailsField
               fullWidth
               label={t("account.transaction-review.summary.item.account.label")}
-              value={<CopyableAddress address={props.transaction.source} testnet={props.testnet} variant="short" />}
+              value={
+                <CopyableAddress address={props.transaction.source} testnet={props.testnet} variant="short" />
+              }
             />
           </SummaryItem>
         ) : null}
@@ -151,11 +151,11 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
             label={t("account.transaction-review.summary.item.max-fee.label")}
             value={<SingleBalance assetCode="XLM" balance={fee.toString()} inline />}
           />
-          {transaction.created_at ? (
+          {props.submittedAt ? (
             <SummaryDetailsField
               fullWidth
               label={t("account.transaction-review.summary.item.submission.label")}
-              value={getTime(transaction.created_at)}
+              value={getTime(props.submittedAt)}
             />
           ) : null}
         </SummaryItem>
@@ -176,7 +176,7 @@ function WebAuthTransactionSummary(props: WebAuthTransactionSummaryProps) {
   const { timeBounds } = props.transaction
 
   const domain = signingKeyCache.get(props.transaction.source)
-  const manageDataOperation = props.transaction.operations.find(op => op.type === "manageData")
+  const manageDataOperation = props.transaction.operations.find((op) => op.type === "manageData")
   const maxTime = timeBounds ? Math.round(Number.parseInt(timeBounds.maxTime, 10) * 1000) : 0
 
   if (!manageDataOperation) {
@@ -214,8 +214,10 @@ interface TransactionSummaryProps {
   showHash?: boolean
   showSource?: boolean
   signatureRequest?: MultisigTransactionResponse
+  submittedAt?: string
   testnet: boolean
   transaction: Transaction
+  exactPaymentSummary?: PaymentSummary
 }
 
 function TransactionSummary(props: TransactionSummaryProps) {
@@ -224,8 +226,10 @@ function TransactionSummary(props: TransactionSummaryProps) {
   const accountDataSet = useLiveAccountDataSet(allTxSources, props.testnet)
   const { t } = useTranslation()
 
-  const accountData = accountDataSet.find(someAccountData => someAccountData.id === props.transaction.source)
-  const showSigners = accountDataSet.some(someAccountData => someAccountData.signers.length > 1)
+  const accountData = accountDataSet.find(
+    (someAccountData) => someAccountData.id === props.transaction.source
+  )
+  const showSigners = accountDataSet.some((someAccountData) => someAccountData.signers.length > 1)
 
   if (!accountData) {
     throw new Error(t("account.transaction-review.validation.no-account-data"))

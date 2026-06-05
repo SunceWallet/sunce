@@ -99,7 +99,7 @@ function createAssetPairCacheKey([horizonURLs, selling, buying]: readonly [strin
   return `${horizonURLs.map(url => `${url}:`)}${stringifyAsset(selling)}:${stringifyAsset(buying)}`
 }
 
-export interface DecodedTransactionResponse extends Horizon.TransactionResponse {
+export interface DecodedTransactionResponse extends Horizon.HorizonApi.TransactionResponse {
   decodedTx: Transaction
   exactPaymentSummary?: PaymentSummary
 }
@@ -171,7 +171,7 @@ export const accountOpenOrdersCache = createCache<
 export const accountTransactionsCache = createCache<
   readonly [string[], string],
   TransactionHistory,
-  Horizon.TransactionResponse
+  Horizon.HorizonApi.TransactionResponse
 >(createAccountCacheKey, areTransactionsNewer)
 
 export const orderbookCache = createCache<

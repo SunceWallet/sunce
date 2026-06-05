@@ -304,7 +304,7 @@ export function useLiveOrderbook(selling: Asset, buying: Asset, testnet: boolean
   return useDataSubscription(applyOrderbookUpdate, get, set, observe)
 }
 
-const txsMatch = (a: Horizon.TransactionResponse, b: Horizon.TransactionResponse): boolean => {
+const txsMatch = (a: Horizon.HorizonApi.TransactionResponse, b: Horizon.HorizonApi.TransactionResponse): boolean => {
   return a.source_account === b.source_account && a.source_account_sequence === b.source_account_sequence
 }
 
@@ -375,7 +375,7 @@ export function useOlderTransactions(accountID: string, testnet: boolean) {
 
   const fetchMoreTransactions = React.useCallback(
     async function fetchMoreTransactions() {
-      let fetched: CollectionPage<Horizon.TransactionResponse>
+      let fetched: CollectionPage<Horizon.HorizonApi.TransactionResponse>
 
       const selector = [horizonURLs, accountID] as const
       const history = accountTransactionsCache.get(selector)
@@ -393,7 +393,7 @@ export function useOlderTransactions(accountID: string, testnet: boolean) {
             order: "desc"
           })
         } catch (e) {
-          fetched = ({ _embedded: { records: [] } } as unknown) as CollectionPage<Horizon.TransactionResponse>
+          fetched = ({ _embedded: { records: [] } } as unknown) as CollectionPage<Horizon.HorizonApi.TransactionResponse>
         }
       } else {
         fetched = await netWorker.fetchAccountTransactions(horizonURLs, accountID, {
@@ -404,7 +404,7 @@ export function useOlderTransactions(accountID: string, testnet: boolean) {
         })
       }
 
-      const fetchedTransactions: Horizon.TransactionResponse[] = fetched._embedded.records
+      const fetchedTransactions: Horizon.HorizonApi.TransactionResponse[] = fetched._embedded.records
 
       const transactions = await Promise.all(
         fetchedTransactions
