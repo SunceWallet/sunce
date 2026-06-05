@@ -87,7 +87,8 @@
       "source": {
         "estimated": "Pagas aproximadamente",
         "label": "Pagas",
-        "max-send-helper": "No más de {{maxSend}} {{sourceAsset}}"
+        "max-send-helper": "No más de {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Total: {{amount}}"
       }
     },
     "quote": {

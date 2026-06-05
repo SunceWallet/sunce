@@ -87,7 +87,8 @@
       "source": {
         "estimated": "Paghi circa",
         "label": "Paghi",
-        "max-send-helper": "Non più di {{maxSend}} {{sourceAsset}}"
+        "max-send-helper": "Non più di {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Totale: {{amount}}"
       }
     },
     "quote": {

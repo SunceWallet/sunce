@@ -87,7 +87,8 @@
       "source": {
         "estimated": "You pay about",
         "label": "You pay",
-        "max-send-helper": "No more than {{maxSend}} {{sourceAsset}}"
+        "max-send-helper": "No more than {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Total: {{amount}}"
       }
     },
     "quote": {

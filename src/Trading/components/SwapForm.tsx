@@ -305,7 +305,7 @@ function SwapForm(props: Props) {
   const allowedPriceChangeBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
   const allowedPriceChangeBoundAmount = allowedPriceChangeBound ? formatBalance(allowedPriceChangeBound) : ""
   const sourceMaxSendHelperText =
-    quote && quote.mode === "strict-receive" && allowedPriceChangeBound
+    quote && quote.mode === "strict-receive" && allowedPriceChangeBound && !sourceAmountExceedsBalance
       ? keepAmountAssetTogether(
           t<string>("trading.swap.inputs.source.max-send-helper", {
             maxSend: allowedPriceChangeBoundAmount,
@@ -329,14 +329,17 @@ function SwapForm(props: Props) {
       disabled={!sourceAsset}
       onClick={setMaxSourceAmount}
       style={{
+        display: "flex",
         fontSize: "inherit",
         fontWeight: "inherit",
-        textAlign: "inherit",
-        visibility: sourceAsset ? undefined : "hidden"
+        justifyContent: "flex-end",
+        textAlign: "right",
+        visibility: sourceAsset ? undefined : "hidden",
+        width: "100%"
       }}
       tabIndex={sourceAsset ? undefined : -1}
     >
-      {t("trading.inputs.primary-amount.placeholder", {
+      {t("trading.swap.inputs.source.total-helper", {
         amount: sourceAsset ? `${formatBalance(spendableSourceBalance.toString())} ${assetCode(sourceAsset)}` : "0 XLM"
       })}
     </ButtonBase>
@@ -358,6 +361,7 @@ function SwapForm(props: Props) {
         <PriceInput
           assetCode={sourceSelector}
           error={Boolean(sourceAmountError)}
+          FormHelperTextProps={{ error: false }}
           helperText={sourceMaxSendHelperText || sourceAmountHelperText}
           label={
             sourceAmountError ||

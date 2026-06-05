@@ -87,7 +87,8 @@
       "source": {
         "estimated": "Plaćaš oko",
         "label": "Plaćaš",
-        "max-send-helper": "Ne više od {{maxSend}} {{sourceAsset}}"
+        "max-send-helper": "Ne više od {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Ukupno: {{amount}}"
       }
     },
     "quote": {

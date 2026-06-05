@@ -87,7 +87,8 @@
       "source": {
         "estimated": "Вы платите около",
         "label": "Вы платите",
-        "max-send-helper": "Не более {{maxSend}} {{sourceAsset}}"
+        "max-send-helper": "Не более {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Всего: {{amount}}"
       }
     },
     "quote": {

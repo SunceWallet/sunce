@@ -87,7 +87,8 @@
       "source": {
         "estimated": "Sie zahlen etwa",
         "label": "Sie zahlen",
-        "max-send-helper": "Nicht mehr als {{maxSend}} {{sourceAsset}}"
+        "max-send-helper": "Nicht mehr als {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Gesamt: {{amount}}"
       }
     },
     "quote": {
