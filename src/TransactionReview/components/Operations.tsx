@@ -126,7 +126,8 @@ interface OperationProps<Op extends Operation> {
   hideHeading?: boolean
   style?: React.CSSProperties
   testnet: boolean
-  exactPaymentSummary?: PaymentSummary
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
 }
 
 const isLocalAccount = (address: string, testnet: boolean, accounts: Account[]): boolean =>
@@ -192,16 +193,30 @@ function PathPaymentOperation(
 ) {
   const { destination, path, source } = props.operation
   const { t } = useTranslation()
+  const summarySendAmount = props.paymentSummary?.find((b) => b.asset.equals(props.operation.sendAsset))
+  const summaryReceiveAmount = props.paymentSummary?.find((b) => b.asset.equals(props.operation.destAsset))
+  const exactSummaryAvailable = Boolean(props.paymentSummary?.length && !props.paymentSummaryIsEstimated)
+  const estimatedSummaryAvailable = Boolean(props.paymentSummary?.length && props.paymentSummaryIsEstimated)
   const receiveAmount =
     props.operation.type === "pathPaymentStrictSend"
-      ? props.exactPaymentSummary?.find((b) => b.asset.equals(props.operation.destAsset))?.balanceChange.abs().toString() ||
-        props.operation.destMin
+      ? summaryReceiveAmount?.balanceChange.abs().toString() || props.operation.destMin
       : props.operation.destAmount
   const payAmount =
     props.operation.type === "pathPaymentStrictSend"
       ? props.operation.sendAmount
-      : props.exactPaymentSummary?.find((b) => b.asset.equals(props.operation.sendAsset))?.balanceChange.abs().toString() ||
-        props.operation.sendMax
+      : summarySendAmount?.balanceChange.abs().toString() || props.operation.sendMax
+  const payLabel =
+    props.operation.type === "pathPaymentStrictReceive" && estimatedSummaryAvailable
+      ? t("operations.swap.summary.you-pay-about")
+      : exactSummaryAvailable
+        ? t("operations.swap.summary.you-paid")
+        : t("operations.swap.summary.you-pay")
+  const receiveLabel =
+    props.operation.type === "pathPaymentStrictSend" && estimatedSummaryAvailable
+      ? t("operations.swap.summary.you-receive-about")
+      : exactSummaryAvailable
+        ? t("operations.swap.summary.you-received")
+        : t("operations.swap.summary.you-receive")
   const boundLabel =
     props.operation.type === "pathPaymentStrictSend"
       ? t("operations.swap.summary.minimum-received")
@@ -210,29 +225,31 @@ function PathPaymentOperation(
   return (
     <SummaryItem heading={props.hideHeading ? undefined : t("operations.swap.title")}>
       <SummaryDetailsField
-        label={t("operations.swap.summary.you-pay")}
+        label={payLabel}
         value={<SingleBalance assetCode={props.operation.sendAsset.code} balance={String(payAmount)} untrimmed />}
       />
       <SummaryDetailsField
-        label={t("operations.swap.summary.you-receive")}
+        label={receiveLabel}
         value={<SingleBalance assetCode={props.operation.destAsset.code} balance={String(receiveAmount)} untrimmed />}
       />
-      <SummaryDetailsField
-        label={boundLabel}
-        value={
-          <SingleBalance
-            assetCode={
-              props.operation.type === "pathPaymentStrictSend"
-                ? props.operation.destAsset.code
-                : props.operation.sendAsset.code
-            }
-            balance={String(
-              props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.sendMax
-            )}
-            untrimmed
-          />
-        }
-      />
+      {exactSummaryAvailable ? null : (
+        <SummaryDetailsField
+          label={boundLabel}
+          value={
+            <SingleBalance
+              assetCode={
+                props.operation.type === "pathPaymentStrictSend"
+                  ? props.operation.destAsset.code
+                  : props.operation.sendAsset.code
+              }
+              balance={String(
+                props.operation.type === "pathPaymentStrictSend" ? props.operation.destMin : props.operation.sendMax
+              )}
+              untrimmed
+            />
+          }
+        />
+      )}
       {path.length > 0 ? (
         <SummaryDetailsField
           fullWidth
@@ -655,7 +672,8 @@ function GenericOperation(props: { operation: Operation; style?: React.CSSProper
 
 interface Props {
   accountData: AccountData
-  exactPaymentSummary?: PaymentSummary
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   operation: Operation
   style?: React.CSSProperties
   testnet: boolean
@@ -697,7 +715,8 @@ function OperationListItem(props: Props) {
       <PathPaymentOperation
         hideHeading={hideHeading}
         operation={props.operation}
-        exactPaymentSummary={props.exactPaymentSummary}
+        paymentSummary={props.paymentSummary}
+        paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
         style={props.style}
         testnet={props.testnet}
       />

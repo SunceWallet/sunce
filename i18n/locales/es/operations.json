@@ -119,7 +119,11 @@
       "route": "Ruta",
       "source": "Origen",
       "you-pay": "Usted paga",
-      "you-receive": "Usted recibe"
+      "you-pay-about": "Usted paga aproximadamente",
+      "you-paid": "Usted pagó",
+      "you-receive": "Usted recibe",
+      "you-receive-about": "Usted recibe aproximadamente",
+      "you-received": "Usted recibió"
     },
     "title": "Intercambio"
   }

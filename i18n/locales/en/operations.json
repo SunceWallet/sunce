@@ -119,7 +119,11 @@
       "route": "Route",
       "source": "Source",
       "you-pay": "You pay",
-      "you-receive": "You receive"
+      "you-pay-about": "You pay about",
+      "you-paid": "You paid",
+      "you-receive": "You receive",
+      "you-receive-about": "You receive about",
+      "you-received": "You received"
     },
     "title": "Swap"
   }

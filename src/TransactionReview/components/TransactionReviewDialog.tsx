@@ -60,7 +60,8 @@ interface TransactionReviewDialogBodyProps {
   submissionProgress?: React.ReactNode
   submittedAt?: string
   transaction: Transaction | null
-  exactPaymentSummary?: PaymentSummary
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   onClose: () => void
   onSubmitTransaction: (tx: Transaction, formValues: { password: string | null }) => void
 }
@@ -101,7 +102,8 @@ export function TransactionReviewDialogBody(props: TransactionReviewDialogBodyPr
             signatureRequest={props.signatureRequest}
             submittedAt={props.submittedAt}
             transaction={props.transaction}
-            exactPaymentSummary={props.exactPaymentSummary}
+            paymentSummary={props.paymentSummary}
+            paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
           />
         </Box>
       ) : null}
@@ -122,7 +124,8 @@ interface Props {
   submissionProgress?: React.ReactNode
   submittedAt?: string
   transaction: Transaction | null
-  exactPaymentSummary?: PaymentSummary
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   onClose: () => void
   onSubmitTransaction: (tx: Transaction, formValues: { password: string | null }) => void
 }

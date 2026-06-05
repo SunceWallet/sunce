@@ -119,7 +119,11 @@
       "route": "Рута",
       "source": "Пошиљалац",
       "you-pay": "Плаћате",
-      "you-receive": "Примате"
+      "you-pay-about": "Плаћате око",
+      "you-paid": "Платили сте",
+      "you-receive": "Примате",
+      "you-receive-about": "Примате око",
+      "you-received": "Примили сте"
     },
     "title": "Размена"
   }

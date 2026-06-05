@@ -119,7 +119,11 @@
       "route": "Percorso",
       "source": "Fonte",
       "you-pay": "Paghi",
-      "you-receive": "Ricevi"
+      "you-pay-about": "Paghi circa",
+      "you-paid": "Hai pagato",
+      "you-receive": "Ricevi",
+      "you-receive-about": "Ricevi circa",
+      "you-received": "Hai ricevuto"
     },
     "title": "Scambio"
   }

@@ -634,7 +634,7 @@ function TransactionList(props: TransactionListProps) {
         open={openedTransaction !== null}
         account={props.account}
         disabled={true}
-        exactPaymentSummary={openedTransaction?.exactPaymentSummary}
+        paymentSummary={openedTransaction?.exactPaymentSummary}
         showSource
         showSubmissionProgress={false}
         submittedAt={openedTransaction?.created_at}

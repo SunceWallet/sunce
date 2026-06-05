@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
+import { Asset, Horizon } from "@stellar/stellar-sdk"
 import Box from "@material-ui/core/Box"
 import Tab from "@material-ui/core/Tab"
 import Tabs from "@material-ui/core/Tabs"
@@ -21,7 +21,7 @@ import { parseAssetID, stringifyAsset } from "~Generic/lib/stellar"
 import { getLastArgumentFromURL } from "~Generic/lib/url"
 import DialogBody from "~Layout/components/DialogBody"
 import { HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
-import TransactionSender from "~Transaction/components/TransactionSender"
+import TransactionSender, { SendTransaction } from "~Transaction/components/TransactionSender"
 import OfferList from "~Account/components/OfferList"
 import SwapForm from "./SwapForm"
 import TradingForm from "./TradingForm"
@@ -31,7 +31,7 @@ type TradeMode = routes.TradeMethod
 interface TradingDialogProps {
   account: Account
   onClose: () => void
-  sendTransaction: (transaction: Transaction) => void
+  sendTransaction: SendTransaction
 }
 
 function getAssetFromPath(pathname: string) {

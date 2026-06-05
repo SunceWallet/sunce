@@ -20,6 +20,7 @@ import {
 import { workers } from "~Workers/worker-controller"
 import TransactionReviewDialog from "~TransactionReview/components/TransactionReviewDialog"
 import SubmissionProgress, { SubmissionType } from "./SubmissionProgress"
+import { PaymentSummary } from "~Generic/lib/paymentSummary"
 
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>
 
@@ -73,7 +74,9 @@ function ConditionalSubmissionProgress(props: {
 
 export type SendTransaction = (
   transaction: Transaction,
-  signatureRequest?: MultisigTransactionResponse | null
+  signatureRequest?: MultisigTransactionResponse | null,
+  paymentSummary?: PaymentSummary,
+  paymentSummaryIsEstimated?: boolean
 ) => Promise<any>
 
 interface RenderFunctionProps {
@@ -105,6 +108,8 @@ interface State {
   submissionClosedCallbacks: (() => void)[]
   signedTransaction: Transaction | null
   unsignedTransaction: Transaction | null
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
 }
 
 class TransactionSender extends React.Component<Props, State> {
@@ -129,8 +134,19 @@ class TransactionSender extends React.Component<Props, State> {
     }
   }
 
-  setTransaction = (transaction: Transaction, signatureRequest: MultisigTransactionResponse | null = null) => {
-    this.setState({ confirmationDialogOpen: true, signatureRequest, unsignedTransaction: transaction })
+  setTransaction = (
+    transaction: Transaction,
+    signatureRequest: MultisigTransactionResponse | null = null,
+    paymentSummary?: PaymentSummary,
+    paymentSummaryIsEstimated?: boolean
+  ) => {
+    this.setState({
+      confirmationDialogOpen: true,
+      signatureRequest,
+      unsignedTransaction: transaction,
+      paymentSummary,
+      paymentSummaryIsEstimated
+    })
     return new Promise((resolve, reject) => {
       this.setState(state => ({
         submissionSuccessCallbacks: [...state.submissionSuccessCallbacks, resolve as () => void],
@@ -363,7 +379,9 @@ class TransactionSender extends React.Component<Props, State> {
       passwordError,
       signatureRequest,
       submissionPromise,
-      unsignedTransaction: transaction
+      unsignedTransaction: transaction,
+      paymentSummary,
+      paymentSummaryIsEstimated
     } = this.state
 
     const content = this.props.children({
@@ -389,6 +407,8 @@ class TransactionSender extends React.Component<Props, State> {
           showSubmissionProgress={Boolean(submissionPromise)}
           signatureRequest={signatureRequest || undefined}
           transaction={transaction}
+          paymentSummary={paymentSummary}
+          paymentSummaryIsEstimated={paymentSummaryIsEstimated}
           onClose={this.onConfirmationDrawerCloseRequest}
           onSubmitTransaction={this.submitTransaction}
           submissionProgress={

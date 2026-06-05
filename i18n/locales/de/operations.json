@@ -119,7 +119,11 @@
       "route": "Route",
       "source": "Quelle",
       "you-pay": "Sie zahlen",
-      "you-receive": "Sie erhalten"
+      "you-pay-about": "Sie zahlen etwa",
+      "you-paid": "Sie haben gezahlt",
+      "you-receive": "Sie erhalten",
+      "you-receive-about": "Sie erhalten etwa",
+      "you-received": "Sie haben erhalten"
     },
     "title": "Tausch"
   }

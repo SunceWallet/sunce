@@ -57,7 +57,8 @@ interface DefaultTransactionSummaryProps {
   submittedAt?: string
   testnet: boolean
   transaction: Transaction
-  exactPaymentSummary?: PaymentSummary
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
 }
 
 function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
@@ -103,7 +104,8 @@ function DefaultTransactionSummary(props: DefaultTransactionSummaryProps) {
         <OperationListItem
           key={index}
           accountData={props.accountData}
-          exactPaymentSummary={props.exactPaymentSummary}
+          paymentSummary={props.paymentSummary}
+          paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
           operation={
             props.showSource
               ? makeOperationSourceExplicit(operation, props.transaction, localAccountPublicKey)
@@ -217,7 +219,8 @@ interface TransactionSummaryProps {
   submittedAt?: string
   testnet: boolean
   transaction: Transaction
-  exactPaymentSummary?: PaymentSummary
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
 }
 
 function TransactionSummary(props: TransactionSummaryProps) {

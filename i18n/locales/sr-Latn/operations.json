@@ -119,7 +119,11 @@
       "route": "Ruta",
       "source": "Pošiljalac",
       "you-pay": "Plaćate",
-      "you-receive": "Primate"
+      "you-pay-about": "Plaćate oko",
+      "you-paid": "Platili ste",
+      "you-receive": "Primate",
+      "you-receive-about": "Primate oko",
+      "you-received": "Primili ste"
     },
     "title": "Razmena"
   }

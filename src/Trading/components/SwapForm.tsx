@@ -1,7 +1,7 @@
 import React from "react"
 import BigNumber from "big.js"
 import { useTranslation } from "react-i18next"
-import { Asset, Transaction } from "@stellar/stellar-sdk"
+import { Asset } from "@stellar/stellar-sdk"
 import Button from "@material-ui/core/Button"
 import ButtonBase from "@material-ui/core/ButtonBase"
 import InputAdornment from "@material-ui/core/InputAdornment"
@@ -31,6 +31,8 @@ import {
 } from "~Generic/lib/stellar"
 import { createPathPaymentOperation, createTransaction } from "~Generic/lib/transaction"
 import { Box, HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
+import { PaymentSummary } from "~Generic/lib/paymentSummary"
+import { SendTransaction } from "~Transaction/components/TransactionSender"
 import {
   fetchSwapQuote,
   getAllowedPriceChangeBound,
@@ -48,7 +50,7 @@ interface Props {
   accountData: AccountData
   dialogActionsRef: RefStateObject
   initialSourceAsset?: Asset
-  sendTransaction: (transaction: Transaction) => void
+  sendTransaction: SendTransaction
 }
 
 function amountIsPositive(value: string) {
@@ -255,7 +257,19 @@ function SwapForm(props: Props) {
         horizonURL: horizonURLs[0],
         walletAccount: props.account
       })
-      props.sendTransaction(tx)
+      const paymentSummary: PaymentSummary = [
+        {
+          asset: freshQuote.sourceAsset,
+          balanceChange: BigNumber(freshQuote.sourceAmount).mul(-1),
+          publicKeys: []
+        },
+        {
+          asset: freshQuote.destinationAsset,
+          balanceChange: BigNumber(freshQuote.destinationAmount),
+          publicKeys: []
+        }
+      ]
+      props.sendTransaction(tx, null, paymentSummary, true)
     } catch (error) {
       trackError(error)
     } finally {

@@ -59,7 +59,8 @@ interface Props {
   signatureRequest?: MultisigTransactionResponse
   submittedAt?: string
   transaction: Transaction
-  exactPaymentSummary?: PaymentSummary
+  paymentSummary?: PaymentSummary
+  paymentSummaryIsEstimated?: boolean
   onClose?: () => void
   onConfirm?: (formValues: FormValues) => any
 }
@@ -180,7 +181,8 @@ function TxConfirmationForm(props: Props) {
           submittedAt={props.submittedAt}
           testnet={props.account.testnet}
           transaction={props.transaction}
-          exactPaymentSummary={props.exactPaymentSummary}
+          paymentSummary={props.paymentSummary}
+          paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
         />
         {props.account.requiresPassword && !props.disabled ? (
           <PasswordField
