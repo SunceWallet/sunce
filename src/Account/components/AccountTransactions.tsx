@@ -4,7 +4,7 @@ import DoneAllIcon from "@material-ui/icons/DoneAll"
 import CreditCardIcon from "@material-ui/icons/CreditCard"
 import UpdateIcon from "@material-ui/icons/Update"
 import { Account } from "~App/contexts/accounts"
-import { AppModeContext } from "~App/contexts/appMode"
+import { AppModeContext, useNoDexModeDetection } from "~App/contexts/appMode"
 import { SettingsContext } from "~App/contexts/settings"
 import { SignatureDelegationContext } from "~App/contexts/signatureDelegation"
 import { HiddenSendersContext } from "~App/contexts/hiddenSenders"
@@ -84,6 +84,7 @@ function AccountTransactions(props: { account: Account }) {
   const { hiddenSenders } = React.useContext(HiddenSendersContext)
   const { t } = useTranslation()
   const accountData = useLiveAccountData(account.accountID, account.testnet)
+  useNoDexModeDetection(accountData.balances)
   const horizonURLs = useHorizonURLs(account.testnet)
   const isSmallScreen = useIsMobile()
   const [moreTxsLoadingState, handleMoreTxsFetch] = useLoadingState()
