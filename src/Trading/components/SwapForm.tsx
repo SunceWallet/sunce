@@ -277,31 +277,30 @@ function SwapForm(props: Props) {
     }
   }, [allowedPriceChange, destinationAsset, formError, horizonURLs, netWorker, primaryAmount, primarySide, props, quote, sourceAsset])
 
-  const quoteHelper = swapConstraintError
-    ? swapConstraintError
-    : priceChanged
-      ? t("trading.swap.quote.price-changed")
-      : status === "loading" && !quote
-        ? t("trading.swap.quote.loading")
-        : status === "loading" && quote
-          ? t("trading.swap.quote.updating")
-          : status === "unavailable"
-            ? t("trading.swap.quote.unavailable")
-            : status === "failed"
-              ? t("trading.swap.quote.failed")
-              : quote
-                ? keepAmountAssetTogether(
-                    t<string>("trading.swap.quote.rate", {
-                      sourceAsset: assetCode(quote.sourceAsset),
-                      rate: formatRate(quote),
-                      destinationAsset: assetCode(quote.destinationAsset)
-                    }),
-                    [
-                      ["1", assetCode(quote.sourceAsset)],
-                      [formatRate(quote), assetCode(quote.destinationAsset)]
-                    ]
-                  )
-                : undefined
+  function getQuoteHelper() {
+    if (swapConstraintError) return swapConstraintError
+    if (priceChanged) return t("trading.swap.quote.price-changed")
+    if (status === "loading") return t(quote ? "trading.swap.quote.updating" : "trading.swap.quote.loading")
+    if (status === "unavailable") return t("trading.swap.quote.unavailable")
+    if (status === "failed") return t("trading.swap.quote.failed")
+    if (!quote) return undefined
+
+    const sourceAssetCode = assetCode(quote.sourceAsset)
+    const destinationAssetCode = assetCode(quote.destinationAsset)
+    const rate = formatRate(quote)
+    return keepAmountAssetTogether(
+      t<string>("trading.swap.quote.rate", {
+        sourceAsset: sourceAssetCode,
+        rate,
+        destinationAsset: destinationAssetCode
+      }),
+      [
+        ["1", sourceAssetCode],
+        [rate, destinationAssetCode]
+      ]
+    )
+  }
+  const quoteHelper = getQuoteHelper()
   const allowedPriceChangeBound = quote ? getAllowedPriceChangeBound(quote, allowedPriceChange) : undefined
   const allowedPriceChangeBoundAmount = allowedPriceChangeBound ? formatBalance(allowedPriceChangeBound) : ""
   const sourceMaxSendHelperText =
