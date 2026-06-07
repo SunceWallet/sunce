@@ -3,6 +3,7 @@ import { Horizon } from "@stellar/stellar-sdk"
 import BigNumber from "big.js"
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { useNoDexModeDetection } from "~App/contexts/appMode"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useClipboard } from "~Generic/hooks/userinterface"
 import { useAssetSettings } from "~Generic/hooks/useAssetSettings"
@@ -165,6 +166,7 @@ function AccountBalances(props: {
   showHidden?: boolean
 }) {
   const accountData = useLiveAccountData(props.publicKey, props.testnet)
+  useNoDexModeDetection(accountData.balances)
   const balances = useVisibleBalances(accountData, props.showHidden ?? true)
 
   return accountData.balances.length > 0 ? (
