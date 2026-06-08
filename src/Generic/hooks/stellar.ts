@@ -23,7 +23,7 @@ export function useHorizon(testnet: boolean = false) {
   const horizonURLs = useHorizonURLs(testnet)
   const horizonURL = horizonURLs[0]
 
-  return testnet ? new Horizon.Server(horizonURL) : new Horizon.Server(horizonURL)
+  return React.useMemo(() => new Horizon.Server(horizonURL), [horizonURL])
 }
 
 export function useHorizonURLs(testnet: boolean = false) {

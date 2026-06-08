@@ -492,7 +492,7 @@ function subscribeToAccountTransactionsUncached(horizonURLs: string[], accountID
 
   return multicast(
     subscribeToAccountEffects(horizonURLs, accountID).pipe(
-      flatMap(async function*(): AsyncIterableIterator<Horizon.TransactionResponse> {
+      flatMap(async function*(): AsyncIterableIterator<Horizon.HorizonApi.TransactionResponse> {
         for (let i = 0; i < 3; i++) {
           const [page, order] = await fetchLatestTxs()
           const newTxs = order === "asc" ? page._embedded.records : page._embedded.records.reverse()
@@ -601,22 +601,47 @@ export const subscribeToOpenOrders = cachify(
   createAccountCacheKey
 )
 
+function assetQuery(prefix: "buying" | "selling" | "source" | "destination", asset: Asset) {
+  const assetType = `${prefix}_asset_type`
+
+  return asset.isNative()
+    ? { [assetType]: "native" }
+    : {
+        [`${prefix}_asset_code`]: asset.getCode(),
+        [`${prefix}_asset_issuer`]: asset.getIssuer(),
+        [assetType]: asset.getAssetType()
+      }
+}
+
 function createOrderbookQuery(selling: Asset, buying: Asset) {
-  const query: any = { limit: 100 }
-
-  query.buying_asset_type = buying.getAssetType()
-  query.selling_asset_type = selling.getAssetType()
-
-  if (!buying.isNative()) {
-    query.buying_asset_code = buying.getCode()
-    query.buying_asset_issuer = buying.getIssuer()
+  return {
+    ...assetQuery("buying", buying),
+    ...assetQuery("selling", selling),
+    limit: 100
   }
-  if (!selling.isNative()) {
-    query.selling_asset_code = selling.getCode()
-    query.selling_asset_issuer = selling.getIssuer()
-  }
+}
 
-  return query
+function stringifyHorizonPathAsset(asset: Asset) {
+  return asset.isNative() ? "native" : `${asset.getCode()}:${asset.getIssuer()}`
+}
+
+export interface PathRecord {
+  destination_amount?: string
+  path?: {
+    asset_code?: string
+    asset_issuer?: string
+    asset_type: string
+  }[]
+  source_amount?: string
+}
+
+async function fetchPathRecords(horizonURLs: string[], endpoint: "paths/strict-send" | "paths/strict-receive", query: any) {
+  const horizonURL = getRandomURL(horizonURLs)
+  const fetchQueue = getFetchQueue(horizonURL)
+  const url = resolveHorizonEndpointURL(horizonURL, `${endpoint}?${qs.stringify(query)}`)
+  const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
+  const page = await parseJSONResponse<CollectionPage<PathRecord>>(response)
+  return page._embedded.records
 }
 
 function createEmptyOrderbookRecord(base: Asset, counter: Asset): Horizon.ServerApi.OrderbookRecord {
@@ -792,6 +817,27 @@ export async function fetchLatestAccountEffect(horizonURL: string, accountID: st
   return parseJSONResponse<Horizon.ServerApi.EffectRecord>(response)
 }
 
+export async function fetchTransactionEffects(horizonURLs: string[], transactionHash: string) {
+  const horizonURL = getRandomURL(horizonURLs)
+  const fetchQueue = getFetchQueue(horizonURL)
+  const url = resolveHorizonEndpointURL(
+    horizonURL,
+    `transactions/${transactionHash}/effects?${qs.stringify({
+      ...identification,
+      limit: 200,
+      order: "asc"
+    })}`
+  )
+  const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
+
+  if (response.status === 404) {
+    return []
+  }
+
+  const page = await parseJSONResponse<CollectionPage<Horizon.ServerApi.EffectRecord>>(response)
+  return page._embedded.records
+}
+
 export interface FetchTransactionsOptions extends PaginationOptions {
   emptyOn404?: boolean
   emptyOn410?: boolean
@@ -879,6 +925,40 @@ export async function fetchOrderbookRecord(horizonURLs: string[], sellingAsset: 
 
   const response = await fetchQueue.add(() => fetch(String(url)), { priority: 1 })
   return parseJSONResponse<Horizon.ServerApi.OrderbookRecord>(response)
+}
+
+export async function fetchStrictSendPaths(
+  horizonURLs: string[],
+  sourceAssetID: string,
+  sourceAmount: string,
+  destinationAssetID: string
+) {
+  const sourceAsset = parseAssetID(sourceAssetID)
+  const destinationAsset = parseAssetID(destinationAssetID)
+  const query = {
+    ...identification,
+    ...assetQuery("source", sourceAsset),
+    destination_assets: stringifyHorizonPathAsset(destinationAsset),
+    source_amount: sourceAmount
+  }
+  return fetchPathRecords(horizonURLs, "paths/strict-send", query)
+}
+
+export async function fetchStrictReceivePaths(
+  horizonURLs: string[],
+  sourceAssetID: string,
+  destinationAssetID: string,
+  destinationAmount: string
+) {
+  const sourceAsset = parseAssetID(sourceAssetID)
+  const destinationAsset = parseAssetID(destinationAssetID)
+  const query = {
+    ...identification,
+    ...assetQuery("destination", destinationAsset),
+    destination_amount: destinationAmount,
+    source_assets: stringifyHorizonPathAsset(sourceAsset)
+  }
+  return fetchPathRecords(horizonURLs, "paths/strict-receive", query)
 }
 
 export async function fetchTimebounds(horizonURL: string, timeout: number) {

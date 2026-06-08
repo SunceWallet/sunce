@@ -4,6 +4,7 @@ import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
 import { trackError } from "~App/contexts/notifications"
 import { AccountData } from "../lib/account"
 import { FixedOrderbookRecord } from "../lib/orderbook"
+import { PaymentSummary } from "../lib/paymentSummary"
 import { stringifyAsset } from "../lib/stellar"
 import { AccountRecord } from "../lib/stellar-expert"
 import { AssetRecord } from "../lib/stellar-ticker"
@@ -98,8 +99,9 @@ function createAssetPairCacheKey([horizonURLs, selling, buying]: readonly [strin
   return `${horizonURLs.map(url => `${url}:`)}${stringifyAsset(selling)}:${stringifyAsset(buying)}`
 }
 
-export interface DecodedTransactionResponse extends Horizon.TransactionResponse {
+export interface DecodedTransactionResponse extends Horizon.HorizonApi.TransactionResponse {
   decodedTx: Transaction
+  exactPaymentSummary?: PaymentSummary
 }
 
 export interface TransactionHistory {
@@ -169,7 +171,7 @@ export const accountOpenOrdersCache = createCache<
 export const accountTransactionsCache = createCache<
   readonly [string[], string],
   TransactionHistory,
-  Horizon.TransactionResponse
+  Horizon.HorizonApi.TransactionResponse
 >(createAccountCacheKey, areTransactionsNewer)
 
 export const orderbookCache = createCache<

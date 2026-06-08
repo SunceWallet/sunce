@@ -6,11 +6,26 @@
   "action-selection": {
     "buy": {
       "description": "Kupi određenu količinu aktive na decentralizovanoj berzi",
-      "label": "Kupi aktivu"
+      "label": "Kupi aktivu",
+      "label-short": "Kupi"
+    },
+    "buy-order": {
+      "label": "Nalog za kupovinu"
+    },
+    "orders": {
+      "label": "Nalozi"
     },
     "sell": {
       "description": "Zameni određenu količinu aktive za drugu",
-      "label": "Prodaj aktivu"
+      "label": "Prodaj aktivu",
+      "label-short": "Prodaj"
+    },
+    "sell-order": {
+      "label": "Nalog za prodaju"
+    },
+    "swap": {
+      "description": "Odmah zameni jednu aktivu za drugu",
+      "label": "Zameni"
     }
   },
   "advanced": {
@@ -48,6 +63,57 @@
   },
   "no-assets-info": "Ovaj račun još uvek ne koristi nijednu aktivu osim Stellar Lumensa.",
   "issuance": "Aktiva {{ asset }} je izdata sa tvog računa. Novi tokeni će biti kreirani tokom trgovine",
+  "swap": {
+    "action": {
+      "enter-amount": "Unesi količinu",
+      "finding-price": "Traženje cene...",
+      "submit": "Zameni"
+    },
+    "allowed-price-change": {
+      "helper": "Ako se cena promeni više od ovoga pre potpisivanja, zamena će biti otkazana.",
+      "high-warning": "Visoka dozvoljena promena cene može omogućiti lošiji kurs.",
+      "label": "Dozvoljena promena cene"
+    },
+    "empty": {
+      "add-asset-action": "Dodaj aktivu",
+      "add-asset-message": "Dodaj još jednu aktivu pre nego što možeš da menjaš."
+    },
+    "inputs": {
+      "destination": {
+        "estimated": "Primaš oko",
+        "label": "Primaš",
+        "min-received-helper": "Ne manje od {{minReceived}} {{destinationAsset}}"
+      },
+      "source": {
+        "estimated": "Plaćaš oko",
+        "label": "Plaćaš",
+        "max-send-helper": "Ne više od {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Ukupno: {{amount}}"
+      }
+    },
+    "quote": {
+      "failed": "Nije moguće dobiti cenu. Pokušaj ponovo.",
+      "loading": "Traženje cene...",
+      "price-changed": "Cena se promenila. Pregledaj novu količinu pre zamene.",
+      "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
+      "unavailable": "Ove aktive trenutno ne mogu da se zamene. Pokušaj manju količinu ili izaberi drugu aktivu.",
+      "updating": "Ažuriranje cene..."
+    },
+    "swap-direction": {
+      "label": "Zameni aktive mesta"
+    },
+    "validation": {
+      "destination-asset-missing": "Izaberi aktivu koju primaš.",
+      "destination-asset-unavailable": "Izaberi aktivu koju ovaj račun može da primi.",
+      "invalid-amount": "Unesi količinu veću od nule.",
+      "no-quote": "Cena još nije dostupna.",
+      "not-enough-balance": "Nema dovoljno {{asset}}.",
+      "receiving-capacity-exceeded": "Limit tvog {{asset}} novčanika je prenizak za prijem ove količine.",
+      "source-asset-missing": "Izaberi aktivu kojom plaćaš.",
+      "stale-quote": "Ažuriranje cene...",
+      "xlm-max-reserve-helper": "Maks ostavlja XLM za mrežne naknade."
+    }
+  },
   "title": "Trgovina",
   "trading-price": {
     "default-label": "Cena (limit)",

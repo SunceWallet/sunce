@@ -110,5 +110,21 @@
     "set-master-key-weight": {
       "title": "Постави тежину главног кључа"
     }
+  },
+  "swap": {
+    "summary": {
+      "destination": "Примаоц",
+      "maximum-paid": "Максимум плаћено",
+      "minimum-received": "Минимум примљено",
+      "route": "Рута",
+      "source": "Пошиљалац",
+      "you-pay": "Плаћате",
+      "you-pay-about": "Плаћате око",
+      "you-paid": "Платили сте",
+      "you-receive": "Примате",
+      "you-receive-about": "Примате око",
+      "you-received": "Примили сте"
+    },
+    "title": "Размена"
   }
 }

@@ -6,11 +6,26 @@
   "action-selection": {
     "buy": {
       "description": "Einen bestimmten Betrag eines Assets an der dezentralen Börse kaufen",
-      "label": "Asset kaufen"
+      "label": "Asset kaufen",
+      "label-short": "Kaufen"
+    },
+    "buy-order": {
+      "label": "Kauforder"
+    },
+    "orders": {
+      "label": "Aufträge"
     },
     "sell": {
       "description": "Einen bestimmten Betrag eines Assets gegen ein anderes tauschen",
-      "label": "Asset verkaufen"
+      "label": "Asset verkaufen",
+      "label-short": "Verkaufen"
+    },
+    "sell-order": {
+      "label": "Verkaufsorder"
+    },
+    "swap": {
+      "description": "Ein Asset sofort in ein anderes tauschen",
+      "label": "Tauschen"
     }
   },
   "advanced": {
@@ -48,6 +63,57 @@
   },
   "no-assets-info": "Dieses Konto verwendet noch keine anderen Assets außer Stellar Lumen.",
   "issuance": "Asset {{ asset }} wird von Ihrem Konto ausgegeben. Beim Handel werden neue Token erstellt.",
+  "swap": {
+    "action": {
+      "enter-amount": "Betrag eingeben",
+      "finding-price": "Preis wird gesucht...",
+      "submit": "Tauschen"
+    },
+    "allowed-price-change": {
+      "helper": "Wenn sich der Preis vor dem Signieren stärker ändert, wird der Tausch abgebrochen.",
+      "high-warning": "Eine hohe erlaubte Preisänderung kann einen schlechteren Kurs zulassen.",
+      "label": "Erlaubte Preisänderung"
+    },
+    "empty": {
+      "add-asset-action": "Asset hinzufügen",
+      "add-asset-message": "Fügen Sie ein weiteres Asset hinzu, bevor Sie tauschen können."
+    },
+    "inputs": {
+      "destination": {
+        "estimated": "Sie erhalten etwa",
+        "label": "Sie erhalten",
+        "min-received-helper": "Nicht weniger als {{minReceived}} {{destinationAsset}}"
+      },
+      "source": {
+        "estimated": "Sie zahlen etwa",
+        "label": "Sie zahlen",
+        "max-send-helper": "Nicht mehr als {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Gesamt: {{amount}}"
+      }
+    },
+    "quote": {
+      "failed": "Preis konnte nicht ermittelt werden. Versuchen Sie es erneut.",
+      "loading": "Preis wird gesucht...",
+      "price-changed": "Der Preis hat sich geändert. Prüfen Sie den neuen Betrag vor dem Tausch.",
+      "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
+      "unavailable": "Diese Assets können derzeit nicht getauscht werden. Versuchen Sie einen kleineren Betrag oder wählen Sie ein anderes Asset.",
+      "updating": "Preis wird aktualisiert..."
+    },
+    "swap-direction": {
+      "label": "Assets tauschen"
+    },
+    "validation": {
+      "destination-asset-missing": "Wählen Sie das Asset, das Sie erhalten.",
+      "destination-asset-unavailable": "Wählen Sie ein Asset, das dieses Konto empfangen kann.",
+      "invalid-amount": "Geben Sie einen Betrag größer als null ein.",
+      "no-quote": "Noch kein Preis verfügbar.",
+      "not-enough-balance": "Nicht genug {{asset}}.",
+      "receiving-capacity-exceeded": "Ihr {{asset}}-Wallet-Limit ist zu niedrig, um diesen Betrag zu empfangen.",
+      "source-asset-missing": "Wählen Sie das Asset, das Sie zahlen.",
+      "stale-quote": "Preis wird aktualisiert...",
+      "xlm-max-reserve-helper": "Max lässt XLM für Netzwerkgebühren übrig."
+    }
+  },
   "title": "Handel",
   "trading-price": {
     "default-label": "Preis (Limit)",

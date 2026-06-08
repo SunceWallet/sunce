@@ -6,11 +6,26 @@
   "action-selection": {
     "buy": {
       "description": "Adquirir alguna cantidad de un activo en el intercambio distribuido",
-      "label": "Adquirir activo"
+      "label": "Adquirir activo",
+      "label-short": "Comprar"
+    },
+    "buy-order": {
+      "label": "Orden de compra"
+    },
+    "orders": {
+      "label": "Órdenes"
     },
     "sell": {
       "description": "Negociar algún monto de un activo a cambio de otro",
-      "label": "Vender activo"
+      "label": "Vender activo",
+      "label-short": "Vender"
+    },
+    "sell-order": {
+      "label": "Orden de venta"
+    },
+    "swap": {
+      "description": "Convertir un activo en otro ahora",
+      "label": "Intercambiar"
     }
   },
   "advanced": {
@@ -48,6 +63,57 @@
   },
   "no-assets-info": "Esta cuenta aún no usa activos diferentes a Lumens Stellar.",
   "issuance": "Activo {{ asset }} es emitido por su cuenta. Se acuñarán nuevos tokens al comerciar",
+  "swap": {
+    "action": {
+      "enter-amount": "Introduce un monto",
+      "finding-price": "Buscando precio...",
+      "submit": "Intercambiar"
+    },
+    "allowed-price-change": {
+      "helper": "Si el precio cambia más que esto antes de firmar, el intercambio se cancelará.",
+      "high-warning": "Un cambio de precio permitido alto puede permitir una tasa peor.",
+      "label": "Cambio de precio permitido"
+    },
+    "empty": {
+      "add-asset-action": "Añadir activo",
+      "add-asset-message": "Añade otro activo antes de poder intercambiar."
+    },
+    "inputs": {
+      "destination": {
+        "estimated": "Recibes aproximadamente",
+        "label": "Recibes",
+        "min-received-helper": "No menos de {{minReceived}} {{destinationAsset}}"
+      },
+      "source": {
+        "estimated": "Pagas aproximadamente",
+        "label": "Pagas",
+        "max-send-helper": "No más de {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Total: {{amount}}"
+      }
+    },
+    "quote": {
+      "failed": "No se pudo obtener un precio. Inténtalo de nuevo.",
+      "loading": "Buscando precio...",
+      "price-changed": "El precio cambió. Revisa el nuevo monto antes de intercambiar.",
+      "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
+      "unavailable": "Estos activos no se pueden intercambiar ahora. Prueba con un monto menor o elige otro activo.",
+      "updating": "Actualizando precio..."
+    },
+    "swap-direction": {
+      "label": "Cambiar activos"
+    },
+    "validation": {
+      "destination-asset-missing": "Elige el activo que recibes.",
+      "destination-asset-unavailable": "Elige un activo que esta cuenta pueda recibir.",
+      "invalid-amount": "Introduce un monto mayor que cero.",
+      "no-quote": "Aún no hay precio disponible.",
+      "not-enough-balance": "No hay suficiente {{asset}}.",
+      "receiving-capacity-exceeded": "El límite de tu billetera {{asset}} es demasiado bajo para recibir este monto.",
+      "source-asset-missing": "Elige el activo que pagas.",
+      "stale-quote": "Actualizando precio...",
+      "xlm-max-reserve-helper": "Max deja XLM para las comisiones de red."
+    }
+  },
   "title": "Negociar",
   "trading-price": {
     "default-label": "Precio (límite)",

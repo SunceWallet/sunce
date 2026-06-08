@@ -110,5 +110,21 @@
     "set-master-key-weight": {
       "title": "Establecer el peso de la llave master"
     }
+  },
+  "swap": {
+    "summary": {
+      "destination": "Destino",
+      "maximum-paid": "Máximo pagado",
+      "minimum-received": "Mínimo recibido",
+      "route": "Ruta",
+      "source": "Origen",
+      "you-pay": "Usted paga",
+      "you-pay-about": "Usted paga aproximadamente",
+      "you-paid": "Usted pagó",
+      "you-receive": "Usted recibe",
+      "you-receive-about": "Usted recibe aproximadamente",
+      "you-received": "Usted recibió"
+    },
+    "title": "Intercambio"
   }
 }

@@ -436,7 +436,7 @@ function TradingForm(props: Props) {
           </Box>
         ) : null}
         <Portal target={props.dialogActionsRef?.element}>
-          <DialogActionsBox desktopStyle={{ marginTop: 32 }}>
+          <DialogActionsBox desktopStyle={{ marginTop: 0 }}>
             <ActionButton loading={pending} icon={<GavelIcon />} onClick={form.handleSubmit(submitForm)} type="primary">
               {t("trading.action.submit")}
             </ActionButton>
