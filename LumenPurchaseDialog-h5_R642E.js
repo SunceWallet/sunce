@@ -1,0 +1,2 @@
+import{R as e,$ as a,b4 as n,ab as c}from"./app-BliqJXuw.js";import{L as s}from"./LumenPurchaseOptions-Zp8m0VCE.js";import"./app-stage2-DSommeX_.js";function l(t){const{t:o}=a();return e.createElement(n,{top:e.createElement(c,{onBack:t.onClose,title:o("account.purchase-lumens.title")})},e.createElement(s,{account:t.account,onCloseDialog:t.onClose}))}const r=e.memo(l);export{r as default};
+//# sourceMappingURL=LumenPurchaseDialog-h5_R642E.js.map
