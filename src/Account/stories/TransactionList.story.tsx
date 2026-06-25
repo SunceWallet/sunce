@@ -32,7 +32,6 @@ export const RecentTransactions = () => (
       <TransactionList
         account={account}
         onFetchMoreTransactions={action("load more transactions")}
-        testnet
         title="Recent transactions"
         transactions={history.transactions}
       />

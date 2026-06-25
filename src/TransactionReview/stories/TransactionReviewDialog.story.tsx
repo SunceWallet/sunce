@@ -1,12 +1,21 @@
 import React from "react"
 import Async from "react-promise"
-import { xdr, Asset, Memo, Networks, Operation, Horizon, TransactionBuilder } from "@stellar/stellar-sdk"
+import {
+  xdr,
+  Account as StellarAccount,
+  Asset,
+  Memo,
+  Networks,
+  Operation,
+  Horizon,
+  TransactionBuilder
+} from "@stellar/stellar-sdk"
 import { TransactionReviewDialogBody } from "../components/TransactionReviewDialog"
 import { Account } from "~App/contexts/accounts"
 import { useWebAuth } from "~Generic/hooks/stellar"
 
 const eurt = new Asset("EURT", "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S")
-const testnetHorizon = new Horizon.Server("https://horizon-testnet.stellar.org")
+const testnetAccountID = "GBPBFWVBADSESGADWEGC7SGTHE3535FWK4BS6UW3WMHX26PHGIH5NF4W"
 
 const doNothing = () => undefined
 
@@ -26,11 +35,10 @@ const accountStub: Account = {
 }
 
 function buildTransaction(
-  account: Horizon.HorizonApi.AccountResponse,
+  account: StellarAccount,
   operations: xdr.Operation[],
   options?: Partial<TransactionBuilder.TransactionBuilderOptions>
 ) {
-  // TODO: fix me
   const builder = new TransactionBuilder(account, { fee: "100", ...options })
 
   for (const operation of operations) {
@@ -40,6 +48,10 @@ function buildTransaction(
   builder.setNetworkPassphrase(Networks.TESTNET)
   builder.setTimeout(60)
   return builder.build()
+}
+
+function createTestnetAccount() {
+  return new StellarAccount(testnetAccountID, "123456789")
 }
 
 interface SampleWebAuthProps {
@@ -76,17 +88,15 @@ function SampleWebAuth(props: SampleWebAuthProps) {
 
 export default { title: "TransactionReviewDialog" }
 export const Payment = () => {
-  const promise = (async () => {
-    const account = await testnetHorizon.loadAccount("GBPBFWVBADSESGADWEGC7SGTHE3535FWK4BS6UW3WMHX26PHGIH5NF4W")
-    return buildTransaction(account, [
+  const promise = Promise.resolve(
+    buildTransaction(createTestnetAccount(), [
       Operation.payment({
         amount: "1.5",
         asset: Asset.native(),
-        destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT",
-        withMuxing: true
+        destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT"
       })
     ])
-  })()
+  )
 
   return (
     <Async
@@ -105,21 +115,19 @@ export const Payment = () => {
   )
 }
 export const PaymentWithMemo = () => {
-  const promise = (async () => {
-    const account = await testnetHorizon.loadAccount("GBPBFWVBADSESGADWEGC7SGTHE3535FWK4BS6UW3WMHX26PHGIH5NF4W")
-    return buildTransaction(
-      account,
+  const promise = Promise.resolve(
+    buildTransaction(
+      createTestnetAccount(),
       [
         Operation.payment({
           amount: "20",
           asset: Asset.native(),
-          destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT",
-          withMuxing: true
+          destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT"
         })
       ],
       { memo: Memo.text("Demo transaction") }
     )
-  })()
+  )
 
   return (
     <Async
@@ -138,20 +146,17 @@ export const PaymentWithMemo = () => {
   )
 }
 export const AccountCreationInflationDestination = () => {
-  const promise = (async () => {
-    const account = await testnetHorizon.loadAccount("GBPBFWVBADSESGADWEGC7SGTHE3535FWK4BS6UW3WMHX26PHGIH5NF4W")
-    return buildTransaction(account, [
+  const promise = Promise.resolve(
+    buildTransaction(createTestnetAccount(), [
       Operation.createAccount({
         startingBalance: "1.0",
-        destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT",
-        withMuxing: true
+        destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT"
       }),
       Operation.setOptions({
-        inflationDest: "GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT",
-        withMuxing: true
+        inflationDest: "GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT"
       })
     ])
-  })()
+  )
 
   return (
     <Async
@@ -170,15 +175,13 @@ export const AccountCreationInflationDestination = () => {
   )
 }
 export const CreateTrustline = () => {
-  const promise = (async () => {
-    const account = await testnetHorizon.loadAccount("GBPBFWVBADSESGADWEGC7SGTHE3535FWK4BS6UW3WMHX26PHGIH5NF4W")
-    return buildTransaction(account, [
+  const promise = Promise.resolve(
+    buildTransaction(createTestnetAccount(), [
       Operation.changeTrust({
-        asset: eurt,
-        withMuxing: true
+        asset: eurt
       })
     ])
-  })()
+  )
 
   return (
     <Async
@@ -221,16 +224,14 @@ export const StellarWebAuth = () => {
   )
 }
 export const MergeAccount = () => {
-  const promise = (async () => {
-    const account = await testnetHorizon.loadAccount("GBPBFWVBADSESGADWEGC7SGTHE3535FWK4BS6UW3WMHX26PHGIH5NF4W")
-    return buildTransaction(account, [
+  const promise = Promise.resolve(
+    buildTransaction(createTestnetAccount(), [
       Operation.accountMerge({
         source: "GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT",
-        destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT",
-        withMuxing: true
+        destination: "GA2CZKBI2C55WHALSTNPG54FOQCLC6Y4EIATZEIJOXWQPSEGN4CWAXFT"
       })
     ])
-  })()
+  )
 
   return (
     <Async
