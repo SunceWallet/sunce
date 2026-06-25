@@ -1,11 +1,12 @@
 // tslint:disable:no-shadowed-variable
 
-import { ObservableLike } from "observable-fns"
+import { flatMap, ObservableLike } from "observable-fns"
 import React from "react"
 import { Asset, FeeBumpTransaction, Horizon, Networks, TransactionBuilder } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { createEmptyAccountData, AccountData, BalanceLine } from "../lib/account"
 import { FixedOrderbookRecord } from "../lib/orderbook"
+import { getPaymentSummary, getPaymentSummaryFromEffects } from "../lib/paymentSummary"
 import { stringifyAsset } from "../lib/stellar"
 import { mapSuspendables } from "../lib/suspense"
 import { CollectionPage } from "~Workers/net-worker/stellar-network"
@@ -29,6 +30,35 @@ function withDecodedTx(tx: Horizon.HorizonApi.TransactionResponse, network: Netw
   return {
     ...tx,
     decodedTx: decoded instanceof FeeBumpTransaction ? decoded.innerTransaction : decoded
+  }
+}
+
+function hasPathPayment(tx: DecodedTransactionResponse) {
+  return tx.decodedTx.operations.some(
+    operation => operation.type === "pathPaymentStrictSend" || operation.type === "pathPaymentStrictReceive"
+  )
+}
+
+async function withExactPaymentSummary(
+  tx: Horizon.HorizonApi.TransactionResponse,
+  options: {
+    accountID: string
+    horizonURLs: string[]
+    netWorker: ReturnType<typeof useNetWorker>
+    network: Networks
+  }
+): Promise<DecodedTransactionResponse> {
+  const decodedTx = withDecodedTx(tx, options.network)
+  if (!hasPathPayment(decodedTx)) return decodedTx
+
+  try {
+    const operationSummary = getPaymentSummary(options.accountID, decodedTx.decodedTx)
+    const effects = await options.netWorker.fetchTransactionEffects(options.horizonURLs, (tx as any).hash)
+    const exactPaymentSummary = getPaymentSummaryFromEffects(options.accountID, effects, operationSummary)
+
+    return exactPaymentSummary.length > 0 ? { ...decodedTx, exactPaymentSummary } : decodedTx
+  } catch (error) {
+    return decodedTx
   }
 }
 
@@ -274,19 +304,17 @@ export function useLiveOrderbook(selling: Asset, buying: Asset, testnet: boolean
   return useDataSubscription(applyOrderbookUpdate, get, set, observe)
 }
 
-const txsMatch = (a: Horizon.TransactionResponse, b: Horizon.TransactionResponse): boolean => {
+const txsMatch = (a: Horizon.HorizonApi.TransactionResponse, b: Horizon.HorizonApi.TransactionResponse): boolean => {
   return a.source_account === b.source_account && a.source_account_sequence === b.source_account_sequence
 }
 
-function applyAccountTransactionsUpdate(network: Networks) {
-  return (prev: TransactionHistory, update: DecodedTransactionResponse): TransactionHistory => {
-    return prev.transactions.some(tx => txsMatch(tx, update))
-      ? prev
-      : {
-          ...prev,
-          transactions: [withDecodedTx(update, network), ...prev.transactions]
-        }
-  }
+function applyAccountTransactionsUpdate(prev: TransactionHistory, update: DecodedTransactionResponse): TransactionHistory {
+  return prev.transactions.some(tx => txsMatch(tx, update))
+    ? prev
+    : {
+        ...prev,
+        transactions: [update, ...prev.transactions]
+      }
 }
 
 export function useLiveRecentTransactions(
@@ -316,7 +344,9 @@ export function useLiveRecentTransactions(
             return {
               // not an accurate science right now…
               olderTransactionsAvailable: transactions.length === limit,
-              transactions: transactions.map(tx => withDecodedTx(tx, network))
+              transactions: await Promise.all(
+                transactions.map(tx => withExactPaymentSummary(tx, { accountID, horizonURLs, netWorker, network }))
+              )
             }
           })
         )
@@ -325,12 +355,16 @@ export function useLiveRecentTransactions(
         accountTransactionsCache.set(selector, updated)
       },
       observe() {
-        return netWorker.subscribeToAccountTransactions(horizonURLs, accountID)
+        return netWorker.subscribeToAccountTransactions(horizonURLs, accountID).pipe(
+          flatMap(async function*(tx): AsyncIterableIterator<DecodedTransactionResponse> {
+            yield await withExactPaymentSummary(tx, { accountID, horizonURLs, netWorker, network })
+          })
+        )
       }
     }
-  }, [accountID, horizonURLs, netWorker, refetchKey])
+  }, [accountID, horizonURLs, netWorker, network, refetchKey])
 
-  return useDataSubscription(applyAccountTransactionsUpdate(network), get, set, observe)
+  return useDataSubscription(applyAccountTransactionsUpdate, get, set, observe)
 }
 
 export function useOlderTransactions(accountID: string, testnet: boolean) {
@@ -341,7 +375,7 @@ export function useOlderTransactions(accountID: string, testnet: boolean) {
 
   const fetchMoreTransactions = React.useCallback(
     async function fetchMoreTransactions() {
-      let fetched: CollectionPage<Horizon.TransactionResponse>
+      let fetched: CollectionPage<Horizon.HorizonApi.TransactionResponse>
 
       const selector = [horizonURLs, accountID] as const
       const history = accountTransactionsCache.get(selector)
@@ -359,7 +393,7 @@ export function useOlderTransactions(accountID: string, testnet: boolean) {
             order: "desc"
           })
         } catch (e) {
-          fetched = ({ _embedded: { records: [] } } as unknown) as CollectionPage<Horizon.TransactionResponse>
+          fetched = ({ _embedded: { records: [] } } as unknown) as CollectionPage<Horizon.HorizonApi.TransactionResponse>
         }
       } else {
         fetched = await netWorker.fetchAccountTransactions(horizonURLs, accountID, {
@@ -370,11 +404,13 @@ export function useOlderTransactions(accountID: string, testnet: boolean) {
         })
       }
 
-      const fetchedTransactions: Horizon.TransactionResponse[] = fetched._embedded.records
+      const fetchedTransactions: Horizon.HorizonApi.TransactionResponse[] = fetched._embedded.records
 
-      const transactions = fetchedTransactions
-        .filter(record => !prevTransactions.some(prevTx => txsMatch(prevTx, record)))
-        .map(tx => withDecodedTx(tx, network))
+      const transactions = await Promise.all(
+        fetchedTransactions
+          .filter(record => !prevTransactions.some(prevTx => txsMatch(prevTx, record)))
+          .map(tx => withExactPaymentSummary(tx, { accountID, horizonURLs, netWorker, network }))
+      )
 
       accountTransactionsCache.set(
         selector,
@@ -390,7 +426,7 @@ export function useOlderTransactions(accountID: string, testnet: boolean) {
       forceRerender()
       return transactions
     },
-    [accountID, forceRerender, horizonURLs, netWorker]
+    [accountID, forceRerender, horizonURLs, netWorker, network]
   )
 
   return fetchMoreTransactions

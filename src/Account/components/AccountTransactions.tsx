@@ -4,6 +4,7 @@ import DoneAllIcon from "@material-ui/icons/DoneAll"
 import CreditCardIcon from "@material-ui/icons/CreditCard"
 import UpdateIcon from "@material-ui/icons/Update"
 import { Account } from "~App/contexts/accounts"
+import { AppModeContext, useNoDexModeDetection } from "~App/contexts/appMode"
 import { SettingsContext } from "~App/contexts/settings"
 import { SignatureDelegationContext } from "~App/contexts/signatureDelegation"
 import { HiddenSendersContext } from "~App/contexts/hiddenSenders"
@@ -79,9 +80,11 @@ function PendingMultisigTransactions(props: { account: Account }) {
 function AccountTransactions(props: { account: Account }) {
   const { account } = props
   const { showDust, showClaimableBalanceTxs } = React.useContext(SettingsContext)
+  const { noDexMode } = React.useContext(AppModeContext)
   const { hiddenSenders } = React.useContext(HiddenSendersContext)
   const { t } = useTranslation()
   const accountData = useLiveAccountData(account.accountID, account.testnet)
+  useNoDexModeDetection(accountData.balances)
   const horizonURLs = useHorizonURLs(account.testnet)
   const isSmallScreen = useIsMobile()
   const [moreTxsLoadingState, handleMoreTxsFetch] = useLoadingState()
@@ -124,7 +127,7 @@ function AccountTransactions(props: { account: Account }) {
       {accountData.balances.length > 0 ? (
         <>
           {settings.multiSignature ? <PendingMultisigTransactions account={account} /> : null}
-          <OfferOverview account={account} />
+          {noDexMode ? null : <OfferOverview account={account} />}
           <TransactionList
             account={account}
             background="transparent"

@@ -17,7 +17,7 @@ import { useLoadingState } from "~Generic/hooks/util"
 import { useLiveAccountData, useLiveAccountOffers, useOlderOffers } from "~Generic/hooks/stellar-subscriptions"
 import { useIsMobile } from "~Generic/hooks/userinterface"
 import { AccountData } from "~Generic/lib/account"
-import { offerAssetToAsset } from "~Generic/lib/stellar"
+import { horizonAssetToAsset } from "~Generic/lib/stellar"
 import { createTransaction } from "~Generic/lib/transaction"
 import { HorizontalLayout } from "~Layout/components/Box"
 import { List } from "~Layout/components/List"
@@ -30,8 +30,8 @@ function createDismissalTransaction(
   accountData: AccountData,
   offer: Horizon.ServerApi.OfferRecord
 ): Promise<Transaction> {
-  const buying = offerAssetToAsset(offer.buying)
-  const selling = offerAssetToAsset(offer.selling)
+  const buying = horizonAssetToAsset(offer.buying)
+  const selling = horizonAssetToAsset(offer.selling)
 
   return selling.isNative()
     ? createTransaction(
@@ -68,8 +68,8 @@ interface OfferListItemProps {
 }
 
 const OfferListItem = React.memo(function OfferListItem(props: OfferListItemProps) {
-  const buying = offerAssetToAsset(props.offer.buying)
-  const selling = offerAssetToAsset(props.offer.selling)
+  const buying = horizonAssetToAsset(props.offer.buying)
+  const selling = horizonAssetToAsset(props.offer.selling)
   const isSmallScreen = useIsMobile()
   return (
     <ListItem

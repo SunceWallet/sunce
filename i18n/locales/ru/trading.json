@@ -6,11 +6,26 @@
   "action-selection": {
     "buy": {
       "description": "Купить некоторое количество актива на распределенной бирже",
-      "label": "Купить актив"
+      "label": "Купить актив",
+      "label-short": "Купить"
+    },
+    "buy-order": {
+      "label": "Ордер на покупку"
+    },
+    "orders": {
+      "label": "Ордера"
     },
     "sell": {
       "description": "Обменять некоторое количество одного актива на другой",
-      "label": "Продать актив"
+      "label": "Продать актив",
+      "label-short": "Продать"
+    },
+    "sell-order": {
+      "label": "Ордер на продажу"
+    },
+    "swap": {
+      "description": "Обменять один актив на другой сейчас",
+      "label": "Обмен"
     }
   },
   "advanced": {
@@ -48,6 +63,57 @@
   },
   "no-assets-info": "Этот аккаунт пока не использует никакие активы, кроме Stellar Lumens.",
   "issuance": "Актив {{ asset }} выпускается вашим аккаунтом. В результате сделки будут выпущены новые токены",
+  "swap": {
+    "action": {
+      "enter-amount": "Введите сумму",
+      "finding-price": "Поиск цены...",
+      "submit": "Обменять"
+    },
+    "allowed-price-change": {
+      "helper": "Если цена изменится сильнее до подписания, обмен будет отменен.",
+      "high-warning": "Высокое допустимое изменение цены может привести к худшему курсу.",
+      "label": "Допустимое изменение цены"
+    },
+    "empty": {
+      "add-asset-action": "Добавить актив",
+      "add-asset-message": "Добавьте еще один актив, прежде чем выполнять обмен."
+    },
+    "inputs": {
+      "destination": {
+        "estimated": "Вы получаете около",
+        "label": "Вы получаете",
+        "min-received-helper": "Не менее {{minReceived}} {{destinationAsset}}"
+      },
+      "source": {
+        "estimated": "Вы платите около",
+        "label": "Вы платите",
+        "max-send-helper": "Не более {{maxSend}} {{sourceAsset}}",
+        "total-helper": "Всего: {{amount}}"
+      }
+    },
+    "quote": {
+      "failed": "Не удалось получить цену. Попробуйте еще раз.",
+      "loading": "Поиск цены...",
+      "price-changed": "Цена изменилась. Проверьте новую сумму перед обменом.",
+      "rate": "1 {{sourceAsset}} ≈ {{rate}} {{destinationAsset}}",
+      "unavailable": "Эти активы сейчас нельзя обменять. Попробуйте меньшую сумму или выберите другой актив.",
+      "updating": "Обновление цены..."
+    },
+    "swap-direction": {
+      "label": "Поменять активы местами"
+    },
+    "validation": {
+      "destination-asset-missing": "Выберите актив, который получаете.",
+      "destination-asset-unavailable": "Выберите актив, который этот аккаунт может получить.",
+      "invalid-amount": "Введите сумму больше нуля.",
+      "no-quote": "Цена пока недоступна.",
+      "not-enough-balance": "Недостаточно {{asset}}.",
+      "receiving-capacity-exceeded": "Лимит вашего кошелька {{asset}} слишком мал, чтобы получить эту сумму.",
+      "source-asset-missing": "Выберите актив, которым платите.",
+      "stale-quote": "Обновление цены...",
+      "xlm-max-reserve-helper": "Макс оставляет XLM для сетевых комиссий."
+    }
+  },
   "title": "Торговля",
   "trading-price": {
     "default-label": "Цена (лимит)",

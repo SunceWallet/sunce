@@ -110,5 +110,21 @@
     "set-master-key-weight": {
       "title": "Postavi težinu glavnog ključa"
     }
+  },
+  "swap": {
+    "summary": {
+      "destination": "Primaoc",
+      "maximum-paid": "Maximum plaćeno",
+      "minimum-received": "Minimum primljeno",
+      "route": "Ruta",
+      "source": "Pošiljalac",
+      "you-pay": "Plaćate",
+      "you-pay-about": "Plaćate oko",
+      "you-paid": "Platili ste",
+      "you-receive": "Primate",
+      "you-receive-about": "Primate oko",
+      "you-received": "Primili ste"
+    },
+    "title": "Razmena"
   }
 }

@@ -10,7 +10,6 @@ import {
   LiquidityPoolAsset,
   getLiquidityPoolId
 } from "@stellar/stellar-sdk"
-import { OfferAsset } from "stellar-sdk/lib/types/offer"
 import { AssetRecord } from "../hooks/stellar-ecosystem"
 import { AccountData, BalanceLine } from "./account"
 
@@ -48,6 +47,18 @@ export function balancelineToAsset(balanceline: BalanceLine): Asset {
   return balanceline.asset_type === "native"
     ? Asset.native()
     : new Asset(balanceline.asset_code, balanceline.asset_issuer)
+}
+
+export function horizonAssetToAsset(asset: { asset_code?: string; asset_issuer?: string; asset_type: string }): Asset {
+  return asset.asset_type === "native" ? Asset.native() : new Asset(asset.asset_code || "", asset.asset_issuer || "")
+}
+
+export function floorStellarAmount(amount: BigNumber) {
+  return amount.round(7, 0).toFixed(7)
+}
+
+export function ceilStellarAmount(amount: BigNumber) {
+  return amount.round(7, 3).toFixed(7)
 }
 
 /** Reversal of stringifyAsset() */
@@ -132,12 +143,6 @@ export function getHorizonURL(horizon: Server) {
 
 export function isSignedByAnyOf(signature: xdr.DecoratedSignature, publicKeys: string[]) {
   return publicKeys.some(publicKey => signatureMatchesPublicKey(signature, publicKey))
-}
-
-export function offerAssetToAsset(offerAsset: OfferAsset) {
-  return offerAsset.asset_type === "native"
-    ? Asset.native()
-    : new Asset(offerAsset.asset_code as string, offerAsset.asset_issuer as string)
 }
 
 export function assetRecordToAsset(assetRecord: AssetRecord) {

@@ -83,7 +83,7 @@ const theme = createMuiTheme({
           backgroundColor: brandColor.main,
           border: "none",
           boxShadow: "none",
-          color: "rgba(255, 255, 255, 0.7)"
+          color: "rgba(0, 0, 0, 0.38)"
         },
         "&:hover": {
           backgroundColor: "#ebbe2c"
@@ -292,7 +292,7 @@ const theme = createMuiTheme({
         transition: "background-color 0.2s",
         "&$selected": {
           backgroundColor: brandColor.main,
-          color: "white",
+          color: "rgba(0, 0, 0, 0.87)",
           "&:hover": {
             // Don't change color of already-selected tab
             backgroundColor: brandColor.main
