@@ -1,4 +1,5 @@
 import React from "react"
+import type { StoryFn } from "@storybook/react"
 import Button from "@material-ui/core/Button"
 import { Asset, Horizon, Transaction } from "@stellar/stellar-sdk"
 import TransactionReviewDialog from "../components/TransactionReviewDialog"
@@ -53,7 +54,7 @@ function DialogContainer(props: DialogContainerProps) {
   )
 }
 
-export default { title: "Dialogs", decorators: [story => <AccountsProvider>{story()}</AccountsProvider>] }
+export default { title: "Dialogs", decorators: [(story: StoryFn) => <AccountsProvider>{story()}</AccountsProvider>] }
 export const TxConfirmationDrawerWithoutPassword = () => (
   <AccountsContext.Consumer>
     {({ accounts }) =>
