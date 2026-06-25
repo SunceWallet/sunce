@@ -276,13 +276,13 @@ export function isStellarWebAuthTransaction(transaction: Transaction) {
 export const DUST_THRESHOLD = BigNumber(0.01)
 
 export function isDustTransaction(tx: Transaction, account: Account) {
-  const paymentSummary = getPaymentSummary(account.publicKey, tx)
+  const paymentSummary = getPaymentSummary(account.accountID, tx)
 
   // not a payment
   if (paymentSummary.length === 0) return false
 
   // payment to self
-  if (paymentSummary.every(payment => payment.publicKeys.every(pubkey => pubkey === account.publicKey))) return false
+  if (paymentSummary.every(payment => payment.publicKeys.every(pubkey => pubkey === account.accountID))) return false
 
   // native payment with dust amount
   return paymentSummary[0].asset.getCode() === "XLM" && paymentSummary[0].balanceChange.abs().lte(DUST_THRESHOLD)

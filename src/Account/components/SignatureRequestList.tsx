@@ -26,15 +26,16 @@ function SignatureRequestListItem(props: SignatureRequestListItemProps) {
     signatureRequest.req
   ])
 
-  const openTransaction = React.useCallback(
-    onOpenTransaction ? () => onOpenTransaction(tx, signatureRequest) : () => undefined,
-    [onOpenTransaction, signatureRequest, tx]
-  )
+  const openTransaction = React.useCallback(() => {
+    if (onOpenTransaction) {
+      onOpenTransaction(tx, signatureRequest)
+    }
+  }, [onOpenTransaction, signatureRequest, tx])
 
   return (
     <TransactionListItem
       alwaysShowSource
-      accountPublicKey={tx.source}
+      accountID={tx.source}
       createdAt={signatureRequest.created_at}
       icon={props.icon}
       onOpenTransaction={openTransaction}
