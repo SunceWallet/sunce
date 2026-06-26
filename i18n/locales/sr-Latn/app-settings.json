@@ -63,6 +63,15 @@
         }
       }
     },
+    "account-cards": {
+      "text": {
+        "primary": "Prikaži sva stanja na karticama računa",
+        "secondary": {
+          "enabled": "Sva stanja su prikazana",
+          "disabled": "Kartice računa su kompaktne"
+        }
+      }
+    },
     "title": "Podešavanja",
     "trusted-services": {
       "text": {

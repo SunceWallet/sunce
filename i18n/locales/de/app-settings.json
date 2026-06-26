@@ -63,6 +63,15 @@
         }
       }
     },
+    "account-cards": {
+      "text": {
+        "primary": "Alle Salden auf Kontokarten anzeigen",
+        "secondary": {
+          "enabled": "Alle Salden werden angezeigt",
+          "disabled": "Kontokarten werden kompakt angezeigt"
+        }
+      }
+    },
     "title": "Einstellungen",
     "trusted-services": {
       "text": {

@@ -18,6 +18,7 @@ import {
   LanguageSetting,
   MultiSigSetting,
   ProtocolHandlerSetting,
+  ShowAllAccountCardBalancesSetting,
   ShowClaimableBalanceSetting,
   ShowDustSetting,
   TestnetSetting,
@@ -89,6 +90,10 @@ function AppSettings() {
           hasTestnetAccount={hasTestnetAccount}
           onToggle={settings.toggleTestnet}
           value={settings.showTestnet || hasTestnetAccount}
+        />
+        <ShowAllAccountCardBalancesSetting
+          onToggle={settings.toggleShowAllBalancesOnAccountCards}
+          value={settings.showAllBalancesOnAccountCards}
         />
         <HideMemoSetting onToggle={settings.toggleHideMemos} value={settings.hideMemos} />
         <MultiSigSetting onToggle={settings.toggleMultiSignature} value={settings.multiSignature} />

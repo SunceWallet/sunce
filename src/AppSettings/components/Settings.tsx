@@ -16,6 +16,7 @@ import MessageIcon from "@material-ui/icons/Message"
 import StorageIcon from "@material-ui/icons/Storage"
 import TestnetIcon from "@material-ui/icons/MoneyOff"
 import TrustIcon from "@material-ui/icons/VerifiedUser"
+import ViewModuleIcon from "@material-ui/icons/ViewModule"
 import { availableLanguages, languageNames } from "../../../i18n"
 import AppSettingsItem from "./AppSettingsItem"
 
@@ -198,6 +199,26 @@ export const ShowClaimableBalanceSetting = React.memo(function ShowClaimableBala
         props.value
           ? t("app-settings.settings.create-claimable-balance.text.secondary.shown")
           : t("app-settings.settings.create-claimable-balance.text.secondary.hidden")
+      }
+    />
+  )
+})
+
+export const ShowAllAccountCardBalancesSetting = React.memo(function ShowAllAccountCardBalancesSetting(
+  props: SettingProps
+) {
+  const classes = useSettingsStyles(props)
+  const { t } = useTranslation()
+  return (
+    <AppSettingsItem
+      actions={<SettingsToggle checked={props.value} onChange={props.onToggle} />}
+      icon={<ViewModuleIcon className={classes.icon} />}
+      onClick={props.onToggle}
+      primaryText={t("app-settings.settings.account-cards.text.primary")}
+      secondaryText={
+        props.value
+          ? t("app-settings.settings.account-cards.text.secondary.enabled")
+          : t("app-settings.settings.account-cards.text.secondary.disabled")
       }
     />
   )

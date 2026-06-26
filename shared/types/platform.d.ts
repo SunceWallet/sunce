@@ -31,6 +31,7 @@ declare namespace Platform {
     showClaimableBalanceTxs: boolean
     accountAssetSettings: AccountAssetSettingsMap
     accountReceivePaymentSettings: AccountReceivePaymentSettingsMap
+    showAllBalancesOnAccountCards: boolean
   }
 }
 

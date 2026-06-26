@@ -64,24 +64,30 @@ function AllAccountsPage() {
     }
   }, [settings.updateAvailable, showNotification, updater, t])
 
-  const updateButton = (
-    <Tooltip title={t("app.all-accounts.update.tooltip")}>
-      <IconButton
-        onClick={startUpdate}
-        color="secondary"
-        style={{ marginLeft: isWidthMax450 ? 0 : 8, marginRight: -12, color: "inherit" }}
-      >
-        <UpdateIcon className={styles.icon}></UpdateIcon>
-      </IconButton>
-    </Tooltip>
+  const updateButton = React.useMemo(
+    () => (
+      <Tooltip title={t("app.all-accounts.update.tooltip")}>
+        <IconButton
+          onClick={startUpdate}
+          color="secondary"
+          style={{ marginLeft: isWidthMax450 ? 0 : 8, marginRight: -12, color: "inherit" }}
+        >
+          <UpdateIcon className={styles.icon}></UpdateIcon>
+        </IconButton>
+      </Tooltip>
+    ),
+    [isWidthMax450, startUpdate, styles.icon, t]
   )
 
-  const networkSwitchButton = (
-    <FormControlLabel
-      control={<Switch checked={networkSwitch === "testnet"} color="secondary" onChange={toggleNetwork} />}
-      label={t("app.all-accounts.switch.label")}
-      style={{ marginRight: 0 }}
-    />
+  const networkSwitchButton = React.useMemo(
+    () => (
+      <FormControlLabel
+        control={<Switch checked={networkSwitch === "testnet"} color="secondary" onChange={toggleNetwork} />}
+        label={t("app.all-accounts.switch.label")}
+        style={{ marginRight: 0 }}
+      />
+    ),
+    [networkSwitch, t, toggleNetwork]
   )
 
   const headerContent = React.useMemo(
@@ -134,6 +140,7 @@ function AllAccountsPage() {
         <VerticalLayout justifyContent="space-between" grow margin="16px 0 0">
           <AccountList
             accounts={accounts}
+            showAllBalancesOnAccountCards={settings.showAllBalancesOnAccountCards}
             testnet={networkSwitch === "testnet"}
             onCreatePubnetAccount={() => router.history.push(routes.newAccount(false))}
             onCreateTestnetAccount={() => router.history.push(routes.newAccount(true))}
