@@ -201,7 +201,7 @@ function TxConfirmationForm(props: Props) {
           />
         ) : null}
       </VerticalLayout>
-      <Portal desktop="inline" target={props.actionsRef && props.actionsRef.element}>
+      <Portal target={props.actionsRef && props.actionsRef.element}>
         <DialogActionsBox smallDialog={props.disabled && !props.signatureRequest}>
           {props.signatureRequest ? (
             <ActionButton icon={DismissIcon} onClick={requestDismissalConfirmation}>
