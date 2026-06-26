@@ -67,7 +67,7 @@
       "text": {
         "primary": "Alle Salden auf Kontokarten anzeigen",
         "secondary": {
-          "enabled": "Alle Salden werden auf Kontokarten angezeigt",
+          "enabled": "Alle Salden werden angezeigt",
           "disabled": "Kontokarten werden kompakt angezeigt"
         }
       }

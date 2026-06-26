@@ -58,7 +58,7 @@
       "text": {
         "primary": "Mostrar todos los saldos en las tarjetas de cuenta",
         "secondary": {
-          "enabled": "Todos los saldos se muestran en las tarjetas de cuenta",
+          "enabled": "Todos los saldos se muestran",
           "disabled": "Las tarjetas de cuenta son compactas"
         }
       }

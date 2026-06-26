@@ -67,7 +67,7 @@
       "text": {
         "primary": "Show all balances on account cards",
         "secondary": {
-          "enabled": "All balances are shown on account cards",
+          "enabled": "All balances are shown",
           "disabled": "Account cards are compact"
         }
       }

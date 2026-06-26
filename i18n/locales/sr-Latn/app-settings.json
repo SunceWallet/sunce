@@ -67,7 +67,7 @@
       "text": {
         "primary": "Prikaži sva stanja na karticama računa",
         "secondary": {
-          "enabled": "Sva stanja su prikazana na karticama računa",
+          "enabled": "Sva stanja su prikazana",
           "disabled": "Kartice računa su kompaktne"
         }
       }
