@@ -30,5 +30,22 @@ export function subscribeToMessages<Message extends keyof IPC.MessageType>(
   messageType: Message,
   callback: (message: any) => void
 ): UnsubscribeFn {
-  return implementation.then(i => i.subscribeToMessages(messageType, callback))
+  let unsubscribe: UnsubscribeFn | undefined
+  let isUnsubscribed = false
+
+  implementation.then(i => {
+    if (isUnsubscribed) {
+      return
+    }
+
+    unsubscribe = i.subscribeToMessages(messageType, callback)
+  })
+
+  return () => {
+    isUnsubscribed = true
+
+    if (unsubscribe) {
+      unsubscribe()
+    }
+  }
 }

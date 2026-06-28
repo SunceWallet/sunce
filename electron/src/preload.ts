@@ -8,17 +8,17 @@ function sendMessage<Message extends keyof IPC.MessageType>(
   ...args: IPC.MessageArgs<Message>
 ): Promise<IPC.MessageReturnType<Message> | void> {
   const responsePromise = new Promise<IPC.MessageReturnType<Message> | void>((resolve, reject) => {
-    const listener = (event: Electron.Event, data: any) => {
-      if (data.messageID === callID) {
+    const listener = (_event: Electron.IpcRendererEvent, data: ElectronIPCCallResponseMessage) => {
+      if (data.callID === callID) {
         ipcRenderer.removeListener(messageType, listener)
 
-        if (data.error) {
+        if ("error" in data && data.error) {
           const error = Object.assign(Error(data.error.message), {
             name: data.error.name || "Error",
             stack: data.error.stack
           })
           reject(error)
-        } else if (data.result) {
+        } else if ("result" in data) {
           resolve(data.result)
         } else {
           resolve()
@@ -43,10 +43,11 @@ async function sendIPCMessage<Message extends keyof IPC.MessageType>(
 
 function subscribeToIPCMessages<Message extends keyof IPC.MessageType>(
   messageType: Message,
-  subscribeCallback: (event: Event, result: IPC.MessageReturnType<Message>) => void
+  subscribeCallback: (result: IPC.MessageReturnType<Message>) => void
 ) {
-  ipcRenderer.on(messageType, subscribeCallback)
-  const unsubscribe = () => ipcRenderer.removeListener(messageType, subscribeCallback)
+  const listener = (_event: Electron.IpcRendererEvent, result: IPC.MessageReturnType<Message>) => subscribeCallback(result)
+  ipcRenderer.on(messageType, listener)
+  const unsubscribe = () => ipcRenderer.removeListener(messageType, listener)
   return unsubscribe
 }
 

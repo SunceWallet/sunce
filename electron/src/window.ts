@@ -9,6 +9,20 @@ let openWindows: BrowserWindow[] = []
 import * as protocolHandler from "./protocol-handler"
 import { Messages } from "./shared/ipc"
 
+const externalProtocols = new Set(["http:", "https:", "mailto:", "web+stellar:"])
+
+function isExternalURLAllowed(url: string) {
+  try {
+    return externalProtocols.has(new URL.URL(url).protocol)
+  } catch (error) {
+    return false
+  }
+}
+
+function isAppURL(url: string) {
+  return isDev ? url.startsWith("http://localhost:3000/") : url.startsWith("file://")
+}
+
 export function createMainWindow() {
   if (process.platform !== "darwin") {
     // Need to set menu to null before creating the window
@@ -28,7 +42,6 @@ export function createMainWindow() {
     webPreferences: {
       contextIsolation: true, // isolate context for preload scripts
       disableBlinkFeatures: "Auxclick", // prevent middle-click events (see https://git.io/Jeu1K)
-      enableRemoteModule: false,
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
       preload: isDev ? path.join(__dirname, "..", "lib", "preload.js") : path.join(__dirname, "preload.js"),
@@ -58,17 +71,24 @@ export function createMainWindow() {
   })
 
   // subscribes to window.open and <a target="_blank"></a> links and opens the url in the browser
-  window.webContents.on("new-window", (event, url) => {
-    event.preventDefault()
-    if (window.webContents.getURL().startsWith("file://")) {
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    if (isAppURL(window.webContents.getURL()) && isExternalURLAllowed(url)) {
       shell.openExternal(url)
+    }
+
+    return { action: "deny" }
+  })
+
+  window.webContents.on("will-navigate", (event, url) => {
+    if (!isAppURL(url)) {
+      event.preventDefault()
     }
   })
 
   // unlikely to be triggered because we programmatically handle user navigation
   window.webContents.on("will-redirect", (event, url) => {
-    // limit navigation flows to unstrusted origins
-    if (!window.webContents.getURL().startsWith("file://")) {
+    // limit navigation flows to untrusted origins
+    if (!isAppURL(url)) {
       event.preventDefault()
     }
   })
