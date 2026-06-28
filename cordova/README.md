@@ -4,6 +4,8 @@
 
 Install the dependencies:
 
+Cordova 13 requires Node.js `>=20.17.0 || >=22.9.0`. CI uses Node.js 22.
+
 ```
 npm install
 ```
@@ -37,6 +39,7 @@ npm run dev:android
 ```
 
 Follow the steps in [Cordova Android - Installing the Requirements](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#installing-the-requirements) to setup your development environment.
+Use a Temurin/OpenJDK 17 `JAVA_HOME` for Android builds; newer JDKs can fail during Gradle's Android SDK image transform.
 
 In Android Studio choose "Import project" and select the `cordova/platforms/android` folder.
 You should now be able to run the app on device or emulator.
