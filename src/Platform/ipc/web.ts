@@ -132,7 +132,8 @@ const defaultSettings: Platform.SettingsData = {
   showDust: false,
   showClaimableBalanceTxs: false,
   accountAssetSettings: {},
-  accountReceivePaymentSettings: {}
+  accountReceivePaymentSettings: {},
+  showAllBalancesOnAccountCards: false
 }
 
 initKeyStore()

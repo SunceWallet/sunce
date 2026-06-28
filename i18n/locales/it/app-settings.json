@@ -54,6 +54,15 @@
         }
       }
     },
+    "account-cards": {
+      "text": {
+        "primary": "Mostra tutti i saldi nelle schede account",
+        "secondary": {
+          "enabled": "Tutti i saldi sono mostrati",
+          "disabled": "Le schede account sono compatte"
+        }
+      }
+    },
     "title": "Impostazioni",
     "trusted-services": {
       "text": {

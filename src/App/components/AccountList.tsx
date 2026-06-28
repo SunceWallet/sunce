@@ -41,16 +41,20 @@ const useCardStyles = makeStyles({
       left: 0,
       right: 0,
       height: "50px",
-      background: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 50%, rgb(255, 255, 255) 100%)",
-    },
-  },
+      background:
+        "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 50%, rgb(255, 255, 255) 100%)"
+    }
+  }
 })
 
-function useOverflowDetection(ref: React.RefObject<HTMLElement>, threshold = 10) {
+function useOverflowDetection(ref: React.RefObject<HTMLElement>, threshold = 10, enabled = true) {
   const [hasOverflow, setHasOverflow] = React.useState(false)
 
   React.useEffect(() => {
-    if (!ref.current) return
+    if (!enabled || !ref.current) {
+      setHasOverflow(false)
+      return
+    }
 
     const checkOverflow = () => {
       if (ref.current) {
@@ -70,7 +74,7 @@ function useOverflowDetection(ref: React.RefObject<HTMLElement>, threshold = 10)
     checkOverflow()
 
     return () => observer.disconnect()
-  }, [ref.current, threshold])
+  }, [enabled, ref, threshold])
 
   return hasOverflow
 }
@@ -132,6 +136,7 @@ function Badges(props: { account: Account }) {
 
 interface AccountCardProps {
   account: Account
+  compact: boolean
   pendingSignatureRequests: MultisigTransactionResponse[]
   style?: React.CSSProperties
 }
@@ -140,7 +145,7 @@ function AccountCard(props: AccountCardProps) {
   const router = useRouter()
   const styles = useCardStyles()
   const contentRef = React.useRef<HTMLDivElement>(null)
-  const hasOverflow = useOverflowDetection(contentRef)
+  const hasOverflow = useOverflowDetection(contentRef, 10, props.compact)
 
   const onClick = () => router.history.push(routes.account(props.account.id))
   const pendingSignatureRequests = props.pendingSignatureRequests.filter(
@@ -155,11 +160,12 @@ function AccountCard(props: AccountCardProps) {
       <StyledBadge badgeContent={badgeContent} color="secondary" style={{ width: "100%" }}>
         <VerticalLayout
           ref={contentRef}
-          height="100px"
+          height={props.compact ? "100px" : undefined}
           justifyContent="space-evenly"
+          minHeight={props.compact ? undefined : "100px"}
           textAlign="left"
           width="100%"
-          className={hasOverflow ? styles.hasOverflow : ''}
+          className={props.compact && hasOverflow ? styles.hasOverflow : ""}
         >
           <InlineErrorBoundary>
             <HorizontalLayout margin="0 0 12px">
@@ -209,6 +215,7 @@ function AddAccountCard(props: { onClick: () => any; style?: React.CSSProperties
 
 interface AccountListProps {
   accounts: Account[]
+  showAllBalancesOnAccountCards: boolean
   testnet: boolean
   onCreatePubnetAccount: () => any
   onCreateTestnetAccount: () => any
@@ -221,7 +228,12 @@ function AccountList(props: AccountListProps) {
   return (
     <CardList addInvisibleCard={accounts.length % 2 === 0}>
       {accounts.map(account => (
-        <AccountCard key={account.id} account={account} pendingSignatureRequests={pendingSignatureRequests} />
+        <AccountCard
+          key={account.id}
+          account={account}
+          compact={!props.showAllBalancesOnAccountCards}
+          pendingSignatureRequests={pendingSignatureRequests}
+        />
       ))}
       <AddAccountCard onClick={props.testnet ? props.onCreateTestnetAccount : props.onCreatePubnetAccount} />
     </CardList>
