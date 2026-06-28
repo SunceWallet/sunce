@@ -76,9 +76,11 @@ function TxConfirmationForm(props: Props) {
   const [errors, setErrors] = React.useState<Partial<FormErrors>>({})
   const [formValues, setFormValues] = React.useState<FormValues>({ password: null })
   const [loading, setLoading] = React.useState<boolean>(false)
+  const passwordFieldRef = React.useRef<HTMLInputElement | null>(null)
   const { t } = useTranslation()
 
   const passwordError = props.passwordError || errors.password
+  const showPasswordField = props.account.requiresPassword && !props.disabled
 
   const cancelDismissal = React.useCallback(() => setDismissalConfirmationPending(false), [])
   const requestDismissalConfirmation = React.useCallback(() => setDismissalConfirmationPending(true), [])
@@ -169,6 +171,18 @@ function TxConfirmationForm(props: Props) {
     }, 0)
   }, [])
 
+  React.useEffect(() => {
+    if (!showPasswordField) {
+      return undefined
+    }
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      passwordFieldRef.current?.scrollIntoView(false)
+    })
+
+    return () => window.cancelAnimationFrame(animationFrame)
+  }, [showPasswordField, props.transaction])
+
   return (
     <form id={formID} noValidate onSubmit={handleFormSubmission}>
       <VerticalLayout>
@@ -184,7 +198,7 @@ function TxConfirmationForm(props: Props) {
           paymentSummary={props.paymentSummary}
           paymentSummaryIsEstimated={props.paymentSummaryIsEstimated}
         />
-        {props.account.requiresPassword && !props.disabled ? (
+        {showPasswordField ? (
           <PasswordField
             autoFocus={import.meta.env.VITE_PLATFORM !== "ios"}
             error={Boolean(passwordError)}
@@ -194,6 +208,7 @@ function TxConfirmationForm(props: Props) {
                 : t("account.transaction-review.textfield.password.label")
             }
             fullWidth
+            inputRef={passwordFieldRef}
             margin="dense"
             value={formValues.password || ""}
             onChange={handleTextFieldChange}
@@ -201,7 +216,7 @@ function TxConfirmationForm(props: Props) {
           />
         ) : null}
       </VerticalLayout>
-      <Portal desktop="inline" target={props.actionsRef && props.actionsRef.element}>
+      <Portal target={props.actionsRef && props.actionsRef.element}>
         <DialogActionsBox smallDialog={props.disabled && !props.signatureRequest}>
           {props.signatureRequest ? (
             <ActionButton icon={DismissIcon} onClick={requestDismissalConfirmation}>
