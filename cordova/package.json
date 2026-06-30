@@ -68,6 +68,11 @@
     "json": "^10.0.0",
     "npm-run-all": "^4.1.5"
   },
+  "overrides": {
+    "xcode": {
+      "uuid": "11.1.1"
+    }
+  },
   "scripts": {
     "install:android": "rm -rf ./plugins && ./scripts/create-config-from-template.sh prod android && cordova platform add android",
     "install:ios": "rm -rf ./plugins && ./scripts/create-config-from-template.sh prod ios && cordova platform add ios && node ./hooks/after_platform_add/set_ios_deployment_target.js",
