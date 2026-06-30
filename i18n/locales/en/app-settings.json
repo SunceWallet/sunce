@@ -63,6 +63,15 @@
         }
       }
     },
+    "account-cards": {
+      "text": {
+        "primary": "Show all balances on account cards",
+        "secondary": {
+          "enabled": "All balances are shown",
+          "disabled": "Account cards are compact"
+        }
+      }
+    },
     "title": "Settings",
     "trusted-services": {
       "text": {

@@ -45,8 +45,10 @@ interface ContextType {
   updateAvailable: boolean
   accountAssetSettings: Platform.AccountAssetSettingsMap
   accountReceivePaymentSettings: Platform.AccountReceivePaymentSettingsMap
+  showAllBalancesOnAccountCards: boolean
   setAssetSettings: (accountId: string, assetKey: string, mode: Platform.AssetSettings) => void
   setReceivePaymentSettings: (accountId: string, settings: Platform.ReceivePaymentSettings) => void
+  toggleShowAllBalancesOnAccountCards: () => void
 }
 
 interface SettingsState extends Platform.SettingsData {
@@ -67,7 +69,8 @@ const initialSettings: SettingsState = {
   showClaimableBalanceTxs: false,
   trustedServices: [],
   accountAssetSettings: {},
-  accountReceivePaymentSettings: {}
+  accountReceivePaymentSettings: {},
+  showAllBalancesOnAccountCards: false
 }
 
 const initialIgnoredSignatureRequests: string[] = []
@@ -104,8 +107,10 @@ const SettingsContext = React.createContext<ContextType>({
   updateAvailable: false,
   accountAssetSettings: initialSettings.accountAssetSettings,
   accountReceivePaymentSettings: initialSettings.accountReceivePaymentSettings,
+  showAllBalancesOnAccountCards: initialSettings.showAllBalancesOnAccountCards,
   setAssetSettings: () => undefined,
-  setReceivePaymentSettings: () => undefined
+  setReceivePaymentSettings: () => undefined,
+  toggleShowAllBalancesOnAccountCards: () => undefined
 })
 
 export function SettingsProvider(props: Props) {
@@ -165,6 +170,8 @@ export function SettingsProvider(props: Props) {
   const toggleShowDust = () => updateSettings({ showDust: !settings.showDust })
   const toggleShowClaimableBalanceTxs = () =>
     updateSettings({ showClaimableBalanceTxs: !settings.showClaimableBalanceTxs })
+  const toggleShowAllBalancesOnAccountCards = () =>
+    updateSettings({ showAllBalancesOnAccountCards: !settings.showAllBalancesOnAccountCards })
 
   const setLanguage = (language: string | undefined) => {
     if (language) {
@@ -241,8 +248,10 @@ export function SettingsProvider(props: Props) {
     updateAvailable,
     accountAssetSettings: settings.accountAssetSettings,
     accountReceivePaymentSettings: settings.accountReceivePaymentSettings,
+    showAllBalancesOnAccountCards: settings.showAllBalancesOnAccountCards,
     setAssetSettings,
-    setReceivePaymentSettings
+    setReceivePaymentSettings,
+    toggleShowAllBalancesOnAccountCards
   }
 
   return <SettingsContext.Provider value={contextValue}>{props.children}</SettingsContext.Provider>
