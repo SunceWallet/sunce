@@ -153,7 +153,7 @@ npm run build:linux
 
 #### Building windows binaries on macOS
 
-Starting with macOS Catalina 32-bit executables are not supported. This means that the windows binaries cannot be build natively. One can circumvent this issue by using docker for building the windows binaries. Details are documented [here](https://www.electron.build/multi-platform-build#build-electron-app-using-docker-on-a-local-machine). Since is using Squirrel.Windows the `electronuserland/builder:wine-mono` image should be used.
+Starting with macOS Catalina 32-bit executables are not supported. This means that the windows binaries cannot be build natively. One can circumvent this issue by using docker for building the windows binaries. Details are documented [here](https://www.electron.build/multi-platform-build#build-electron-app-using-docker-on-a-local-machine). Windows builds use the NSIS target configured in `electron-build.yml`; use an Electron Builder Docker image with Wine support.
 
 To run the docker container use:
 
