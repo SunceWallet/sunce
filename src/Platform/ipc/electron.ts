@@ -9,13 +9,8 @@ export function call<Message extends keyof IPC.MessageType>(
 ): Promise<IPC.MessageReturnType<Message>> {
   const callID = nextCallID++
 
-  window.electron!.sendIPCMessage(messageType, {
-    args,
-    callID
-  })
-
   return new Promise<IPC.MessageReturnType<Message>>((resolve, reject) => {
-    const unsubscribe = window.electron!.subscribeToIPCMessages(messageType, (event: Event, message: any) => {
+    const unsubscribe = window.electron!.subscribeToIPCMessages(messageType, (message: any) => {
       // TODO look into this again
       if (!message || typeof message !== "object" || message.callID !== callID) {
         return
@@ -31,6 +26,14 @@ export function call<Message extends keyof IPC.MessageType>(
         resolve((message as ElectronIPCCallResultMessage).result)
       }
     })
+
+    window.electron!.sendIPCMessage(messageType, {
+      args,
+      callID
+    }).catch(error => {
+      unsubscribe()
+      reject(error)
+    })
   })
 }
 
@@ -40,5 +43,5 @@ export function subscribeToMessages<Message extends keyof IPC.MessageType>(
   messageType: Message,
   callback: (message: any) => void
 ): UnsubscribeFn {
-  return window.electron!.subscribeToIPCMessages(messageType, (event: Event, message: any) => callback(message))
+  return window.electron!.subscribeToIPCMessages(messageType, (message: any) => callback(message))
 }
