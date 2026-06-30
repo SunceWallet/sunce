@@ -3,7 +3,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { nodePolyfills } from '@troggy/vite-plugin-node-polyfills'
 
 
 const __dirname = join(dirname(fileURLToPath(import.meta.url)), "")
@@ -11,7 +10,6 @@ const __dirname = join(dirname(fileURLToPath(import.meta.url)), "")
 const platform = process.env.VITE_PLATFORM
 
 const isCordova = platform === 'android' || platform === 'ios'
-const isDesktop = ['darwin', 'linux', 'windows'].indexOf(platform || '') >= 0
 
 const getBundleName = (isProd: boolean) => {
   if (isCordova) {
@@ -24,7 +22,13 @@ const getBundleName = (isProd: boolean) => {
 const getLocalIP = () => {
   const interfaces = os.networkInterfaces();
   for (const interfaceName in interfaces) {
-    for (const net of interfaces[interfaceName]) {
+    const nets = interfaces[interfaceName]
+
+    if (!nets) {
+      continue
+    }
+
+    for (const net of nets) {
       if (net.family === 'IPv4' && !net.internal) {
         return net.address;
       }
@@ -42,12 +46,13 @@ export default defineConfig(({ mode }) => {
   const env = isProd ? 'prod' : 'dev';
   const bundleName = getBundleName(isProd)
   const inputFile = resolve(__dirname, bundleName);
-  const distDir = resolve(__dirname, "dist");
 
   return {
     base: "./",
+    define: {
+      global: "globalThis"
+    },
     plugins: [
-      nodePolyfills(),
       react({
         jsxRuntime: 'classic',
       }),
@@ -63,6 +68,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: [
+        { find: "eventsource", replacement: resolve(__dirname, "src/Platform/eventsource.cjs") },
         { find: /^~/, replacement: '/src/' },
         { find: /^\*/, replacement: 'shared/types/' }
       ],

@@ -1,6 +1,5 @@
 import { resolve } from "node:path"
 import type { StorybookConfig } from "@storybook/react-vite"
-import { nodePolyfills } from "@troggy/vite-plugin-node-polyfills"
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.story.@(ts|tsx)"],
@@ -16,7 +15,10 @@ const config: StorybookConfig = {
 
     return {
       ...config,
-      plugins: [...(config.plugins || []), nodePolyfills()],
+      define: {
+        ...config.define,
+        global: "globalThis"
+      },
       optimizeDeps: {
         ...config.optimizeDeps,
         include: optimizeDepsInclude,
@@ -28,6 +30,7 @@ const config: StorybookConfig = {
           ...(Array.isArray(config.resolve?.alias) ? config.resolve.alias : []),
           { find: "react/jsx-runtime", replacement: resolve(__dirname, "./react-jsx-runtime.ts") },
           { find: "react/jsx-dev-runtime", replacement: resolve(__dirname, "./react-jsx-dev-runtime.ts") },
+          { find: "eventsource", replacement: resolve(__dirname, "../src/Platform/eventsource.cjs") },
           { find: /^~/, replacement: `${resolve(__dirname, "../src")}/` },
           { find: /^\*/, replacement: `${resolve(__dirname, "../shared/types")}/` }
         ]
