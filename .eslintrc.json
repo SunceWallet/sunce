@@ -51,6 +51,9 @@ Happy linting! 💖
       "env": {
         "node": true
       },
+      "parserOptions": {
+        "project": false
+      },
       "rules": {
         "@typescript-eslint/no-var-requires": "off",
         "no-console": "off"
@@ -65,7 +68,7 @@ Happy linting! 💖
         "default": "array"
       }
     ],
-    "@typescript-eslint/ban-types": [
+    "@typescript-eslint/no-restricted-types": [
       "error",
       {
         "types": {
