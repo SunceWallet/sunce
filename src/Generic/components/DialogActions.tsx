@@ -43,6 +43,14 @@ const useActionButtonStyles = makeStyles((theme) => ({
       marginRight: -12
     }
   },
+  confirmDialogActionsBox: {
+    margin: "8px 24px 16px",
+
+    [breakpoints.down(600)]: {
+      justifyContent: "center",
+      margin: "8px 24px 16px"
+    }
+  },
   mobileDialogActionsBox: {
     display: "flex",
     position: "fixed",
@@ -263,17 +271,18 @@ interface ConfirmDialogProps {
 }
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-  const isSmallScreen = useIsMobile()
+  const classes = useActionButtonStyles()
+
   return (
     <Dialog open={props.open} onClose={props.onClose} TransitionComponent={CompactDialogTransition}>
       <DialogTitle>{props.title}</DialogTitle>
-      <DialogContent style={{ paddingBottom: isSmallScreen ? 24 : undefined }}>
+      <DialogContent>
         <Typography variant="body2">{props.children}</Typography>
-        <DialogActionsBox preventMobileActionsBox smallDialog>
-          {props.cancelButton}
-          {props.confirmButton}
-        </DialogActionsBox>
       </DialogContent>
+      <DialogActionsBox className={classes.confirmDialogActionsBox} preventMobileActionsBox smallDialog>
+        {props.cancelButton}
+        {props.confirmButton}
+      </DialogActionsBox>
     </Dialog>
   )
 }
