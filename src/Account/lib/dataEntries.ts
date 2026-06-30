@@ -1,4 +1,5 @@
 import BigNumber from "big.js"
+import { Buffer } from "buffer"
 import { AccountData } from "~Generic/lib/account"
 import { BASE_RESERVE } from "~Generic/lib/stellar"
 

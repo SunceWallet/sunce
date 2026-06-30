@@ -1,5 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { Buffer } from "buffer"
 import { Horizon, Operation } from "@stellar/stellar-sdk"
 import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"

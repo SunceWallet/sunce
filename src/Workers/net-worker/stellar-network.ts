@@ -1,4 +1,3 @@
-import "eventsource"
 import DebugLogger from "debug"
 import throttle from "lodash.throttle"
 import { filter, flatMap, map, merge, multicast, Observable } from "observable-fns"

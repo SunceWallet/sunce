@@ -1,4 +1,5 @@
 import React from "react"
+import { Buffer } from "buffer"
 import { Memo } from "@stellar/stellar-sdk"
 import { WithdrawalSuccessResponse } from "@suncewallet/stellar-transfer"
 import { trackError } from "~App/contexts/notifications"
