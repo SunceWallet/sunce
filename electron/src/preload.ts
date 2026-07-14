@@ -1,6 +1,20 @@
-// tslint:disable-next-line: no-var-requires
-const { contextBridge, ipcRenderer } = require("electron")
+import { contextBridge, ipcRenderer } from "electron"
+
 const electronProcess = process
+const deepLinkURLMessage = "DeepLinkURL"
+const deepLinkSubscribers = new Set<(url: string) => void>()
+const queuedDeepLinkURLs: string[] = []
+
+function emitDeepLinkURL(url: string) {
+  if (deepLinkSubscribers.size === 0) {
+    queuedDeepLinkURLs.push(url)
+    return
+  }
+
+  deepLinkSubscribers.forEach(callback => callback(url))
+}
+
+ipcRenderer.on(deepLinkURLMessage, (_event: Electron.IpcRendererEvent, url: string) => emitDeepLinkURL(url))
 
 function sendMessage<Message extends keyof IPC.MessageType>(
   messageType: Message,
@@ -45,6 +59,14 @@ function subscribeToIPCMessages<Message extends keyof IPC.MessageType>(
   messageType: Message,
   subscribeCallback: (result: IPC.MessageReturnType<Message>) => void
 ) {
+  if (messageType === deepLinkURLMessage) {
+    const callback = subscribeCallback as (url: string) => void
+    deepLinkSubscribers.add(callback)
+    queuedDeepLinkURLs.splice(0).forEach(callback)
+
+    return () => deepLinkSubscribers.delete(callback)
+  }
+
   const listener = (_event: Electron.IpcRendererEvent, result: IPC.MessageReturnType<Message>) => subscribeCallback(result)
   ipcRenderer.on(messageType, listener)
   const unsubscribe = () => ipcRenderer.removeListener(messageType, listener)
