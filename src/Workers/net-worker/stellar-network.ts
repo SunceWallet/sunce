@@ -425,12 +425,23 @@ function subscribeToAccountUncached(horizonURLs: string[], accountID: string) {
             return accountData
           }
         }
+        const handleNewOfferUpdate = (newOptimisticUpdate: OptimisticOfferUpdate) => {
+          return newOptimisticUpdate.effectsAccountID === accountID && horizonURLs.includes(newOptimisticUpdate.horizonURL)
+            ? fetchAccountData(newOptimisticUpdate.horizonURL, accountID, 20)
+            : undefined
+        }
         return merge(
           // Update whenever we receive an account effect push notification
           subscribeToAccountEffects(horizonURLs, accountID).pipe(map(() => fetchAccountData(horizonURLs, accountID))),
           // Update on new optimistic updates
           accountDataUpdates.observe().pipe(
             map(handleNewOptimisticUpdate),
+            filter(accountData => Boolean(accountData))
+          ),
+          // Order creation/cancellation changes liabilities, but account effects for
+          // those operations are unreliable. Refresh account data after local offer updates.
+          offerUpdates.observe().pipe(
+            map(handleNewOfferUpdate),
             filter(accountData => Boolean(accountData))
           ),
           // Initially fetch data with a delay to make sure we don't miss anything
@@ -576,8 +587,8 @@ function subscribeToOpenOrdersUncached(horizonURLs: string[], accountID: string)
       },
       subscribeToUpdates() {
         const handleNewOptimisticUpdate = (newOptimisticUpdate: OptimisticOfferUpdate) => {
-          return newOptimisticUpdate.effectsAccountID === accountID && newOptimisticUpdate.horizonURL === horizonURL
-            ? optimisticallyUpdateOffers(horizonURL, accountID, latestSet)
+          return newOptimisticUpdate.effectsAccountID === accountID && horizonURLs.includes(newOptimisticUpdate.horizonURL)
+            ? optimisticallyUpdateOffers(newOptimisticUpdate.horizonURL, accountID, latestSet)
             : latestSet
         }
         // We somewhat rely on the optimistic updates as a trigger to fetch
