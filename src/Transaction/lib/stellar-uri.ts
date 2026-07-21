@@ -14,10 +14,7 @@ export async function verifyTransactionRequest(request: string, options: Verific
     if (parsedURI.isTestNetwork && options.allowUnsafeTestnetURIs) {
       // ignore
     } else {
-      const unsignedRequest = new URL(request)
-      unsignedRequest.searchParams.delete("origin_domain")
-      unsignedRequest.searchParams.delete("signature")
-      return verifyTransactionRequest(unsignedRequest.toString(), options)
+      throw CustomError("StellarUriVerificationError", i18next.t("stellar-uri-verification-error"))
     }
   }
 
