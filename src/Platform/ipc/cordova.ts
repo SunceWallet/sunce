@@ -1,7 +1,28 @@
 import { CustomError } from "../../Generic/lib/errors"
+import { Messages } from "../../shared/ipc"
 import pick from "lodash.pick"
 
 let nextCallID = 1
+const deepLinkSubscribers = new Set<(url: string) => void>()
+const queuedDeepLinkURLs: string[] = []
+
+function emitDeepLinkURL(url: string) {
+  if (deepLinkSubscribers.size === 0) {
+    queuedDeepLinkURLs.push(url)
+    return
+  }
+
+  deepLinkSubscribers.forEach(callback => callback(url))
+}
+
+window.addEventListener("message", event => {
+  if (event instanceof MessageEvent && event.source === window.parent) {
+    const message = event.data
+    if (message && typeof message === "object" && message.messageType === Messages.DeepLinkURL) {
+      emitDeepLinkURL(message.result)
+    }
+  }
+})
 
 export function call<Message extends keyof IPC.MessageType>(
   messageType: Message,
@@ -48,6 +69,13 @@ export function subscribeToMessages<Message extends keyof IPC.MessageType>(
   messageType: Message,
   callback: (message: any) => void
 ): UnsubscribeFn {
+  if (messageType === Messages.DeepLinkURL) {
+    deepLinkSubscribers.add(callback)
+    queuedDeepLinkURLs.splice(0).forEach(callback)
+
+    return () => deepLinkSubscribers.delete(callback)
+  }
+
   const eventListener = (event: Event) => {
     if (event instanceof MessageEvent && event.source === window.parent) {
       if (event.data.messageType === messageType) {
