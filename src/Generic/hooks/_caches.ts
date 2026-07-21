@@ -135,23 +135,6 @@ function areTransactionsNewer(prev: TransactionHistory, next: TransactionHistory
   return !prev || nextMaxTimestamp > prevMaxTimestamp
 }
 
-function areOffersNewer(prev: OfferHistory, next: OfferHistory) {
-  const prevMaxTimestamp =
-    (prev
-      ? max(
-          prev.offers.map(tx => asComparableTimestamp((tx as any).last_modified_time)),
-          "0"
-        )
-      : undefined) || ""
-  const nextMaxTimestamp =
-    max(
-      next.offers.map(tx => asComparableTimestamp((tx as any).last_modified_time)),
-      "0"
-    ) || ""
-
-  return !prev || nextMaxTimestamp > prevMaxTimestamp
-}
-
 export const accountDataCache = createCache<readonly [string[], string], AccountData, AccountData>(
   createAccountCacheKey
 )
@@ -166,7 +149,7 @@ export const accountOpenOrdersCache = createCache<
   readonly [string[], string],
   OfferHistory,
   Horizon.ServerApi.OfferRecord[]
->(createAccountCacheKey, areOffersNewer)
+>(createAccountCacheKey)
 
 export const accountTransactionsCache = createCache<
   readonly [string[], string],
