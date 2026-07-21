@@ -1,3 +1,4 @@
+import "../polyfills"
 import DebugLogger from "debug"
 import { registerSerializer } from "threads"
 import { expose } from "threads/worker"
