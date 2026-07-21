@@ -1,1 +1,3 @@
-import "core-js/es6"
+import { Buffer } from "buffer"
+
+;(globalThis as typeof globalThis & { Buffer: typeof Buffer }).Buffer = Buffer

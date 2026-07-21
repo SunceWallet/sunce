@@ -1,3 +1,4 @@
+import "./polyfills"
 import SmoothScroll from "smoothscroll-polyfill"
 import handleSplashScreen from "./SplashScreen/splash-screen"
 
