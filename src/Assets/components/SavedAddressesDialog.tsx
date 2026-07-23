@@ -11,12 +11,14 @@ import ButtonListItem from "~Generic/components/ButtonListItem"
 import MainTitle from "~Generic/components/MainTitle"
 import { PublicKey } from "~Generic/components/PublicKey"
 import ViewLoading from "~Generic/components/ViewLoading"
-import { useIsMobile, useRouter } from "~Generic/hooks/userinterface"
+import { useIsMobile } from "~Generic/hooks/userinterface"
 import { DialogsContext } from "~App/contexts/dialogs"
+import { SettingsContext } from "~App/contexts/settings"
 import DialogBody from "~Layout/components/DialogBody"
 import SavedAddressesDetailsDialog from "./SavedAddressesDetailsDialog"
-import { SavedAddresses, SavedAddressesContext } from "~App/contexts/savedAddresses"
+import { SavedAddresses, SavedAddressesContext, useSavedAddressesSyncOnMount } from "~App/contexts/savedAddresses"
 import { SearchField } from "~Generic/components/FormFields"
+import SavedAddressesSyncStatus from "./SavedAddressesSyncStatus"
 
 interface SavedAddressesListProps {
   addresses: SavedAddresses
@@ -97,7 +99,9 @@ function SavedAddressesDialog(props: SavedAddressesDialogProps) {
     props.address ? { address: props.address, label: "" } : null
   )
 
-  const { savedAddresses, add, remove } = React.useContext(SavedAddressesContext)
+  const { savedAddresses, add, remove, lastSyncAt, syncStatus } = React.useContext(SavedAddressesContext)
+  const { savedAddressesSyncEnabled } = React.useContext(SettingsContext)
+  useSavedAddressesSyncOnMount()
 
   const openAddAddressDialog = () => {
     setEditingAddress({ address: "", label: "" })
@@ -141,6 +145,10 @@ function SavedAddressesDialog(props: SavedAddressesDialogProps) {
     openSavedAddressesSettings({})
   }, [openSavedAddressesSettings])
 
+  const navigateToSavedAddressesSyncSettings = React.useCallback(() => {
+    openSavedAddressesSettings({ syncSettingsOpen: true })
+  }, [openSavedAddressesSettings])
+
   return (
     <DialogBody
       excessWidth={12}
@@ -149,9 +157,19 @@ function SavedAddressesDialog(props: SavedAddressesDialogProps) {
           onBack={props.onClose}
           title={t("account.saved-addresses.title")}
           actions={
-            <IconButton onClick={navigateToSavedAddressesSettings} style={{ color: "black" }}>
-              <SettingsIcon />
-            </IconButton>
+            <div style={{ alignItems: "center", display: "flex" }}>
+              {savedAddressesSyncEnabled && (
+                <SavedAddressesSyncStatus
+                  compact
+                  lastSyncAt={lastSyncAt}
+                  onClick={navigateToSavedAddressesSyncSettings}
+                  status={syncStatus}
+                />
+              )}
+              <IconButton onClick={navigateToSavedAddressesSettings} style={{ color: "black" }}>
+                <SettingsIcon />
+              </IconButton>
+            </div>
           }
         />
       }
