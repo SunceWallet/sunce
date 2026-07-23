@@ -147,6 +147,27 @@
   "saved-addresses": {
     "title": "Direcciónes Favoritos",
     "settings-title": "Configuración de direcciones guardadas",
+    "sync": {
+      "title": "Sincronizar contactos con BSN.expert",
+      "enabled": "Activar sincronización",
+      "description": "Habilita la sincronización bidireccional de tu libreta de direcciones entre Sunce y tu cuenta de BSN.expert.\n\nLos cambios en la libreta de direcciones realizados en Sunce se enviarán a tu cuenta de BSN.expert, y los cambios que realices en BSN.expert aparecerán automáticamente en Sunce.",
+      "privacy-warning": "Los nombres y las direcciones de tu libreta pueden ser visibles para los operadores de bsn.expert",
+      "api-key": {
+        "label": "Clave de API",
+        "help": "La clave de API se puede obtener en"
+      },
+      "status": {
+        "enabled": "Activada",
+        "disabled": "Desactivada",
+        "api-key-required": "Se requiere una clave de API",
+        "syncing": "Sincronizando contactos…",
+        "failed": "Última sincronización: fallida",
+        "minute-ago": "Última sincronización: hace {{count}} min",
+        "minutes-ago": "Última sincronización: hace {{count}} min",
+        "never-synced": "Aún no se ha sincronizado",
+        "sync-now": "Sincronizar ahora"
+      }
+    },
     "export-to-file": "Exportar a archivo",
     "export-description": "Descargar direcciones guardadas como archivo JSON",
     "share": "Compartir",

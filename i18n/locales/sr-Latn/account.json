@@ -147,6 +147,27 @@
   "saved-addresses": {
     "title": "Sačuvane adrese",
     "settings-title": "Podešavanja sačuvanih adresa",
+    "sync": {
+      "title": "Sinhronizuj kontakte sa BSN.expert",
+      "enabled": "Omogući sinhronizaciju",
+      "description": "Omogućite dvosmernu sinhronizaciju adresara između aplikacije Sunce i vašeg BSN.expert naloga.\n\nIzmene adresara napravljene u aplikaciji Sunce biće poslate na vaš BSN.expert nalog, a izmene koje napravite na BSN.expert automatski će se pojaviti u aplikaciji Sunce.",
+      "privacy-warning": "Imena i adrese u vašem adresaru mogu biti vidljivi operaterima bsn.expert",
+      "api-key": {
+        "label": "API ključ",
+        "help": "API ključ se može dobiti na"
+      },
+      "status": {
+        "enabled": "Uključena",
+        "disabled": "Isključena",
+        "api-key-required": "Potreban je API ključ",
+        "syncing": "Sinhronizacija kontakata…",
+        "failed": "Poslednja sinhronizacija: nije uspela",
+        "minute-ago": "Poslednja sinhronizacija: pre {{count}} min",
+        "minutes-ago": "Poslednja sinhronizacija: pre {{count}} min",
+        "never-synced": "Još nije sinhronizovano",
+        "sync-now": "Sinhronizuj sada"
+      }
+    },
     "export-to-file": "Izvezi u fajl",
     "export-description": "Preuzmi sačuvane adrese kao JSON fajl",
     "share": "Podeli",

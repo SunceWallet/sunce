@@ -8,6 +8,7 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox"
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser"
 import { Account } from "~App/contexts/accounts"
 import { DialogsContext } from "~App/contexts/dialogs"
+import { useSavedAddressesSyncOnMount } from "~App/contexts/savedAddresses"
 import { AccountData } from "~Generic/lib/account"
 import DialogBody from "~Layout/components/DialogBody"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
@@ -30,6 +31,7 @@ function CustomTrustlineDialog(props: Props) {
   const isWidthMax450 = useMediaQuery("(max-width:450px)")
   const { t } = useTranslation()
   const { openSavedAddresses } = React.useContext(DialogsContext)
+  useSavedAddressesSyncOnMount()
 
   const createTransaction = () =>
     props.createAddAssetTransaction(new Asset(code, issuerPublicKey), { limit: limit || undefined })

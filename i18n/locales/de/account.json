@@ -147,6 +147,27 @@
   "saved-addresses": {
     "title": "Gespeicherte Adressen",
     "settings-title": "Einstellungen für gespeicherte Adressen",
+    "sync": {
+      "title": "Kontakte mit BSN.expert synchronisieren",
+      "enabled": "Synchronisierung aktivieren",
+      "description": "Aktivieren Sie die bidirektionale Synchronisierung Ihres Adressbuchs zwischen Sunce und Ihrem BSN.expert-Konto.\n\nIn Sunce vorgenommene Änderungen am Adressbuch werden an Ihr BSN.expert-Konto übertragen; von Ihnen bei BSN.expert vorgenommene Änderungen erscheinen automatisch in Sunce.",
+      "privacy-warning": "Namen und Adressen in Ihrem Adressbuch können für die Betreiber von bsn.expert sichtbar sein",
+      "api-key": {
+        "label": "API-Schlüssel",
+        "help": "Der API-Schlüssel ist erhältlich unter"
+      },
+      "status": {
+        "enabled": "Aktiviert",
+        "disabled": "Deaktiviert",
+        "api-key-required": "API-Schlüssel erforderlich",
+        "syncing": "Kontakte werden synchronisiert…",
+        "failed": "Letzte Synchronisierung: fehlgeschlagen",
+        "minute-ago": "Letzte Synchronisierung: vor {{count}} Min.",
+        "minutes-ago": "Letzte Synchronisierung: vor {{count}} Min.",
+        "never-synced": "Noch nicht synchronisiert",
+        "sync-now": "Jetzt synchronisieren"
+      }
+    },
     "export-to-file": "In Datei exportieren",
     "export-description": "Gespeicherte Adressen als JSON-Datei herunterladen",
     "share": "Teilen",

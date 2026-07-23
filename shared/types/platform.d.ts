@@ -32,6 +32,8 @@ declare namespace Platform {
     accountAssetSettings: AccountAssetSettingsMap
     accountReceivePaymentSettings: AccountReceivePaymentSettingsMap
     showAllBalancesOnAccountCards: boolean
+    savedAddressesSyncEnabled?: boolean
+    savedAddressesSyncApiKey?: string
   }
 }
 
