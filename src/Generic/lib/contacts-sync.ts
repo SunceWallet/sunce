@@ -108,7 +108,7 @@ export function mergeContactItems(current: Readonly<ContactItems>, incoming?: Re
 
   for (const [address, incomingItem] of Object.entries(incoming ?? {})) {
     const currentItem = current[address]
-    if (!currentItem || incomingItem.updated_at > currentItem.updated_at) {
+    if (!currentItem || incomingItem.updated_at >= currentItem.updated_at) {
       merged[address] = { ...incomingItem }
     }
   }
@@ -118,7 +118,6 @@ export function mergeContactItems(current: Readonly<ContactItems>, incoming?: Re
 
 export function syncReportHasErrors(report: SyncReport) {
   return (
-    !report.permissions.read ||
     report.errors.length > 0 ||
     report.not_added.length > 0 ||
     report.not_updated.length > 0 ||

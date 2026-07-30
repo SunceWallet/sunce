@@ -4,6 +4,7 @@ import { SettingsContext } from "./settings"
 import {
   ContactItem,
   ContactItems,
+  ContactsSyncApiError,
   mergeContactItems,
   syncContacts,
   syncReportHasErrors
@@ -18,6 +19,7 @@ const lastSyncStorageKey = "sunce:favorites:last-sync:mainnet"
 const syncCursorStorageKey = "sunce:favorites:sync-cursor:mainnet"
 const syncIntervalMs = 5 * 60 * 1000
 const syncTimeoutMs = 30 * 1000
+const syncRetryDelayMs = 1000
 
 export type SavedAddressesSyncStatus = "idle" | "syncing" | "error"
 
@@ -58,6 +60,8 @@ export function SavedAddressesProvider(props: Props) {
   const [lastSyncAt, setLastSyncAt] = React.useState<number | undefined>(loadLastSyncAt)
   const lastSyncAtRef = React.useRef(lastSyncAt)
   const syncCursorRef = React.useRef<number | undefined>(loadSyncCursor())
+  const syncApiKeyRef = React.useRef<string | undefined>()
+  const syncApiKeyInitializedRef = React.useRef(false)
   const [syncStatus, setSyncStatus] = React.useState<SavedAddressesSyncStatus>("idle")
   const synchronizeRef = React.useRef<() => void>(() => undefined)
 
@@ -71,6 +75,14 @@ export function SavedAddressesProvider(props: Props) {
   }, [])
 
   const synchronize = React.useCallback(() => synchronizeRef.current(), [])
+
+  const resetSyncProgress = React.useCallback(() => {
+    localStorage.removeItem(lastSyncStorageKey)
+    localStorage.removeItem(syncCursorStorageKey)
+    lastSyncAtRef.current = undefined
+    syncCursorRef.current = undefined
+    setLastSyncAt(undefined)
+  }, [])
 
   const updateSavedAddresses = React.useCallback(
     (update: (current: ContactItems) => ContactItems) => {
@@ -115,14 +127,29 @@ export function SavedAddressesProvider(props: Props) {
     const apiKey = settings.savedAddressesSyncApiKey?.trim()
     synchronizeRef.current = () => undefined
     setSyncStatus("idle")
-    if (!settings.initialized || !settings.savedAddressesSyncEnabled || !apiKey) return
+
+    if (!settings.initialized) return
+
+    if (syncApiKeyInitializedRef.current && syncApiKeyRef.current !== apiKey) {
+      resetSyncProgress()
+    }
+    syncApiKeyRef.current = apiKey
+    syncApiKeyInitializedRef.current = true
+
+    if (!settings.savedAddressesSyncEnabled || !apiKey) return
 
     let active = true
     let syncing = false
     let controller: AbortController | undefined
+    let retrySyncTimer: number | undefined
 
     const synchronizeContacts = async () => {
       if (syncing || window.navigator.onLine === false) return
+
+      if (retrySyncTimer !== undefined) {
+        window.clearTimeout(retrySyncTimer)
+        retrySyncTimer = undefined
+      }
 
       syncing = true
       setSyncStatus("syncing")
@@ -167,13 +194,22 @@ export function SavedAddressesProvider(props: Props) {
           setLastSyncAt(syncedAt)
           setSyncStatus("idle")
         }
-      } catch {
-        if (active) setSyncStatus("error")
+      } catch (error) {
+        if (!active) return
+
+        if (error instanceof ContactsSyncApiError && error.status === 409) {
+          if (isCursorAheadError(error)) resetSyncProgress()
+          synchronizeAgain = true
+        } else if (active) {
+          setSyncStatus("error")
+        }
       } finally {
         if (timeout !== undefined) window.clearTimeout(timeout)
         syncing = false
         controller = undefined
-        if (active && synchronizeAgain) synchronizeContacts()
+        if (active && synchronizeAgain) {
+          retrySyncTimer = window.setTimeout(synchronizeContacts, syncRetryDelayMs)
+        }
       }
     }
 
@@ -186,6 +222,7 @@ export function SavedAddressesProvider(props: Props) {
       active = false
       window.clearTimeout(initialSyncTimer)
       window.clearInterval(syncInterval)
+      if (retrySyncTimer !== undefined) window.clearTimeout(retrySyncTimer)
       window.removeEventListener("online", synchronizeContacts)
       if (synchronizeRef.current === synchronizeContacts) synchronizeRef.current = () => undefined
       controller?.abort()
@@ -194,6 +231,7 @@ export function SavedAddressesProvider(props: Props) {
     settings.initialized,
     settings.savedAddressesSyncApiKey,
     settings.savedAddressesSyncEnabled,
+    resetSyncProgress,
     updateContactItems
   ])
 
@@ -297,4 +335,13 @@ function replaceSavedAddresses(current: ContactItems, addresses: SavedAddresses,
 
 function nextUpdatedAt(current: ContactItem | undefined, updatedAfter: number) {
   return Math.max(Date.now(), (current?.updated_at || 0) + 1, updatedAfter + 1)
+}
+
+function isCursorAheadError(error: ContactsSyncApiError) {
+  return (
+    typeof error.body === "object" &&
+    error.body !== null &&
+    "message" in error.body &&
+    error.body.message === "`cursor` is ahead of the current server revision"
+  )
 }
