@@ -1,0 +1,39 @@
+{
+  "account-badge": {
+    "label": "WalletConnect"
+  },
+  "action": {
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "review": "Revisar"
+  },
+  "network": {
+    "pubnet": "Red publica de Stellar",
+    "stellar": "Red Stellar",
+    "testnet": "Red de pruebas de Stellar",
+    "unknown": "Red desconocida ({{network}})"
+  },
+  "permission": {
+    "sign-and-submit-xdr": "Firmar y enviar transacciones de Stellar",
+    "sign-xdr": "Firmar transacciones de Stellar",
+    "unknown": "Permiso desconocido ({{method}})"
+  },
+  "proposal": {
+    "account": "Cuenta para conectar",
+    "networks": "Redes solicitadas",
+    "no-account": "Ninguna cuenta local coincide con la red solicitada.",
+    "permissions": "Permisos solicitados",
+    "required-networks-error": "La cuenta seleccionada no satisface todas las redes requeridas.",
+    "title": "Solicitud de conexion",
+    "unknown-dapp": "dApp desconocida"
+  },
+  "request": {
+    "account": "Cuenta de firma",
+    "default-dapp": "dApp",
+    "from": "Solicitud de",
+    "no-account": "Ninguna cuenta local coincide con la solicitud de WalletConnect.",
+    "title": "WalletConnect",
+    "unsupported-method": "Metodo de WalletConnect no compatible: {{method}}",
+    "user-rejected": "El usuario rechazo la solicitud."
+  }
+}

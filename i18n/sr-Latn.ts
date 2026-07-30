@@ -9,6 +9,7 @@ import Payment from "./locales/sr-Latn/payment.json"
 import Trading from "./locales/sr-Latn/trading.json"
 import TransactionRequest from "./locales/sr-Latn/transaction-request.json"
 import TransferService from "./locales/sr-Latn/transfer-service.json"
+import WalletConnect from "./locales/sr-Latn/wallet-connect.json"
 
 const translations = {
   "account-settings": AccountSettings,
@@ -21,7 +22,8 @@ const translations = {
   payment: Payment,
   trading: Trading,
   "transaction-request": TransactionRequest,
-  "transfer-service": TransferService
+  "transfer-service": TransferService,
+  "wallet-connect": WalletConnect
 } as const
 
 export default translations

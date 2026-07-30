@@ -1,0 +1,39 @@
+{
+  "account-badge": {
+    "label": "WalletConnect"
+  },
+  "action": {
+    "approve": "Одобри",
+    "reject": "Одбиј",
+    "review": "Прегледај"
+  },
+  "network": {
+    "pubnet": "Stellar јавна мрежа",
+    "stellar": "Stellar мрежа",
+    "testnet": "Stellar testnet",
+    "unknown": "Непозната мрежа ({{network}})"
+  },
+  "permission": {
+    "sign-and-submit-xdr": "Потписивање и слање Stellar трансакција",
+    "sign-xdr": "Потписивање Stellar трансакција",
+    "unknown": "Непозната дозвола ({{method}})"
+  },
+  "proposal": {
+    "account": "Налог за повезивање",
+    "networks": "Затражене мреже",
+    "no-account": "Ниједан локални налог не одговара затраженој мрежи.",
+    "permissions": "Затражене дозволе",
+    "required-networks-error": "Изабрани налог не подржава све обавезне мреже.",
+    "title": "Захтев за повезивање",
+    "unknown-dapp": "Непозната dApp"
+  },
+  "request": {
+    "account": "Налог за потписивање",
+    "default-dapp": "dApp",
+    "from": "Захтев од",
+    "no-account": "Ниједан локални налог не одговара WalletConnect захтеву.",
+    "title": "WalletConnect",
+    "unsupported-method": "Неподржан WalletConnect метод: {{method}}",
+    "user-rejected": "Корисник је одбио захтев."
+  }
+}

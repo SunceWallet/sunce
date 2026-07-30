@@ -73,6 +73,12 @@
       }
     },
     "title": "Settings",
+    "wallet-connect": {
+      "text": {
+        "primary": "WalletConnect",
+        "secondary": "Connect Sunce Wallet to Stellar dApps"
+      }
+    },
     "trusted-services": {
       "text": {
         "primary": "Manage Trusted Services",
@@ -145,6 +151,21 @@
       "checking": "Checking server…",
       "invalid-url": "Enter a valid server address.",
       "probe-failed": "The server did not pass the check."
+    }
+  },
+  "wallet-connect": {
+    "action": {
+      "connect": "Connect",
+      "scan": "Scan"
+    },
+    "missing-project-id": "Set VITE_WALLETCONNECT_PROJECT_ID to enable WalletConnect.",
+    "sessions": {
+      "empty": "No connected dApps.",
+      "title": "Connected dApps",
+      "unknown-account": "Unknown account"
+    },
+    "uri": {
+      "label": "WalletConnect URI"
     }
   }
 }

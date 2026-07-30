@@ -73,6 +73,12 @@
       }
     },
     "title": "Podešavanja",
+    "wallet-connect": {
+      "text": {
+        "primary": "WalletConnect",
+        "secondary": "Poveži Sunce Wallet sa Stellar dApp-ovima"
+      }
+    },
     "trusted-services": {
       "text": {
         "primary": "Upravljaj Pouzdanim Uslugama",
@@ -145,6 +151,21 @@
       "checking": "Proveravamo server…",
       "invalid-url": "Unesite ispravnu adresu servera.",
       "probe-failed": "Server nije prošao proveru."
+    }
+  },
+  "wallet-connect": {
+    "action": {
+      "connect": "Poveži",
+      "scan": "Skeniraj"
+    },
+    "missing-project-id": "Podesi VITE_WALLETCONNECT_PROJECT_ID da uključiš WalletConnect.",
+    "sessions": {
+      "empty": "Nema povezanih dApp-ova.",
+      "title": "Povezani dApp-ovi",
+      "unknown-account": "Nepoznat nalog"
+    },
+    "uri": {
+      "label": "WalletConnect URI"
     }
   }
 }

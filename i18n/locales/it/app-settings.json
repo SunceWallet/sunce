@@ -64,6 +64,12 @@
       }
     },
     "title": "Impostazioni",
+    "wallet-connect": {
+      "text": {
+        "primary": "WalletConnect",
+        "secondary": "Collega Sunce Wallet alle dApp Stellar"
+      }
+    },
     "trusted-services": {
       "text": {
         "primary": "Gestisci servizi attendibili",
@@ -136,6 +142,21 @@
       "checking": "Controllo del server in corso…",
       "invalid-url": "Inserisci un indirizzo server valido.",
       "probe-failed": "Il server non ha superato il controllo."
+    }
+  },
+  "wallet-connect": {
+    "action": {
+      "connect": "Connetti",
+      "scan": "Scansiona"
+    },
+    "missing-project-id": "Imposta VITE_WALLETCONNECT_PROJECT_ID per abilitare WalletConnect.",
+    "sessions": {
+      "empty": "Nessuna dApp connessa.",
+      "title": "dApp connesse",
+      "unknown-account": "Account sconosciuto"
+    },
+    "uri": {
+      "label": "URI WalletConnect"
     }
   }
 }

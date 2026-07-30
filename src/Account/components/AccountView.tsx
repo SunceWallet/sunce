@@ -30,9 +30,11 @@ import { matchesRoute, matchesRouteWithParams } from "~Generic/lib/routes"
 import { InlineErrorBoundary, HideOnError } from "~Generic/components/ErrorBoundaries"
 import { DialogsContext } from "~App/contexts/dialogs"
 import { TransactionRequestContext } from "~App/contexts/transactionRequest"
+import { WalletConnectContext } from "~App/contexts/walletConnect"
 import { isStellarUri, parseStellarUri, StellarUriType } from "@suncewallet/stellar-uri"
 import { isPublicKey, isStellarAddress } from "~Generic/lib/stellar-address"
 import QRImportDialog from "~Generic/components/QRImport"
+import { isWalletConnectURI } from "~WalletConnect/lib/stellar"
 
 const modules = {
   AssetDetailsDialog: import("../../Assets/components/AssetDetailsDialog"),
@@ -135,6 +137,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
 
   const { openSavedAddresses, openHiddenSenders } = React.useContext(DialogsContext)
   const { setURI } = React.useContext(TransactionRequestContext)
+  const walletConnect = React.useContext(WalletConnectContext)
 
   const showAccountCreation =
     matchesRoute(router.location.pathname, routes.createAccount(props.testnet), false) ||
@@ -194,9 +197,23 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       receivePayment: accountID ? () => router.history.push(routes.receivePayment(accountID)) : undefined,
       tradeAssets: accountID ? () => router.history.push(routes.tradeAsset(accountID)) : undefined,
       transactions: accountID ? () => router.history.push(routes.account(accountID)) : undefined,
+      walletConnect: accountID
+        ? () => router.history.push(`${routes.manageWalletConnect()}?account=${encodeURIComponent(accountID)}`)
+        : undefined,
       withdraw: accountID ? () => router.history.push(routes.withdrawAsset(accountID)) : undefined
     }
   }, [openSavedAddresses, openHiddenSenders, router.history, props.account])
+
+  const hasWalletConnectConnections = React.useMemo(() => {
+    if (!props.account) return false
+
+    return walletConnect.sessions.some(session => {
+      const approvedAccounts = session?.namespaces?.stellar?.accounts
+      if (!Array.isArray(approvedAccounts)) return false
+
+      return approvedAccounts.some((accountID: string) => accountID.split(":")[2] === props.account?.publicKey)
+    })
+  }, [props.account, walletConnect.sessions])
 
   const closeAssetDetails = React.useCallback(() => {
     // We might need to go back to either "balance details" or "add assets"
@@ -319,6 +336,12 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
     (data: string | null) => {
       if (!data) return
 
+      if (props.account && isWalletConnectURI(data)) {
+        walletConnect.pair(data, props.account).catch(trackError)
+        closeQRScanner()
+        return
+      }
+
       // Handle SEP-07 URIs (both Pay and Transaction)
       if (isStellarUri(data)) {
         const stellarUri = parseStellarUri(data)
@@ -344,7 +367,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       trackError(new Error(`Unrecognized QR code format: ${data}`))
       closeQRScanner()
     },
-    [setURI, closeQRScanner]
+    [closeQRScanner, props.account, setURI, walletConnect]
   )
 
   const creationTitle = props.testnet
@@ -374,8 +397,10 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
         onPurchaseLumens={navigateTo.purchaseLumens}
         onRename={performRenaming}
         onTrade={navigateTo.tradeAssets}
+        onWalletConnect={navigateTo.walletConnect}
         onWithdraw={navigateTo.withdraw}
         onReadQRCode={openQRScanner}
+        walletConnectActive={hasWalletConnectConnections}
       >
         <HideOnError>
           {props.account ? (
@@ -400,6 +425,7 @@ const AccountPageContent = React.memo(function AccountPageContent(props: Account
       accountToBackup,
       creationTitle,
       handleBackNavigation,
+      hasWalletConnectConnections,
       isSmallScreen,
       navigateTo,
       openQRScanner,

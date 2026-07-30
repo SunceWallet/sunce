@@ -8,6 +8,7 @@ import { appIsLoaded } from "~SplashScreen/splash-screen"
 import ConnectionErrorListener from "~Toasts/components/ConnectionErrorListener"
 import NotificationContainer from "~Toasts/components/NotificationContainer"
 import StellarUriHandler from "~TransactionRequest/components/StellarUriHandler"
+import WalletConnectHandler from "~WalletConnect/components/WalletConnectHandler"
 import AllAccountsPage from "../components/AccountListView"
 import AndroidBackButton from "../components/AndroidBackButton"
 import DesktopNotifications from "../components/DesktopNotifications"
@@ -84,6 +85,7 @@ function Stage2() {
         {/* Notifications need to come after the -webkit-overflow-scrolling element on iOS */}
         <DesktopNotifications />
         <StellarUriHandler />
+        <WalletConnectHandler />
       </React.Suspense>
       {import.meta.env.VITE_PLATFORM === "android" ? <AndroidBackButton /> : null}
       {import.meta.env.VITE_PLATFORM === "android" || import.meta.env.VITE_PLATFORM === "ios" ? <LinkHandler /> : null}

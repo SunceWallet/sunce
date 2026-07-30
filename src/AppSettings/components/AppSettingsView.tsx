@@ -12,19 +12,23 @@ import { matchesRoute } from "~Generic/lib/routes"
 import { Section } from "~Layout/components/Page"
 import pkg from "../../../package.json"
 
-
 function SettingsPage() {
   const isSmallScreen = useIsMobile()
   const router = useRouter()
   const { t } = useTranslation()
 
   const showSettingsOverview = matchesRoute(router.location.pathname, routes.settings(), true)
+  const walletConnectReturnToAccount = matchesRoute(router.location.pathname, routes.manageWalletConnect())
+    ? new URLSearchParams(router.location.search).get("account")
+    : null
 
   const navigateToAllAccounts = React.useCallback(() => {
     router.history.push(routes.allAccounts())
   }, [router.history])
 
-  const navigateToSettingsOverview = React.useCallback(() => router.history.push(routes.settings()), [router.history])
+  const navigateBackFromSettingsDetails = React.useCallback(() => {
+    router.history.push(walletConnectReturnToAccount ? routes.account(walletConnectReturnToAccount) : routes.settings())
+  }, [router.history, walletConnectReturnToAccount])
 
   const headerCard = React.useMemo(
     () => (
@@ -38,7 +42,7 @@ function SettingsPage() {
       >
         <CardContent style={{ padding: isSmallScreen ? 8 : undefined, paddingBottom: 8 }}>
           <MainTitle
-            onBack={showSettingsOverview ? navigateToAllAccounts : navigateToSettingsOverview}
+            onBack={showSettingsOverview ? navigateToAllAccounts : navigateBackFromSettingsDetails}
             title={t("app-settings.settings.title")}
             titleColor="inherit"
             style={{ marginTop: -12, marginLeft: 0 }}
@@ -46,7 +50,7 @@ function SettingsPage() {
         </CardContent>
       </Card>
     ),
-    [isSmallScreen, navigateToAllAccounts, navigateToSettingsOverview, showSettingsOverview, t]
+    [isSmallScreen, navigateBackFromSettingsDetails, navigateToAllAccounts, showSettingsOverview, t]
   )
 
   return (
