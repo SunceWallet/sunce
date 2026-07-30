@@ -15,6 +15,7 @@ export type SavedAddresses = {
 
 const storageKey = "sunce:favorites:mainnet"
 const lastSyncStorageKey = "sunce:favorites:last-sync:mainnet"
+const syncCursorStorageKey = "sunce:favorites:sync-cursor:mainnet"
 const syncIntervalMs = 5 * 60 * 1000
 const syncTimeoutMs = 30 * 1000
 
@@ -56,6 +57,7 @@ export function SavedAddressesProvider(props: Props) {
   const contactItemsRef = React.useRef(contactItems)
   const [lastSyncAt, setLastSyncAt] = React.useState<number | undefined>(loadLastSyncAt)
   const lastSyncAtRef = React.useRef(lastSyncAt)
+  const syncCursorRef = React.useRef<number | undefined>(loadSyncCursor())
   const [syncStatus, setSyncStatus] = React.useState<SavedAddressesSyncStatus>("idle")
   const synchronizeRef = React.useRef<() => void>(() => undefined)
 
@@ -134,6 +136,7 @@ export function SavedAddressesProvider(props: Props) {
         const response = await Promise.race([
           syncContacts({
             apiKey,
+            cursor: syncCursorRef.current ?? null,
             items: sentItems,
             signal: controller?.signal
           }),
@@ -147,7 +150,11 @@ export function SavedAddressesProvider(props: Props) {
         if (!active) return
 
         const changedWhileSyncing = contactItemsRef.current !== sourceItems
-        updateContactItems(current => mergeContactItems(current, response.items))
+        if (response.items !== undefined) {
+          updateContactItems(current => mergeContactItems(current, response.items))
+          localStorage.setItem(syncCursorStorageKey, String(response.next_cursor))
+          syncCursorRef.current = response.next_cursor
+        }
 
         if (syncReportHasErrors(response.report)) {
           setSyncStatus("error")
@@ -241,6 +248,11 @@ function loadContactItems(): ContactItems {
 function loadLastSyncAt(): number | undefined {
   const value = Number(localStorage.getItem(lastSyncStorageKey))
   return Number.isSafeInteger(value) && value > 0 ? value : undefined
+}
+
+function loadSyncCursor(): number | undefined {
+  const value = Number(localStorage.getItem(syncCursorStorageKey))
+  return Number.isSafeInteger(value) && value >= 0 ? value : undefined
 }
 
 function toSavedAddresses(items: ContactItems): SavedAddresses {

@@ -25,12 +25,14 @@ interface SyncReport {
 
 interface SyncResponse {
   status: "OK"
+  next_cursor: number
   report: SyncReport
   items?: ContactItems
 }
 
 interface SyncContactsOptions {
   apiKey: string
+  cursor?: number | null
   items?: ContactItems
   endpoint?: string
   signal?: AbortSignal
@@ -70,6 +72,11 @@ export async function syncContacts(options: SyncContactsOptions): Promise<SyncRe
     throw new TypeError("now must return an integer timestamp in milliseconds")
   }
 
+  const cursor = options.cursor ?? null
+  if (cursor !== null && (!Number.isSafeInteger(cursor) || cursor < 0)) {
+    throw new TypeError("cursor must be a non-negative integer or null")
+  }
+
   const response = await fetchImplementation(endpoint, {
     method: "POST",
     headers: {
@@ -79,6 +86,7 @@ export async function syncContacts(options: SyncContactsOptions): Promise<SyncRe
     },
     body: JSON.stringify({
       current_timestamp: currentTimestamp,
+      cursor,
       items: options.items ?? {}
     }),
     ...(options.signal ? { signal: options.signal } : {})
