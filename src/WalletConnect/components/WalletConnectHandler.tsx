@@ -1,9 +1,6 @@
 import Box from "@material-ui/core/Box"
 import Dialog from "@material-ui/core/Dialog"
 import DialogContent from "@material-ui/core/DialogContent"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
 import Typography from "@material-ui/core/Typography"
 import makeStyles from "@material-ui/core/styles/makeStyles"
 import CloseIcon from "@material-ui/icons/Close"
@@ -33,24 +30,21 @@ import {
 } from "~WalletConnect/lib/stellar"
 
 const useProposalDialogStyles = makeStyles({
+  bulletList: {
+    margin: "8px 0 0",
+    paddingLeft: 24
+  },
+  bulletListItem: {
+    marginBottom: 4,
+    "&:last-child": {
+      marginBottom: 0
+    }
+  },
+  description: {
+    margin: "8px 0 0"
+  },
   sectionHeader: {
     marginTop: 24
-  },
-  list: {
-    background: "transparent",
-    paddingTop: 8
-  },
-  listItem: {
-    background: "#FFFFFF",
-    boxShadow: "0 8px 16px 0 rgba(0, 0, 0, 0.1)",
-    "&:first-child": {
-      borderTopLeftRadius: 8,
-      borderTopRightRadius: 8
-    },
-    "&:last-child": {
-      borderBottomLeftRadius: 8,
-      borderBottomRightRadius: 8
-    }
   }
 })
 
@@ -123,7 +117,11 @@ function WalletConnectProposalDialog() {
   const account = (selectedAccountIsSelectable ? selectedAccount : null) || defaultAccount || selectableAccounts[0] || null
   const selectedAccountChains = account ? [getChainFromAccount(account)] : []
   const networkLabels = (chains.length ? chains : [""]).map(chain => getNetworkLabel(chain as string, t))
-  const permissionLabels = (methods.length ? methods : stellarMethods).map(method => getPermissionLabel(method as string, t))
+  const permissionLabels = [
+    t("wallet-connect.permission.account-address"),
+    t("wallet-connect.permission.account-balances"),
+    ...(methods.length ? methods : stellarMethods).map(method => getPermissionLabel(method as string, t))
+  ]
   const selectedAccountSupportsRequiredChains = requiredChains.every(
     (chain: string) => selectedAccountChains.indexOf(chain) > -1
   )
@@ -165,26 +163,29 @@ function WalletConnectProposalDialog() {
               {metadata.name || t("wallet-connect.proposal.unknown-dapp")}
             </Typography>
             {metadata.url ? <Typography color="textSecondary">{metadata.url}</Typography> : null}
+            <Typography className={classes.description} color="textSecondary" component="p">
+              {t("wallet-connect.proposal.description")}
+            </Typography>
             <Typography className={classes.sectionHeader} variant="h6">
               {t("wallet-connect.proposal.networks")}
             </Typography>
-            <List className={classes.list}>
+            <ul className={classes.bulletList}>
               {networkLabels.map(label => (
-                <ListItem className={classes.listItem} key={label}>
-                  <ListItemText primary={label} />
-                </ListItem>
+                <Typography className={classes.bulletListItem} component="li" key={label}>
+                  {label}
+                </Typography>
               ))}
-            </List>
+            </ul>
             <Typography className={classes.sectionHeader} variant="h6">
               {t("wallet-connect.proposal.permissions")}
             </Typography>
-            <List className={classes.list}>
+            <ul className={classes.bulletList}>
               {permissionLabels.map(label => (
-                <ListItem className={classes.listItem} key={label}>
-                  <ListItemText primary={label} />
-                </ListItem>
+                <Typography className={classes.bulletListItem} component="li" key={label}>
+                  {label}
+                </Typography>
               ))}
-            </List>
+            </ul>
             <Box paddingTop={3}>
               <Typography variant="h6">{t("wallet-connect.proposal.account")}</Typography>
               <AccountSelectionList

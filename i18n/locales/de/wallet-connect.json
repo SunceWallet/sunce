@@ -14,17 +14,20 @@
     "unknown": "Unbekanntes Netzwerk ({{network}})"
   },
   "permission": {
-    "sign-and-submit-xdr": "Stellar-Transaktionen signieren und einreichen",
-    "sign-xdr": "Stellar-Transaktionen signieren",
+    "account-address": "Deine Kontoadresse sehen",
+    "account-balances": "Deine Kontosalden sehen",
+    "sign-and-submit-xdr": "Transaktionen nach deiner Genehmigung signieren und senden",
+    "sign-xdr": "Transaktionen nach deiner Genehmigung signieren",
     "unknown": "Unbekannte Berechtigung ({{method}})"
   },
   "proposal": {
     "account": "Zu verbindendes Konto",
+    "description": "Website fordert eine Verbindung zu deiner Wallet an. Ohne deine Genehmigung hier werden keine Transaktionen gesendet.",
     "networks": "Angefragte Netzwerke",
     "no-account": "Kein lokales Konto passt zum angefragten Netzwerk.",
     "permissions": "Angefragte Berechtigungen",
     "required-networks-error": "Das ausgewaehlte Konto erfuellt nicht alle erforderlichen Netzwerke.",
-    "title": "Verbindungsanfrage",
+    "title": "Verbindungsanfrage via WalletConnect",
     "unknown-dapp": "Unbekannte dApp"
   },
   "request": {

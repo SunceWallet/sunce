@@ -356,6 +356,9 @@
     "read-qr-code": {
       "label": "Read QR Code"
     },
+    "wallet-connect": {
+      "label": "Connect to website"
+    },
     "trade": {
       "label": "Trade"
     },

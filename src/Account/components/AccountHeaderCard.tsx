@@ -95,6 +95,7 @@ function AccountHeaderCard(props: Props) {
             onReceiveFunds={props.onReceiveFunds}
             onTrade={props.onTrade}
             onWithdraw={props.onWithdraw}
+            onWalletConnect={props.onWalletConnect}
             onReadQRCode={props.onReadQRCode}
             settings={settings}
             showingSettings={showingSettings}
@@ -122,6 +123,7 @@ function AccountHeaderCard(props: Props) {
       props.onDataEntries,
       props.onTrade,
       props.onWithdraw,
+      props.onWalletConnect,
       props.onReceiveFunds,
       props.onReadQRCode,
       settings,

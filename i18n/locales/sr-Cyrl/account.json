@@ -316,6 +316,9 @@
     "receive-funds": {
       "label": "Прими средства"
     },
+    "wallet-connect": {
+      "label": "Повежи са веб-сајтом"
+    },
     "trade": {
       "label": "Тргуј"
     },

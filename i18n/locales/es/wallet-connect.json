@@ -14,17 +14,20 @@
     "unknown": "Red desconocida ({{network}})"
   },
   "permission": {
-    "sign-and-submit-xdr": "Firmar y enviar transacciones de Stellar",
-    "sign-xdr": "Firmar transacciones de Stellar",
+    "account-address": "Ver la direccion de tu cuenta",
+    "account-balances": "Ver los saldos de tu cuenta",
+    "sign-and-submit-xdr": "Firmar y enviar transacciones despues de tu aprobacion",
+    "sign-xdr": "Firmar transacciones despues de tu aprobacion",
     "unknown": "Permiso desconocido ({{method}})"
   },
   "proposal": {
     "account": "Cuenta para conectar",
+    "description": "El sitio web solicita conexion a tu billetera. No se enviaran transacciones sin tu aprobacion aqui.",
     "networks": "Redes solicitadas",
     "no-account": "Ninguna cuenta local coincide con la red solicitada.",
     "permissions": "Permisos solicitados",
     "required-networks-error": "La cuenta seleccionada no satisface todas las redes requeridas.",
-    "title": "Solicitud de conexion",
+    "title": "Solicitud de conexion via WalletConnect",
     "unknown-dapp": "dApp desconocida"
   },
   "request": {

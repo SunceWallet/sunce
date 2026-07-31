@@ -14,17 +14,20 @@
     "unknown": "Nepoznata mreza ({{network}})"
   },
   "permission": {
-    "sign-and-submit-xdr": "Potpisivanje i slanje Stellar transakcija",
-    "sign-xdr": "Potpisivanje Stellar transakcija",
+    "account-address": "Vidi adresu tvog naloga",
+    "account-balances": "Vidi salda tvog naloga",
+    "sign-and-submit-xdr": "Potpisivanje i slanje transakcija posle tvog odobrenja",
+    "sign-xdr": "Potpisivanje transakcija posle tvog odobrenja",
     "unknown": "Nepoznata dozvola ({{method}})"
   },
   "proposal": {
     "account": "Nalog za povezivanje",
+    "description": "Veb-sajt trazi povezivanje sa tvojim novcanikom. Nijedna transakcija nece biti poslata bez tvog odobrenja ovde.",
     "networks": "Zatrazene mreze",
     "no-account": "Nijedan lokalni nalog ne odgovara zatrazenoj mrezi.",
     "permissions": "Zatrazene dozvole",
     "required-networks-error": "Izabrani nalog ne podrzava sve obavezne mreze.",
-    "title": "Zahtev za povezivanje",
+    "title": "Zahtev za povezivanje preko WalletConnect",
     "unknown-dapp": "Nepoznata dApp"
   },
   "request": {

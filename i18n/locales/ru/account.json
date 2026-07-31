@@ -356,6 +356,9 @@
     "read-qr-code": {
       "label": "Считать QR-код"
     },
+    "wallet-connect": {
+      "label": "Подключиться к сайту"
+    },
     "trade": {
       "label": "Торговля"
     },

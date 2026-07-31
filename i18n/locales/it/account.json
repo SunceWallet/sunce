@@ -316,6 +316,9 @@
     "read-qr-code": {
       "label": "Leggi codice QR"
     },
+    "wallet-connect": {
+      "label": "Connetti a sito web"
+    },
     "trade": {
       "label": "Negozia"
     },
