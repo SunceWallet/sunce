@@ -27,9 +27,17 @@ jobs:
         run: |
           npm run build:web
 
+      # GitHub Pages caches HTML after the deployment action removes its hashed assets.
+      # Restore the prior release so a stale app shell can load and update itself.
+      - name: Restore previous hashed assets
+        run: |
+          git fetch origin gh-pages:refs/remotes/origin/gh-pages --depth=2
+          git archive --format=tar origin/gh-pages~1 -- ':(glob)*-*.js' ':(glob)*-*.css' | tar -x -C dist
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           cname: beta.sunce.app
+          keep_files: true
