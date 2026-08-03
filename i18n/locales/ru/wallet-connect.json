@@ -1,0 +1,42 @@
+{
+  "account-badge": {
+    "label": "WalletConnect"
+  },
+  "action": {
+    "approve": "Подтвердить",
+    "reject": "Отклонить",
+    "review": "Проверить"
+  },
+  "network": {
+    "pubnet": "Публичная сеть Stellar",
+    "stellar": "Сеть Stellar",
+    "testnet": "Тестовая сеть Stellar",
+    "unknown": "Неизвестная сеть ({{network}})"
+  },
+  "permission": {
+    "account-address": "Видеть адрес вашего аккаунта",
+    "account-balances": "Видеть балансы вашего аккаунта",
+    "sign-and-submit-xdr": "Подписывать и отправлять транзакции после вашего подтверждения",
+    "sign-xdr": "Подписывать транзакции после вашего подтверждения",
+    "unknown": "Неизвестное разрешение ({{method}})"
+  },
+  "proposal": {
+    "account": "Аккаунт для подключения",
+    "description": "Веб-сайт запрашивает подключение к вашему кошельку. Транзакции не будут отправлены без вашего подтверждения здесь.",
+    "networks": "Запрошенные сети",
+    "no-account": "Нет локального аккаунта для запрошенной сети.",
+    "permissions": "Запрошенные разрешения",
+    "required-networks-error": "Выбранный аккаунт не соответствует всем обязательным сетям.",
+    "title": "Запрос на подключение через WalletConnect",
+    "unknown-dapp": "Неизвестное dApp"
+  },
+  "request": {
+    "account": "Аккаунт для подписи",
+    "default-dapp": "dApp",
+    "from": "Запрос от",
+    "no-account": "Нет локального аккаунта для запроса WalletConnect.",
+    "title": "WalletConnect",
+    "unsupported-method": "Неподдерживаемый метод WalletConnect: {{method}}",
+    "user-rejected": "Пользователь отклонил запрос."
+  }
+}

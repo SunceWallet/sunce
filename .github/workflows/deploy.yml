@@ -20,11 +20,13 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        
+
       - name: Build website
+        env:
+          VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
         run: |
           npm run build:web
-          
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

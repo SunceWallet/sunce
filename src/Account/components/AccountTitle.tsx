@@ -10,12 +10,13 @@ import ClearIcon from "@material-ui/icons/Clear"
 import EditIcon from "@material-ui/icons/Edit"
 import GroupIcon from "@material-ui/icons/Group"
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser"
+import WalletConnectIcon from "@material-ui/icons/DeviceHub"
 import { Account } from "~App/contexts/accounts"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useIsMobile, useRouter } from "~Generic/hooks/userinterface"
 import { containsThirdPartySigner, ThirdPartySecurityService } from "~Generic/lib/third-party-security"
 import { primaryBackgroundColor } from "~App/theme"
-import { HorizontalLayout, VerticalLayout } from "~Layout/components/Box"
+import { HorizontalLayout } from "~Layout/components/Box"
 import MainTitle from "~Generic/components/MainTitle"
 import { CopyableAddress } from "~Generic/components/PublicKey"
 
@@ -57,12 +58,15 @@ function TestnetBadge(props: { style?: React.CSSProperties }) {
 
 interface StaticBadgesProps {
   multisig: "generic" | ThirdPartySecurityService | undefined
+  onWalletConnect?: () => void
   password: boolean
   testnet: boolean
+  walletConnectActive?: boolean
 }
 
 export const StaticBadges = React.memo(function StaticBadges(props: StaticBadgesProps) {
   const { t } = useTranslation()
+  const walletConnectLabel = t("wallet-connect.account-badge.label")
   return (
     <HorizontalLayout display="inline-flex" alignItems="center" width="auto" fontSize="1.5rem">
       {props.testnet ? <TestnetBadge style={{ marginRight: 16 }} /> : null}
@@ -88,12 +92,25 @@ export const StaticBadges = React.memo(function StaticBadges(props: StaticBadges
         }
       })()}
       <PasswordStatus safe={props.password} style={{ fontSize: "90%", marginTop: "-0.05em" }} />
+      {props.walletConnectActive && props.onWalletConnect ? (
+        <Tooltip title={walletConnectLabel}>
+          <IconButton
+            aria-label={walletConnectLabel}
+            onClick={props.onWalletConnect}
+            style={{ color: "black", height: "1em", marginLeft: 8, padding: 0, width: "1em" }}
+          >
+            <WalletConnectIcon style={{ fontSize: "inherit" }} />
+          </IconButton>
+        </Tooltip>
+      ) : null}
     </HorizontalLayout>
   )
 })
 
 interface BadgesProps {
   account: Account
+  onWalletConnect?: () => void
+  walletConnectActive?: boolean
 }
 
 export const Badges = React.memo(function Badges(props: BadgesProps) {
@@ -102,7 +119,15 @@ export const Badges = React.memo(function Badges(props: BadgesProps) {
   const securityService = containsThirdPartySigner(accountData.signers)
   const multisig = accountData.signers.length > 1 ? (securityService ? securityService : "generic") : undefined
 
-  return <StaticBadges multisig={multisig} password={props.account.requiresPassword} testnet={props.account.testnet} />
+  return (
+    <StaticBadges
+      multisig={multisig}
+      onWalletConnect={props.onWalletConnect}
+      password={props.account.requiresPassword}
+      testnet={props.account.testnet}
+      walletConnectActive={props.walletConnectActive}
+    />
+  )
 })
 
 const useTitleTextfieldStyles = makeStyles({
@@ -294,7 +319,7 @@ function AccountTitle(props: AccountTitleProps) {
         </IconButton>
       </>
     ),
-    [applyRenaming, cancelRenaming, isSmallScreen]
+    [applyRenaming, cancelRenaming, classes.editTitleActionButton, isSmallScreen]
   )
 
   const permanentEditActions = React.useMemo(
@@ -303,7 +328,7 @@ function AccountTitle(props: AccountTitleProps) {
         <EditIcon />
       </IconButton>
     ),
-    [focusInput]
+    [classes.editTitleActionButton, focusInput]
   )
 
   const readonlyActions = React.useMemo(
@@ -312,7 +337,7 @@ function AccountTitle(props: AccountTitleProps) {
         <EditIcon />
       </IconButton>
     ),
-    [toggleMode]
+    [classes.editTitleActionButton, toggleMode]
   )
 
   return (

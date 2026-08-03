@@ -1,0 +1,42 @@
+{
+  "account-badge": {
+    "label": "WalletConnect"
+  },
+  "action": {
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
+    "review": "Pruefen"
+  },
+  "network": {
+    "pubnet": "Stellar Public Network",
+    "stellar": "Stellar-Netzwerk",
+    "testnet": "Stellar Testnet",
+    "unknown": "Unbekanntes Netzwerk ({{network}})"
+  },
+  "permission": {
+    "account-address": "Deine Kontoadresse sehen",
+    "account-balances": "Deine Kontosalden sehen",
+    "sign-and-submit-xdr": "Transaktionen nach deiner Genehmigung signieren und senden",
+    "sign-xdr": "Transaktionen nach deiner Genehmigung signieren",
+    "unknown": "Unbekannte Berechtigung ({{method}})"
+  },
+  "proposal": {
+    "account": "Zu verbindendes Konto",
+    "description": "Website fordert eine Verbindung zu deiner Wallet an. Ohne deine Genehmigung hier werden keine Transaktionen gesendet.",
+    "networks": "Angefragte Netzwerke",
+    "no-account": "Kein lokales Konto passt zum angefragten Netzwerk.",
+    "permissions": "Angefragte Berechtigungen",
+    "required-networks-error": "Das ausgewaehlte Konto erfuellt nicht alle erforderlichen Netzwerke.",
+    "title": "Verbindungsanfrage via WalletConnect",
+    "unknown-dapp": "Unbekannte dApp"
+  },
+  "request": {
+    "account": "Signierkonto",
+    "default-dapp": "dApp",
+    "from": "Anfrage von",
+    "no-account": "Kein lokales Konto passt zur WalletConnect-Anfrage.",
+    "title": "WalletConnect",
+    "unsupported-method": "Nicht unterstuetzte WalletConnect-Methode: {{method}}",
+    "user-rejected": "Der Benutzer hat die Anfrage abgelehnt."
+  }
+}

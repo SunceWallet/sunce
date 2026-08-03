@@ -11,6 +11,7 @@ import { isDefaultProtocolClient, setAsDefaultProtocolClient } from "~Platform/p
 import { availableLanguages } from "../../../i18n/index"
 import ManageApiServerDialog from "./ManageApiServerDialog"
 import ManageTrustedServicesDialog from "./ManageTrustedServicesDialog"
+import ManageWalletConnectDialog from "./ManageWalletConnectDialog"
 import {
   ApiServerSetting,
   BiometricLockSetting,
@@ -22,19 +23,25 @@ import {
   ShowClaimableBalanceSetting,
   ShowDustSetting,
   TestnetSetting,
-  TrustedServicesSetting
+  TrustedServicesSetting,
+  WalletConnectSetting
 } from "./Settings"
 
 const SettingsDialogs = React.memo(function SettingsDialogs() {
   const router = useRouter()
   const showManageApiServer = matchesRoute(router.location.pathname, routes.manageApiServer())
   const showManageTrustedServices = matchesRoute(router.location.pathname, routes.manageTrustedServices())
+  const showManageWalletConnect = matchesRoute(router.location.pathname, routes.manageWalletConnect())
 
   if (showManageApiServer) {
     return <ManageApiServerDialog />
   }
 
-  return showManageTrustedServices ? <ManageTrustedServicesDialog /> : <></>
+  if (showManageTrustedServices) {
+    return <ManageTrustedServicesDialog />
+  }
+
+  return showManageWalletConnect ? <ManageWalletConnectDialog /> : <></>
 })
 
 function AppSettings() {
@@ -56,6 +63,9 @@ function AppSettings() {
   const hasTestnetAccount = accounts.some(account => account.testnet)
   const navigateToApiServer = React.useCallback(() => router.history.push(routes.manageApiServer()), [router.history])
   const navigateToTrustedServices = React.useCallback(() => router.history.push(routes.manageTrustedServices()), [
+    router.history
+  ])
+  const navigateToWalletConnect = React.useCallback(() => router.history.push(routes.manageWalletConnect()), [
     router.history
   ])
 
@@ -103,6 +113,7 @@ function AppSettings() {
           value={settings.showClaimableBalanceTxs}
         />
         <ProtocolHandlerSetting isDefaultHandler={isDefaultHandler} onClick={setDefaultClient} />
+        <WalletConnectSetting onClick={navigateToWalletConnect} />
         <TrustedServicesSetting onClick={navigateToTrustedServices} />
         <ApiServerSetting onClick={navigateToApiServer} />
       </List>

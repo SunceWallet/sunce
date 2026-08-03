@@ -52,6 +52,7 @@ jobs:
             KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASS }}
             SIGNINGKEY_ALIAS: android
             SIGNINGKEY_PASSWORD: ${{ secrets.ANDROID_SIGNINGKEY_PASS }}
+            VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
           run: | # decrypting keystore from secrets to a file is safe because the resulting file is encrypted as well
             ENCRYPTED_KEYSTORE_LOCATION="$KEYSTORE_LOCATION".asc
             echo "$ENCRYPTED_KEYSTORE" > "$ENCRYPTED_KEYSTORE_LOCATION"

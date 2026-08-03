@@ -73,6 +73,12 @@
       }
     },
     "title": "Настройки",
+    "wallet-connect": {
+      "text": {
+        "primary": "WalletConnect",
+        "secondary": "Подключить Sunce Wallet к dApp Stellar"
+      }
+    },
     "trusted-services": {
       "text": {
         "primary": "Управление доверенными сервисами",
@@ -145,6 +151,21 @@
       "checking": "Проверяем сервер…",
       "invalid-url": "Введите корректный адрес сервера.",
       "probe-failed": "Сервер не прошёл проверку."
+    }
+  },
+  "wallet-connect": {
+    "action": {
+      "connect": "Подключить",
+      "scan": "Сканировать"
+    },
+    "missing-project-id": "Задайте VITE_WALLETCONNECT_PROJECT_ID, чтобы включить WalletConnect.",
+    "sessions": {
+      "empty": "Нет подключенных dApp.",
+      "title": "Подключенные dApp",
+      "unknown-account": "Неизвестный аккаунт"
+    },
+    "uri": {
+      "label": "URI WalletConnect"
     }
   }
 }

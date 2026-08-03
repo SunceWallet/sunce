@@ -15,6 +15,7 @@ import SettingsIcon from "@material-ui/icons/Settings"
 import StorageIcon from "@material-ui/icons/Storage"
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz"
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff"
+import WalletConnectIcon from "@material-ui/icons/DeviceHub"
 import { Account } from "~App/contexts/accounts"
 import { AppModeContext } from "~App/contexts/appMode"
 import { SettingsContextType } from "~App/contexts/settings"
@@ -76,6 +77,7 @@ interface MenuProps {
   onPurchaseLumens?: () => void
   onTrade?: () => void
   onWithdraw?: () => void
+  onWalletConnect?: () => void
   onReadQRCode?: () => void
   settings: SettingsContextType
   showingSettings: boolean
@@ -128,6 +130,12 @@ function LiveAccountContextMenuItems(
         icon={<QRReaderIcon style={{ fontSize: "140%" }} />}
         label={t("account.context-menu.read-qr-code.label")}
         onClick={closeAndCall(props.onReadQRCode)}
+      />
+      <AccountContextMenuItem
+        disabled={!activated || !props.onWalletConnect}
+        icon={<WalletConnectIcon />}
+        label={t("account.context-menu.wallet-connect.label")}
+        onClick={closeAndCall(props.onWalletConnect)}
       />
       <AccountContextMenuItem
         disabled={!activated || !props.onSavedAddresses}

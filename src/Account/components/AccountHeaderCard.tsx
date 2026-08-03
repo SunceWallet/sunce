@@ -58,7 +58,9 @@ interface Props {
   onRename: (newName: string) => void
   onTrade?: () => void
   onWithdraw?: () => void
+  onWalletConnect?: () => void
   onReadQRCode?: () => void
+  walletConnectActive?: boolean
 }
 
 function AccountHeaderCard(props: Props) {
@@ -93,6 +95,7 @@ function AccountHeaderCard(props: Props) {
             onReceiveFunds={props.onReceiveFunds}
             onTrade={props.onTrade}
             onWithdraw={props.onWithdraw}
+            onWalletConnect={props.onWalletConnect}
             onReadQRCode={props.onReadQRCode}
             settings={settings}
             showingSettings={showingSettings}
@@ -120,6 +123,7 @@ function AccountHeaderCard(props: Props) {
       props.onDataEntries,
       props.onTrade,
       props.onWithdraw,
+      props.onWalletConnect,
       props.onReceiveFunds,
       props.onReadQRCode,
       settings,
@@ -132,7 +136,11 @@ function AccountHeaderCard(props: Props) {
       <HideOnError>
         <React.Suspense fallback={null}>
           {meta.account ? (
-            <Badges account={meta.account} />
+            <Badges
+              account={meta.account}
+              walletConnectActive={props.walletConnectActive}
+              onWalletConnect={props.onWalletConnect}
+            />
           ) : (
             <StaticBadges
               multisig={meta.accountCreation.cosigner ? "generic" : undefined}
@@ -143,7 +151,7 @@ function AccountHeaderCard(props: Props) {
         </React.Suspense>
       </HideOnError>
     ),
-    [meta.account, meta.accountCreation]
+    [meta.account, meta.accountCreation, props.onWalletConnect, props.walletConnectActive]
   )
 
   return (

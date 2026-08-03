@@ -17,6 +17,7 @@ import StorageIcon from "@material-ui/icons/Storage"
 import TestnetIcon from "@material-ui/icons/MoneyOff"
 import TrustIcon from "@material-ui/icons/VerifiedUser"
 import ViewModuleIcon from "@material-ui/icons/ViewModule"
+import WalletConnectIcon from "@material-ui/icons/DeviceHub"
 import { availableLanguages, languageNames } from "../../../i18n"
 import AppSettingsItem from "./AppSettingsItem"
 
@@ -268,6 +269,24 @@ export const TrustedServicesSetting = React.memo(function TrustedServicesSetting
       onClick={props.onClick}
       primaryText={t("app-settings.settings.trusted-services.text.primary")}
       secondaryText={t("app-settings.settings.trusted-services.text.secondary")}
+    />
+  )
+})
+
+interface WalletConnectSettingProps {
+  onClick: () => void
+}
+
+export const WalletConnectSetting = React.memo(function WalletConnectSetting(props: WalletConnectSettingProps) {
+  const classes = useSettingsStyles(props)
+  const { t } = useTranslation()
+  return (
+    <AppSettingsItem
+      actions={<ArrowRightIcon className={classes.caret} />}
+      icon={<WalletConnectIcon className={classes.icon} />}
+      onClick={props.onClick}
+      primaryText={t("app-settings.settings.wallet-connect.text.primary")}
+      secondaryText={t("app-settings.settings.wallet-connect.text.secondary")}
     />
   )
 })
