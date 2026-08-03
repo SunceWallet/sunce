@@ -1,15 +1,7 @@
 import React from "react"
 import { Account } from "./accounts"
 import { trackError } from "./notifications"
-import {
-  approveStellarSession,
-  createSignClient,
-  disconnectWalletConnectSession,
-  rejectWalletConnectSession,
-  respondWithError,
-  respondWithResult
-} from "~WalletConnect/lib/sign-client"
-import { walletConnectProjectID } from "~WalletConnect/lib/stellar"
+import { walletConnectProjectID } from "~WalletConnect/lib/config"
 
 interface WalletConnectRequest {
   id: number
@@ -62,6 +54,7 @@ function getSessions(signClient: any) {
 
 export function WalletConnectProvider(props: { children: React.ReactNode }) {
   const [signClient, setSignClient] = React.useState<any | null>(null)
+  const signClientModule = React.useRef<typeof import("~WalletConnect/lib/sign-client") | null>(null)
   const [initialized, setInitialized] = React.useState(false)
   const [preselectedProposalAccount, setPreselectedProposalAccount] = React.useState<Account | null>(null)
   const [sessions, setSessions] = React.useState<any[]>([])
@@ -72,13 +65,18 @@ export function WalletConnectProvider(props: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     let cancelled = false
+    const projectID = walletConnectProjectID
 
-    if (!walletConnectProjectID) {
+    if (!projectID) {
       setInitialized(true)
       return () => undefined
     }
 
-    createSignClient(walletConnectProjectID)
+    import("~WalletConnect/lib/sign-client")
+      .then(module => {
+        signClientModule.current = module
+        return module.createSignClient(projectID)
+      })
       .then(client => {
         if (cancelled) return
         setSignClient(client)
@@ -108,35 +106,35 @@ export function WalletConnectProvider(props: { children: React.ReactNode }) {
   }, [signClient])
 
   const approveProposal = React.useCallback(async (approvedAccounts: Account[]) => {
-    if (!signClient || !pendingProposal) return
-    await approveStellarSession(signClient, pendingProposal, approvedAccounts)
+    if (!signClient || !pendingProposal || !signClientModule.current) return
+    await signClientModule.current.approveStellarSession(signClient, pendingProposal, approvedAccounts)
     setPendingProposal(null)
     setPreselectedProposalAccount(null)
     refreshSessions(signClient)
   }, [pendingProposal, refreshSessions, signClient])
 
   const rejectProposal = React.useCallback(async () => {
-    if (!signClient || !pendingProposal) return
-    await rejectWalletConnectSession(signClient, pendingProposal.id)
+    if (!signClient || !pendingProposal || !signClientModule.current) return
+    await signClientModule.current.rejectWalletConnectSession(signClient, pendingProposal.id)
     setPendingProposal(null)
     setPreselectedProposalAccount(null)
   }, [pendingProposal, signClient])
 
   const disconnectSession = React.useCallback(async (topic: string) => {
-    if (!signClient) return
-    await disconnectWalletConnectSession(signClient, topic)
+    if (!signClient || !signClientModule.current) return
+    await signClientModule.current.disconnectWalletConnectSession(signClient, topic)
     refreshSessions(signClient)
   }, [refreshSessions, signClient])
 
   const respondSuccess = React.useCallback(async (topic: string, id: number, result: any) => {
-    if (!signClient) return
-    await respondWithResult(signClient, topic, id, result)
+    if (!signClient || !signClientModule.current) return
+    await signClientModule.current.respondWithResult(signClient, topic, id, result)
     setPendingRequest(current => (current && current.id === id ? null : current))
   }, [signClient])
 
   const respondError = React.useCallback(async (topic: string, id: number, message: string) => {
-    if (!signClient) return
-    await respondWithError(signClient, topic, id, message)
+    if (!signClient || !signClientModule.current) return
+    await signClientModule.current.respondWithError(signClient, topic, id, message)
     setPendingRequest(current => (current && current.id === id ? null : current))
   }, [signClient])
 

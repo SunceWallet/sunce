@@ -1,8 +1,6 @@
 import { Networks, Transaction } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 
-export const walletConnectProjectID = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string | undefined
-
 export const stellarChains = {
   pubnet: "stellar:pubnet",
   testnet: "stellar:testnet"

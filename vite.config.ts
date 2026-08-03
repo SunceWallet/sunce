@@ -85,6 +85,17 @@ export default defineConfig(({ mode }) => {
           app: inputFile,
           web: "/index.html"
         },
+        output: {
+          manualChunks(id) {
+            if (id.includes("/node_modules/@walletconnect/")) {
+              return "walletconnect"
+            }
+
+            if (id.includes("/node_modules/@stellar/stellar-sdk/")) {
+              return "stellar-sdk"
+            }
+          }
+        }
       },
     },
     server: {
