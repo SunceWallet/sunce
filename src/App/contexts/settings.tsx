@@ -46,6 +46,8 @@ interface ContextType {
   accountAssetSettings: Platform.AccountAssetSettingsMap
   accountReceivePaymentSettings: Platform.AccountReceivePaymentSettingsMap
   showAllBalancesOnAccountCards: boolean
+  savedAddressesSyncEnabled: boolean
+  savedAddressesSyncApiKey: string | undefined
   setAssetSettings: (accountId: string, assetKey: string, mode: Platform.AssetSettings) => void
   setReceivePaymentSettings: (accountId: string, settings: Platform.ReceivePaymentSettings) => void
   toggleShowAllBalancesOnAccountCards: () => void
@@ -70,7 +72,9 @@ const initialSettings: SettingsState = {
   trustedServices: [],
   accountAssetSettings: {},
   accountReceivePaymentSettings: {},
-  showAllBalancesOnAccountCards: false
+  showAllBalancesOnAccountCards: false,
+  savedAddressesSyncEnabled: false,
+  savedAddressesSyncApiKey: undefined
 }
 
 const initialIgnoredSignatureRequests: string[] = []
@@ -108,6 +112,8 @@ const SettingsContext = React.createContext<ContextType>({
   accountAssetSettings: initialSettings.accountAssetSettings,
   accountReceivePaymentSettings: initialSettings.accountReceivePaymentSettings,
   showAllBalancesOnAccountCards: initialSettings.showAllBalancesOnAccountCards,
+  savedAddressesSyncEnabled: initialSettings.savedAddressesSyncEnabled || false,
+  savedAddressesSyncApiKey: initialSettings.savedAddressesSyncApiKey,
   setAssetSettings: () => undefined,
   setReceivePaymentSettings: () => undefined,
   toggleShowAllBalancesOnAccountCards: () => undefined
@@ -249,6 +255,8 @@ export function SettingsProvider(props: Props) {
     accountAssetSettings: settings.accountAssetSettings,
     accountReceivePaymentSettings: settings.accountReceivePaymentSettings,
     showAllBalancesOnAccountCards: settings.showAllBalancesOnAccountCards,
+    savedAddressesSyncEnabled: settings.savedAddressesSyncEnabled || false,
+    savedAddressesSyncApiKey: settings.savedAddressesSyncApiKey,
     setAssetSettings,
     setReceivePaymentSettings,
     toggleShowAllBalancesOnAccountCards

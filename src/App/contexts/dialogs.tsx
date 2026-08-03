@@ -3,16 +3,14 @@ import React from "react"
 import { FullscreenDialogTransition } from "~App/theme"
 import ViewLoading from "~Generic/components/ViewLoading"
 import SavedAddressesDialog, { SavedAddressesDialogProps } from "../../Assets/components/SavedAddressesDialog"
-import SavedAddressesSettings from "../../Assets/components/SavedAddressesSettings"
+import SavedAddressesSettings, { SavedAddressesSettingsProps } from "../../Assets/components/SavedAddressesSettings"
 import HiddenSendersDialog, { HiddenSendersDialogProps } from "../../Account/components/HiddenSendersDialog"
 
 interface Props {
   children: React.ReactNode
 }
 
-interface SavedAddressesSettingsDialogProps {
-  onClose?: () => void
-}
+type SavedAddressesSettingsDialogProps = Partial<SavedAddressesSettingsProps>
 
 interface ContextType {
   isSavedAddressesOpened: boolean
@@ -20,7 +18,7 @@ interface ContextType {
   isHiddenSendersOpened: boolean
   openHiddenSenders: (params: Partial<HiddenSendersDialogProps> | null) => void
   isSavedAddressesSettingsOpened: boolean
-  openSavedAddressesSettings: (params: Partial<SavedAddressesSettingsDialogProps> | null) => void
+  openSavedAddressesSettings: (params: SavedAddressesSettingsDialogProps | null) => void
 }
 
 const initialValues: ContextType = {
@@ -41,7 +39,7 @@ export function DialogsProvider(props: Props) {
   const [hiddenSendersDialog, setHiddenSendersDialog] = React.useState<Partial<HiddenSendersDialogProps> | null>(
     null
   )
-  const [savedAddressesSettingsDialog, setSavedAddressesSettingsDialog] = React.useState<Partial<SavedAddressesSettingsDialogProps> | null>(
+  const [savedAddressesSettingsDialog, setSavedAddressesSettingsDialog] = React.useState<SavedAddressesSettingsDialogProps | null>(
     null
   )
 

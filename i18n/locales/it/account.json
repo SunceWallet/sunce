@@ -147,6 +147,27 @@
   "saved-addresses": {
     "title": "Destinazioni Preferite",
     "settings-title": "Impostazioni degli indirizzi salvati",
+    "sync": {
+      "title": "Sincronizza i contatti con BSN.expert",
+      "enabled": "Abilita sincronizzazione",
+      "description": "Abilita la sincronizzazione bidirezionale della tua rubrica tra Sunce e il tuo account BSN.expert.\n\nLe modifiche alla rubrica effettuate in Sunce verranno inviate al tuo account BSN.expert, mentre quelle effettuate da te su BSN.expert appariranno automaticamente in Sunce.",
+      "privacy-warning": "I nomi e gli indirizzi nella tua rubrica potrebbero essere visibili agli operatori di bsn.expert",
+      "api-key": {
+        "label": "Chiave API",
+        "help": "La chiave API può essere ottenuta su"
+      },
+      "status": {
+        "enabled": "Attivata",
+        "disabled": "Disattivata",
+        "api-key-required": "Chiave API richiesta",
+        "syncing": "Sincronizzazione dei contatti…",
+        "failed": "Ultima sincronizzazione: non riuscita",
+        "minute-ago": "Ultima sincronizzazione: {{count}} min fa",
+        "minutes-ago": "Ultima sincronizzazione: {{count}} min fa",
+        "never-synced": "Non ancora sincronizzato",
+        "sync-now": "Sincronizza ora"
+      }
+    },
     "export-to-file": "Esporta in file",
     "export-description": "Scarica gli indirizzi salvati come file JSON",
     "share": "Condividi",

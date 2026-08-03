@@ -147,6 +147,27 @@
   "saved-addresses": {
     "title": "Saved Addresses",
     "settings-title": "Saved Addresses Settings",
+    "sync": {
+      "title": "Sync contacts with BSN.expert",
+      "enabled": "Enable synchronization",
+      "description": "Enable two-way synchronization of your address book between Sunce and your BSN.expert account.\n\nAddress book changes made in Sunce will be sent to your BSN.expert account, and changes made by you on BSN.expert will automatically appear in Sunce.",
+      "privacy-warning": "Names and addresses in your address book may be visible to bsn.expert operators",
+      "api-key": {
+        "label": "API key",
+        "help": "The API key can be obtained at"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "api-key-required": "API key required",
+        "syncing": "Synchronizing contacts…",
+        "failed": "Last sync: failed",
+        "minute-ago": "Last sync: {{count}} minute ago",
+        "minutes-ago": "Last sync: {{count}} minutes ago",
+        "never-synced": "Not synchronized yet",
+        "sync-now": "Sync now"
+      }
+    },
     "export-to-file": "Export to file",
     "export-description": "Download saved addresses as JSON file",
     "share": "Share",

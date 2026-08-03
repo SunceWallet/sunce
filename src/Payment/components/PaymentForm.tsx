@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next"
 import { Asset, Memo, MemoType, Horizon, Transaction } from "@stellar/stellar-sdk"
 import { Account } from "~App/contexts/accounts"
 import { DialogsContext } from "~App/contexts/dialogs"
+import { useSavedAddressesSyncOnMount } from "~App/contexts/savedAddresses"
 import { warningColor } from "~App/theme"
 import AssetSelector from "~Generic/components/AssetSelector"
 import { ActionButton, DialogActionsBox } from "~Generic/components/DialogActions"
@@ -88,6 +89,7 @@ const PaymentForm = React.memo(function PaymentForm(props: PaymentFormProps) {
   const formID = React.useMemo(() => nanoid(), [])
   const { t } = useTranslation()
   const wellknownAccounts = useWellKnownAccounts(props.testnet)
+  useSavedAddressesSyncOnMount()
 
   const [matchingWellknownAccount, setMatchingWellknownAccount] = React.useState<AccountRecord | undefined>(undefined)
   const [memoType, setMemoType] = React.useState<MemoType>("none")

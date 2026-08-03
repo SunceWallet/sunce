@@ -2,23 +2,47 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import DialogBody from "~Layout/components/DialogBody"
 import { SavedAddresses, SavedAddressesContext } from "~App/contexts/savedAddresses"
-import { List, ListItem, ListItemText } from "@material-ui/core"
+import { Dialog, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core"
+import ArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import MainTitle from "~Generic/components/MainTitle"
-import { NotificationsContext } from "~App/contexts/notifications"
+import { NotificationsContext, trackError } from "~App/contexts/notifications"
 import { ActionButton, ConfirmDialog } from "~Generic/components/DialogActions"
 import { call as ipcCall } from "~Platform/ipc"
+import { SettingsContext } from "~App/contexts/settings"
+import { FullscreenDialogTransition } from "~App/theme"
+import SavedAddressesSyncSettings from "./SavedAddressesSyncSettings"
 
-interface SavedAddressesSettingsProps {
+export interface SavedAddressesSettingsProps {
   onClose: () => void
+  syncSettingsOpen?: boolean
 }
 
 function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
   const { t } = useTranslation()
   const { savedAddresses, bulkUpdate } = React.useContext(SavedAddressesContext)
   const { showNotification } = React.useContext(NotificationsContext)
+  const settings = React.useContext(SettingsContext)
+  const closeSettings = props.onClose
+  const openedSyncSettingsDirectly = Boolean(props.syncSettingsOpen)
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = React.useState(false)
+  const [syncSettingsOpen, setSyncSettingsOpen] = React.useState(openedSyncSettingsDirectly)
   const isAndroid = import.meta.env.VITE_PLATFORM === "android"
+
+  const closeSyncSettings = React.useCallback(() => {
+    if (openedSyncSettingsDirectly) {
+      closeSettings()
+    } else {
+      setSyncSettingsOpen(false)
+    }
+  }, [closeSettings, openedSyncSettingsDirectly])
+  const openSyncSettings = React.useCallback(() => setSyncSettingsOpen(true), [])
+
+  const syncSettingsStatus = !settings.savedAddressesSyncEnabled
+    ? t("account.saved-addresses.sync.status.disabled")
+    : settings.savedAddressesSyncApiKey?.trim()
+    ? t("account.saved-addresses.sync.status.enabled")
+    : t("account.saved-addresses.sync.status.api-key-required")
 
   const handleShare = React.useCallback(async () => {
     const jsonContent = JSON.stringify(savedAddresses, null, 2)
@@ -30,7 +54,7 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
       })
       showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
     } catch (error) {
-      console.error("Error sharing file:", error.message)
+      trackError(error)
       showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))
     }
   }, [savedAddresses, showNotification, t])
@@ -62,7 +86,7 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
           showNotification("success", t("account.saved-addresses.export-success", "File exported successfully"))
         }
       } catch (error) {
-        console.error("Error sharing file:", error.message)
+        trackError(error)
         showNotification("error", t("account.saved-addresses.export-error", "Failed to export file"))
       }
     } else {
@@ -124,7 +148,7 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
         // Reset the file input
         setFileInputKey(prev => prev + 1)
       } catch (error) {
-        console.error("Error parsing JSON file:", error)
+        trackError(error)
         showNotification("error", t("account.saved-addresses.invalid-json", "Invalid JSON format"))
       }
     }
@@ -137,8 +161,7 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
       return false
     }
 
-    for (const address in data) {
-      const entry = data[address]
+    for (const entry of Object.values(data) as { label?: unknown }[]) {
       if (!entry || typeof entry.label !== 'string') {
         return false
       }
@@ -174,6 +197,17 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
       }
     >
       <List style={{ margin: "0 -8px" }}>
+        <ListItem button onClick={openSyncSettings}>
+          <ListItemText
+            primary={t("account.saved-addresses.sync.title")}
+            secondary={syncSettingsStatus}
+          />
+          <ListItemIcon
+            style={{ color: "rgba(0, 0, 0, 0.35)", justifyContent: "center", marginRight: -8, width: 48 }}
+          >
+            <ArrowRightIcon style={{ fontSize: 48 }} />
+          </ListItemIcon>
+        </ListItem>
         {isAndroid && (
           <ListItem button onClick={handleShare}>
             <ListItemText
@@ -229,6 +263,14 @@ function SavedAddressesSettings(props: SavedAddressesSettingsProps) {
       >
         {t("account.saved-addresses.delete-all-confirm.text", "Are you sure you want to delete all saved addresses? This action cannot be undone.")}
       </ConfirmDialog>
+      <Dialog
+        fullScreen
+        open={syncSettingsOpen}
+        onClose={closeSyncSettings}
+        TransitionComponent={FullscreenDialogTransition}
+      >
+        <SavedAddressesSyncSettings onClose={closeSyncSettings} />
+      </Dialog>
     </DialogBody>
   )
 }
