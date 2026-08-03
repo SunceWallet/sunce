@@ -94,6 +94,7 @@ jobs:
             APPLE_API_KEY: ${{ env.APPLE_API_KEY }}
             APPLE_API_KEY_ID: ${{ env.APPLE_API_KEY_ID }}
             APPLE_API_ISSUER: ${{ env.APPLE_API_ISSUER }}
+            VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
 #            DEBUG: "electron-builder,electron-osx-sign*,electron-notarize*,app-builder,macos-sign"
 #            ELECTRON_BUILDER_DEBUG: "true"
 #            DEBUG_COLORS: "false"
