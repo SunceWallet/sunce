@@ -50,5 +50,7 @@ export const pwaOptions: Partial<VitePWAOptions> = {
   workbox: {
     globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
     globIgnores: ['**/favicons/*', '**/screenshots/*'],
+    // assetsDir is empty, so Vite's default matcher would treat every file as hashed.
+    dontCacheBustURLsMatching: /-[A-Za-z0-9_-]{8}\.(?:js|css|ico|png|svg|woff2)$/,
   },
 }
