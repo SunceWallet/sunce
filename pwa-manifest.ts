@@ -1,7 +1,7 @@
 import type { VitePWAOptions } from 'vite-plugin-pwa'
 
 export const pwaOptions: Partial<VitePWAOptions> = {
-  registerType: 'autoUpdate',
+  registerType: 'prompt',
   manifest: {
     name: 'Sunce Wallet',
     short_name: 'Sunce',
