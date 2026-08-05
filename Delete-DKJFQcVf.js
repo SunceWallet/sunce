@@ -1,2 +1,0 @@
-import{bL as o,bN as i,bK as v,bb as c}from"./app-DhnJqn8y.js";var e={},t;function f(){if(t)return e;t=1;var r=o();Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0;var a=r(i()),u=r(v()),l=(0,u.default)(a.default.createElement("path",{d:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"}),"Delete");return e.default=l,e}var n=f();const s=c(n);export{s as D};
-//# sourceMappingURL=Delete-DKJFQcVf.js.map
