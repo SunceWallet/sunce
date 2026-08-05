@@ -34,14 +34,21 @@ function LastOpenedAccountRedirect() {
   const { accounts, initialized: accountsInitialized } = React.useContext(AccountsContext)
   const { initialized: settingsInitialized, lastOpenedAccount, setSetting } = React.useContext(SettingsContext)
   const router = useRouter()
-  const redirectAttempted = React.useRef(false)
+  const startupResolved = React.useRef(false)
 
   React.useEffect(() => {
-    if (redirectAttempted.current || !accountsInitialized || !settingsInitialized) {
+    if (!accountsInitialized || !settingsInitialized) {
       return
     }
 
-    redirectAttempted.current = true
+    if (startupResolved.current) {
+      if (router.location.pathname === routes.allAccounts() && lastOpenedAccount) {
+        setSetting("lastOpenedAccount", undefined)
+      }
+      return
+    }
+
+    startupResolved.current = true
 
     if (router.location.pathname !== routes.allAccounts() || !lastOpenedAccount) return
 
