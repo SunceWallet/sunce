@@ -17,6 +17,11 @@ declare namespace Platform {
   export type AssetSettingsMap = Record<string, AssetSettings>
   export type AccountAssetSettingsMap = Record<string, AssetSettingsMap>
   export type AccountReceivePaymentSettingsMap = Record<string, ReceivePaymentSettings>
+  export interface LastOpenedAccount {
+    id: string
+    publicKey: string
+    testnet: boolean
+  }
   export interface SettingsData {
     agreedToTermsAt?: string
     biometricLock: boolean
@@ -34,6 +39,7 @@ declare namespace Platform {
     showAllBalancesOnAccountCards: boolean
     savedAddressesSyncEnabled?: boolean
     savedAddressesSyncApiKey?: string
+    lastOpenedAccount?: LastOpenedAccount
   }
 }
 

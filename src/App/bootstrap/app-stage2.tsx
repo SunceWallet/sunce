@@ -9,10 +9,14 @@ import ConnectionErrorListener from "~Toasts/components/ConnectionErrorListener"
 import NotificationContainer from "~Toasts/components/NotificationContainer"
 import StellarUriHandler from "~TransactionRequest/components/StellarUriHandler"
 import WalletConnectHandler from "~WalletConnect/components/WalletConnectHandler"
+import { AccountsContext } from "../contexts/accounts"
+import { SettingsContext } from "../contexts/settings"
 import AllAccountsPage from "../components/AccountListView"
 import AndroidBackButton from "../components/AndroidBackButton"
 import DesktopNotifications from "../components/DesktopNotifications"
 import LinkHandler from "../components/LinkHandler"
+import * as routes from "../routes"
+import { useRouter } from "~Generic/hooks/userinterface"
 
 const CreateMainnetAccount = () => (
   <React.Suspense fallback={null}>
@@ -26,12 +30,45 @@ const CreateTestnetAccount = () => (
   </React.Suspense>
 )
 
+function LastOpenedAccountRedirect() {
+  const { accounts, initialized: accountsInitialized } = React.useContext(AccountsContext)
+  const { initialized: settingsInitialized, lastOpenedAccount, setSetting } = React.useContext(SettingsContext)
+  const router = useRouter()
+  const redirectAttempted = React.useRef(false)
+
+  React.useEffect(() => {
+    if (redirectAttempted.current || !accountsInitialized || !settingsInitialized) {
+      return
+    }
+
+    redirectAttempted.current = true
+
+    if (router.location.pathname !== routes.allAccounts() || !lastOpenedAccount) return
+
+    const account = accounts.find(
+      someAccount =>
+        someAccount.id === lastOpenedAccount.id &&
+        someAccount.publicKey === lastOpenedAccount.publicKey &&
+        someAccount.testnet === lastOpenedAccount.testnet
+    )
+
+    if (account) {
+      router.history.replace(routes.account(account.id))
+    } else {
+      setSetting("lastOpenedAccount", undefined)
+    }
+  }, [accounts, accountsInitialized, lastOpenedAccount, router.history, router.location.pathname, setSetting, settingsInitialized])
+
+  return null
+}
+
 function Stage2() {
   React.useEffect(() => {
     appIsLoaded()
   }, [])
   return (
     <>
+      <LastOpenedAccountRedirect />
       <VerticalLayout height="100%" style={{ WebkitOverflowScrolling: "touch" }}>
         <VerticalLayout height="100%" grow overflowY="hidden">
           <MainErrorBoundary>

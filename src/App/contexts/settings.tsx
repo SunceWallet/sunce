@@ -26,6 +26,7 @@ interface ContextType {
   ignoredSignatureRequests: string[]
   initialized: boolean
   language: string | undefined
+  lastOpenedAccount: Platform.LastOpenedAccount | undefined
   multiSignature: boolean
   multiSignatureCoordinator: string
   onlyCustomMainnetHorizon: boolean
@@ -92,6 +93,7 @@ const SettingsContext = React.createContext<ContextType>({
   ignoredSignatureRequests: initialIgnoredSignatureRequests,
   initialized: false,
   language: undefined,
+  lastOpenedAccount: undefined,
   multiSignature: initialSettings.multisignature,
   multiSignatureCoordinator,
   onlyCustomMainnetHorizon: initialSettings.onlyCustomMainnetHorizon,
@@ -235,6 +237,7 @@ export function SettingsProvider(props: Props) {
     ignoredSignatureRequests,
     initialized: settings.initialized,
     language: localStorage.getItem("i18nextLng") || undefined,
+    lastOpenedAccount: settings.lastOpenedAccount,
     multiSignature: settings.multisignature,
     multiSignatureCoordinator,
     onlyCustomMainnetHorizon: settings.onlyCustomMainnetHorizon,
