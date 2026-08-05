@@ -21,7 +21,6 @@ import ReceivePaymentDialog from "~Payment/components/ReceivePaymentDialog"
 import ViewLoading from "~Generic/components/ViewLoading"
 import { Account, AccountsContext } from "~App/contexts/accounts"
 import { trackError } from "~App/contexts/notifications"
-import { SettingsContext } from "~App/contexts/settings"
 import * as routes from "~App/routes"
 import { warningColor, FullscreenDialogTransition } from "~App/theme"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
@@ -618,26 +617,7 @@ type AccountPageProps =
 
 function AccountPage(props: AccountPageProps) {
   const { accounts } = React.useContext(AccountsContext)
-  const { lastOpenedAccount, setSetting } = React.useContext(SettingsContext)
   const account = props.accountID ? accounts.find((someAccount) => someAccount.id === props.accountID) : undefined
-
-  React.useEffect(() => {
-    if (!account) return
-
-    const nextLastOpenedAccount: Platform.LastOpenedAccount = {
-      id: account.id,
-      publicKey: account.publicKey,
-      testnet: account.testnet
-    }
-    const isAlreadyStored =
-      lastOpenedAccount?.id === nextLastOpenedAccount.id &&
-      lastOpenedAccount.publicKey === nextLastOpenedAccount.publicKey &&
-      lastOpenedAccount.testnet === nextLastOpenedAccount.testnet
-
-    if (!isAlreadyStored) {
-      setSetting("lastOpenedAccount", nextLastOpenedAccount)
-    }
-  }, [account, lastOpenedAccount, setSetting])
 
   if (props.accountID && !account) {
     // FIXME: Use error boundaries

@@ -9,7 +9,7 @@ import ConnectionErrorListener from "~Toasts/components/ConnectionErrorListener"
 import NotificationContainer from "~Toasts/components/NotificationContainer"
 import StellarUriHandler from "~TransactionRequest/components/StellarUriHandler"
 import WalletConnectHandler from "~WalletConnect/components/WalletConnectHandler"
-import { AccountsContext } from "../contexts/accounts"
+import { Account, AccountsContext } from "../contexts/accounts"
 import { SettingsContext } from "../contexts/settings"
 import AllAccountsPage from "../components/AccountListView"
 import AndroidBackButton from "../components/AndroidBackButton"
@@ -17,6 +17,7 @@ import DesktopNotifications from "../components/DesktopNotifications"
 import LinkHandler from "../components/LinkHandler"
 import * as routes from "../routes"
 import { useRouter } from "~Generic/hooks/userinterface"
+import { matchesRoute } from "~Generic/lib/routes"
 
 const CreateMainnetAccount = () => (
   <React.Suspense fallback={null}>
@@ -30,7 +31,15 @@ const CreateTestnetAccount = () => (
   </React.Suspense>
 )
 
-function LastOpenedAccountRedirect() {
+function matchesLastOpenedAccount(account: Account, lastOpenedAccount: Platform.LastOpenedAccount | undefined) {
+  return (
+    lastOpenedAccount?.id === account.id &&
+    lastOpenedAccount.publicKey === account.publicKey &&
+    lastOpenedAccount.testnet === account.testnet
+  )
+}
+
+function LastOpenedAccountManager() {
   const { accounts, initialized: accountsInitialized } = React.useContext(AccountsContext)
   const { initialized: settingsInitialized, lastOpenedAccount, setSetting } = React.useContext(SettingsContext)
   const router = useRouter()
@@ -41,27 +50,29 @@ function LastOpenedAccountRedirect() {
       return
     }
 
-    if (startupResolved.current) {
+    if (!startupResolved.current) {
+      startupResolved.current = true
+
       if (router.location.pathname === routes.allAccounts() && lastOpenedAccount) {
+        const savedAccount = accounts.find(someAccount => matchesLastOpenedAccount(someAccount, lastOpenedAccount))
+
+        if (savedAccount) {
+          router.history.replace(routes.account(savedAccount.id))
+          return
+        }
+
         setSetting("lastOpenedAccount", undefined)
+        return
       }
-      return
     }
 
-    startupResolved.current = true
-
-    if (router.location.pathname !== routes.allAccounts() || !lastOpenedAccount) return
-
-    const account = accounts.find(
-      someAccount =>
-        someAccount.id === lastOpenedAccount.id &&
-        someAccount.publicKey === lastOpenedAccount.publicKey &&
-        someAccount.testnet === lastOpenedAccount.testnet
-    )
+    const account = accounts.find(someAccount => matchesRoute(router.location.pathname, routes.account(someAccount.id)))
 
     if (account) {
-      router.history.replace(routes.account(account.id))
-    } else {
+      if (!matchesLastOpenedAccount(account, lastOpenedAccount)) {
+        setSetting("lastOpenedAccount", { id: account.id, publicKey: account.publicKey, testnet: account.testnet })
+      }
+    } else if (router.location.pathname === routes.allAccounts() && lastOpenedAccount) {
       setSetting("lastOpenedAccount", undefined)
     }
   }, [accounts, accountsInitialized, lastOpenedAccount, router.history, router.location.pathname, setSetting, settingsInitialized])
@@ -75,7 +86,7 @@ function Stage2() {
   }, [])
   return (
     <>
-      <LastOpenedAccountRedirect />
+      <LastOpenedAccountManager />
       <VerticalLayout height="100%" style={{ WebkitOverflowScrolling: "touch" }}>
         <VerticalLayout height="100%" grow overflowY="hidden">
           <MainErrorBoundary>
