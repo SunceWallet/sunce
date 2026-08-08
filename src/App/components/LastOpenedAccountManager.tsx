@@ -3,11 +3,11 @@ import { AccountsContext } from "~App/contexts/accounts"
 import { SettingsContext } from "~App/contexts/settings"
 import * as routes from "~App/routes"
 import { useRouter } from "~Generic/hooks/userinterface"
-import { getLastOpenedAccountAction } from "./LastOpenedAccountManager.logic"
+import { matchesRoute } from "~Generic/lib/routes"
 
 function LastOpenedAccountManager() {
   const { accounts, initialized: accountsInitialized } = React.useContext(AccountsContext)
-  const { initialized: settingsInitialized, lastOpenedAccount, setSetting } = React.useContext(SettingsContext)
+  const { initialized: settingsInitialized, lastOpenedAccountID, setSetting } = React.useContext(SettingsContext)
   const router = useRouter()
   const startupResolved = React.useRef(false)
 
@@ -16,24 +16,27 @@ function LastOpenedAccountManager() {
       return
     }
 
-    const action = getLastOpenedAccountAction({
-      accounts,
-      lastOpenedAccount,
-      pathname: router.location.pathname,
-      startup: !startupResolved.current
-    })
+    const pathname = router.location.pathname
+    const isStartup = !startupResolved.current
     startupResolved.current = true
 
-    if (!action) return
+    if (isStartup && pathname === routes.allAccounts() && lastOpenedAccountID) {
+      const savedAccount = accounts.find(candidate => candidate.id === lastOpenedAccountID)
 
-    if (action.type === "restore") {
-      router.history.replace(routes.account(action.accountID))
-    } else if (action.type === "save") {
-      setSetting("lastOpenedAccount", action.account)
-    } else {
-      setSetting("lastOpenedAccount", undefined)
+      if (savedAccount) {
+        router.history.replace(routes.account(savedAccount.id))
+        return
+      }
     }
-  }, [accounts, accountsInitialized, lastOpenedAccount, router.history, router.location.pathname, setSetting, settingsInitialized])
+
+    const activeAccount = accounts.find(candidate => matchesRoute(pathname, routes.account(candidate.id)))
+
+    if (activeAccount && activeAccount.id !== lastOpenedAccountID) {
+      setSetting("lastOpenedAccountID", activeAccount.id)
+    } else if (!activeAccount && pathname === routes.allAccounts() && lastOpenedAccountID) {
+      setSetting("lastOpenedAccountID", undefined)
+    }
+  }, [accounts, accountsInitialized, lastOpenedAccountID, router.history, router.location.pathname, setSetting, settingsInitialized])
 
   return null
 }
