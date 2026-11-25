@@ -1,10 +1,11 @@
 import BigNumber from "big.js"
-import { Asset, Horizon, Operation, Transaction } from "@stellar/stellar-sdk"
+import { Asset, extractBaseAddress, Horizon, Transaction } from "@stellar/stellar-sdk"
 
 export type PaymentSummary = {
   asset: Asset
   balanceChange: BigNumber
   publicKeys: string[]
+  selfPaymentAmount?: BigNumber
 }[]
 
 type BalanceEffect = Horizon.ServerApi.EffectRecord & {
@@ -57,82 +58,69 @@ export function getPaymentSummaryFromEffects(
   return balanceChanges
 }
 
-export function getPaymentSummary(accountPublicKey: string, transaction: Transaction) {
+function baseAccount(address: string) {
+  return address.startsWith("M") ? extractBaseAddress(address) : address
+}
+
+export function getPaymentSummary(accountID: string, transaction: Transaction): PaymentSummary {
+  const account = baseAccount(accountID)
   const balanceChanges: PaymentSummary = []
+  const selfPayments: PaymentSummary = []
 
-  const paymentOps: (
-    | Operation.Payment
-    | Operation.CreateAccount
-    | Operation.PathPaymentStrictSend
-    | Operation.PathPaymentStrictReceive
-  )[] = transaction.operations.filter(
-    op =>
-      op.type === "payment" ||
-      op.type === "createAccount" ||
-      op.type === "pathPaymentStrictSend" ||
-      op.type === "pathPaymentStrictReceive"
-  ) as any
+  for (const operation of transaction.operations) {
+    if (
+      operation.type !== "payment" &&
+      operation.type !== "createAccount" &&
+      operation.type !== "pathPaymentStrictSend" &&
+      operation.type !== "pathPaymentStrictReceive"
+    ) {
+      continue
+    }
 
-  for (const operation of paymentOps) {
+    const source = operation.source || transaction.source
+    const isSender = baseAccount(source) === account
+    const isRecipient = baseAccount(operation.destination) === account
+    if (!isSender && !isRecipient) continue
+
     if (operation.type === "pathPaymentStrictSend" || operation.type === "pathPaymentStrictReceive") {
-      const sourceAccount = operation.source || transaction.source
-      const isSelfSwap = operation.destination === sourceAccount
-      const sourcePublicKeys = isSelfSwap ? [] : [operation.destination]
-      const destinationPublicKeys = isSelfSwap ? [] : [sourceAccount]
-
-      if (sourceAccount === accountPublicKey) {
+      if (isSender) {
         addBalanceChange(
           balanceChanges,
           operation.sendAsset,
           BigNumber(operation.type === "pathPaymentStrictSend" ? operation.sendAmount : operation.sendMax).mul(-1),
-          sourcePublicKeys
+          isRecipient ? [] : [operation.destination]
         )
       }
 
-      if (operation.destination === accountPublicKey) {
+      if (isRecipient) {
         addBalanceChange(
           balanceChanges,
           operation.destAsset,
           BigNumber(operation.type === "pathPaymentStrictSend" ? operation.destMin : operation.destAmount),
-          destinationPublicKeys
+          isSender ? [] : [source]
         )
       }
       continue
     }
 
-    const amount = (operation as Operation.Payment).amount || (operation as Operation.CreateAccount).startingBalance
-    const asset = (operation as Operation.Payment).asset || Asset.native()
-
-    const summaryItem = balanceChanges.find(assetBalanceChange => assetBalanceChange.asset.equals(asset))
-    let balanceChange = summaryItem ? summaryItem.balanceChange : BigNumber(0)
-    let remotePublicKey: string | null = null
-
-    if (operation.destination === (operation.source || transaction.source)) {
-      // leave at zero, since source equals destination
-    } else if (operation.destination === accountPublicKey) {
-      // incoming payment
-      balanceChange = balanceChange.add(amount)
-      remotePublicKey = operation.source || transaction.source
-    } else if (
-      operation.source === accountPublicKey ||
-      (!operation.source && transaction.source === accountPublicKey)
-    ) {
-      // outgoing payment
-      balanceChange = balanceChange.sub(amount)
-      remotePublicKey = operation.destination
-    }
-
-    if (summaryItem) {
-      summaryItem.balanceChange = balanceChange
-      summaryItem.publicKeys = remotePublicKey ? summaryItem.publicKeys.concat(remotePublicKey) : summaryItem.publicKeys
+    const amount = BigNumber(operation.type === "payment" ? operation.amount : operation.startingBalance)
+    const asset = operation.type === "payment" ? operation.asset : Asset.native()
+    if (isSender && isRecipient) {
+      addBalanceChange(selfPayments, asset, amount)
+    } else if (isRecipient) {
+      addBalanceChange(balanceChanges, asset, amount, [source])
     } else {
-      balanceChanges.push({
-        asset,
-        balanceChange,
-        publicKeys: remotePublicKey ? [remotePublicKey] : [] // TODO: this doesn't work okay for incloming multisig txs?
-      })
+      addBalanceChange(balanceChanges, asset, amount.mul(-1), [operation.destination])
     }
   }
 
-  return balanceChanges
+  if (balanceChanges.length) return balanceChanges
+
+  // History shows the amount moved to self while the account's balance change is zero.
+  return selfPayments.map(({ asset, publicKeys, balanceChange: selfPaymentAmount }) => ({
+    asset,
+    publicKeys,
+    balanceChange: BigNumber(0),
+    selfPaymentAmount
+  }))
 }
