@@ -15,7 +15,7 @@ const isMobileDevice = import.meta.env.VITE_PLATFORM === "android" || import.met
 interface AccountSelectionListProps {
   accounts: Account[]
   disabled?: boolean
-  selectedAccount?: Account
+  selectedAccount?: Account | null
   testnet: boolean
   onChange?: (account: Account) => void
 }
@@ -39,7 +39,9 @@ function AccountSelectionList(props: AccountSelectionListProps) {
           index={index}
           key={account.id}
           onClick={handleListItemClick}
-          selected={props.selectedAccount ? account === props.selectedAccount : index === selectedIndex}
+          selected={
+            props.selectedAccount === undefined ? index === selectedIndex : account.id === props.selectedAccount?.id
+          }
         />
       ))}
       {props.accounts.length === 0 ? (

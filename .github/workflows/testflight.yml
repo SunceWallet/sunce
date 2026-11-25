@@ -39,7 +39,11 @@ jobs:
           npm run install:ios
 
       - name: Prebuild project (iOS)
-        run: npm run prebuild:ios
+        env:
+          VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
+        run: |
+          : "${VITE_WALLETCONNECT_PROJECT_ID:?WALLETCONNECT_PROJECT_ID is required for the iOS bundle}"
+          npm run prebuild:ios
 
       - name: Install the Apple certificate and provisioning profiles
         env:
@@ -63,8 +67,6 @@ jobs:
           echo -n "${{ secrets.MAIN_APP_APPSTORE_PROVISION_PROFILE_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Sunce\ provision.mobileprovision
 
       - name: Build IPA
-        env:
-          VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
         run: |
           cd cordova
           npm run build:ios
@@ -74,6 +76,14 @@ jobs:
           IPA_PATH="${{ github.workspace }}/cordova/platforms/ios/build/Release-iphoneos/Sunce Wallet.ipa"
           xcrun altool --validate-app -f "$IPA_PATH" -t ios --username ${{ secrets.APPLE_USER }} --password ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           xcrun altool --upload-app -f "$IPA_PATH" -t ios --username ${{ secrets.APPLE_USER }} --password ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+
+      - name: Retain uploaded IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunce-wallet-testflight-ipa
+          path: cordova/platforms/ios/build/Release-iphoneos/Sunce Wallet.ipa
+          retention-days: 7
+          if-no-files-found: error
 
       - name: Clean up keychain and provisioning profiles
         if: ${{ always() }}
