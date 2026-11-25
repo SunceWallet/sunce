@@ -1,2 +1,0 @@
-import{a5 as e,cx as a,s as n,S as c}from"./app-BNE7lMat.js";import{L as s}from"./LumenPurchaseOptions-787zpxOC.js";import"./stellar-sdk-DPLH474J.js";import"./app-stage2-BzMuQyj4.js";import"./stellar-Dtn9LiFJ.js";function i(t){const{t:o}=a();return e.createElement(n,{top:e.createElement(c,{onBack:t.onClose,title:o("account.purchase-lumens.title")})},e.createElement(s,{account:t.account,onCloseDialog:t.onClose}))}const f=e.memo(i);export{f as default};
-//# sourceMappingURL=LumenPurchaseDialog-MtJpSk1K.js.map
