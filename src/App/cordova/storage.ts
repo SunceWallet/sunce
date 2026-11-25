@@ -70,8 +70,13 @@ async function getValueFromStorage<T = any>(storage: CordovaSecureStorage, keyNa
 }
 
 async function saveValueIntoStorage(storage: CordovaSecureStorage, keyName: string, value: object) {
-  return new Promise((resolve, reject) => {
-    storage.set(resolve, reject, keyName, JSON.stringify(value))
+  return new Promise<void>((resolve, reject) => {
+    storage.set(
+      () => resolve(),
+      error => reject(error instanceof Error ? error : new Error(String(error))),
+      keyName,
+      JSON.stringify(value)
+    )
   })
 }
 
@@ -112,13 +117,40 @@ export function initSecureStorage() {
 }
 
 export async function initKeyStore(secureStorage: CordovaSecureStorage) {
-  const initialKeys = await getValueFromStorage(secureStorage, storeKeys.keystore)
-  const saveKeys = (keysData: KeysData<PublicKeyData>) => {
-    saveValueIntoStorage(secureStorage, storeKeys.keystore, keysData)
+  let committedKeys = await getValueFromStorage<KeysData<PublicKeyData>>(secureStorage, storeKeys.keystore)
+  const openStore = () =>
+    createStore<PrivateKeyData, PublicKeyData>(
+      async keys => {
+        await saveValueIntoStorage(secureStorage, storeKeys.keystore, keys)
+        committedKeys = keys
+      },
+      { ...committedKeys },
+      { iterations: 250000 }
+    )
+  let current = openStore()
+  let pending = Promise.resolve()
+
+  // key-store mutates its input before saving. Publish each snapshot only after the native write succeeds.
+  type WalletKeyStore = KeyStore<PrivateKeyData, PublicKeyData>
+  const write = (mutate: (store: WalletKeyStore) => Promise<void>) => {
+    const result = pending.then(async () => {
+      const draft = openStore()
+      await mutate(draft)
+      current = draft
+    })
+    pending = result.catch(() => undefined)
+    return result
   }
 
-  // Create a key store with a high number of iterations to make it harder to brute-force, default is only 10000.
-  const keyStore = createStore<PrivateKeyData, PublicKeyData>(saveKeys, initialKeys, { iterations: 250000 })
+  const keyStore: WalletKeyStore = {
+    getKeyIDs: () => current.getKeyIDs(),
+    getPublicKeyData: id => current.getPublicKeyData(id),
+    getPrivateKeyData: (id, password) => current.getPrivateKeyData(id, password),
+    saveKey: (...args) => write(store => store.saveKey(...args)),
+    saveKeys: data => write(store => store.saveKeys(data)),
+    savePublicKeyData: (id, data) => write(store => store.savePublicKeyData(id, data)),
+    removeKey: id => write(store => store.removeKey(id))
+  }
   registerKeyStoreCommandHandlers()
   return keyStore
 }
