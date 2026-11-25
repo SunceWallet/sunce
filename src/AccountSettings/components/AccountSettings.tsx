@@ -103,7 +103,7 @@ function MultiSigItem(props: SuspendedItemProps) {
 function DeleteAccountItem(props: SuspendedItemProps) {
   // call useLiveAccountData to make sure this item is suspended until the account data is available
   // necessary because the AccountDeletion dialog needs account data and would be suspended anyways
-  useLiveAccountData(props.account.publicKey, props.account.testnet)
+  useLiveAccountData(props.account.accountID, props.account.testnet)
   const { t } = useTranslation()
 
   return (

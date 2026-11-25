@@ -108,7 +108,7 @@ export const Address = React.memo(function Address(props: AddressProps) {
   }
 
   if (isPublicKey(props.address)) {
-    const stellarAddress = lookupStellarAddress(props.address)
+    const stellarAddress = props.showRaw ? undefined : lookupStellarAddress(props.address)
 
     if (stellarAddress) {
       const formattedStellarAddress =
