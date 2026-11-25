@@ -38,6 +38,8 @@
 
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/icon/android/adaptiveicon/mipmap-xxxhdpi/ic_launcher_foreground.png" />
         <preference name="AndroidWindowSplashScreenBackground" value="#ebbe2c" />
+        <preference name="BackgroundColor" value="0xfffcfcfc" />
+        <preference name="StatusBarBackgroundColor" value="#ebbe2c" />
 
         <icon background="res/icon/android/adaptiveicon/mipmap-mdpi/ic_launcher_background.png" density="mdpi" foreground="res/icon/android/adaptiveicon/mipmap-mdpi/ic_launcher_foreground.png" />
         <icon background="res/icon/android/adaptiveicon/mipmap-hdpi/ic_launcher_background.png" density="hdpi" foreground="res/icon/android/adaptiveicon/mipmap-hdpi/ic_launcher_foreground.png" />
@@ -55,6 +57,7 @@
         <resource-file src="res/icon/android/notification/icon.png" target="app/src/main/res/mipmap-hdpi/notif_icon.png" />
     </platform>
     <platform name="ios">
+        <preference name="BackgroundColor" value="0xffd6a400" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
 
@@ -108,5 +111,4 @@
     <preference name="SwiftVersion" value="5.0" />
     <preference name="scheme" value="app" />
     <preference name="hostname" value="localhost" />
-    <preference name="BackgroundColor" value="0xffd6a400" />
 </widget>

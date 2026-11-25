@@ -15,8 +15,11 @@ export const brandColor = {
   light: "#f8e091"
 }
 
-export const primaryBackground = "linear-gradient(to left bottom, #ebbe2c, #d6a400)"
+// The Android status bar meets the top edge of this gradient at brandColor.main.
+const gradientDirection = import.meta.env.VITE_PLATFORM === "android" ? "to bottom" : "to left bottom"
+export const primaryBackground = `linear-gradient(${gradientDirection}, ${brandColor.main}, ${brandColor.dark})`
 export const primaryBackgroundColor = "#f8ab5e"
+export const pageBackground = "#fcfcfc"
 
 export const warningColor = amber["500"]
 

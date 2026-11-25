@@ -1,7 +1,8 @@
 import React from "react"
 import { Box, BoxProps } from "./Box"
+import useAndroidSystemBars from "./useAndroidSystemBars"
 import { useIsMobile } from "~Generic/hooks/userinterface"
-import { primaryBackground } from "~App/theme"
+import { pageBackground, primaryBackground } from "~App/theme"
 
 const platform = import.meta.env.VITE_PLATFORM
 
@@ -21,9 +22,6 @@ function TopOfTopSection(props: { background?: React.CSSProperties["background"]
   } else if (platform === "ios") {
     // Add some additional v-space for the iPhone X notch
     return isSmallScreen ? <div className="iphone-notch-top-spacing" /> : <></>
-  } else if (platform === "android") {
-    // Add some additional v-space for android fullscreen view
-    return isSmallScreen ? <div className="android-top-spacing" /> : <></>
   } else {
     return null
   }
@@ -51,7 +49,8 @@ interface SectionProps extends BoxProps {
 }
 
 const Section = React.memo(function Section(props: SectionProps) {
-  const background = props.brandColored ? primaryBackground : props.backgroundColor || "#fcfcfc"
+  const sectionRef = useAndroidSystemBars(!!props.brandColored, !!props.bottom)
+  const background = props.brandColored ? primaryBackground : props.backgroundColor || pageBackground
   const isSmallScreen = useIsMobile()
 
   const padding: React.CSSProperties["padding"] = props.noPadding ? 0 : props.padding !== undefined ? props.padding : 16
@@ -71,7 +70,7 @@ const Section = React.memo(function Section(props: SectionProps) {
   const MaybeInset = props.pageInset ? PageInset : React.Fragment
 
   return (
-    <Box {...props} component="section" padding={padding} style={style}>
+    <Box {...props} ref={sectionRef} component="section" padding={padding} style={style}>
       {props.top ? <TopOfTopSection background={background} /> : null}
       {/* Add a little padding to the top if window is frameless */}
       {props.top && !isSmallScreen ? <div style={{ width: "100%", padding: "4px 0 0", margin: 0 }} /> : null}

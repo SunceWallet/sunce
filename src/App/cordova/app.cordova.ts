@@ -69,6 +69,18 @@ function onDeviceReady() {
   setupBioAuthAvailableHandler()
   setupBioAuthTestHandler()
 
+  if (device.platform === "Android") {
+    const isColor = (value: unknown) => typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value)
+    window.addEventListener("message", event => {
+      if (event.source !== contentWindow || event.data?.type !== "app:system-bars") return
+      if (event.origin !== new URL(iframe.src).origin) return
+      const { top, bottom } = event.data
+      if (isColor(top) && isColor(bottom)) {
+        cordova.exec(() => undefined, trackError, "SunceSystemBars", "setColors", [top, bottom])
+      }
+    })
+  }
+
   document.addEventListener("backbutton", () => contentWindow.postMessage("app:backbutton", "*"), false)
   document.addEventListener("pause", () => onPause(contentWindow), false)
   document.addEventListener("resume", () => onResume(contentWindow), false)
