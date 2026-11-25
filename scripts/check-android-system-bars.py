@@ -32,7 +32,9 @@ assert webview is not None, "Open Sunce first"
 _, top, _, bottom = bounds(webview)
 buttons = [bounds(n) for n in webview.iter("node") if n.get("class") == "android.widget.Button"]
 density = int(re.findall(r"density: (\d+)", adb("shell", "wm", "density").decode())[-1]) / 160
-assert any(top <= y <= top + 32 * density and h > y for _, y, _, h in buttons), "Extra space above toolbar"
+assert any(top <= y <= top + 6 * density and h - y >= 40 * density for _, y, _, h in buttons), (
+    "Expected a full toolbar button within 6 dp of the safe area"
+)
 
 raw = adb("exec-out", "screencap")
 width, height, fmt = struct.unpack_from("<III", raw)
@@ -57,6 +59,10 @@ if args.ime:
     window = adb("shell", "dumpsys", "window").decode()
     assert re.search(rf"type=ime frame=\[0,{bottom}\].*?visible=true", window), "Gap or overlap at keyboard"
 else:
-    check_pixel(width // 8, height - 2, "d6a400" if args.screen == "accounts" else "fcfcfc")
+    bottom_color = "d6a400" if args.screen == "accounts" else "fcfcfc"
+    for x in range(width):
+        check_pixel(x, bottom - 1, bottom_color)
+        check_pixel(x, bottom, bottom_color)
+    check_pixel(width // 8, height - 2, bottom_color)
 
 print(f"{args.screen} passed on {width}×{height}, WebView y={top}…{bottom}")

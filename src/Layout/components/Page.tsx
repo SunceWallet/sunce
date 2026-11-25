@@ -53,7 +53,8 @@ const Section = React.memo(function Section(props: SectionProps) {
   const background = props.brandColored ? primaryBackground : props.backgroundColor || pageBackground
   const isSmallScreen = useIsMobile()
 
-  const padding: React.CSSProperties["padding"] = props.noPadding ? 0 : props.padding !== undefined ? props.padding : 16
+  const defaultPadding = platform === "android" && isSmallScreen && props.top && !props.bottom ? "6px 16px 16px" : 16
+  const padding = props.noPadding ? 0 : props.padding ?? defaultPadding
 
   const style: React.CSSProperties = {
     background,
