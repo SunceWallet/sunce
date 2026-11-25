@@ -14,6 +14,7 @@ import { AccountData } from "~Generic/lib/account"
 import { getAssetsFromBalances } from "~Generic/lib/stellar"
 import { PaymentParams } from "~Payment/components/PaymentForm"
 import PaymentForm from "~Payment/components/PaymentForm"
+import { getPaymentRequestAsset } from "~Payment/lib/payment-request"
 import { SendTransaction } from "../../Transaction/components/TransactionSender"
 import { MultisigTransactionResponse } from "~Generic/lib/multisig-service"
 
@@ -85,8 +86,6 @@ interface PaymentRequestContentProps {
 function PaymentRequestContent(props: PaymentRequestContentProps) {
   const {
     amount,
-    assetCode,
-    assetIssuer,
     destination,
     memo,
     memoType,
@@ -101,10 +100,7 @@ function PaymentRequestContent(props: PaymentRequestContentProps) {
     testnet
   )
   const accountData = accountDataSet.find(acc => acc.account_id === props.selectedAccount?.publicKey)
-  const asset = React.useMemo(() => (assetCode && assetIssuer ? new Asset(assetCode, assetIssuer) : undefined), [
-    assetCode,
-    assetIssuer
-  ])
+  const asset = React.useMemo(() => getPaymentRequestAsset(props.payStellarUri), [props.payStellarUri])
   const paymentParams = React.useMemo(() => {
     return {
       amount,
