@@ -28,10 +28,35 @@ import android.webkit.WebView;
 import android.webkit.WebSettings;
 
 import org.apache.cordova.*;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 
 public class MainActivity extends CordovaActivity
 {
+    @Override
+    protected void init() {
+        super.init();
+        appView.getPluginManager().addService("SunceSystemBars", SystemBars.class.getName());
+    }
+
+    public static class SystemBars extends CordovaPlugin {
+        @Override
+        public boolean execute(String action, JSONArray args, CallbackContext callback) throws JSONException {
+            if (!"setColors".equals(action)) return false;
+            String top = args.getString(0);
+            int bottom = Color.parseColor(args.getString(1));
+            cordova.getActivity().runOnUiThread(() -> {
+                // Cordova uses these colors for the inset backgrounds and icon contrast, including on resume.
+                preferences.set("StatusBarBackgroundColor", top);
+                preferences.set("BackgroundColor", bottom);
+                webView.getPluginManager().postMessage("updateSystemBars", null);
+                callback.success();
+            });
+            return true;
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

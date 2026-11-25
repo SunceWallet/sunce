@@ -9,11 +9,12 @@ import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 import CloseIcon from "@material-ui/icons/Close"
 import { useIsMobile } from "~Generic/hooks/userinterface"
-import { breakpoints, MobileKeyboardOpenedSelector, CompactDialogTransition } from "~App/theme"
+import { breakpoints, MobileKeyboardOpenedSelector, CompactDialogTransition, pageBackground } from "~App/theme"
 import { setupRerenderListener } from "~Platform/keyboard-hack"
 import ButtonIconLabel from "~Generic/components/ButtonIconLabel"
 
 const closeIcon = <CloseIcon />
+const isAndroid = import.meta.env.VITE_PLATFORM === "android"
 
 interface MaybeIconProps {
   icon?: React.ReactNode
@@ -54,10 +55,11 @@ const useActionButtonStyles = makeStyles((theme) => ({
   mobileDialogActionsBox: {
     display: "flex",
     position: "fixed",
-    left: 8,
-    right: 8,
+    left: isAndroid ? 0 : 8,
+    right: isAndroid ? 0 : 8,
+    paddingInline: isAndroid ? "8px" : undefined,
     bottom: 0,
-    backgroundColor: "#fcfcfc",
+    backgroundColor: pageBackground,
     justifyContent: "flex-end",
 
     [MobileKeyboardOpenedSelector()]: {
@@ -106,6 +108,10 @@ const useActionButtonStyles = makeStyles((theme) => ({
       flexGrow: 1,
       margin: 12,
       padding: 20,
+
+      "&.MuiButton-contained:not(:disabled)": {
+        boxShadow: isAndroid ? "0 2px 6px rgba(0, 0, 0, 0.1)" : undefined
+      },
 
       "&:not(:first-child)": {
         flexBasis: "calc(50% - 16px)",

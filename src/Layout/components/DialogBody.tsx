@@ -65,6 +65,7 @@ function DialogBody(props: Props) {
 
   const actionsPosition = isSmallScreen ? "bottom" : props.actionsPosition || "after-content"
   const excessWidth = props.excessWidth || 0
+  const flushHeader = import.meta.env.VITE_PLATFORM === "android" && props.top && !props.preventNotchSpacing
 
   const topContent = React.useMemo(() => (props.top ? <Box style={topStyle}>{props.top}</Box> : null), [props.top])
 
@@ -102,7 +103,7 @@ function DialogBody(props: Props) {
         margin="0 auto"
         maxWidth={props.noMaxWidth ? undefined : 900}
         overflowX="hidden"
-        padding={isSmallScreen ? "12px 24px" : "24px 32px"}
+        padding={isSmallScreen ? (flushHeader ? "0 24px 12px" : "12px 24px") : "24px 32px"}
         style={{ flexDirection: "column" }}
         top={!props.preventNotchSpacing}
         width="100%"
