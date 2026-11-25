@@ -36,10 +36,6 @@ import { useOperationTitle } from "~TransactionReview/components/Operations"
 const dedupe = <T extends any>(array: T[]): T[] => Array.from(new Set(array))
 const doNothing = () => undefined
 
-function sum(...amounts: (string | number | BigNumber)[]): BigNumber {
-  return amounts.reduce<BigNumber>((total, amount) => total.add(amount), BigNumber(0))
-}
-
 function EntryAnimation(props: { children: React.ReactNode; animate: boolean }) {
   return props.animate ? (
     <Collapse appear enter={false} in timeout={{ enter: 1000 }}>
@@ -388,9 +384,7 @@ function TransactionListBalanceChange(props: {
   )
 }
 
-type BalanceChange = Pick<PaymentSummary[number], "asset" | "balanceChange">
-
-function TransactionListBalanceChangeGrid(props: { balanceChanges: BalanceChange[] }) {
+function TransactionListBalanceChangeGrid(props: { balanceChanges: PaymentSummary }) {
   const isSmallScreen = useIsMobile()
   const orderedBalanceChanges = props.balanceChanges
     .filter((balanceChange) => balanceChange.balanceChange.lt(0))
@@ -410,50 +404,12 @@ function TransactionListBalanceChangeGrid(props: { balanceChanges: BalanceChange
         <React.Fragment key={stringifyAsset(balanceChange.asset)}>
           <TransactionListBalanceChange
             assetCode={balanceChange.asset.getCode()}
-            balanceChange={balanceChange.balanceChange}
+            balanceChange={balanceChange.selfPaymentAmount || balanceChange.balanceChange}
             style={isSmallScreen ? { fontSize: "1rem" } : { fontSize: "1.4rem" }}
           />
         </React.Fragment>
       ))}
     </span>
-  )
-}
-
-function TransactionListItemBalance(props: {
-  accountID: string
-  paymentSummary: PaymentSummary
-  style?: React.CSSProperties
-  transaction: Transaction
-}) {
-  const { paymentSummary } = props
-
-  const creationOps = props.transaction.operations.filter(
-    (op): op is Operation.CreateAccount => op.type === "createAccount"
-  )
-  const paymentOps = props.transaction.operations.filter((op): op is Operation.Payment => op.type === "payment")
-  const hasPathPayment = props.transaction.operations.some(
-    (op) => op.type === "pathPaymentStrictSend" || op.type === "pathPaymentStrictReceive"
-  )
-
-  // Handle special edge case: Sending money from an account to itself
-  const isSelfPayment =
-    paymentSummary.length > 0 &&
-    !hasPathPayment &&
-    paymentSummary.every((payment) => payment.publicKeys.every((pubkey) => pubkey === props.accountID))
-
-  const balanceChanges = isSelfPayment
-    ? [
-        {
-          asset: paymentSummary[0].asset,
-          balanceChange: sum(...creationOps.map((op) => op.startingBalance), ...paymentOps.map((op) => op.amount))
-        }
-      ]
-    : paymentSummary
-
-  return (
-    <ListItemText primaryTypographyProps={{ align: "right" }} style={{ flexShrink: 0, ...props.style }}>
-      {paymentSummary.length === 0 ? null : <TransactionListBalanceChangeGrid balanceChanges={balanceChanges} />}
-    </ListItemText>
   )
 }
 
@@ -498,12 +454,9 @@ export const TransactionListItem = React.memo(function TransactionListItem(props
         }}
         transaction={transaction}
       />
-      <TransactionListItemBalance
-        accountID={props.accountID}
-        paymentSummary={paymentSummary}
-        style={{ paddingRight: 0 }}
-        transaction={transaction}
-      />
+      <ListItemText primaryTypographyProps={{ align: "right" }} style={{ flexShrink: 0, paddingRight: 0 }}>
+        {paymentSummary.length > 0 && <TransactionListBalanceChangeGrid balanceChanges={paymentSummary} />}
+      </ListItemText>
     </ListItem>
   )
 })
