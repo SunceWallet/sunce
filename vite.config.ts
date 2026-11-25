@@ -71,6 +71,11 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: [
+        // The SDK's prebuilt browser bundle embeds toml@3. Use its modular entry so the npm override applies.
+        {
+          find: /^@stellar\/stellar-sdk$/,
+          replacement: resolve(__dirname, "node_modules/@stellar/stellar-sdk/lib/browser.js")
+        },
         { find: "eventsource", replacement: resolve(__dirname, "src/Platform/eventsource.cjs") },
         { find: /^~/, replacement: '/src/' },
         { find: /^\*/, replacement: 'shared/types/' }
