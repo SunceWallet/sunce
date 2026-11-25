@@ -17,7 +17,7 @@
     "lint:fix": "eslint --fix '{src,stories}/**/*.{ts,tsx}'",
     "storybook": "storybook dev -p 9001 -c .storybook",
     "storybook:build": "storybook build -c .storybook",
-    "test": "tsx scripts/check-batch-payment-summary.ts && tsc --noEmit && eslint",
+    "test": "tsx scripts/check-batch-payment-summary.ts && node scripts/check-cordova-keystore.cjs && node scripts/check-payment-qr.cjs && tsc --noEmit && eslint",
     "clean:dist": "rimraf dist/*",
     "clean:electron:ts": "rimraf electron/lib/*",
     "prebuild:electron:bundle": "cross-env NODE_ENV=production vite build -m production",

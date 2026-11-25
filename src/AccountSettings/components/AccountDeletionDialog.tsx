@@ -9,6 +9,7 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import WarnIcon from "@material-ui/icons/Warning"
 import AccountSelectionList from "~Account/components/AccountSelectionList"
 import { Account, AccountsContext } from "~App/contexts/accounts"
+import { NotificationsContext } from "~App/contexts/notifications"
 import { createTransaction } from "~Generic/lib/transaction"
 import { useLiveAccountData } from "~Generic/hooks/stellar-subscriptions"
 import { useIsMobile, useIsSmallMobile } from "~Generic/hooks/userinterface"
@@ -265,10 +266,15 @@ interface AccountDeletionContainerProps {
 function AccountDeletionContainer(props: AccountDeletionContainerProps) {
   const { deleteAccount } = React.useContext(AccountsContext)
 
-  const onDelete = () => {
-    deleteAccount(props.account.id)
-    props.onClose()
-    props.onDeleted()
+  const { showError } = React.useContext(NotificationsContext)
+  const onDelete = async () => {
+    try {
+      await deleteAccount(props.account.id)
+      props.onClose()
+      props.onDeleted()
+    } catch (error) {
+      showError(error)
+    }
   }
 
   return (

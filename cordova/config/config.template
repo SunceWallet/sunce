@@ -91,7 +91,7 @@
     <plugin name="cordova-plugin-dialogs" spec="~2.0.1" />
     <plugin name="cordova-plugin-network-information" spec="^3.1.0" />
     <plugin name="cordova-plugin-secure-storage" spec="github:satoshipay/cordova-plugin-secure-storage" />
-    <engine name="android" spec="^14.0.1" />
+    <engine name="android" spec="^15.1.0" />
     <engine name="ios" spec="^7.1.0" />
 
     <preference name="AndroidXEnabled" value="true" />
@@ -102,7 +102,6 @@
     <preference name="HideKeyboardFormAccessoryBar" value="false" />
     <preference name="KeyboardResize" value="true" />
     <preference name="KeyboardResizeMode" value="native" />
-    <preference name="resizeOnFullScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="$SPLASH_SCREEN_DELAY" />
     <preference name="FadeSplashScreen" value="false" />

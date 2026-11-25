@@ -59,7 +59,7 @@ async function saveKey(
   privateData: PrivateKeyData,
   publicData?: PublicKeyData
 ) {
-  keyStore.saveKey(keyID, password, privateData, publicData)
+  return keyStore.saveKey(keyID, password, privateData, publicData)
 }
 
 async function savePublicKeyData(
@@ -68,7 +68,7 @@ async function savePublicKeyData(
   keyID: string,
   publicData: PublicKeyData
 ) {
-  keyStore.savePublicKeyData(keyID, publicData)
+  return keyStore.savePublicKeyData(keyID, publicData)
 }
 
 async function removeKey(
@@ -76,7 +76,7 @@ async function removeKey(
   keyStore: KeyStore<PrivateKeyData, PublicKeyData>,
   keyID: string
 ) {
-  keyStore.removeKey(keyID)
+  return keyStore.removeKey(keyID)
 }
 
 async function respondWithSignedTransaction(
