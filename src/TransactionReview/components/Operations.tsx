@@ -639,20 +639,38 @@ function SetOptionsOperation(props: SetOptionsOperationProps) {
   )
 }
 
+function AccountMergeAddressField(props: { address: string; label: string; testnet: boolean }) {
+  const { accounts } = React.useContext(AccountsContext)
+  const { savedAddresses } = React.useContext(SavedAddressesContext)
+  const matches = accounts.filter(account => account.testnet === props.testnet && account.accountID === props.address)
+  const name = matches.length === 1 ? matches[0].name : savedAddresses[props.address]?.label
+
+  return (
+    <SummaryDetailsField
+      fullWidth
+      label={props.label}
+      helperText={name}
+      value={<CopyableAddress address={props.address} testnet={props.testnet} variant="full" showRaw />}
+    />
+  )
+}
+
 function AccountMergeOperation(props: OperationProps<Operation.AccountMerge>) {
   const { destination, source } = props.operation
   const { t } = useTranslation()
   return (
     <SummaryItem heading={props.hideHeading ? undefined : t("operations.account-merge.title")}>
-      {source ? (
-        <SummaryDetailsField
+      {source && (
+        <AccountMergeAddressField
+          address={source}
           label={t("operations.account-merge.summary.account")}
-          value={<CopyableAddress address={source} testnet={props.testnet} variant="short" />}
+          testnet={props.testnet}
         />
-      ) : null}
-      <SummaryDetailsField
+      )}
+      <AccountMergeAddressField
+        address={destination}
         label={t("operations.account-merge.summary.merge-into")}
-        value={<CopyableAddress address={destination} testnet={props.testnet} variant="short" />}
+        testnet={props.testnet}
       />
     </SummaryItem>
   )

@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Operation, Transaction, Horizon } from "@stellar/stellar-sdk"
+import { Transaction, Horizon } from "@stellar/stellar-sdk"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogContentText from "@material-ui/core/DialogContentText"
 import Switch from "@material-ui/core/Switch"
@@ -18,6 +18,7 @@ import MergeIcon from "~Icons/components/Merge"
 import DialogBody from "~Layout/components/DialogBody"
 import { HorizontalLayout } from "~Layout/components/Box"
 import TransactionSender from "~Transaction/components/TransactionSender"
+import { buildAccountMergeOperation, getAccountMergeDestinations } from "../lib/account-merge"
 
 const redText: React.CSSProperties = {
   color: "red"
@@ -25,6 +26,7 @@ const redText: React.CSSProperties = {
 
 interface DeletionConfirmationDialogProps {
   merging: boolean
+  mergeDestination?: Account
   onCancel: () => void
   onClose: () => void
   onConfirm: () => void
@@ -41,7 +43,7 @@ const DeletionConfirmationDialog = React.memo(function DeletionConfirmationDialo
         <ActionButton onClick={props.onCancel}>{t("account-settings.account-deletion.action.cancel")}</ActionButton>
       }
       confirmButton={
-        <ActionButton onClick={props.onConfirm} type="primary">
+        <ActionButton disabled={props.merging && !props.mergeDestination} onClick={props.onConfirm} type="primary">
           {t("account-settings.account-deletion.action.confirm")}
         </ActionButton>
       }
@@ -52,6 +54,13 @@ const DeletionConfirmationDialog = React.memo(function DeletionConfirmationDialo
       {t("account-settings.account-deletion.confirm.text.delete")}
       {props.merging ? ` ${t("account-settings.account-deletion.confirm.text.merge")}. ` : ". "}
       {t("account-settings.account-deletion.confirm.text.confirm")}
+      {props.mergeDestination && (
+        <span style={{ display: "block", overflowWrap: "anywhere" }}>
+          {props.mergeDestination.name}
+          <br />
+          {props.mergeDestination.accountID}
+        </span>
+      )}
     </ConfirmDialog>
   )
 })
@@ -103,7 +112,9 @@ function AccountDeletionDialog(props: AccountDeletionDialogProps) {
   const { accounts } = React.useContext(AccountsContext)
   const [mergeAccountEnabled, setMergeAccountEnabled] = React.useState(false)
   const [confirmationPending, setConfirmationPending] = React.useState(false)
-  const [selectedMergeAccount, setSelectedMergeAccount] = React.useState<Account | null>(null)
+  const [selectedId, setSelectedId] = React.useState<string>()
+  const mergeDestinations = getAccountMergeDestinations(props.account, accounts)
+  const selectedMergeAccount = mergeDestinations.find(account => account.id === selectedId)
   const [warning, setWarning] = React.useState<Warning | undefined>()
 
   const { t } = useTranslation()
@@ -120,13 +131,7 @@ function AccountDeletionDialog(props: AccountDeletionDialogProps) {
   const onMerge = async () => {
     if (selectedMergeAccount) {
       const transaction = await createTransaction(
-        [
-          Operation.accountMerge({
-            source: props.account.accountID,
-            destination: selectedMergeAccount.publicKey,
-            withMuxing: true
-          })
-        ],
+        [buildAccountMergeOperation(props.account, selectedMergeAccount)],
         { accountData, horizon, walletAccount: props.account }
       )
 
@@ -155,53 +160,36 @@ function AccountDeletionDialog(props: AccountDeletionDialogProps) {
     }
   }, [accountData, mergeAccountEnabled, setConfirmationPending, setWarning, t])
 
-  const remainingFundsContent = React.useMemo(
-    () =>
-      accountData.balances.length > 0 ? (
-        <>
-          <HorizontalLayout alignItems="center" style={{ marginTop: 24, marginLeft: -12, marginBottom: 8 }}>
-            <Switch color="primary" checked={mergeAccountEnabled} onChange={toggleMergeAccount} />
-            <Typography
-              onClick={toggleMergeAccount}
-              variant="h6"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                height: 48,
-                cursor: "pointer",
-                fontSize: isSmallScreen ? 16 : 20,
-                marginLeft: 8
-              }}
-            >
-              {t("account-settings.account-deletion.remaining-funds.text")}
-            </Typography>
-          </HorizontalLayout>
+  const remainingFundsContent =
+    accountData.balances.length > 0 ? (
+      <>
+        <HorizontalLayout alignItems="center" style={{ marginTop: 24, marginLeft: -12, marginBottom: 8 }}>
+          <Switch color="primary" checked={mergeAccountEnabled} onChange={toggleMergeAccount} />
+          <Typography
+            onClick={toggleMergeAccount}
+            variant="h6"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: 48,
+              cursor: "pointer",
+              fontSize: isSmallScreen ? 16 : 20,
+              marginLeft: 8
+            }}
+          >
+            {t("account-settings.account-deletion.remaining-funds.text")}
+          </Typography>
+        </HorizontalLayout>
 
-          <AccountSelectionList
-            disabled={!mergeAccountEnabled}
-            accounts={accounts.filter(
-              account =>
-                account.accountID !== props.account.accountID &&
-                account.publicKey !== props.account.publicKey &&
-                account.testnet === props.account.testnet
-            )}
-            testnet={props.account.testnet}
-            onChange={setSelectedMergeAccount}
-          />
-        </>
-      ) : null,
-    [
-      accountData.balances.length,
-      mergeAccountEnabled,
-      toggleMergeAccount,
-      isSmallScreen,
-      t,
-      accounts,
-      props.account.accountID,
-      props.account.publicKey,
-      props.account.testnet
-    ]
-  )
+        <AccountSelectionList
+          disabled={!mergeAccountEnabled}
+          accounts={mergeDestinations}
+          selectedAccount={selectedMergeAccount || null}
+          testnet={props.account.testnet}
+          onChange={account => setSelectedId(account.id)}
+        />
+      </>
+    ) : null
 
   return (
     <DialogBody
@@ -251,6 +239,7 @@ function AccountDeletionDialog(props: AccountDeletionDialogProps) {
 
         <DeletionConfirmationDialog
           merging={mergeAccountEnabled}
+          mergeDestination={mergeAccountEnabled ? selectedMergeAccount : undefined}
           onCancel={cancelConfirmation}
           onClose={cancelConfirmation}
           onConfirm={onConfirm}

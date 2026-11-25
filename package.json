@@ -30,7 +30,7 @@
     "build:win": "cross-env arch=x64 VITE_PLATFORM=windows npm run prebuild:electron && electron-builder -p always --win --x64 --config ./electron-build.yml",
     "build:win:signed": "source ./scripts/signing-env.sh win && npm run build:win -- -c.forceCodeSigning=true",
     "build:web": "cross-env NODE_ENV=production vite build -m production",
-    "postbuild:web": "node scripts/check-stellar-toml.cjs",
+    "postbuild:web": "node scripts/check-stellar-toml.cjs && node scripts/check-account-merge.cjs",
     "prebuild:android": "rm -rf ./dist/ && cross-env NODE_ENV=production VITE_PLATFORM=android vite build -m production && cd cordova && npm run prebuild:android",
     "build:android": "cd cordova && npm run build:android",
     "prebuild:ios": "rm -rf ./dist/ && cross-env NODE_ENV=production VITE_PLATFORM=ios vite build -m production && cd cordova && npm run prebuild:ios",
